@@ -1,0 +1,53 @@
+{
+  "audit_adapter_scope": "prepared.json was generated after execution solely for the generic read-only auditor; source identity is byte-for-byte the prelaunch plan identity",
+  "data_manifest_basis": "same independently frozen current-campaign manifest; NPU saved-batch diagnostic did not sample corpus data",
+  "data_manifest_sha256": "2f4617d73b5dad4f6a343707382714738e8012432fda85d9f7e36f44b26a4e1a",
+  "diagnostic_input_files": {
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/inputs/failing-attention.pt": {
+      "actual": "9ace0106ee8510747907354844176d51502a1ee79aa4eeaa8c2235ad05992664",
+      "expected": "9ace0106ee8510747907354844176d51502a1ee79aa4eeaa8c2235ad05992664"
+    },
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/inputs/failing-membership.pt": {
+      "actual": "1ac04278aa55e10994b16c9d327021a860064cc263e49e305417fcc2414629c9",
+      "expected": "1ac04278aa55e10994b16c9d327021a860064cc263e49e305417fcc2414629c9"
+    },
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/inputs/failure-result.json": {
+      "actual": "4a28cea8b4f558cfdb9199ffcc2357e6f26db4a1e2bb669e16e3ed468edf66d1",
+      "expected": "4a28cea8b4f558cfdb9199ffcc2357e6f26db4a1e2bb669e16e3ed468edf66d1"
+    },
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/inputs/failure.pt": {
+      "actual": "47aa26937d8a2f9d6b8c632730ba878d42c7a0ded76d66d28bf7a9ecf5b7d4b8",
+      "expected": "47aa26937d8a2f9d6b8c632730ba878d42c7a0ded76d66d28bf7a9ecf5b7d4b8"
+    }
+  },
+  "frozen_source_files_passed": 196,
+  "lifecycle_released": true,
+  "observed_unix": 1795162952.3514862,
+  "prelaunch_launcher_digest_verified": "1250065bfaccdf62c4484cd511ff42ffd320ae7d7a34c3398c73cb637a327667",
+  "prelaunch_plan_digest_verified": "bfb8a1cd3a10867a3a38264118c968348b534a60c1abe017bce50809041ff9c0",
+  "schema": "pilot-r3-padding-repair-terminal-reconciliation-v1",
+  "strict_audit": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-padding-repair-r01-terminal-audit.json",
+    "retained_findings": [
+      {
+        "expected_sha256": null,
+        "path": ".local/pilot-r3/padding-repair-r01/prepared.json",
+        "reason": "expected_digest_not_recorded",
+        "sha256": "fcd4100fda43a9078b904e8a549e0c7e1f42c29d641b97375ba3ada5995b0dfd",
+        "size_bytes": 38589,
+        "status": "unknown"
+      },
+      {
+        "expected_sha256": null,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data/manifest.json",
+        "reason": "expected_digest_not_recorded",
+        "sha256": "2f4617d73b5dad4f6a343707382714738e8012432fda85d9f7e36f44b26a4e1a",
+        "size_bytes": 3505,
+        "status": "unknown"
+      }
+    ],
+    "sha256": "e5430de988ecaa91d2390ffedc4ca1ad8a0c71c9ab19d49c6022f4f15c7f3f6b",
+    "status": "incomplete"
+  },
+  "strict_audit_relabelled": false
+}

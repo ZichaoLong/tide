@@ -1,0 +1,884 @@
+{
+  "accuracy": {
+    "actual_auto_fp64_crosscheck": {
+      "original_threshold_gate": {
+        "atol": 1e-05,
+        "exact": false,
+        "failed_field_count": 1,
+        "failed_fields": [
+          "/state/memories/14/K/values"
+        ],
+        "fields": 966,
+        "finite": true,
+        "integer_equal": true,
+        "max_abs": 1.7623595874732834e-05,
+        "rtol": 0.0001,
+        "structure_equal": true,
+        "within_tolerance": false
+      },
+      "scope": "actual auto against same-state FP64 with tiled reception; forward algebra identical, implementation not independent"
+    },
+    "atol": 1e-05,
+    "full_model_comparisons": {
+      "healthy-new-auto vs healthy-old-auto": {
+        "categories": {
+          "gradients_before_clip": {
+            "cosine_similarity": 0.9999999999999081,
+            "elements": 1640748,
+            "failed_elements": 0,
+            "failed_fields": [],
+            "max_abs_error": 3.4458935260772705e-08,
+            "relative_l2_error": 4.297069833306348e-07
+          },
+          "logits": {
+            "cosine_similarity": 0.9999999999999892,
+            "elements": 2097152,
+            "failed_elements": 0,
+            "failed_fields": [],
+            "max_abs_error": 5.245208740234375e-06,
+            "relative_l2_error": 1.4746361214472807e-07
+          },
+          "optimizer": {
+            "cosine_similarity": 1.0,
+            "elements": 3281613,
+            "failed_elements": 0,
+            "failed_fields": [],
+            "max_abs_error": 2.7939677238464355e-09,
+            "relative_l2_error": 5.55703885309601e-13
+          },
+          "parameter_delta": {
+            "cosine_similarity": 0.9999999999067333,
+            "elements": 1640748,
+            "failed_elements": 0,
+            "failed_fields": [],
+            "max_abs_error": 1.9073486328125e-06,
+            "relative_l2_error": 1.3657755080280316e-05
+          },
+          "parameters": {
+            "cosine_similarity": 0.9999999999999989,
+            "elements": 1640748,
+            "failed_elements": 0,
+            "failed_fields": [],
+            "max_abs_error": 1.9073486328125e-06,
+            "relative_l2_error": 2.3183658634878542e-08
+          },
+          "state": {
+            "cosine_similarity": 0.9999999999999915,
+            "elements": 1076480,
+            "failed_elements": 0,
+            "failed_fields": [],
+            "max_abs_error": 3.814697265625e-06,
+            "relative_l2_error": 1.320960043922135e-07
+          }
+        },
+        "original_threshold_gate": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 966,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 5.245208740234375e-06,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "reference_kind": "same saved inputs, model, optimizer and private state"
+      },
+      "healthy-new-tiled vs healthy-fp64-tiled": {
+        "categories": {
+          "gradients_before_clip": {
+            "cosine_similarity": 0.9999999999995637,
+            "elements": 1640748,
+            "failed_elements": 0,
+            "failed_fields": [],
+            "max_abs_error": 9.355277874253942e-08,
+            "relative_l2_error": 9.345666131022331e-07
+          },
+          "logits": {
+            "cosine_similarity": 0.9999999999999845,
+            "elements": 2097152,
+            "failed_elements": 0,
+            "failed_fields": [],
+            "max_abs_error": 5.880282310855023e-06,
+            "relative_l2_error": 1.7771135122169285e-07
+          },
+          "optimizer": {
+            "cosine_similarity": 1.0,
+            "elements": 3281613,
+            "failed_elements": 0,
+            "failed_fields": [],
+            "max_abs_error": 5.416762667151062e-07,
+            "relative_l2_error": 9.140715563513511e-11
+          },
+          "parameter_delta": {
+            "cosine_similarity": 0.9999995317522122,
+            "elements": 1640748,
+            "failed_elements": 3,
+            "failed_fields": [
+              {
+                "failed_elements": 1,
+                "field": "/core.receive.k.weight",
+                "max_abs": 1.1918726534262958e-05,
+                "reference_max_abs": 0.0011157059124887597
+              },
+              {
+                "failed_elements": 1,
+                "field": "/core.receive.q.weight",
+                "max_abs": 1.0370461806463727e-05,
+                "reference_max_abs": 0.0010798489626904217
+              },
+              {
+                "failed_elements": 1,
+                "field": "/core.receive.q.left",
+                "max_abs": 1.013211990502378e-05,
+                "reference_max_abs": 0.001182631117311414
+              }
+            ],
+            "max_abs_error": 1.1918726534262958e-05,
+            "relative_l2_error": 0.000967829427554193
+          },
+          "parameters": {
+            "cosine_similarity": 0.9999999999986507,
+            "elements": 1640748,
+            "failed_elements": 0,
+            "failed_fields": [],
+            "max_abs_error": 1.1918726534262958e-05,
+            "relative_l2_error": 1.6428418975610048e-06
+          },
+          "state": {
+            "cosine_similarity": 0.9999999999999725,
+            "elements": 1076480,
+            "failed_elements": 1,
+            "failed_fields": [
+              {
+                "failed_elements": 1,
+                "field": "/memories/14/K/values",
+                "max_abs": 1.7176561038917404e-05,
+                "reference_max_abs": 7.358127106715975
+              }
+            ],
+            "max_abs_error": 1.7384826278554755e-05,
+            "relative_l2_error": 2.335352646082307e-07
+          }
+        },
+        "original_threshold_gate": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 4,
+          "failed_fields": [
+            "/parameter_delta/core.receive.q.weight",
+            "/parameter_delta/core.receive.k.weight",
+            "/state/memories/14/K/values",
+            "/parameter_delta/core.receive.q.left"
+          ],
+          "fields": 966,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 1.7384826278554755e-05,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": false
+        },
+        "reference_kind": "same implementation in CPU FP64; precision diagnosis, not independent model oracle"
+      },
+      "healthy-new-tiled vs healthy-old-tiled": {
+        "categories": {
+          "gradients_before_clip": {
+            "cosine_similarity": 1.0,
+            "elements": 1640748,
+            "failed_elements": 0,
+            "failed_fields": [],
+            "max_abs_error": 0.0,
+            "relative_l2_error": 0.0
+          },
+          "logits": {
+            "cosine_similarity": 1.0,
+            "elements": 2097152,
+            "failed_elements": 0,
+            "failed_fields": [],
+            "max_abs_error": 0.0,
+            "relative_l2_error": 0.0
+          },
+          "optimizer": {
+            "cosine_similarity": 1.0,
+            "elements": 3281613,
+            "failed_elements": 0,
+            "failed_fields": [],
+            "max_abs_error": 0.0,
+            "relative_l2_error": 0.0
+          },
+          "parameter_delta": {
+            "cosine_similarity": 1.0,
+            "elements": 1640748,
+            "failed_elements": 0,
+            "failed_fields": [],
+            "max_abs_error": 0.0,
+            "relative_l2_error": 0.0
+          },
+          "parameters": {
+            "cosine_similarity": 1.0,
+            "elements": 1640748,
+            "failed_elements": 0,
+            "failed_fields": [],
+            "max_abs_error": 0.0,
+            "relative_l2_error": 0.0
+          },
+          "state": {
+            "cosine_similarity": 1.0,
+            "elements": 1076480,
+            "failed_elements": 0,
+            "failed_fields": [],
+            "max_abs_error": 0.0,
+            "relative_l2_error": 0.0
+          }
+        },
+        "original_threshold_gate": {
+          "atol": 1e-05,
+          "exact": true,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 966,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 0.0,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "reference_kind": "same saved inputs, model, optimizer and private state"
+      },
+      "highactivation-new-auto vs highactivation-fp64-auto": {
+        "categories": {
+          "gradients_before_clip": {
+            "cosine_similarity": 0.9999999999918264,
+            "elements": 1135759,
+            "failed_elements": 0,
+            "failed_fields": [],
+            "max_abs_error": 1.274121200833117e-06,
+            "relative_l2_error": 4.0444271116327975e-06
+          },
+          "logits": {
+            "cosine_similarity": 0.9999999999999818,
+            "elements": 2097152,
+            "failed_elements": 0,
+            "failed_fields": [],
+            "max_abs_error": 9.641740773336238e-06,
+            "relative_l2_error": 1.9131740808639343e-07
+          },
+          "optimizer": {
+            "cosine_similarity": 1.0000000000000002,
+            "elements": 2271625,
+            "failed_elements": 0,
+            "failed_fields": [],
+            "max_abs_error": 2.6624679142980834e-07,
+            "relative_l2_error": 5.6035089198793845e-11
+          },
+          "parameter_delta": {
+            "cosine_similarity": 0.999999999561299,
+            "elements": 1135759,
+            "failed_elements": 0,
+            "failed_fields": [],
+            "max_abs_error": 1.8620738950758664e-07,
+            "relative_l2_error": 3.067072232397115e-05
+          },
+          "parameters": {
+            "cosine_similarity": 0.9999999999999988,
+            "elements": 1135759,
+            "failed_elements": 0,
+            "failed_fields": [],
+            "max_abs_error": 1.8620738950758664e-07,
+            "relative_l2_error": 4.8187892615985454e-08
+          },
+          "state": {
+            "cosine_similarity": 0.999999999999994,
+            "elements": 239540,
+            "failed_elements": 0,
+            "failed_fields": [],
+            "max_abs_error": 4.9811721169135126e-05,
+            "relative_l2_error": 1.1495820135482187e-07
+          }
+        },
+        "original_threshold_gate": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 889,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 4.9811721169135126e-05,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "reference_kind": "same implementation in CPU FP64; precision diagnosis, not independent model oracle"
+      }
+    },
+    "healthy_local_independent_oracle": {
+      "independent_fp64_comparisons": {
+        "k": {
+          "cosine_similarity": 0.9999999999997973,
+          "elements": 229376,
+          "failed_elements": 0,
+          "failed_fields": [],
+          "max_abs_error": 1.660678963068203e-11,
+          "relative_l2_error": 6.388631042074361e-07
+        },
+        "mass": {
+          "cosine_similarity": 0.9999999999998491,
+          "elements": 3584,
+          "failed_elements": 0,
+          "failed_fields": [],
+          "max_abs_error": 1.258160392536567e-08,
+          "relative_l2_error": 5.510828296971175e-07
+        },
+        "output": {
+          "cosine_similarity": 0.9999999999999916,
+          "elements": 229376,
+          "failed_elements": 0,
+          "failed_fields": [],
+          "max_abs_error": 6.9981956156706104e-06,
+          "relative_l2_error": 1.2941896382400077e-07
+        },
+        "q": {
+          "cosine_similarity": 0.9999999999985856,
+          "elements": 229376,
+          "failed_elements": 0,
+          "failed_fields": [],
+          "max_abs_error": 1.1621806570397103e-11,
+          "relative_l2_error": 1.6820226282565261e-06
+        },
+        "v": {
+          "cosine_similarity": 0.9999999999999865,
+          "elements": 229376,
+          "failed_elements": 0,
+          "failed_fields": [],
+          "max_abs_error": 1.3876568900298304e-11,
+          "relative_l2_error": 1.643945923192401e-07
+        }
+      },
+      "largest_hypothetical_padding_vjp_fp32": 1.5726384350473124e+23,
+      "largest_hypothetical_padding_vjp_fp64": 1.5726574042823944e+23,
+      "padded_mass_vjp_is_exact_zero_after_mask": true,
+      "qkv_vjps_bitwise_unchanged": [
+        true,
+        true,
+        true
+      ],
+      "real_mass_vjp_bitwise_unchanged": true,
+      "real_mass_vjp_max_abs": 0.022515971213579178,
+      "reference": "CPU FP64 direct normalized quotient, standard autograd; same saved inputs/root"
+    },
+    "rtol": 0.0001,
+    "schema": "pilot-r3-padding-accuracy-comparisons-v1",
+    "singleton_cancellation_witness": {
+      "backend": "tiled",
+      "dtype": "fp32",
+      "implementation_changed": false,
+      "k_vjp_max_abs": 2.8862436884935505e-09,
+      "output_exactly_v": true,
+      "q_vjp_max_abs": 2.3774391344488777e-09,
+      "root_max_abs": 0.026166118681430817,
+      "scope": "single real key, no padding or small mass; literal output equals V and Q/K derivatives are exactly zero",
+      "seed": 843,
+      "v_vjp_exact_root": true
+    }
+  },
+  "artifacts": {
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/accuracy-comparisons.json": "c2fea1c7371a2c0a079f4a0ff8db9b5ed968ca31bbdaf20ef503e7082176017e",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/before.json": "c01697afd26106fad060dac26a2ac9f1b8c2c82af3b077bf0e551a0d2d820ca2",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/compare_replays.py": "dcd8fc30d5e11deec0f47532f9c2d517b0f2c85a937add961aec62c25e0f51e3",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/cpu-diagnostic-plan.json": "95372efc1faf320eb50d2e1df2cb0b1ceaf18ee3f2485596316376d797b199e3",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/cpu-layout.log": "6d35b59f5308ea9ecb91c47781869b2eda218d790d691afac4158a027cc9faa3",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/cpu-primitives.log": "a825a31d4c5e1ab7caa96bc03438b602982464985b8600e057cb3c6b0974cf7d",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/cpu_replay.py": "27b6fdd822b65f80c750698c71e0f998721633df0d6ef72118ee72ee82a2bca5",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/healthy-restore.json": "ce4b03584a2d47ca95e67ba31b80c5cc15608479eb6d87b1663d193b6092ea91",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/healthy_restore.py": "9479e2603cb7783fdb6bbde2babf814f68eaee1081ed643e85ed2fcc44b0c9a2",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/log-audit.json": "45862f2f0228c8f298e8f4f7f53c34832e655ec3ab2146e7ba4720ab4b5137b9",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/npu-local-tests.log": "e91deeb3d35ea60d0a81a82c3e3f93c0ae95bd0381595fb74bc21505485b954c",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/padding_probe.py": "6666659bc8010f40cd36bb99ae8f3258240a3edd4e9d142ace43bf309e022b1a",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/repair-plan.json": "bfb8a1cd3a10867a3a38264118c968348b534a60c1abe017bce50809041ff9c0",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/snapshot.json": "0999e0a906a1916a930d8cca6d046b26c6978bdda5b0fd0297b1539cd2baadfb",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/update-delta-witness.json": "4e14ea06a8af60c6fa02356f730c09fbce2a11fdfdfd4754254c48ed60cc5318"
+  },
+  "authorization": "user authorized canonical foundation repair and requested alignment before further learning",
+  "budget": {
+    "campaign_deadline_and_limits_unchanged": true,
+    "cpu_completed_loss_tokens": 3072,
+    "cpu_conservative_token_reservation": 4096,
+    "cpu_initial_single_updates_accounted_retrospectively": 2048,
+    "npu_loss_tokens": 1024,
+    "npu_probe_seconds": 36.53378510475159
+  },
+  "foundation": "/mi/data2T/zlong/home/llm/graph-execution-foundation",
+  "implementation": {
+    "changed_code_and_tests": {
+      "examples/train.py": "83e278520c833c2142c99cf8983764b0111e1c9272b9a1ea8e0694e085d046ed",
+      "src/tide/config.py": "01e4be6898e1d5a156ff29c2739509c30b65b372ff65c39584b3b4f1a72d520a",
+      "src/tide/model.py": "6e38b6d6e0382688cc8b7e01de8f87adff35e8777cbd9d41a87dd705c44e936d",
+      "tests/test_reception_execution.py": "ee62fda2bf0d2451579b5b750998a565b3f44f1252a35d36037f2bed5c9f5c21",
+      "tests/test_reception_padding.py": "00eea517ab5a93bb51f867fe064320a1c90d90a3a3d1ffef7a1846a20ff82723"
+    },
+    "checkpoint_parameter_schema_changed": false,
+    "committed_or_pushed": false,
+    "frozen_campaign_sources_modified": false,
+    "legacy_false": "remains readable and serialized unchanged; cannot suppress topology membership",
+    "new_default": "reception_mask_padding=True",
+    "preexisting_changes_preserved": {
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/docs/architecture.md": true,
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/docs/positive-chain.md": true,
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/docs/shannon-active-set.md": true,
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/src/tide/allocation.py": true,
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/tests/test_shannon_active_set.py": true
+    },
+    "semantic_boundary": "absent edge has no derivative root; real zero-mass edge retains right derivative",
+    "source_identity": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/snapshot.json",
+      "sha256": "0999e0a906a1916a930d8cca6d046b26c6978bdda5b0fd0297b1539cd2baadfb"
+    }
+  },
+  "learning_conclusion": {
+    "all_finite_training_certified_accurate": false,
+    "all_previous_results_invalidated": false,
+    "formal_12mi_quality_conclusion": false,
+    "scope": "earlier curves and selected recipes are preliminary A evidence; corrected-source and numerical gate review needed before quality claims",
+    "selected_subjects": 42,
+    "stage_b_started": false
+  },
+  "optimizer_amplification": {
+    "failed_update_elements": [
+      {
+        "absolute_error": 1.0370461806463727e-05,
+        "actual_auto_gradient": 0.0,
+        "actual_auto_update": 2.0265579223632812e-06,
+        "betas": [
+          0.9,
+          0.999
+        ],
+        "delta_fp32": 1.239776611328125e-05,
+        "delta_fp64": 2.0273043068175234e-06,
+        "eps": 1e-08,
+        "index": [
+          1,
+          14,
+          18
+        ],
+        "name": "core.receive.q.weight",
+        "old_exp_avg": 0.0,
+        "old_exp_avg_sq": 0.0,
+        "old_parameter": -0.2122780829668045,
+        "raw_gradient_fp32": -1.3386324271280614e-09,
+        "raw_gradient_fp64": 2.859432312512051e-19,
+        "step": 7273.0
+      },
+      {
+        "absolute_error": 1.013211990502378e-05,
+        "actual_auto_gradient": 0.0,
+        "actual_auto_update": 2.468004822731018e-08,
+        "betas": [
+          0.9,
+          0.999
+        ],
+        "delta_fp32": 1.0156771168112755e-05,
+        "delta_fp64": 2.465126308897475e-08,
+        "eps": 1e-08,
+        "index": [
+          0,
+          41,
+          4
+        ],
+        "name": "core.receive.q.left",
+        "old_exp_avg": 0.0,
+        "old_exp_avg_sq": 0.0,
+        "old_parameter": -0.0025812205858528614,
+        "raw_gradient_fp32": -1.3078910177100056e-09,
+        "raw_gradient_fp64": -1.9727815415032535e-18,
+        "step": 7273.0
+      },
+      {
+        "absolute_error": 1.1918726534262958e-05,
+        "actual_auto_gradient": 0.0,
+        "actual_auto_update": -5.513429641723633e-07,
+        "betas": [
+          0.9,
+          0.999
+        ],
+        "delta_fp32": 1.13658607006073e-05,
+        "delta_fp64": -5.52865833655658e-07,
+        "eps": 1e-08,
+        "index": [
+          0,
+          45,
+          32
+        ],
+        "name": "core.receive.k.weight",
+        "old_exp_avg": 0.0,
+        "old_exp_avg_sq": 0.0,
+        "old_parameter": 0.05789032205939293,
+        "raw_gradient_fp32": -1.5392348506892972e-09,
+        "raw_gradient_fp64": -3.511139575339761e-20,
+        "step": 7273.0
+      }
+    ],
+    "independently_reduced_raw_gradient_l2": {
+      "fp32": 1.228740055458007,
+      "fp64": 1.2287400744645396
+    },
+    "scope": "forced reception-tiled witness; same sampled actual auto has exact zero gradients at all three positions"
+  },
+  "record_audit": {
+    "attempt_count": 1171,
+    "failure_attempt": {
+      "clipped_steps": 3257,
+      "gradient_norm": {
+        "count": 3257,
+        "max": 2.369658946990967,
+        "median": 1.2081421613693237,
+        "min": 1.0461199283599854,
+        "p95": 1.3738890886306763,
+        "p99": 1.5042173862457275
+      },
+      "health_samples": 4,
+      "loss": {
+        "count": 3257,
+        "max": 7.1274943351745605,
+        "median": 5.433730125427246,
+        "min": 4.169816970825195,
+        "p95": 5.879517078399658,
+        "p99": 6.06600284576416
+      },
+      "model_id": "multiscale_settle-d64-k-singleton7-121b8d2af3",
+      "origin": "scheduler_result",
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_settle-d64-k-singleton7-121b8d2af3-a3-2026112001-r2/attempt-0",
+      "stage": "a3",
+      "steps": 3257,
+      "task_id": "multiscale_settle-d64-k-singleton7-121b8d2af3-a3-2026112001-r2"
+    },
+    "failure_attempt_gradient_norm": {
+      "count": 3257,
+      "max": 2.369658946990967,
+      "median": 1.2081421613693237,
+      "min": 1.0461199283599854,
+      "p95": 1.3738890886306763,
+      "p99": 1.5042173862457275
+    },
+    "finished_unix": 1795162210.2515974,
+    "gradient_norm": {
+      "count": 1144441,
+      "max": 96.67662811279297,
+      "median": 1.1960681676864624,
+      "min": 0.2640182673931122,
+      "p95": 1.6095242500305176,
+      "p99": 2.382080554962158
+    },
+    "health_sample_count": 3041,
+    "largest_samples": {
+      "activations": {
+        "model_id": "exchange-d64-s-capacity-71f21161e3",
+        "origin": "scheduler_result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/exchange-d64-s-capacity-71f21161e3-a3-2026112002-r2/attempt-0/health.jsonl",
+        "stage": "a3",
+        "task_id": "exchange-d64-s-capacity-71f21161e3-a3-2026112002-r2",
+        "tensor": "core.describe.encode",
+        "tokens": 1835264,
+        "value": 6563.50537109375
+      },
+      "gradients_before_clip": {
+        "model_id": "exchange-d64-s-independent-9bdefe8e73",
+        "origin": "scheduler_result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/exchange-d64-s-independent-9bdefe8e73-a2-2026112001-r1/attempt-0/health.jsonl",
+        "stage": "a2",
+        "task_id": "exchange-d64-s-independent-9bdefe8e73-a2-2026112001-r1",
+        "tensor": "embedding.weight",
+        "tokens": 262400,
+        "value": 1.279938817024231
+      },
+      "relative_update_rms": {
+        "model_id": "exchange-d64-x_reverse-base-9e2f3f272c",
+        "origin": "scheduler_result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/exchange-d64-x_reverse-base-9e2f3f272c-init-2026112002/attempt-0/health.jsonl",
+        "stage": "init",
+        "task_id": "exchange-d64-x_reverse-base-9e2f3f272c-init-2026112002",
+        "tensor": "core.memories.S.a_log.value",
+        "tokens": 24576,
+        "value": 3.2778169223472986
+      },
+      "step_gradient_norm": {
+        "model_id": "exchange-d64-s-base-f9310d4300",
+        "origin": "scheduler_attempt",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/exchange-d64-s-base-f9310d4300-a1-2026112001-r0/attempt-0/steps.jsonl",
+        "stage": "a1",
+        "step": 814,
+        "task_id": "exchange-d64-s-base-f9310d4300-a1-2026112001-r0",
+        "value": 96.67662811279297
+      },
+      "updates": {
+        "model_id": "exchange-d64-s-independent-9bdefe8e73",
+        "origin": "scheduler_result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/exchange-d64-s-independent-9bdefe8e73-a3-2026112002-r2/attempt-0/health.jsonl",
+        "stage": "a3",
+        "task_id": "exchange-d64-s-independent-9bdefe8e73-a3-2026112002-r2",
+        "tensor": "core.memories.S.ffn.down.weight",
+        "tokens": 2097152,
+        "value": 0.0056616514921188354
+      }
+    },
+    "limitations": [
+      "Only recorded observations, not every intermediate tensor.",
+      "Finite logs cannot certify gradient accuracy or erase retained numerical failures.",
+      "Continuation retries may include repeated exposure; no unique-token claim."
+    ],
+    "loss": {
+      "count": 1144441,
+      "max": 9.075662612915039,
+      "median": 6.027964115142822,
+      "min": 4.11152458190918,
+      "p95": 8.443559646606445,
+      "p99": 9.011213302612305
+    },
+    "nonfinite_records": [],
+    "read_errors": [],
+    "recorded_step_count": 1144441,
+    "schema": "pilot-r3-padding-history-audit-v1",
+    "scope": "r07 current scheduler and selected.json explicit current-cycle ancestry only",
+    "selected_model_gradient_norm": {
+      "count": 879244,
+      "max": 96.67662811279297,
+      "median": 1.2091416120529175,
+      "min": 0.2833629250526428,
+      "p95": 1.602170467376709,
+      "p99": 2.282717227935791
+    },
+    "stage_recorded_steps": {
+      "a1": 230664,
+      "a2": 335266,
+      "a3": 181251,
+      "capacity-cpu": 800,
+      "capacity-large": 191,
+      "capacity-small": 755,
+      "init": 2076,
+      "selected_evidence": 393438
+    },
+    "started_unix": 1795162195.372011,
+    "steps_above_clip_one": 954274
+  },
+  "retained_failures": [
+    "original Shannon restoration exceedances and original seven deviations",
+    "r07 numeric failure and all interruptions",
+    "r07 conservative 0.0773132406-second ledger excess",
+    "new FP64 private-state and forced-tiled update deviations",
+    "generic padding-probe audit two unbound-adapter/data-manifest findings"
+  ],
+  "reviewed_unix": 1795162952.3534412,
+  "schema": "pilot-r3-reception-padding-repair-review-v1",
+  "scope": "canonical foundation, meaningful CPU/NPU diagnostics, current-cycle read-only record audit; no campaign restart",
+  "status": "padding_fixed_targeted_qualification_passed_numerical_limits_retained",
+  "terminal": {
+    "findings": [
+      {
+        "expected_sha256": null,
+        "path": ".local/pilot-r3/padding-repair-r01/prepared.json",
+        "reason": "expected_digest_not_recorded",
+        "sha256": "fcd4100fda43a9078b904e8a549e0c7e1f42c29d641b97375ba3ada5995b0dfd",
+        "size_bytes": 38589,
+        "status": "unknown"
+      },
+      {
+        "expected_sha256": null,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data/manifest.json",
+        "reason": "expected_digest_not_recorded",
+        "sha256": "2f4617d73b5dad4f6a343707382714738e8012432fda85d9f7e36f44b26a4e1a",
+        "size_bytes": 3505,
+        "status": "unknown"
+      }
+    ],
+    "reconciliation": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-padding-repair-r01-terminal-reconciliation.json",
+    "release_verified": true,
+    "strict_status": "incomplete"
+  },
+  "tests": {
+    "cpu": {
+      "layout_placement_recomputation_and_recovery": 67,
+      "primitive_and_shannon": 156,
+      "total": 223
+    },
+    "cpu_actual_failure_update": {
+      "all_floating_tensors_finite": true,
+      "case": "failure",
+      "finished_unix": 1795162512.9525979,
+      "forced_reception_tiled": false,
+      "foundation": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation",
+      "fp64": false,
+      "gradient_norm": 1.2299275398254395,
+      "inputs_sha256": "45fa46b1ba4f19f12c69bbf417143511a35c9600a3d5e31a627973564ce760ec",
+      "largest_finite_padding_vjp": null,
+      "loss": 5.369584083557129,
+      "name": "failure-new-auto",
+      "reception_attention_backward": [],
+      "scope": "one diagnostic update; no campaign continuation",
+      "started_unix": 1795162511.8348107,
+      "status": "completed",
+      "tokens_at_start": 1882368
+    },
+    "cpu_healthy_checkpoint_restore": {
+      "actual_healthy_checkpoint": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_settle-d64-k-singleton7-121b8d2af3-a3-2026112001-r2/attempt-0/checkpoints/step-000007273-cea01564a5.pt",
+        "sha256": "c50f243efa593d48cb2cca4277a16dc904e5b26dd5345a8a702ee43ce951c579",
+        "size_bytes": 24264625,
+        "state_sha256": "eeac7ce36735639550a2c97fab25388244c7ebf44a22a71662b00d6ebc7c2609",
+        "steps": 7273,
+        "tokens": 1861888
+      },
+      "child": {
+        "argv": [
+          "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+          "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/healthy_restore.py",
+          "--restore"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": ""
+      },
+      "diagnostic_loss_tokens": 1024,
+      "fresh_load": {
+        "load": "exact",
+        "updates": [
+          {
+            "gradient_norm": 1.1939232349395752,
+            "input_sha256": "6691e8a8dc91f9da40cacfc67ec1b4c31ca2ec6d14e02e28a910ca940b85891a",
+            "loss": 5.572612762451172,
+            "reset": false,
+            "step": 7276,
+            "tokens": 1862656
+          }
+        ]
+      },
+      "initial_state_rng_stream_load": "exact",
+      "restored_update": {
+        "atol": 1e-05,
+        "exact": true,
+        "failed_field_count": 0,
+        "failed_fields": [],
+        "fields": 831,
+        "finite": true,
+        "integer_equal": true,
+        "max_abs": 0.0,
+        "rtol": 0.0001,
+        "structure_equal": true,
+        "within_tolerance": true
+      },
+      "schema": "pilot-r3-padding-healthy-restore-v1",
+      "scope": "three next-batch updates plus one replay; no campaign continuation",
+      "updates": [
+        {
+          "gradient_norm": 1.228651762008667,
+          "input_sha256": "93ebdad60325e6f5e30c4716da6f340a01cddc5a7b5590d62e76922471780932",
+          "loss": 5.460681438446045,
+          "reset": false,
+          "step": 7274,
+          "tokens": 1862144
+        },
+        {
+          "gradient_norm": 1.206978440284729,
+          "input_sha256": "32efd8b4180e9b97bde8734ee53d393ebce25187878be4e3c20f940e05a2a203",
+          "loss": 5.215014457702637,
+          "reset": false,
+          "step": 7275,
+          "tokens": 1862400
+        },
+        {
+          "gradient_norm": 1.1939232349395752,
+          "input_sha256": "6691e8a8dc91f9da40cacfc67ec1b4c31ca2ec6d14e02e28a910ca940b85891a",
+          "loss": 5.572612762451172,
+          "reset": false,
+          "step": 7276,
+          "tokens": 1862656
+        }
+      ]
+    },
+    "initial_regression_attempt": {
+      "failed": 1,
+      "passed": 33,
+      "reason": "new synthetic math-output assertion used atol=1e-6 and saw 2.384185791e-6 rounding; changed this new assertion to original campaign atol=1e-5 rtol=1e-4 before frozen qualification; original gates unchanged"
+    },
+    "npu": {
+      "actual_loss_tokens": 1024,
+      "captured_attention": {
+        "atol": 1e-05,
+        "comparisons": [
+          {
+            "finite": true,
+            "max_abs_error": 3.061067740950385e-06,
+            "name": "output",
+            "within_tolerance": true
+          },
+          {
+            "finite": true,
+            "max_abs_error": 7.772492966216316e-12,
+            "name": "q",
+            "within_tolerance": true
+          },
+          {
+            "finite": true,
+            "max_abs_error": 1.6951579856461867e-11,
+            "name": "k",
+            "within_tolerance": true
+          },
+          {
+            "finite": true,
+            "max_abs_error": 1.579915117783532e-11,
+            "name": "v",
+            "within_tolerance": true
+          },
+          {
+            "finite": true,
+            "max_abs_error": 5.1978305548594506e-08,
+            "name": "mass",
+            "within_tolerance": true
+          }
+        ],
+        "padding_mass_gradient_exact_zero": true,
+        "rtol": 0.0001
+      },
+      "deselected_cpu_whole_region_case": 1,
+      "device_seconds": 36.53378510475159,
+      "directed_tests_passed": 26,
+      "fallback_observation": "no host-fallback warning observed in uncaptured parent/child test logs; not a full operator trace",
+      "physical_card": 1,
+      "recovery": {
+        "checkpoint_load": {
+          "atol": 0,
+          "exact": true,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 712,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 0.0,
+          "rng_exact": true,
+          "rtol": 0,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "numeric_trajectory": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 829,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 7.450580596923828e-09,
+          "rtol": 0.0001,
+          "status": "within_threshold",
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "restored_result_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/round/tasks/padding-repair-numeric-and-replay/attempt-0/restored/restore-result.json",
+        "restored_result_sha256": "0b5c6039ed7e918b5b4101e6ae75a1d75f52de54fba9c557501c58d807e8c315"
+      }
+    }
+  }
+}

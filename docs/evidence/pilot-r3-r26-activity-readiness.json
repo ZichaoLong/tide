@@ -1,0 +1,640 @@
+{
+  "activity": {
+    "active_ratio": 0.9370369305103722,
+    "aggregation": "last prescribed sample of each fixed A3 seed",
+    "always_active_backbone_parameters": 3198165,
+    "attribution": "unique parameter elements per external execution slot; Timed ticks unioned",
+    "backbone_total_parameters": 6501589,
+    "inherited_samples": [
+      {
+        "checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/exchange-d256-k-capacity-afae2c3e83-a3-2026112001-r1/attempt-0/checkpoints/step-000008192-12eac3814d.pt",
+          "sha256": "3f311282c07152c7d4e5c5f26136387de16ba4e2a6118a58b9627cbfc0e718ae",
+          "size_bytes": 120592277,
+          "state_sha256": "c4e50ea33402d037ee291e68e29d2a48afd1a919b0a6b4ec6b56bf187c5c61af",
+          "steps": 8192,
+          "tokens": 2097152
+        },
+        "measured_external_tokens": 256,
+        "measurement_version": "unique-external-token-parameters-v1",
+        "migrations": [
+          {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r25/source-migrations/exchange-d256-k-capacity-afae2c3e83-a3-2026112001-r1.json",
+            "sha256": "991b0a8482491e6387bf55d7f865e1a9c24cb0be1c29d1f8e93dcaad29d247bd"
+          }
+        ],
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/exchange-d256-k-capacity-afae2c3e83-a3-2026112001-r1/attempt-0/result.json",
+          "sha256": "483f857f96c361fd0564db508ec7be890a020ebd48c1638c60b7c2ccdcf63461"
+        },
+        "seed": 2026112001,
+        "source_digest": "8849ad9c8f992b105e70f21756ad1feb626473e4198e13a2d62437586895c085",
+        "step": 8192,
+        "task": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/exchange-d256-k-capacity-afae2c3e83-a3-2026112001-r1/task.json",
+          "sha256": "eecbff0f76da33e084bea523d5f09904be0779b187f9567c6d0079955d196880"
+        },
+        "task_id": "exchange-d256-k-capacity-afae2c3e83-a3-2026112001-r1",
+        "tokens": 2097152
+      }
+    ],
+    "max_active_backbone_parameters": 6362325,
+    "mean_active_backbone_parameters": 6092229.0,
+    "mean_active_whole_model_parameters": 8189381.0,
+    "measured_external_tokens": 512,
+    "method": "actual-finish-controls-with-explicit-parameter-coverage",
+    "min_active_backbone_parameters": 5909717,
+    "padding_policy": "unpublished rectangular/power2 packing rows excluded",
+    "qualified": true,
+    "semantic_full_owner_tick_rows": 8828,
+    "tied_vocabulary_counted_once": true,
+    "unique_parameter_tensors": 122,
+    "version": "unique-external-token-parameters-v1",
+    "vocabulary_parameters": 2097152,
+    "vocabulary_policy": "excluded from match; tied full output matrix included once in whole-model count",
+    "whole_model_parameters": 8598741
+  },
+  "budget": {
+    "budget_ledger": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/budget.json",
+    "deadline_unix": 1797698913.9318287,
+    "max_device_seconds": 25920000,
+    "observed_unix": 1795401957.6355157,
+    "remaining_device_seconds": 24756574.29878184,
+    "remaining_preparation_device_seconds": 143033.66198591888,
+    "remaining_preparation_processed_tokens": 44645248,
+    "remaining_wall_seconds": 2296956.2963130474,
+    "started_unix": 1795106913.9318287
+  },
+  "confirmation_sources": [
+    [
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r25/round/tasks/exchange-d256-k-capacity-afae2c3e83-a3-2026112001-r1/task.json",
+        "sha256": "b64508e6f93a9c77f826b047222c88699bce8df14e5184e56fca5ec8c9593603"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r25/round/tasks/exchange-d256-k-capacity-afae2c3e83-a3-2026112001-r1/attempt-0/result.json",
+        "sha256": "5775cf9c3c98d300ea71fb89ee9df0484e64ceebabf04d3653da3ec5968c70eb"
+      }
+    ],
+    [
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r25/round/tasks/exchange-d256-k-capacity-afae2c3e83-a3-2026112002-r1/task.json",
+        "sha256": "62464a6f79f2067c74a0d35d832504a4cd173f5dca03e391ca45f600e6faaddb"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r25/round/tasks/exchange-d256-k-capacity-afae2c3e83-a3-2026112002-r1/attempt-0/result.json",
+        "sha256": "11afd34682c9966e6cd70060e4fa666ad46b8acf140ff7b88d42c34a80975850"
+      }
+    ]
+  ],
+  "confirmation_tasks": [
+    "exchange-d256-k-capacity-afae2c3e83-a3-2026112001-r1",
+    "exchange-d256-k-capacity-afae2c3e83-a3-2026112002-r1"
+  ],
+  "current_stage_a": {
+    "blocking_reason": "Blocked: missing_actual_activity_measurement",
+    "counts": {
+      "completed": 8,
+      "failed": 21,
+      "pending": 166,
+      "stopped_budget": 25
+    },
+    "status": "a_blocked_needs_repair",
+    "unit": "tide-pilot-r3-campaign-r25.service"
+  },
+  "foundation": {
+    "authority": "r25 accepted immutable foundation snapshot",
+    "published_head": "6e14a6cc90e3ea1972611ee98b9de9bfea3b14fe"
+  },
+  "gate_activity": {
+    "active_ratio": 0.9370369305103722,
+    "backbone_total_parameters": 6501589,
+    "inherited_samples": [
+      {
+        "checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/exchange-d256-k-capacity-afae2c3e83-a3-2026112001-r1/attempt-0/checkpoints/step-000008192-12eac3814d.pt",
+          "sha256": "3f311282c07152c7d4e5c5f26136387de16ba4e2a6118a58b9627cbfc0e718ae",
+          "size_bytes": 120592277,
+          "state_sha256": "c4e50ea33402d037ee291e68e29d2a48afd1a919b0a6b4ec6b56bf187c5c61af",
+          "steps": 8192,
+          "tokens": 2097152
+        },
+        "measured_external_tokens": 256,
+        "measurement_version": "unique-external-token-parameters-v1",
+        "migrations": [
+          {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r25/source-migrations/exchange-d256-k-capacity-afae2c3e83-a3-2026112001-r1.json",
+            "sha256": "991b0a8482491e6387bf55d7f865e1a9c24cb0be1c29d1f8e93dcaad29d247bd"
+          }
+        ],
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/exchange-d256-k-capacity-afae2c3e83-a3-2026112001-r1/attempt-0/result.json",
+          "sha256": "483f857f96c361fd0564db508ec7be890a020ebd48c1638c60b7c2ccdcf63461"
+        },
+        "seed": 2026112001,
+        "source_digest": "8849ad9c8f992b105e70f21756ad1feb626473e4198e13a2d62437586895c085",
+        "step": 8192,
+        "task": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/exchange-d256-k-capacity-afae2c3e83-a3-2026112001-r1/task.json",
+          "sha256": "eecbff0f76da33e084bea523d5f09904be0779b187f9567c6d0079955d196880"
+        },
+        "task_id": "exchange-d256-k-capacity-afae2c3e83-a3-2026112001-r1",
+        "tokens": 2097152
+      }
+    ],
+    "mean_active_backbone_parameters": 6092229.0,
+    "measured_external_tokens": 512
+  },
+  "inputs": {
+    "campaign_plan": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r25/campaign-plan.json",
+      "sha256": "dcf80b3d4b2779bf7c5b69e6a3fbb35e1a2494e217cd740b2b00bef2d7d8422e"
+    },
+    "foundation_acceptance": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-r24-foundation-quad-total-acceptance.json",
+      "sha256": "b77e783a2f77a12b91e4e73c4226db446b03632ca03725fb9f47ecd4f5b5e2b7"
+    },
+    "scheduler": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r25/round/scheduler.json",
+      "sha256": "b76859aeb3fc0c8641e7a26ecca6f6a4e8fabd56f116f9e4b689f41f7b2ab651"
+    },
+    "selected": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r25/round/selected.json",
+      "sha256": "b27f9ab0b91eaf445e79fbbbbd94d89fd8f53813d39bdd856e00c4ab02c8e2f9"
+    },
+    "terminal_audit": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-campaign-r25-terminal-audit.json",
+      "sha256": "f1de7927dc9faec5b0539977df37f14c1fea2c0b87febeb6f94007882a1938db"
+    }
+  },
+  "mixed_chain_activity": {
+    "active_ratio": 0.9370369305103722,
+    "backbone_total_parameters": 6501589,
+    "inherited_samples": [
+      {
+        "checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/exchange-d256-k-capacity-afae2c3e83-a3-2026112001-r1/attempt-0/checkpoints/step-000008192-12eac3814d.pt",
+          "sha256": "3f311282c07152c7d4e5c5f26136387de16ba4e2a6118a58b9627cbfc0e718ae",
+          "size_bytes": 120592277,
+          "state_sha256": "c4e50ea33402d037ee291e68e29d2a48afd1a919b0a6b4ec6b56bf187c5c61af",
+          "steps": 8192,
+          "tokens": 2097152
+        },
+        "measured_external_tokens": 256,
+        "measurement_version": "unique-external-token-parameters-v1",
+        "migrations": [
+          {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r25/source-migrations/exchange-d256-k-capacity-afae2c3e83-a3-2026112001-r1.json",
+            "sha256": "991b0a8482491e6387bf55d7f865e1a9c24cb0be1c29d1f8e93dcaad29d247bd"
+          }
+        ],
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/exchange-d256-k-capacity-afae2c3e83-a3-2026112001-r1/attempt-0/result.json",
+          "sha256": "483f857f96c361fd0564db508ec7be890a020ebd48c1638c60b7c2ccdcf63461"
+        },
+        "seed": 2026112001,
+        "source_digest": "8849ad9c8f992b105e70f21756ad1feb626473e4198e13a2d62437586895c085",
+        "step": 8192,
+        "task": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/exchange-d256-k-capacity-afae2c3e83-a3-2026112001-r1/task.json",
+          "sha256": "eecbff0f76da33e084bea523d5f09904be0779b187f9567c6d0079955d196880"
+        },
+        "task_id": "exchange-d256-k-capacity-afae2c3e83-a3-2026112001-r1",
+        "tokens": 2097152
+      }
+    ],
+    "mean_active_backbone_parameters": 6092229.0,
+    "measured_external_tokens": 512
+  },
+  "negative_controls": {
+    "wrong_hash": {
+      "gate": [
+        "a2_not_from_selected_a1_checkpoint",
+        "a3_not_from_selected_a2_checkpoint",
+        "confirmation_evidence_error:ValueError:result does not bind its migrated task",
+        "continuation_provenance_invalid:result does not bind its migrated task",
+        "declared_real_continuation_not_established",
+        "diagnostic_identity_mismatch",
+        "invalid_selected_learning_chain",
+        "selected activity differs from the measured seed evidence"
+      ],
+      "mixed_chain": "mixed chain old reference mismatch",
+      "selection": "missing_actual_activity_measurement: result does not bind its migrated task"
+    },
+    "wrong_seed": {
+      "gate": [
+        "a2_not_from_selected_a1_checkpoint",
+        "a3_not_from_selected_a2_checkpoint",
+        "confirmation_evidence_error:ValueError:result does not bind its migrated task",
+        "continuation_provenance_invalid:result does not bind its migrated task",
+        "declared_real_continuation_not_established",
+        "diagnostic_identity_mismatch",
+        "incomplete_confirmation_seed_group",
+        "invalid_selected_learning_chain",
+        "selected activity differs from the measured seed evidence"
+      ],
+      "mixed_chain": "mixed chain old reference mismatch",
+      "selection": "missing_actual_activity_measurement: result does not bind its migrated task"
+    }
+  },
+  "observed_local": "2026-11-23T10:45:57+08:00",
+  "priority_task_id": "exchange-d256-k-capacity-afae2c3e83-a3-2026112001-r1",
+  "recoveries": {
+    "exchange-d256-k-base-4f97098597-a3-2026112001-r1": {
+      "checkpoint": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r25/round/tasks/exchange-d256-k-base-4f97098597-a3-2026112001-r1/attempt-0/checkpoints/step-000007377-f6e8539080.pt",
+        "sha256": "d22d4fd296cac0c9c8df9b228abc9c3c8214953f8a1247ede9b2e1213b72ebb9",
+        "size_bytes": 105804757,
+        "state_sha256": "23de5dee799f856b2bdc936a4a9ae9c839d3aeedda19f8a77926db93e9229792",
+        "steps": 7377,
+        "tokens": 1888512
+      },
+      "heartbeat_step": 7493,
+      "initial_evaluation": {
+        "exposure": 1048576,
+        "field": "validation_initial",
+        "mode": "inherit",
+        "observation": {
+          "nll": 5.4638452008366585,
+          "requested_tokens": 16384,
+          "seconds": 38.78360829129815,
+          "split": "selection",
+          "state_policy": "fixed article windows from cold state; training-state activity measured separately",
+          "status": "completed",
+          "tokens": 16384
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/exchange-d256-k-base-4f97098597-a3-2026112001-r1/attempt-0/result.json",
+          "sha256": "a1857ea8f3666d4947b08b470ad7b3af88cf6e9b5a2eb677022bde7e55057304"
+        }
+      },
+      "initial_replay": null,
+      "journal": {
+        "heartbeat": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r25/round/tasks/exchange-d256-k-base-4f97098597-a3-2026112001-r1/attempt-0/heartbeat.json",
+          "sha256": "8c2eb18f274dc7ccd176a2fd347d915e5def04eaa94548c5565b9c37ba4c5948"
+        },
+        "journal_step_after_last_heartbeat": {
+          "step": 7494,
+          "time_unix": 1795398999.7794168,
+          "tokens": 1918464
+        },
+        "resume_prefix": true,
+        "step_journal": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r25/round/tasks/exchange-d256-k-base-4f97098597-a3-2026112001-r1/attempt-0/steps.jsonl",
+          "sha256": "707ec2ce40cee21be909c1cc068e3d9b4e9d96b6892b66edfc6057940f1c9b73"
+        }
+      },
+      "mode": "checkpoint_only",
+      "original_result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r25/round/tasks/exchange-d256-k-base-4f97098597-a3-2026112001-r1/attempt-0/result.json",
+        "sha256": "91de92572cd9235ff8d13967f10291b1e3825fc76581b3b16f5d87c7998debf2"
+      },
+      "reason": "worker_exit_-9"
+    },
+    "exchange-d256-k-shannon-417a5ef511-a2-2026112002-r1": {
+      "checkpoint": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r25/round/tasks/exchange-d256-k-shannon-417a5ef511-a2-2026112002-r1/attempt-0/checkpoints/step-000001174-360035dd1b.pt",
+        "sha256": "240d9784d4c23073e43ace62883cf57c99cd28b95a9339b3d22f0b3efc6fc71b",
+        "size_bytes": 105804821,
+        "state_sha256": "ee634a8e8a906507785900bd41808a2939d409bc635530db4b424882161894a4",
+        "steps": 1174,
+        "tokens": 300544
+      },
+      "heartbeat_step": 1260,
+      "initial_evaluation": {
+        "exposure": 262144,
+        "field": "validation_initial",
+        "mode": "inherit",
+        "observation": {
+          "execution": "recomputed at unchanged original initial exposure",
+          "exposure": 262144,
+          "nll": 6.220268674194813,
+          "requested_tokens": 16384,
+          "seconds": 19.252349201589823,
+          "split": "selection",
+          "state_policy": "fixed article windows from cold state; training-state activity measured separately",
+          "status": "completed",
+          "tokens": 16384
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/activity-r26/initial/result.json",
+          "sha256": "ad8d877685c94a80f1eb4e25acecaa9bc44b65388532c9a17507b9f06e9751d1"
+        }
+      },
+      "initial_replay": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/activity-r26/initial/result.json",
+        "sha256": "ad8d877685c94a80f1eb4e25acecaa9bc44b65388532c9a17507b9f06e9751d1"
+      },
+      "journal": {
+        "heartbeat": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r25/round/tasks/exchange-d256-k-shannon-417a5ef511-a2-2026112002-r1/attempt-0/heartbeat.json",
+          "sha256": "433ca4b31e6ef973df2c173e2822dff27254bf8372eb18985cef1d276f012d67"
+        },
+        "journal_step_after_last_heartbeat": {
+          "step": 1261,
+          "time_unix": 1795398999.5264962,
+          "tokens": 322816
+        },
+        "resume_prefix": true,
+        "step_journal": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r25/round/tasks/exchange-d256-k-shannon-417a5ef511-a2-2026112002-r1/attempt-0/steps.jsonl",
+          "sha256": "4f5f68a71fb3cbc00fcfecb2bce2b5637c0203c1144eff881565fcf16c3334df"
+        }
+      },
+      "mode": "checkpoint_only",
+      "original_result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r25/round/tasks/exchange-d256-k-shannon-417a5ef511-a2-2026112002-r1/attempt-0/result.json",
+        "sha256": "c3388a1bb435529b1b4002ecea98ae111ed00f4b9bc6137890c7a7274162e88e"
+      },
+      "reason": "worker_exit_-9"
+    },
+    "multiscale_timed-d128-s-mixed9-542e33dbf6-a2-2026112001-r1": {
+      "checkpoint": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r25/round/tasks/multiscale_timed-d128-s-mixed9-542e33dbf6-a2-2026112001-r1/attempt-0/checkpoints/step-000002688-009f996f09.pt",
+        "sha256": "cf57b8af05db00bdc12ddf10806209a3f71f03dedcf213074215591fcc24e6c5",
+        "size_bytes": 55739407,
+        "state_sha256": "7317b131eaff657368e9d508a6110db32133bb831a04739a17fada7f7d0a6b6d",
+        "steps": 2688,
+        "tokens": 688128
+      },
+      "heartbeat_step": 2688,
+      "initial_evaluation": {
+        "exposure": 262144,
+        "field": "validation_initial",
+        "mode": "inherit",
+        "observation": {
+          "execution": "recomputed at unchanged original initial exposure",
+          "exposure": 262144,
+          "nll": 6.572957493364811,
+          "requested_tokens": 16384,
+          "seconds": 223.0713571831584,
+          "split": "selection",
+          "state_policy": "fixed article windows from cold state; training-state activity measured separately",
+          "status": "completed",
+          "tokens": 16384
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/multiscale_timed-d128-s-mixed9-542e33dbf6-a2-2026112001-r1/attempt-0/result.json",
+          "sha256": "e2dfda064ec2221f77d9ce81f264481b4b680ae1ed7f5d362442f71d3418a164"
+        }
+      },
+      "initial_replay": null,
+      "journal": null,
+      "mode": "signal",
+      "original_result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r25/round/tasks/multiscale_timed-d128-s-mixed9-542e33dbf6-a2-2026112001-r1/attempt-0/result.json",
+        "sha256": "1e36c7e441e331aee29054e2c65ee3b1eb0aa5022e887ab1d7b7cf7ba3c40971"
+      },
+      "reason": "cleanup_evidence_error:Blocked:dynamic_owner_exited_before_worker_terminal_evidence"
+    },
+    "multiscale_timed-d128-x-mixed9-ae4ffdec56-a2-2026112002-r2": {
+      "checkpoint": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r25/round/tasks/multiscale_timed-d128-x-mixed9-ae4ffdec56-a2-2026112002-r2/attempt-0/checkpoints/step-000006002-94b7e11cd0.pt",
+        "sha256": "7daa8abed40a132fdfd754f30287963acd3818cf5c19bcc41caa50a29460f7ca",
+        "size_bytes": 104044731,
+        "state_sha256": "04d0a28ad90d3f58fcacfc9785db668c6b33423b78df2fafa89de6c7e1c999bd",
+        "steps": 6002,
+        "tokens": 768256
+      },
+      "heartbeat_step": 6004,
+      "initial_evaluation": {
+        "exposure": 262144,
+        "field": "validation_initial",
+        "mode": "inherit",
+        "observation": {
+          "execution": "recomputed at unchanged original initial exposure",
+          "exposure": 262144,
+          "nll": 6.298360951244831,
+          "requested_tokens": 16384,
+          "seconds": 651.145168453455,
+          "split": "selection",
+          "state_policy": "fixed article windows from cold state; training-state activity measured separately",
+          "status": "completed",
+          "tokens": 16384
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r19/round/tasks/multiscale_timed-d128-x-mixed9-ae4ffdec56-a2-2026112002-r2/attempt-0/result.json",
+          "sha256": "c2082193686e3fc3ddb16bd277f8ea91bfce59ef621bce69fa3a8bedfeee4b56"
+        }
+      },
+      "initial_replay": null,
+      "journal": {
+        "heartbeat": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r25/round/tasks/multiscale_timed-d128-x-mixed9-ae4ffdec56-a2-2026112002-r2/attempt-0/heartbeat.json",
+          "sha256": "d2c9b751fb2ab2d18cd047f8f0ed18591e82c5ac066b0722f9e8b3bf7d2c5f81"
+        },
+        "resume_prefix": true,
+        "step_journal": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r25/round/tasks/multiscale_timed-d128-x-mixed9-ae4ffdec56-a2-2026112002-r2/attempt-0/steps.jsonl",
+          "sha256": "8b7817f20bdd6a29f0abeaf87bb46c0795884d3376bf0df3a1905b65f4fc2389"
+        }
+      },
+      "mode": "checkpoint_only",
+      "original_result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r25/round/tasks/multiscale_timed-d128-x-mixed9-ae4ffdec56-a2-2026112002-r2/attempt-0/result.json",
+        "sha256": "522a33a78a741ab827e9f71f8ca34ae5a0c211221938b1ec52bf259fbe7e033e"
+      },
+      "reason": "worker_exit_-9"
+    }
+  },
+  "replay_plan": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/activity-r26/initial-plan.json",
+    "sha256": "a34675d374a033ec69640016e7826e7289e68be6241b200823624b3460daaab7"
+  },
+  "replay_queue": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/activity-r26/initial-queue.json",
+    "sha256": "62b3eae8a0685ec15b68fd9faff3947793d5a8c2b6882bcee2717443f340daa6"
+  },
+  "schema": "pilot-r3-activity-evidence-continuation-v1",
+  "stage_a_scope": {
+    "already_selected": 90,
+    "exposed_subject_ids": [
+      "exchange-d128-k-base-4aac2dcb10",
+      "exchange-d128-k-capacity-74eba502b1",
+      "exchange-d128-k-independent-d3d8980f6a",
+      "exchange-d128-k-narrowwide-a8b4f1078d",
+      "exchange-d128-k-pool-25a642ea44",
+      "exchange-d128-k-shannon-b4f9572c1e",
+      "exchange-d128-s-base-0f1647288b",
+      "exchange-d128-s-capacity-32268b8664",
+      "exchange-d128-s-independent-9e3c5ca87d",
+      "exchange-d128-s-narrowwide-5d192e0d6d",
+      "exchange-d128-s-pool-0f81d87b81",
+      "exchange-d128-s-shannon-4274ad3518",
+      "exchange-d128-x-base-2ab17f45cd",
+      "exchange-d128-x-capacity-faa7acc649",
+      "exchange-d128-x-independent-1edb3a093d",
+      "exchange-d128-x-narrowwide-f2f75f7e7f",
+      "exchange-d128-x-pool-5c0c9ad46d",
+      "exchange-d128-x-shannon-71abfc07a5",
+      "exchange-d128-x_reverse-base-817dc5b466",
+      "exchange-d128-x_reverse-capacity-e1bd082588",
+      "exchange-d128-x_reverse-independent-9faca6385c",
+      "exchange-d128-x_reverse-narrowwide-a276d01a16",
+      "exchange-d128-x_reverse-pool-26a8635043",
+      "exchange-d128-x_reverse-shannon-86ba13b249",
+      "exchange-d256-k-base-4f97098597",
+      "exchange-d256-k-capacity-afae2c3e83",
+      "exchange-d256-k-independent-7ec4f58bca",
+      "exchange-d256-k-narrowwide-c37cf9388b",
+      "exchange-d256-k-pool-2ad67d691b",
+      "exchange-d256-k-shannon-417a5ef511",
+      "exchange-d256-s-base-05c8908295",
+      "exchange-d256-s-capacity-171c8b98d0",
+      "exchange-d256-s-independent-c47e3ed498",
+      "exchange-d256-s-narrowwide-d1af418efa",
+      "exchange-d256-s-pool-c419779d1a",
+      "exchange-d256-s-shannon-2b8b292dbc",
+      "exchange-d256-x-base-ae3f147d0b",
+      "exchange-d256-x-capacity-13e62bfec2",
+      "exchange-d256-x-independent-83ef74944b",
+      "exchange-d256-x-narrowwide-3754933830",
+      "exchange-d256-x-pool-c5f24ae509",
+      "exchange-d256-x-shannon-89d19dc30e",
+      "exchange-d256-x_reverse-base-7cf4ba7a94",
+      "exchange-d256-x_reverse-capacity-b9547f2bb6",
+      "exchange-d256-x_reverse-independent-fb6e51933d",
+      "exchange-d256-x_reverse-narrowwide-56ff71f804",
+      "exchange-d256-x_reverse-pool-a45b190f73",
+      "exchange-d256-x_reverse-shannon-d9e3c0c28c",
+      "fc-d128-k-ffn1-e8be37f2b7",
+      "fc-d128-k-shared-f9498953c0",
+      "fc-d128-s-base-5c4809c97b",
+      "fc-d128-s-depth3-fbc6080d7d",
+      "fc-d128-s-ffn1-f45d256eab",
+      "fc-d128-s-shared-cbe5e2ff4e",
+      "fc-d256-k-base-0e3021c331",
+      "fc-d256-k-depth3-2f03e71304",
+      "fc-d256-k-ffn1-2b14f30d4a",
+      "fc-d256-k-shared-b862e34fe3",
+      "fc-d256-s-base-7e5a1b3415",
+      "fc-d256-s-depth3-91e5cfbe4e",
+      "fc-d256-s-ffn1-ca290fd261",
+      "fc-d256-s-shared-6af703487d",
+      "lattice-d128-k-base-78dbac086a",
+      "lattice-d128-k-depth2-87732fbcda",
+      "lattice-d128-k-ffn2-848b8b0ddd",
+      "lattice-d128-k-layershared-91f7652530",
+      "lattice-d128-k-memoryshared-ce62b8f81b",
+      "lattice-d128-k-nodes4-1f22ba3272",
+      "lattice-d128-k-receive128-ee1edca248",
+      "lattice-d128-k-receive64-c05227ce86",
+      "lattice-d128-s-base-0a353237f5",
+      "lattice-d128-s-depth2-00b9531d37",
+      "lattice-d128-s-ffn2-5c6ff7f21c",
+      "lattice-d128-s-layershared-6312958b4e",
+      "lattice-d128-s-memoryshared-4a1c5168a4",
+      "lattice-d128-s-nodes4-87a2e4a9d9",
+      "lattice-d128-s-receive128-1ede806cba",
+      "lattice-d128-s-receive64-cd47a49acb",
+      "lattice-d256-k-base-416b5585a2",
+      "lattice-d256-k-depth2-c24a34d6ed",
+      "lattice-d256-k-ffn2-e4a5b07a08",
+      "lattice-d256-k-layershared-1bb62cd81d",
+      "lattice-d256-k-memoryshared-719a561efa",
+      "lattice-d256-k-nodes4-910f84829b",
+      "lattice-d256-k-receive128-959d85255b",
+      "lattice-d256-k-receive64-c3e271805b",
+      "lattice-d256-s-base-7f0fca324e",
+      "lattice-d256-s-depth2-8bfed52ede",
+      "lattice-d256-s-ffn2-5372474eb5",
+      "lattice-d256-s-layershared-015f2cec51",
+      "lattice-d256-s-memoryshared-f80260ac11",
+      "lattice-d256-s-nodes4-3f686fda6a",
+      "lattice-d256-s-receive128-0a7681b33e",
+      "lattice-d256-s-receive64-2d8d03e9f1",
+      "low-activity-fc-base-n16-d128-k1-9459fb82e1",
+      "low-activity-fc-base-n16-d128-k2-facd1047db",
+      "low-activity-fc-base-n16-d128-k4-331e82d848",
+      "low-activity-fc-base-n16-d128-k8-2a7e46028d",
+      "low-activity-fc-depth3-n16-d128-k1-98601618df",
+      "low-activity-fc-depth3-n16-d128-k2-7cf0ffa8b3",
+      "low-activity-fc-depth3-n16-d128-k4-9f824da109",
+      "low-activity-fc-depth3-n16-d128-k8-dd9f3c5f19",
+      "low-activity-fc-memory_s-n16-d128-k1-21b1de9bd0",
+      "low-activity-fc-memory_s-n16-d128-k2-108a76d880",
+      "low-activity-fc-memory_s-n16-d128-k4-bdbb245463",
+      "low-activity-fc-memory_s-n16-d128-k8-caf6ec75f9",
+      "multiscale_settle-d128-k-group5-b152141dc5",
+      "multiscale_settle-d128-k-mixed9-e96a17a14d",
+      "multiscale_settle-d128-k-singleton7-43b1716b2d",
+      "multiscale_settle-d128-s-group5-e393757acf",
+      "multiscale_settle-d128-s-mixed9-5bc345edf5",
+      "multiscale_settle-d128-s-singleton7-ffd53c4df7",
+      "multiscale_settle-d128-x-group5-4380cdb1f8",
+      "multiscale_settle-d128-x-mixed9-70e3fa0199",
+      "multiscale_settle-d128-x-singleton7-281f04cf8c",
+      "multiscale_settle-d128-x_reverse-group5-5850ce5a6d",
+      "multiscale_settle-d128-x_reverse-mixed9-35343ff0aa",
+      "multiscale_settle-d128-x_reverse-singleton7-655942fdd4",
+      "multiscale_settle-d256-k-group5-53ebbbaa25",
+      "multiscale_settle-d256-k-mixed9-0fad868c8b",
+      "multiscale_settle-d256-k-singleton7-cad34be170",
+      "multiscale_settle-d256-s-group5-aad4200d9a",
+      "multiscale_settle-d256-s-mixed9-44f0426744",
+      "multiscale_settle-d256-s-singleton7-49cd2e2448",
+      "multiscale_settle-d256-x-group5-cb1443b5b5",
+      "multiscale_settle-d256-x-mixed9-86ec4aebf2",
+      "multiscale_settle-d256-x-singleton7-96194847fa",
+      "multiscale_settle-d256-x_reverse-group5-06dadd446a",
+      "multiscale_settle-d256-x_reverse-mixed9-cb57866ab9",
+      "multiscale_settle-d256-x_reverse-singleton7-79bf479cff",
+      "multiscale_timed-d128-k-group5-b74cd801f3",
+      "multiscale_timed-d128-k-mixed9-b193254132",
+      "multiscale_timed-d128-k-singleton7-eaab60796a",
+      "multiscale_timed-d128-s-group5-37506fa4ee",
+      "multiscale_timed-d128-s-mixed9-542e33dbf6",
+      "multiscale_timed-d128-s-singleton7-139de547de",
+      "multiscale_timed-d128-x-group5-4b26d12571",
+      "multiscale_timed-d128-x-mixed9-ae4ffdec56",
+      "multiscale_timed-d128-x-singleton7-8ac3511b6a",
+      "multiscale_timed-d128-x_reverse-group5-f83e81e4af",
+      "multiscale_timed-d128-x_reverse-mixed9-99820c3100",
+      "multiscale_timed-d128-x_reverse-singleton7-2f58b0a0f6",
+      "multiscale_timed-d256-k-group5-27d7c0e70b",
+      "multiscale_timed-d256-k-mixed9-fa94f99487",
+      "multiscale_timed-d256-k-singleton7-ffd4b110ac",
+      "multiscale_timed-d256-s-group5-5f436f22c1",
+      "multiscale_timed-d256-s-mixed9-b15cc248ef",
+      "multiscale_timed-d256-s-singleton7-d252547d80",
+      "multiscale_timed-d256-x-group5-3db19adc40",
+      "multiscale_timed-d256-x-mixed9-c39d1fad91",
+      "multiscale_timed-d256-x-singleton7-4a89c4ac13",
+      "multiscale_timed-d256-x_reverse-group5-6f1c2603c6",
+      "multiscale_timed-d256-x_reverse-mixed9-e7d7132220",
+      "multiscale_timed-d256-x_reverse-singleton7-7307401cb8"
+    ],
+    "prospective_recipe_check": {
+      "canonical_prospective_subjects_sha256": "c724771307ff15ca36257c50cf30edb2a13a6c8f20a70d69604c331dfab8b765"
+    },
+    "subject_count": 270
+  },
+  "stage_b_gate": "closed",
+  "stage_start_replays": {
+    "exchange-d256-k-shannon-417a5ef511-a2-2026112002-r1": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/activity-r26/initial/result.json",
+      "sha256": "ad8d877685c94a80f1eb4e25acecaa9bc44b65388532c9a17507b9f06e9751d1"
+    }
+  },
+  "tests": {
+    "activity-tests-final.log": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/activity-r26/activity-tests-final.log",
+      "sha256": "13dfddd98a0bcc8048bc0b49e67b05f6b6c0909c61d5954e2e215e8ad42931b7"
+    },
+    "controller-tests-final.log": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/activity-r26/controller-tests-final.log",
+      "sha256": "6c72e1315da5442f1c108e121049896f1f171bc953d37a7278ab408c77337afc"
+    }
+  },
+  "unpublished_signal_results": {
+    "multiscale_timed-d128-s-mixed9-542e33dbf6-a2-2026112001-r1": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r25/round/tasks/multiscale_timed-d128-s-mixed9-542e33dbf6-a2-2026112001-r1/attempt-0/result.json",
+      "sha256": "1e36c7e441e331aee29054e2c65ee3b1eb0aa5022e887ab1d7b7cf7ba3c40971"
+    }
+  },
+  "verification_driver": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/activity-r26/verify-final.py",
+    "sha256": "bd0434492d03c868eaa7f8eaf464225eaa943286495b1c9120997663b31724c3"
+  }
+}

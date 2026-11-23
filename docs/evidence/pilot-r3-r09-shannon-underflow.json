@@ -1,0 +1,1884 @@
+{
+  "candidate_batch_results": {
+    "cpu_fp32_bounded_scores": {
+      "all_grad_finite": true,
+      "all_logits_finite": true,
+      "finite_loss": true,
+      "minimum_positive_allocation": 1.1782591648133063e-25,
+      "objective": 5.558220386505127,
+      "optimizer_steps": 0,
+      "shannon_calls": 10,
+      "tensors_with_grad": 123
+    },
+    "cpu_fp64_all_floating_state": {
+      "all_grad_finite": true,
+      "all_logits_finite": true,
+      "finite_loss": true,
+      "minimum_positive_allocation": 9.25950152345494e-51,
+      "objective": 5.557805585643979,
+      "optimizer_steps": 0,
+      "shannon_calls": 10,
+      "tensors_with_grad": 123
+    },
+    "npu_fp32_bounded_scores": {
+      "all_grad_finite": true,
+      "all_logits_finite": true,
+      "device": "npu:0",
+      "diagnostic": "smooth Shannon scores 32*tanh(s/32)",
+      "failure_capture_sha256": "376cbcab8a82b59b312ea0c525cc046768028f6f7738da427b7859f05220726e",
+      "finite_loss": true,
+      "minimum_positive_allocation": 1.1782636021558982e-25,
+      "objective": 5.558219909667969,
+      "optimizer_steps": 0,
+      "physical_id": "4",
+      "shannon_calls": 10,
+      "tensors_with_grad": 123
+    }
+  },
+  "device_lock_after_probes": "unlocked",
+  "diagnostic_queue": [
+    {
+      "elapsed_seconds": 15.045103207230568,
+      "job_id": "tide-r09-shannon-investigate-08dlffay",
+      "job_lock_now": "unlocked",
+      "logical_device": "npu:0",
+      "logical_devices": [
+        "npu:0"
+      ],
+      "npu_count": 1,
+      "physical_id": 4,
+      "physical_ids": [
+        4
+      ],
+      "priority": 0,
+      "project": "tide-learning-lab",
+      "queue_manifest_absent": true,
+      "return_code": 1,
+      "schema_version": 1,
+      "status": "failed",
+      "timestamp": "2026-11-20T13:38:24.274689+00:00"
+    },
+    {
+      "elapsed_seconds": 16.47553091496229,
+      "job_id": "tide-r09-shannon-softcap-08dlffay",
+      "job_lock_now": "unlocked",
+      "logical_device": "npu:0",
+      "logical_devices": [
+        "npu:0"
+      ],
+      "npu_count": 1,
+      "physical_id": 4,
+      "physical_ids": [
+        4
+      ],
+      "priority": 0,
+      "project": "tide-learning-lab",
+      "queue_manifest_absent": true,
+      "return_code": 0,
+      "schema_version": 1,
+      "status": "completed",
+      "timestamp": "2026-11-20T13:42:00.322017+00:00"
+    }
+  ],
+  "failure": {
+    "capture": {
+      "path": ".local/pilot-r3/campaign-r09/round/tasks/multiscale_settle-d128-k-singleton7-43b1716b2d-a2-2026112001-r2/attempt-0/failure.pt",
+      "sha256": "376cbcab8a82b59b312ea0c525cc046768028f6f7738da427b7859f05220726e"
+    },
+    "completed_steps": 1255,
+    "completed_tokens": 321280,
+    "error": "Shannon allocation underflow would erase a positive sender",
+    "module": "tide.region.region_control -> tide.allocation.allocate -> _Constrained.forward -> _save_solution",
+    "next_update": 1256,
+    "physical_id": 4,
+    "recovery": "exact",
+    "result": {
+      "path": ".local/pilot-r3/campaign-r09/round/tasks/multiscale_settle-d128-k-singleton7-43b1716b2d-a2-2026112001-r2/attempt-0/result.json",
+      "sha256": "a75f7c3a4d2b3aad0483ca4bad9a2c275d9b6fdeb29724f6a051365b7a645faf"
+    },
+    "task": {
+      "path": ".local/pilot-r3/campaign-r09/round/tasks/multiscale_settle-d128-k-singleton7-43b1716b2d-a2-2026112001-r2/task.json",
+      "sha256": "fc61ec0d4417154ad9ecf5b23d2d9850525c38935a9ba23703ce78b18b17330b"
+    },
+    "task_id": "multiscale_settle-d128-k-singleton7-43b1716b2d-a2-2026112001-r2",
+    "unit": "tide-pilot-r3-campaign-r09.service",
+    "worker_device": "Ascend NPU FP32"
+  },
+  "foundation": {
+    "ahead_of_remote": 1,
+    "controller_plan": {
+      "path": ".local/pilot-r3/campaign-r09/campaign-plan.json",
+      "sha256": "257c6d58bf45529e2a262c10e63f97cc2e038ddb5e433a9a7f6837115ec9708b"
+    },
+    "frozen_training_root": ".local/pilot-r3/campaign-r08/frozen/foundation/src/tide",
+    "lab_cap_patch": {
+      "path": "patches/pilot-round2-shannon-cap.patch",
+      "sha256": "3fa3bd1614e6eea01665e50dc5f4b90ea870ff43c52a602900e20de7d5e41b16"
+    },
+    "live_remote_head": "b3a02979276fbd1ca448318ef05c7e3a4533c67b",
+    "local_head": "049ecdcbc39c80297b37a99591906acbefa1bc13",
+    "local_worktree": "/mi/data2T/zlong/home/llm/graph-execution-foundation",
+    "lookup": "git ls-remote --symref https://github.com/ZichaoLong/tide.git HEAD refs/heads/graph-execution-foundation",
+    "prior_active_set_witness": {
+      "decimal_weak_mass": 5.8905588703119336e-08,
+      "scores": [
+        6.040277004241943,
+        -10.60705280303955
+      ],
+      "source": {
+        "path": "../graph-execution-foundation/docs/shannon-active-set.md",
+        "sha256": "50437c207aca6a79f3c5bd7b0a3f592307c7841670dbc0a89a657a6ca2ee086c"
+      }
+    },
+    "public_npu_arithmetic_commit": "3efcc6b1ae68e5c22f5895a7d68220836edfcef7",
+    "public_scaled_positive_chain_commit": "b4a8d93799eb24ed7f338ed969702b7ac0150e8a",
+    "python_files_matching_worktree": 25,
+    "ref": "refs/heads/graph-execution-foundation",
+    "remote": "https://github.com/ZichaoLong/tide.git",
+    "runtime_files_changed_vs_remote": [
+      {
+        "file": "src/tide/allocation.py",
+        "frozen_training_sha256": "a8e4346837e7db763d3b778126090c82719c8192679606b4b1b508e576a4e74e",
+        "local_head_sha256": "004051c7178380b270e2cce020661bd144ed9afd78c98271d9e5c253beb9d65f",
+        "local_worktree_sha256": "a8e4346837e7db763d3b778126090c82719c8192679606b4b1b508e576a4e74e",
+        "remote_sha256": "1fc55fa5c3199620763cb5dc77e8542e6e7cf51a360b0ffdceddcbc8006db221"
+      },
+      {
+        "file": "src/tide/attention.py",
+        "frozen_training_sha256": "c163d02d95c7e62d6cf9ed83638bfea79cdb354253bcebd7ca104681a954257c",
+        "local_head_sha256": "58602a6211632de9db1632c53cbcbf6b9890360ee4d0266d32bb536b1bec2214",
+        "local_worktree_sha256": "c163d02d95c7e62d6cf9ed83638bfea79cdb354253bcebd7ca104681a954257c",
+        "remote_sha256": "58602a6211632de9db1632c53cbcbf6b9890360ee4d0266d32bb536b1bec2214"
+      },
+      {
+        "file": "src/tide/config.py",
+        "frozen_training_sha256": "01e4be6898e1d5a156ff29c2739509c30b65b372ff65c39584b3b4f1a72d520a",
+        "local_head_sha256": "2b890c0ae9eac381aa3ab9726eb386339345f62dc7b3e27433ecd5a0b1c0299f",
+        "local_worktree_sha256": "01e4be6898e1d5a156ff29c2739509c30b65b372ff65c39584b3b4f1a72d520a",
+        "remote_sha256": "2b890c0ae9eac381aa3ab9726eb386339345f62dc7b3e27433ecd5a0b1c0299f"
+      },
+      {
+        "file": "src/tide/model.py",
+        "frozen_training_sha256": "6e38b6d6e0382688cc8b7e01de8f87adff35e8777cbd9d41a87dd705c44e936d",
+        "local_head_sha256": "1911afe3b66b199eb7e066ea57c5900fead1e390ebb5894818d423284850255e",
+        "local_worktree_sha256": "6e38b6d6e0382688cc8b7e01de8f87adff35e8777cbd9d41a87dd705c44e936d",
+        "remote_sha256": "1911afe3b66b199eb7e066ea57c5900fead1e390ebb5894818d423284850255e"
+      }
+    ]
+  },
+  "numeric_witness": {
+    "all_failing_coordinates": {
+      "cpu": [
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            1.2151709138204085e-46,
+            -1.2151709138204085e-46
+          ],
+          "cpu_fp64_weak_mass": 1.2151709138204085e-46,
+          "decimal_weak_mass": "1.215170913820407274E-46",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            0,
+            1,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 105.72402954101562,
+          "scores": [
+            -73.420654296875,
+            32.303375244140625
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            2.68717386180067e-47,
+            -2.68717386180067e-47
+          ],
+          "cpu_fp64_weak_mass": 2.68717386180067e-47,
+          "decimal_weak_mass": "2.687173861800695628E-47",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            0,
+            11,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 107.2330093383789,
+          "scores": [
+            -73.00955200195312,
+            34.22345733642578
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            2.8842917315753816e-47,
+            -2.8842917315753816e-47
+          ],
+          "cpu_fp64_weak_mass": 2.8842917315753816e-47,
+          "decimal_weak_mass": "2.884291731575409030E-47",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            0,
+            24,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 107.1622200012207,
+          "scores": [
+            -70.31761932373047,
+            36.844600677490234
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            2.3601753141212438e-49,
+            -2.3601753141212438e-49
+          ],
+          "cpu_fp64_weak_mass": 2.3601753141212438e-49,
+          "decimal_weak_mass": "2.360175314121268804E-49",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            0,
+            44,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 111.96793365478516,
+          "scores": [
+            -78.46302032470703,
+            33.504913330078125
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            3.490923491160149e-48,
+            -3.490923491160149e-48
+          ],
+          "cpu_fp64_weak_mass": 3.490923491160149e-48,
+          "decimal_weak_mass": "3.490923491160162465E-48",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            0,
+            49,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 109.27391815185547,
+          "scores": [
+            -73.33262634277344,
+            35.94129180908203
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            1.57020262643241e-48,
+            -1.57020262643241e-48
+          ],
+          "cpu_fp64_weak_mass": 1.57020262643241e-48,
+          "decimal_weak_mass": "1.570202626432413326E-48",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            0,
+            58,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 110.07287979125977,
+          "scores": [
+            -76.22833251953125,
+            33.844547271728516
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            1.8285131584682337e-47,
+            -1.8285131584682337e-47
+          ],
+          "cpu_fp64_weak_mass": 1.8285131584682337e-47,
+          "decimal_weak_mass": "1.828513158468247736E-47",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            0,
+            72,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 107.61799621582031,
+          "scores": [
+            -73.68441009521484,
+            33.93358612060547
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            9.259902342738753e-51,
+            -9.259902342738753e-51
+          ],
+          "cpu_fp64_weak_mass": 9.259902342738753e-51,
+          "decimal_weak_mass": "9.259902342738764432E-51",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            0,
+            99,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 115.20614624023438,
+          "scores": [
+            -79.39852905273438,
+            35.8076171875
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            8.139891299010315e-49,
+            -8.139891299010315e-49
+          ],
+          "cpu_fp64_weak_mass": 8.139891299010315e-49,
+          "decimal_weak_mass": "8.139891299010316713E-49",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            0,
+            100,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 110.72989273071289,
+          "scores": [
+            -74.6032485961914,
+            36.126644134521484
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            3.0739908718069716e-48,
+            -3.0739908718069716e-48
+          ],
+          "cpu_fp64_weak_mass": 3.0739908718069716e-48,
+          "decimal_weak_mass": "3.073990871806983670E-48",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            0,
+            120,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 109.40110778808594,
+          "scores": [
+            -72.95022583007812,
+            36.45088195800781
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            1.8740542601122863e-47,
+            -1.8740542601122863e-47
+          ],
+          "cpu_fp64_weak_mass": 1.8740542601122863e-47,
+          "decimal_weak_mass": "1.874054260112300621E-47",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            0,
+            127,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 107.5933952331543,
+          "scores": [
+            -75.99980926513672,
+            31.593585968017578
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            6.956922337493545e-49,
+            -6.956922337493545e-49
+          ],
+          "cpu_fp64_weak_mass": 6.956922337493545e-49,
+          "decimal_weak_mass": "6.956922337493545590E-49",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            1,
+            15,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 110.88693237304688,
+          "scores": [
+            -78.48946380615234,
+            32.39746856689453
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            1.4326626416485796e-46,
+            -1.4326626416485796e-46
+          ],
+          "cpu_fp64_weak_mass": 1.4326626416485796e-46,
+          "decimal_weak_mass": "1.432662641648578245E-46",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            1,
+            30,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 105.55937957763672,
+          "scores": [
+            -74.04169464111328,
+            31.517684936523438
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            1.2751244264879899e-49,
+            -1.2751244264879899e-49
+          ],
+          "cpu_fp64_weak_mass": 1.2751244264879899e-49,
+          "decimal_weak_mass": "1.275124426488001022E-49",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            1,
+            41,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 112.58362579345703,
+          "scores": [
+            -79.17268371582031,
+            33.41094207763672
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            8.842959663141177e-47,
+            -8.842959663141177e-47
+          ],
+          "cpu_fp64_weak_mass": 8.842959663141177e-47,
+          "decimal_weak_mass": "8.842959663141168718E-47",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            1,
+            54,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 106.04187774658203,
+          "scores": [
+            -71.2305908203125,
+            34.81128692626953
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            8.724758343815479e-48,
+            -8.724758343815479e-48
+          ],
+          "cpu_fp64_weak_mass": 8.724758343815479e-48,
+          "decimal_weak_mass": "8.724758343815528784E-48",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            1,
+            62,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 108.35791969299316,
+          "scores": [
+            -76.39354705810547,
+            31.964372634887695
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            8.31061498415691e-47,
+            -8.31061498415691e-47
+          ],
+          "cpu_fp64_weak_mass": 8.31061498415691e-47,
+          "decimal_weak_mass": "8.310614984156886120E-47",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            1,
+            65,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 106.10396575927734,
+          "scores": [
+            -72.46265411376953,
+            33.64131164550781
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            2.6359948218402504e-46,
+            -2.6359948218402504e-46
+          ],
+          "cpu_fp64_weak_mass": 2.6359948218402504e-46,
+          "decimal_weak_mass": "2.635994821840252651E-46",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            1,
+            66,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 104.94965362548828,
+          "scores": [
+            -71.44047546386719,
+            33.509178161621094
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            2.0908500176433235e-47,
+            -2.0908500176433235e-47
+          ],
+          "cpu_fp64_weak_mass": 2.0908500176433235e-47,
+          "decimal_weak_mass": "2.090850017643339315E-47",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            1,
+            69,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 107.48392868041992,
+          "scores": [
+            -74.67119598388672,
+            32.8127326965332
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            4.0690531471586824e-48,
+            -4.0690531471586824e-48
+          ],
+          "cpu_fp64_weak_mass": 4.0690531471586824e-48,
+          "decimal_weak_mass": "4.069053147158698208E-48",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            1,
+            77,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 109.12067413330078,
+          "scores": [
+            -75.99186706542969,
+            33.128807067871094
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            6.194227431408565e-49,
+            -6.194227431408565e-49
+          ],
+          "cpu_fp64_weak_mass": 6.194227431408565e-49,
+          "decimal_weak_mass": "6.194227431408555085E-49",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            1,
+            84,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 111.0030517578125,
+          "scores": [
+            -76.27368927001953,
+            34.72936248779297
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            7.731845554275754e-48,
+            -7.731845554275754e-48
+          ],
+          "cpu_fp64_weak_mass": 7.731845554275754e-48,
+          "decimal_weak_mass": "7.731845554275798248E-48",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            1,
+            105,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 108.4787368774414,
+          "scores": [
+            -74.67363739013672,
+            33.80509948730469
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            1.140389098248731e-47,
+            -1.140389098248731e-47
+          ],
+          "cpu_fp64_weak_mass": 1.140389098248731e-47,
+          "decimal_weak_mass": "1.140389098248739736E-47",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            1,
+            127,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 108.09012985229492,
+          "scores": [
+            -75.07592010498047,
+            33.01420974731445
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        }
+      ],
+      "npu": [
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            1.2151616428374501e-46,
+            -1.2151616428374501e-46
+          ],
+          "cpu_fp64_weak_mass": 1.2151616428374501e-46,
+          "decimal_weak_mass": "1.215161642837448877E-46",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            0,
+            1,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 105.72403717041016,
+          "scores": [
+            -73.42066192626953,
+            32.303375244140625
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            2.687184112575005e-47,
+            -2.687184112575005e-47
+          ],
+          "cpu_fp64_weak_mass": 2.687184112575005e-47,
+          "decimal_weak_mass": "2.687184112575030286E-47",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            0,
+            11,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 107.23300552368164,
+          "scores": [
+            -73.0095443725586,
+            34.22346115112305
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            2.8843027342961495e-47,
+            -2.8843027342961495e-47
+          ],
+          "cpu_fp64_weak_mass": 2.8843027342961495e-47,
+          "decimal_weak_mass": "2.884302734296176746E-47",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            0,
+            24,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 107.16221618652344,
+          "scores": [
+            -70.31761932373047,
+            36.84459686279297
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            2.3602113278132745e-49,
+            -2.3602113278132745e-49
+          ],
+          "cpu_fp64_weak_mass": 2.3602113278132745e-49,
+          "decimal_weak_mass": "2.360211327813299466E-49",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            0,
+            44,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 111.9679183959961,
+          "scores": [
+            -78.46302032470703,
+            33.50489807128906
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            3.490976758831733e-48,
+            -3.490976758831733e-48
+          ],
+          "cpu_fp64_weak_mass": 3.490976758831733e-48,
+          "decimal_weak_mass": "3.490976758831746453E-48",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            0,
+            49,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 109.2739028930664,
+          "scores": [
+            -73.3326187133789,
+            35.9412841796875
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            1.5702565359868135e-48,
+            -1.5702565359868135e-48
+          ],
+          "cpu_fp64_weak_mass": 1.5702565359868135e-48,
+          "decimal_weak_mass": "1.570256535986816625E-48",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            0,
+            58,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 110.07284545898438,
+          "scores": [
+            -76.22830200195312,
+            33.84454345703125
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            1.8285271089697422e-47,
+            -1.8285271089697422e-47
+          ],
+          "cpu_fp64_weak_mass": 1.8285271089697422e-47,
+          "decimal_weak_mass": "1.828527108969756145E-47",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            0,
+            72,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 107.61798858642578,
+          "scores": [
+            -73.68441009521484,
+            33.93357849121094
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            9.259619757257512e-51,
+            -9.259619757257512e-51
+          ],
+          "cpu_fp64_weak_mass": 9.259619757257512e-51,
+          "decimal_weak_mass": "9.259619757257524213E-51",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            0,
+            99,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 115.2061767578125,
+          "scores": [
+            -79.3985595703125,
+            35.8076171875
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            8.140046556596367e-49,
+            -8.140046556596367e-49
+          ],
+          "cpu_fp64_weak_mass": 8.140046556596367e-49,
+          "decimal_weak_mass": "8.140046556596367825E-49",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            0,
+            100,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 110.72987365722656,
+          "scores": [
+            -74.60322570800781,
+            36.12664794921875
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            3.07396741920729e-48,
+            -3.07396741920729e-48
+          ],
+          "cpu_fp64_weak_mass": 3.07396741920729e-48,
+          "decimal_weak_mass": "3.073967419207301875E-48",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            0,
+            120,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 109.40111541748047,
+          "scores": [
+            -72.95022583007812,
+            36.450889587402344
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            1.8742222679597877e-47,
+            -1.8742222679597877e-47
+          ],
+          "cpu_fp64_weak_mass": 1.8742222679597877e-47,
+          "decimal_weak_mass": "1.874222267959801813E-47",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            0,
+            127,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 107.59330558776855,
+          "scores": [
+            -75.99972534179688,
+            31.59358024597168
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            6.956895798991545e-49,
+            -6.956895798991545e-49
+          ],
+          "cpu_fp64_weak_mass": 6.956895798991545e-49,
+          "decimal_weak_mass": "6.956895798991545795E-49",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            1,
+            15,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 110.88693618774414,
+          "scores": [
+            -78.48946380615234,
+            32.3974723815918
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            1.4327008983791914e-46,
+            -1.4327008983791914e-46
+          ],
+          "cpu_fp64_weak_mass": 1.4327008983791914e-46,
+          "decimal_weak_mass": "1.432700898379190051E-46",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            1,
+            30,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 105.55935287475586,
+          "scores": [
+            -74.04167938232422,
+            31.51767349243164
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            1.2751341549524271e-49,
+            -1.2751341549524271e-49
+          ],
+          "cpu_fp64_weak_mass": 1.2751341549524271e-49,
+          "decimal_weak_mass": "1.275134154952438232E-49",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            1,
+            41,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 112.5836181640625,
+          "scores": [
+            -79.17268371582031,
+            33.41093444824219
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            8.842824731314441e-47,
+            -8.842824731314441e-47
+          ],
+          "cpu_fp64_weak_mass": 8.842824731314441e-47,
+          "decimal_weak_mass": "8.842824731314431410E-47",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            1,
+            54,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 106.0418930053711,
+          "scores": [
+            -71.23060607910156,
+            34.81128692626953
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            8.7249247569615e-48,
+            -8.7249247569615e-48
+          ],
+          "cpu_fp64_weak_mass": 8.7249247569615e-48,
+          "decimal_weak_mass": "8.724924756961550132E-48",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            1,
+            62,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 108.35790061950684,
+          "scores": [
+            -76.3935317993164,
+            31.96436882019043
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            8.31051987726035e-47,
+            -8.31051987726035e-47
+          ],
+          "cpu_fp64_weak_mass": 8.31051987726035e-47,
+          "decimal_weak_mass": "8.310519877260326009E-47",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            1,
+            65,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 106.10397720336914,
+          "scores": [
+            -72.4626693725586,
+            33.64130783081055
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            2.6360149329614464e-46,
+            -2.6360149329614464e-46
+          ],
+          "cpu_fp64_weak_mass": 2.6360149329614464e-46,
+          "decimal_weak_mass": "2.636014932961448544E-46",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            1,
+            66,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 104.94964599609375,
+          "scores": [
+            -71.44046783447266,
+            33.509178161621094
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            2.0908659696238656e-47,
+            -2.0908659696238656e-47
+          ],
+          "cpu_fp64_weak_mass": 2.0908659696238656e-47,
+          "decimal_weak_mass": "2.090865969623881487E-47",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            1,
+            69,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 107.48392105102539,
+          "scores": [
+            -74.67119598388672,
+            32.81272506713867
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            4.0691152364560414e-48,
+            -4.0691152364560414e-48
+          ],
+          "cpu_fp64_weak_mass": 4.0691152364560414e-48,
+          "decimal_weak_mass": "4.069115236456057346E-48",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            1,
+            77,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 109.12065887451172,
+          "scores": [
+            -75.99185180664062,
+            33.128807067871094
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            6.1940147731371005e-49,
+            -6.1940147731371005e-49
+          ],
+          "cpu_fp64_weak_mass": 6.1940147731371005e-49,
+          "decimal_weak_mass": "6.194014773137089861E-49",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            1,
+            84,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 111.00308609008789,
+          "scores": [
+            -76.27371215820312,
+            34.729373931884766
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            7.731609600675385e-48,
+            -7.731609600675385e-48
+          ],
+          "cpu_fp64_weak_mass": 7.731609600675385e-48,
+          "decimal_weak_mass": "7.731609600675429731E-48",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            1,
+            105,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 108.47876739501953,
+          "scores": [
+            -74.67366790771484,
+            33.80509948730469
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            1.1404935087683884e-47,
+            -1.1404935087683884e-47
+          ],
+          "cpu_fp64_weak_mass": 1.1404935087683884e-47,
+          "decimal_weak_mass": "1.140493508768397205E-47",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            1,
+            127,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 108.09003829956055,
+          "scores": [
+            -75.07583618164062,
+            33.01420211791992
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        }
+      ]
+    },
+    "summary": {
+      "cpu": {
+        "all_below_fp32_half_min_subnormal": true,
+        "bad": 23,
+        "call": 9,
+        "representative": {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            1.2151709138204085e-46,
+            -1.2151709138204085e-46
+          ],
+          "cpu_fp64_weak_mass": 1.2151709138204085e-46,
+          "decimal_weak_mass": "1.215170913820407274E-46",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            0,
+            1,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 105.72402954101562,
+          "scores": [
+            -73.420654296875,
+            32.303375244140625
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        "score_gap_range": [
+          104.94965362548828,
+          115.20614624023438
+        ],
+        "shape": [
+          2,
+          128,
+          2
+        ],
+        "weak_mass_range": [
+          9.259902342738764e-51,
+          2.6359948218402527e-46
+        ]
+      },
+      "fp32": {
+        "binary_unit_budget_gap_to_zero": 103.97207708399179,
+        "half_least_positive_subnormal": 7.006492321624085e-46,
+        "least_positive_subnormal": 1.401298464324817e-45
+      },
+      "identical_bad_indices_cpu_npu": true,
+      "npu": {
+        "all_below_fp32_half_min_subnormal": true,
+        "bad": 23,
+        "call": 9,
+        "representative": {
+          "cpu_fp64_score_vjp_for_weak_root": [
+            1.2151616428374501e-46,
+            -1.2151616428374501e-46
+          ],
+          "cpu_fp64_weak_mass": 1.2151616428374501e-46,
+          "decimal_weak_mass": "1.215161642837448877E-46",
+          "fp32_allocation": [
+            0.0,
+            1.0
+          ],
+          "high_total": 1.0,
+          "index": [
+            0,
+            1,
+            0
+          ],
+          "low_total": 1.0,
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "score_gap": 105.72403717041016,
+          "scores": [
+            -73.42066192626953,
+            32.303375244140625
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "would_round_to_zero_in_ieee_fp32": true
+        },
+        "score_gap_range": [
+          104.94964599609375,
+          115.2061767578125
+        ],
+        "shape": [
+          2,
+          128,
+          2
+        ],
+        "weak_mass_range": [
+          9.259619757257525e-51,
+          2.6360149329614487e-46
+        ]
+      },
+      "versions_same_rows_cpu_fp32": {
+        "049ecdcbc39c80297b37a99591906acbefa1bc13": {
+          "allocation_sha256": "004051c7178380b270e2cce020661bd144ed9afd78c98271d9e5c253beb9d65f",
+          "cases": {
+            "earlier_r3_representable": {
+              "error": "Shannon allocation underflow would erase a positive sender"
+            },
+            "r09_npu_row": {
+              "values": [
+                4.7809827459499006e-33,
+                1.0
+              ],
+              "weak_score_vjp": [
+                4.7809827459499006e-33,
+                0.0
+              ]
+            }
+          }
+        },
+        "b3a02979276fbd1ca448318ef05c7e3a4533c67b": {
+          "allocation_sha256": "1fc55fa5c3199620763cb5dc77e8542e6e7cf51a360b0ffdceddcbc8006db221",
+          "cases": {
+            "earlier_r3_representable": {
+              "error": "Shannon allocation underflow would erase a positive sender"
+            },
+            "r09_npu_row": {
+              "values": [
+                4.7809827459499006e-33,
+                1.0
+              ],
+              "weak_score_vjp": [
+                4.7809827459499006e-33,
+                0.0
+              ]
+            }
+          }
+        },
+        "r08_frozen": {
+          "allocation_sha256": "a8e4346837e7db763d3b778126090c82719c8192679606b4b1b508e576a4e74e",
+          "cases": {
+            "earlier_r3_representable": {
+              "values": [
+                0.9999999403953552,
+                5.8905648359086626e-08
+              ],
+              "weak_score_vjp": [
+                -5.8905648359086626e-08,
+                5.890564480637295e-08
+              ]
+            },
+            "r09_npu_row": {
+              "error": "Shannon allocation underflow would erase a positive sender"
+            }
+          }
+        }
+      }
+    }
+  },
+  "original_contract_replays": {
+    "cpu_threads": 4,
+    "driver": {
+      "path": ".local/pilot-r3/campaign-r08/frozen/source/pilotlab/diagnose_shannon3.py",
+      "sha256": "e43ebb2609ee874a495c8b5c2a2c63be4f7ce57721023f91160e13a671449fca"
+    },
+    "fixed_input": "original saved model, optimizer, private state, input tokens and targets; one attempted update on each backend; both guards fired in forward before any update",
+    "physical_npu": 4,
+    "runtime_packages": {
+      "numpy": "2.5.2",
+      "torch": "2.12.0+cpu",
+      "torch-npu": "2.12.0.post3"
+    }
+  },
+  "probe_methods": {
+    "bounded_score_batch": "Only for Shannon calls, immediately before the regional allocator, substitute s_new=32*tanh(s/32). Reload the original captured FP32 weights/private state for each device; one forward/backward, no optimizer step.",
+    "historical_operator_comparison": "Each committed src/tide/allocation.py was imported on CPU against the frozen, matching helper sources. Both rows used float32 scores, ones for w, mu and upper, zero lower, budget one.",
+    "limits": "Single captured batch; no restart, no long training, optimizer trajectory or cross-device equivalence claim. The soft bound is an experimental change to the score function.",
+    "reference_batch": "Convert all floating model parameters and captured private state to CPU FP64; evaluate saved batch and differentiate cross entropy. Reference loss used the compute dtype.",
+    "row_reference": "120-digit Decimal closed form for the two unit-capped candidates with fixed total one, independently cross-checked with the existing 80-digit Decimal dual and CPU FP64 weak-root VJP. IEEE FP32 round-to-nearest threshold uses exactly 2**-150."
+  },
+  "reviewed_unix": 1795182273.1760604,
+  "schema": "pilot-r3-shannon-r09-range-investigation-v1"
+}

@@ -1,0 +1,171 @@
+{
+  "active_service_after": {
+    "ActiveState": "active",
+    "InvocationID": "dd91b7004e53452f9ffc8b62696491d8",
+    "MainPID": "4163035"
+  },
+  "active_service_before": {
+    "ActiveState": "active",
+    "InvocationID": "dd91b7004e53452f9ffc8b62696491d8",
+    "MainPID": "4163035"
+  },
+  "active_unit": "tide-pilot-r3-campaign-r17.service",
+  "after": {
+    "filesystem_available_bytes": 1298205466624,
+    "observed": "2026-11-22T00:48:30+08:00",
+    "quota": {
+      "filesystem": "/dev/mapper/ascend_data-data",
+      "grace_epoch": 0,
+      "hard_bytes": 751619276800,
+      "soft_bytes": 322122547200,
+      "used_bytes": 290159931392
+    }
+  },
+  "before": {
+    "filesystem_available_bytes": 1298059259904,
+    "observed": "2026-11-22T00:48:28+08:00",
+    "quota": {
+      "filesystem": "/dev/mapper/ascend_data-data",
+      "grace_epoch": 0,
+      "hard_bytes": 751619276800,
+      "soft_bytes": 322122547200,
+      "used_bytes": 290308182016
+    }
+  },
+  "captured": "2026-11-22T00:48:28+08:00",
+  "completed": "2026-11-22T00:48:30+08:00",
+  "files": [
+    {
+      "allocated_bytes": 35860480,
+      "file_bytes": 35859533,
+      "index_sha256": "9e00b6695b57abb0b3261d5734ad0189191bb2f408311a530ec15e36f1f4d196",
+      "path": ".local/pilot-r3/campaign-r10/round/tasks/exchange-d128-s-capacity-32268b8664-a2-2026112001-r1/attempt-0/checkpoints/.step-000003752-51565e245a.ptyo0jfmi3",
+      "published_index": ".local/pilot-r3/campaign-r10/round/tasks/exchange-d128-s-capacity-32268b8664-a2-2026112001-r1/attempt-0/checkpoint.json",
+      "sha256": "fa3f95767dceb1bf0a1f6ce2c8026f9d5b503c3c3be64eac68cf3d8ce5d84f0d"
+    },
+    {
+      "allocated_bytes": 4096,
+      "file_bytes": 64,
+      "index_sha256": "44872a182da5d846264b2d862f346c95fdbf73c7040b5267043f8ee7f2b1a9da",
+      "path": ".local/pilot-r3/campaign-r10/round/tasks/multiscale_timed-d128-x-group5-4b26d12571-a1-2026112001-r1/attempt-0/checkpoints/.step-000000901-5b9d9a9d2b.ptzu4lpkn5",
+      "published_index": ".local/pilot-r3/campaign-r10/round/tasks/multiscale_timed-d128-x-group5-4b26d12571-a1-2026112001-r1/attempt-0/checkpoint.json",
+      "sha256": "e1ee2039013c5f8568cbb88ebb58422df665d52a633b62edd00de8bab76a6799"
+    },
+    {
+      "allocated_bytes": 4096,
+      "file_bytes": 64,
+      "index_sha256": "771a554bfb7e4f63ea874d7d6768511b3869d3f88fe1b3ae31b4ba0b70c5012f",
+      "path": ".local/pilot-r3/campaign-r10/round/tasks/multiscale_timed-d128-x-group5-4b26d12571-a1-2026112001-r2/attempt-0/checkpoints/.step-000000704-2deb954ba2.pti6ypyc90",
+      "published_index": ".local/pilot-r3/campaign-r10/round/tasks/multiscale_timed-d128-x-group5-4b26d12571-a1-2026112001-r2/attempt-0/checkpoint.json",
+      "sha256": "e1ee2039013c5f8568cbb88ebb58422df665d52a633b62edd00de8bab76a6799"
+    },
+    {
+      "allocated_bytes": 0,
+      "file_bytes": 0,
+      "index_sha256": "44a8a5139b95accee07754d80f68aa23c2a1a3405408e92f29bcb9b7aee5597b",
+      "path": ".local/pilot-r3/campaign-r10/round/tasks/multiscale_timed-d128-x-group5-4b26d12571-a1-2026112002-r0/attempt-0/checkpoints/.step-000000898-e1cb36bdb4.ptotj4ecyp",
+      "published_index": ".local/pilot-r3/campaign-r10/round/tasks/multiscale_timed-d128-x-group5-4b26d12571-a1-2026112002-r0/attempt-0/checkpoint.json",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "allocated_bytes": 4308992,
+      "file_bytes": 4306880,
+      "index_sha256": "5c58d9d714b1a416364c6a48949cdafbf19e05c9f3d71e868a58298a4e36816d",
+      "path": ".local/pilot-r3/campaign-r11/round/tasks/multiscale_timed-d128-x-group5-4b26d12571-a1-2026112001-r2/attempt-0/checkpoints/.step-000000281-c16402b561.pt93uavt5h",
+      "published_index": ".local/pilot-r3/campaign-r11/round/tasks/multiscale_timed-d128-x-group5-4b26d12571-a1-2026112001-r2/attempt-0/checkpoint.json",
+      "sha256": "7613d84ebc616ceb42963219e583d7c112d5078520e6643b5565cd6284f630fa"
+    },
+    {
+      "allocated_bytes": 7708672,
+      "file_bytes": 7705152,
+      "index_sha256": "89be6ec962f9afd6768cfb0d98fa770e39fd1286f2208406b69d4b681fc62534",
+      "path": ".local/pilot-r3/campaign-r11/round/tasks/multiscale_timed-d128-x-singleton7-8ac3511b6a-a1-2026112002-r0/attempt-0/checkpoints/.step-000000040-ca4a9eba04.pt06ojbafp",
+      "published_index": ".local/pilot-r3/campaign-r11/round/tasks/multiscale_timed-d128-x-singleton7-8ac3511b6a-a1-2026112002-r0/attempt-0/checkpoint.json",
+      "sha256": "e27b4d7970420fbdc9a8f0d6ea9b6fc3a52745b97c44d9a80a5d6f0c36d1cafc"
+    },
+    {
+      "allocated_bytes": 9953280,
+      "file_bytes": 9950016,
+      "index_sha256": "54690ed6d8f7d82473d3af624b937c418904bd9acbfd358021b2261e563f9b99",
+      "path": ".local/pilot-r3/campaign-r14/round/tasks/multiscale_settle-d128-x-singleton7-281f04cf8c-a2-2026112002-r2/attempt-0/checkpoints/.step-000002288-31da68e3db.pttc1dxvx_",
+      "published_index": ".local/pilot-r3/campaign-r14/round/tasks/multiscale_settle-d128-x-singleton7-281f04cf8c-a2-2026112002-r2/attempt-0/checkpoint.json",
+      "sha256": "e8147024e959acca4968f4e0f46438689f3984d34bc300759cc490500b0aef9d"
+    },
+    {
+      "allocated_bytes": 23416832,
+      "file_bytes": 23412800,
+      "index_sha256": "70728e2bed5a2d76db20e5c8dcc73190257df32130ac09c1389d591a59515974",
+      "path": ".local/pilot-r3/campaign-r16/round/tasks/fc-d256-k-depth3-2f03e71304-a2-2026112001-r1/attempt-0/checkpoints/.step-000003463-1876d26e62.pte5meeanf",
+      "published_index": ".local/pilot-r3/campaign-r16/round/tasks/fc-d256-k-depth3-2f03e71304-a2-2026112001-r1/attempt-0/checkpoint.json",
+      "sha256": "a3f3c4e9de1f48dbd9ab154c95246f2385a17f7e7359f606f0cddb983d780ff8"
+    },
+    {
+      "allocated_bytes": 22134784,
+      "file_bytes": 22131008,
+      "index_sha256": "9230a1add7426c26e15a1cd91138f6e0f756365d3750b3c27baed630b8244071",
+      "path": ".local/pilot-r3/campaign-r16/round/tasks/lattice-d256-k-nodes4-910f84829b-a1-2026112001-r0/attempt-0/checkpoints/.step-000000195-d8649456ff.ptspxwgkrx",
+      "published_index": ".local/pilot-r3/campaign-r16/round/tasks/lattice-d256-k-nodes4-910f84829b-a1-2026112001-r0/attempt-0/checkpoint.json",
+      "sha256": "7d3de3c9a640684eb063d4820c36316f50e6d7b1466c91c082b43b7065f001fb"
+    },
+    {
+      "allocated_bytes": 28418048,
+      "file_bytes": 28417792,
+      "index_sha256": "cb6ec7d13e653159433a9b5f6e76571fba9ec7584a9616ca0b8bc935fdc1f19d",
+      "path": ".local/pilot-r3/campaign-r16/round/tasks/lattice-d256-k-receive64-c3e271805b-a1-2026112001-r0/attempt-0/checkpoints/.step-000000099-3ecd91bcaf.ptqyukloj0",
+      "published_index": ".local/pilot-r3/campaign-r16/round/tasks/lattice-d256-k-receive64-c3e271805b-a1-2026112001-r0/attempt-0/checkpoint.json",
+      "sha256": "b4c9a46820d16afa3e593abca119c515b0fcd688dfe4b9f1a98d23e79fbe8941"
+    },
+    {
+      "allocated_bytes": 16465920,
+      "file_bytes": 16464512,
+      "index_sha256": "01cf6bf425f25f76f93b4ca823642464a6927bf173d0b09955658506947772cc",
+      "path": ".local/pilot-r3/campaign-r16/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112002-r2/attempt-0/checkpoints/.step-000004236-b1a18176df.ptqxt5oaet",
+      "published_index": ".local/pilot-r3/campaign-r16/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112002-r2/attempt-0/checkpoint.json",
+      "sha256": "e5fde23d111d679d446711b9d23257157b81f03be97972d1f71abd90fcbf6308"
+    }
+  ],
+  "files_removed": 11,
+  "published_indexes_and_generations_verified_after": true,
+  "reference_check": {
+    "candidate_name_matches": 0,
+    "files_scanned": 54673,
+    "scope": "R3 run metadata and logs outside checkpoints and frozen source, plus pilot-r3 docs/evidence records"
+  },
+  "removed_allocated_bytes": 148275200,
+  "retained_r16_unpublished_files": [
+    {
+      "path": ".local/pilot-r3/campaign-r16/round/tasks/multiscale_settle-d128-x-singleton7-281f04cf8c-a2-2026112002-r1/attempt-0/checkpoints/step-000003353-0e00da9cac.pt",
+      "sha256": "f8a56985a9f563559a96f2b27961632d8cd15fe5279bc6c61a69139b21a71fe1"
+    },
+    {
+      "path": ".local/pilot-r3/campaign-r16/round/tasks/multiscale_settle-d128-x_reverse-singleton7-655942fdd4-a1-2026112002-r2/attempt-0/checkpoints/step-000000708-77b8b036f3.pt",
+      "sha256": "41daf538bcfa78fd441d739b1846c3bc3fe008c26f8231c69e6793deaab9cdf3"
+    }
+  ],
+  "schema": "pilot-r3-storage-cleanup-v1",
+  "scope": "Abandoned mkstemp files from atomic checkpoint writes in four stopped R3 units.",
+  "status": "completed",
+  "stopped_units": {
+    "tide-pilot-r3-campaign-r10.service": {
+      "ActiveState": "failed",
+      "InvocationID": "4bbcb64f144940ffa286f74f6a19381b",
+      "MainPID": "0"
+    },
+    "tide-pilot-r3-campaign-r11.service": {
+      "ActiveState": "failed",
+      "InvocationID": "dabd17f2b5df40a0b57dbdb8353878ce",
+      "MainPID": "0"
+    },
+    "tide-pilot-r3-campaign-r14.service": {
+      "ActiveState": "failed",
+      "InvocationID": "2b9d57e3a3fd459aa161f9231b9672c8",
+      "MainPID": "0"
+    },
+    "tide-pilot-r3-campaign-r16.service": {
+      "ActiveState": "failed",
+      "InvocationID": "7b2fc4b19e1f46819acd1db317df2dd8",
+      "MainPID": "0"
+    }
+  },
+  "verified_published_generations": 21
+}

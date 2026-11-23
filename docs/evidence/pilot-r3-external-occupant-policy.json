@@ -1,0 +1,136 @@
+{
+  "authorization": "NPU\u6709\u5176\u4ed6\u7528\u6237\u7684\u8fdb\u7a0b\u65f6\uff0c\u662f\u5426\u53ef\u4ee5\u4e0d\u9000\u51fa\uff1f\u9664\u975e\u663e\u5f0fOOM\u88ab\u8feb\u9000\u51fa",
+  "budget": {
+    "deadline_unix": 1797698913.9318287,
+    "device_seconds": 187510.56962759048,
+    "ledger": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/budget.json",
+      "sha256": "55623aaa69458e0d2fa07b3663873ce57ae1db43fda1ffdf8fbca246cb4fd1f5"
+    },
+    "max_device_seconds": 25920000,
+    "reset": false,
+    "started_unix": 1795106913.9318287
+  },
+  "current_campaign": {
+    "main_service_restarted": false,
+    "scheduler": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/round/scheduler.json",
+      "sha256": "8fa2601725a9fd81be8ccad87a3f23830199904226fa31401489c1a302c0990c"
+    },
+    "service": {
+      "ActiveState": "failed",
+      "ControlGroup": "",
+      "ExecMainStatus": "1",
+      "MainPID": "0",
+      "Result": "exit-code",
+      "SubState": "failed"
+    },
+    "stage": "a1",
+    "stage_b_gate": "closed",
+    "status": "a_blocked_needs_repair",
+    "task_counts": {
+      "completed": 126,
+      "failed": 18
+    },
+    "unit": "tide-pilot-r3-campaign-r04.service"
+  },
+  "frozen_r04_verification": {
+    "data_manifest": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data/manifest.json",
+      "sha256": "2f4617d73b5dad4f6a343707382714738e8012432fda85d9f7e36f44b26a4e1a"
+    },
+    "data_manifest_matches": true,
+    "prepared": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/prepared.json",
+      "sha256": "5f3bdbed87710a27c9a43cc8957d53aedbe9f17110e6ae6e434e0b8275abf54e"
+    },
+    "scope": "source bytes and data manifest checked now; data assets and checkpoint audit remain referenced by prior terminal audit",
+    "source_files_checked": 62,
+    "source_mismatches": []
+  },
+  "implementation_files": {
+    "pilotlab/prepare_revision3.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/prepare_revision3.py",
+      "sha256": "17a76a5e6753457392249a69664a4193050d432549dbf38fab9d46a128a87ca6"
+    },
+    "pilotlab/report3.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/report3.py",
+      "sha256": "66d999b7a59245325ae6de92dae61b7ea61977ca0e6bfdc06e7a5347f0687ffc"
+    },
+    "pilotlab/scheduler_shared3.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/scheduler_shared3.py",
+      "sha256": "8d7b3fceb9a9ea9b17f1cc8a551012ccd5498209be28a1bd7204000d24e82777"
+    },
+    "pilotlab/shared_npu3.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/shared_npu3.py",
+      "sha256": "29992eaf12515809a79d3a2252530067e84875303615dbf778973c0a01f1d9c9"
+    },
+    "tests/test_pilot_report3.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/tests/test_pilot_report3.py",
+      "sha256": "e981b084f398c60e22226a95ca87ab5404d914636c1aa4831c0a681e58221fa5"
+    },
+    "tests/test_pilot_scheduler_shared3.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/tests/test_pilot_scheduler_shared3.py",
+      "sha256": "44939f7ecd1ca563eafd7beabe5800255d2bfaea6a90185548a2be5867059489"
+    },
+    "tests/test_pilot_shared_npu3.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/tests/test_pilot_shared_npu3.py",
+      "sha256": "8150b0f780c57e55e43058c5dd1240ba33c57e3eeee1ea70cf57a52b8e77cd51"
+    }
+  },
+  "pending_resume": {
+    "b_gate": "closed; policy fix does not override audit or scientific gates",
+    "terminal_audit": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-campaign-r04-terminal-audit.json",
+      "sha256": "c837890b6e8cb7f59b69db543aef31b2e2ccda9389cd3ae4c8deabccc3c0cbbf"
+    },
+    "unresolved": [
+      "two worker results lack final group digest publication",
+      "two CPU groups lack final terminal publication",
+      "eleven scheduler/group physical debit comparisons differ; preserve conservative charges",
+      "interrupted same-trajectory checkpoint/evaluation reservation continuation must be designed without full A1 reruns or evaluation budget reset"
+    ]
+  },
+  "policy": {
+    "actual_errors": "capacity/OOM result preserved; only explicitly declared calibration capacity errors are nonfatal; learning OOM, numerical and true device errors remain failures",
+    "configuration": {
+      "external_occupant_policy": "continue_running"
+    },
+    "enabled_by": "new prepare_revision3 plan; scheduler passes explicit field into frozen group manifest",
+    "external_arrival": "continue existing workers; record sampled external PID/start and readable UID; never adopt external ownership",
+    "hbm_attribution": "no per-PID HBM measurement; when external occupants are observed, reserve active worker future allocations above whole-card observed usage conservatively",
+    "hbm_pressure": "whole-card usage above 48 GiB admission ceiling does not terminate running workers; defer additional workers within original deadline/device budget",
+    "initial_admission": "unchanged public FIFO helper; empty device; two samples; whole-device lock",
+    "legacy_default": "stop; old frozen plans and snapshots are unchanged",
+    "new_worker_admission": "two fresh samples; cached capacity pressure waits do not force npu-smi every poll",
+    "observability": "device-observations.jsonl records condition changes, latest device sample survives rejection, read-only report surfaces sampled contention without exclusive timing claims",
+    "release": "terminate and wait for owned PID/start identities only; external occupants do not prevent releasing own lease",
+    "remaining_limits": "RSS, storage, absolute deadline, preparation and total budget unchanged"
+  },
+  "reviewed_local": "2026-11-20T10:48:36.113334+08:00",
+  "reviewed_unix": 1795142916.113136,
+  "schema": "pilot-r3-external-occupant-policy-review-v1",
+  "scientific_scope": "no new training result, numerical qualification, restore qualification, learning ranking or throughput claim; original Shannon failures and tolerances unchanged",
+  "status": "implemented_and_tested_not_deployed",
+  "validation": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 TORCH_DEVICE_BACKEND_AUTOLOAD=0 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=.:/mi/data2T/zlong/home/llm/graph-execution-foundation/src .venv-pilot-r3/bin/python -m pytest -q tests/test_pilot_shared_npu3.py tests/test_pilot_scheduler_shared3.py tests/test_pilot_report3.py tests/test_pilot_scheduler3.py tests/test_pilot_prepare_campaign3.py",
+    "covered": [
+      "external arrival while workers run and additional admission with headroom",
+      "HBM growth seen in either admission sample; existing worker completes; next waits",
+      "waiting with no active workers; external departure and headroom restoration",
+      "external allocation before first worker does not permanently inflate baseline",
+      "PID reuse is not owned; external PID never signalled; lock release while external occupant remains",
+      "real failure payload classification including capacity/OOM, numerical and device errors",
+      "device health failures and decisive sample publication",
+      "absolute deadline and physical-device budget",
+      "public helper double sampling and lock lifetime for both policies",
+      "observation cadence under persistent external presence",
+      "explicit policy propagation into frozen group manifests",
+      "read-only reporting of contention",
+      "default scheduler, shared scheduler and campaign preparation regressions"
+    ],
+    "method": "real short CPU subprocesses and temporary flock leases; simulated NPU observations; no real NPU execution or service submission",
+    "return_code": 0,
+    "summary": "179 passed in 16.33s"
+  }
+}

@@ -1,0 +1,1925 @@
+{
+  "all_terminal_integrity_checks_pass": true,
+  "checkpoints": {
+    "all_match": true,
+    "files": [
+      {
+        "bytes": 60959983,
+        "bytes_match": true,
+        "expected_bytes": 60959983,
+        "expected_sha256": "3072f3e1a8b9ee9b0b57bbe17f3cef82e8c0aff6c080986b8d3c42ecb943f29b",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/cpu-isolated-exchange-x-t4/checkpoint.pt",
+        "sha256": "3072f3e1a8b9ee9b0b57bbe17f3cef82e8c0aff6c080986b8d3c42ecb943f29b",
+        "step": 65,
+        "task": "cpu-isolated-exchange-x-t4"
+      },
+      {
+        "bytes": 60959919,
+        "bytes_match": true,
+        "expected_bytes": 60959919,
+        "expected_sha256": "edf8df477af0fcb06d1ce38bb584932f19a28624ebabbbb370a4b772af9010cb",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/cpu-isolated-exchange-x-t16/checkpoint.pt",
+        "sha256": "edf8df477af0fcb06d1ce38bb584932f19a28624ebabbbb370a4b772af9010cb",
+        "step": 81,
+        "task": "cpu-isolated-exchange-x-t16"
+      },
+      {
+        "bytes": 80227631,
+        "bytes_match": true,
+        "expected_bytes": 80227631,
+        "expected_sha256": "00d7bff04a72321a95d98fe83874d520ea48910f31dff4d72da8b58c4ca4e56a",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/cpu-isolated-exchange-x-t40/checkpoint.pt",
+        "sha256": "00d7bff04a72321a95d98fe83874d520ea48910f31dff4d72da8b58c4ca4e56a",
+        "step": 70,
+        "task": "cpu-isolated-exchange-x-t40"
+      },
+      {
+        "bytes": 27055773,
+        "bytes_match": true,
+        "expected_bytes": 27055773,
+        "expected_sha256": "d047bc717279a2c94368752764504752daecbb6abe9a33c18f50450cf09bb187",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/cpu-isolated-transformer-t4/checkpoint.pt",
+        "sha256": "d047bc717279a2c94368752764504752daecbb6abe9a33c18f50450cf09bb187",
+        "step": 1391,
+        "task": "cpu-isolated-transformer-t4"
+      },
+      {
+        "bytes": 24991453,
+        "bytes_match": true,
+        "expected_bytes": 24991453,
+        "expected_sha256": "33debfec3412c41335f1ff9558ca13d6b90e587b683e4d248964d92e9843890c",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/cpu-isolated-transformer-t16/checkpoint.pt",
+        "sha256": "33debfec3412c41335f1ff9558ca13d6b90e587b683e4d248964d92e9843890c",
+        "step": 2297,
+        "task": "cpu-isolated-transformer-t16"
+      },
+      {
+        "bytes": 27055901,
+        "bytes_match": true,
+        "expected_bytes": 27055901,
+        "expected_sha256": "6309a0512f02300ece86701cf75dfc16573b0d1fa5cc77c1628b633b957d3afd",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/cpu-isolated-transformer-t40/checkpoint.pt",
+        "sha256": "6309a0512f02300ece86701cf75dfc16573b0d1fa5cc77c1628b633b957d3afd",
+        "step": 2295,
+        "task": "cpu-isolated-transformer-t40"
+      },
+      {
+        "bytes": 122894573,
+        "bytes_match": true,
+        "expected_bytes": 122894573,
+        "expected_sha256": "1a11577be19a1fc1587811dfb58ad09ea51157cf4bbe7a1c8941b84de37bb7ba",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/npu-isolated-exchange-x-a/checkpoint.pt",
+        "sha256": "1a11577be19a1fc1587811dfb58ad09ea51157cf4bbe7a1c8941b84de37bb7ba",
+        "step": 347,
+        "task": "npu-isolated-exchange-x-a"
+      },
+      {
+        "bytes": 111658035,
+        "bytes_match": true,
+        "expected_bytes": 111658035,
+        "expected_sha256": "e03066d76ca132b67d337034a8e47adc757bede643271f0f8f2356e6d995044e",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/npu-isolated-transformer-a/checkpoint.pt",
+        "sha256": "e03066d76ca132b67d337034a8e47adc757bede643271f0f8f2356e6d995044e",
+        "step": 8397,
+        "task": "npu-isolated-transformer-a"
+      },
+      {
+        "bytes": 122894573,
+        "bytes_match": true,
+        "expected_bytes": 122894573,
+        "expected_sha256": "9a79c40f5692eacb70832a43d05187178396d40eaa9c2ef6b17d0dc4b1f59048",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/npu-isolated-exchange-x-b/checkpoint.pt",
+        "sha256": "9a79c40f5692eacb70832a43d05187178396d40eaa9c2ef6b17d0dc4b1f59048",
+        "step": 346,
+        "task": "npu-isolated-exchange-x-b"
+      },
+      {
+        "bytes": 111657971,
+        "bytes_match": true,
+        "expected_bytes": 111657971,
+        "expected_sha256": "c1365b76f9c52e1c0db58e2699c19c4d7653ef13425c8c60e8964ee1a2622adc",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/npu-isolated-transformer-b/checkpoint.pt",
+        "sha256": "c1365b76f9c52e1c0db58e2699c19c4d7653ef13425c8c60e8964ee1a2622adc",
+        "step": 8409,
+        "task": "npu-isolated-transformer-b"
+      },
+      {
+        "bytes": 122894637,
+        "bytes_match": true,
+        "expected_bytes": 122894637,
+        "expected_sha256": "97db19481f2c6bfe6cfb7134328b5ba6711ec66038195087c77e246726dc19c7",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/npu-concurrent-exchange-x-a/checkpoint.pt",
+        "sha256": "97db19481f2c6bfe6cfb7134328b5ba6711ec66038195087c77e246726dc19c7",
+        "step": 338,
+        "task": "npu-concurrent-exchange-x-a"
+      },
+      {
+        "bytes": 111658163,
+        "bytes_match": true,
+        "expected_bytes": 111658163,
+        "expected_sha256": "925b088de34a31fdf07be138f01f640b9c9f52d49cdb65120553d09408bf0f7c",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/npu-concurrent-transformer-a/checkpoint.pt",
+        "sha256": "925b088de34a31fdf07be138f01f640b9c9f52d49cdb65120553d09408bf0f7c",
+        "step": 8105,
+        "task": "npu-concurrent-transformer-a"
+      },
+      {
+        "bytes": 277340083,
+        "bytes_match": true,
+        "expected_bytes": 277340083,
+        "expected_sha256": "99a68fb245f36cbed9c4ffae974f157f5c613435aa75c6b113199f31c08d1002",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/npu-load-fc32-a/checkpoint.pt",
+        "sha256": "99a68fb245f36cbed9c4ffae974f157f5c613435aa75c6b113199f31c08d1002",
+        "step": 1511,
+        "task": "npu-load-fc32-a"
+      },
+      {
+        "bytes": 208125613,
+        "bytes_match": true,
+        "expected_bytes": 208125613,
+        "expected_sha256": "7718fc6d8da5a8988e03d5decd3e91d171ac6f3524cfdb8cd3981fdcecfce11a",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/npu-load-x32-a/checkpoint.pt",
+        "sha256": "7718fc6d8da5a8988e03d5decd3e91d171ac6f3524cfdb8cd3981fdcecfce11a",
+        "step": 346,
+        "task": "npu-load-x32-a"
+      },
+      {
+        "bytes": 378656365,
+        "bytes_match": true,
+        "expected_bytes": 378656365,
+        "expected_sha256": "472205fc762804c2af8c3720935f3e78726b5b2a452e835cc0b84602e25ffabd",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/npu-load-x64-a/checkpoint.pt",
+        "sha256": "472205fc762804c2af8c3720935f3e78726b5b2a452e835cc0b84602e25ffabd",
+        "step": 278,
+        "task": "npu-load-x64-a"
+      },
+      {
+        "bytes": 122894509,
+        "bytes_match": true,
+        "expected_bytes": 122894509,
+        "expected_sha256": "190749bdaeb5f20c155206cbf3a44192263f42ddcd2b4518dba0413748780d61",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/npu-load-x16-l128-a/checkpoint.pt",
+        "sha256": "190749bdaeb5f20c155206cbf3a44192263f42ddcd2b4518dba0413748780d61",
+        "step": 338,
+        "task": "npu-load-x16-l128-a"
+      },
+      {
+        "bytes": 122962477,
+        "bytes_match": true,
+        "expected_bytes": 122962477,
+        "expected_sha256": "0ccc6809bf58f06efd3bd5eec342d0673e90fd9f7b8806641577b45bd310a4f4",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/npu-load-x16-l256-a/checkpoint.pt",
+        "sha256": "0ccc6809bf58f06efd3bd5eec342d0673e90fd9f7b8806641577b45bd310a4f4",
+        "step": 238,
+        "task": "npu-load-x16-l256-a"
+      },
+      {
+        "bytes": 437671990,
+        "bytes_match": true,
+        "expected_bytes": 437671990,
+        "expected_sha256": "f3768b32bfb7a4051b1d1a817328444f9a7a0cbbfc05aebf84aa537eeb07512d",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/npu-load-timed16-a/checkpoint.pt",
+        "sha256": "f3768b32bfb7a4051b1d1a817328444f9a7a0cbbfc05aebf84aa537eeb07512d",
+        "step": 162,
+        "task": "npu-load-timed16-a"
+      },
+      {
+        "bytes": 80227757,
+        "bytes_match": true,
+        "expected_bytes": 80227757,
+        "expected_sha256": "1fbfc5b8a9a9f0681998bb882094e6cb61a4eb4fea2378fdf35266bde7acd76f",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/npu-load-shannon8-a/checkpoint.pt",
+        "sha256": "1fbfc5b8a9a9f0681998bb882094e6cb61a4eb4fea2378fdf35266bde7acd76f",
+        "step": 390,
+        "task": "npu-load-shannon8-a"
+      },
+      {
+        "bytes": 80227567,
+        "bytes_match": true,
+        "expected_bytes": 80227567,
+        "expected_sha256": "9788e9b58219c9557d15727c015f9b893cd354e0da8b4bb65ff4cc8f45b426c6",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/cpu-concurrent-exchange-x-a/checkpoint.pt",
+        "sha256": "9788e9b58219c9557d15727c015f9b893cd354e0da8b4bb65ff4cc8f45b426c6",
+        "step": 170,
+        "task": "cpu-concurrent-exchange-x-a"
+      },
+      {
+        "bytes": 24991453,
+        "bytes_match": true,
+        "expected_bytes": 24991453,
+        "expected_sha256": "b2f7af11d75b4ae569f80863e8bf73af55f21a9eea9652018153231c8be5b2ab",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/cpu-concurrent-transformer-a/checkpoint.pt",
+        "sha256": "b2f7af11d75b4ae569f80863e8bf73af55f21a9eea9652018153231c8be5b2ab",
+        "step": 3665,
+        "task": "cpu-concurrent-transformer-a"
+      },
+      {
+        "bytes": 60959919,
+        "bytes_match": true,
+        "expected_bytes": 60959919,
+        "expected_sha256": "4acbd053538faa5ba086625c88b2606e04611fa65654a761243ce5e4806c8302",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/cpu-load-exchange-x-a/checkpoint.pt",
+        "sha256": "4acbd053538faa5ba086625c88b2606e04611fa65654a761243ce5e4806c8302",
+        "step": 213,
+        "task": "cpu-load-exchange-x-a"
+      },
+      {
+        "bytes": 27055773,
+        "bytes_match": true,
+        "expected_bytes": 27055773,
+        "expected_sha256": "0e57e5c6b6f3afba83ba9e61348e564e9da15b0d74168eb531eb202a5d5a2b6c",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/cpu-load-transformer-a/checkpoint.pt",
+        "sha256": "0e57e5c6b6f3afba83ba9e61348e564e9da15b0d74168eb531eb202a5d5a2b6c",
+        "step": 4791,
+        "task": "cpu-load-transformer-a"
+      },
+      {
+        "bytes": 122894509,
+        "bytes_match": true,
+        "expected_bytes": 122894509,
+        "expected_sha256": "7e824cdd40268996bc48ba25b5022a84a1d86a37270b8a3efdd1ff0080959f2d",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/npu-concurrent-exchange-x-b/checkpoint.pt",
+        "sha256": "7e824cdd40268996bc48ba25b5022a84a1d86a37270b8a3efdd1ff0080959f2d",
+        "step": 341,
+        "task": "npu-concurrent-exchange-x-b"
+      },
+      {
+        "bytes": 111658227,
+        "bytes_match": true,
+        "expected_bytes": 111658227,
+        "expected_sha256": "fe51a6b29ea36e08c980e2e854282cd9e51b5146dbe6d08b92f82197fe857e63",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/npu-concurrent-transformer-b/checkpoint.pt",
+        "sha256": "fe51a6b29ea36e08c980e2e854282cd9e51b5146dbe6d08b92f82197fe857e63",
+        "step": 8137,
+        "task": "npu-concurrent-transformer-b"
+      },
+      {
+        "bytes": 277408563,
+        "bytes_match": true,
+        "expected_bytes": 277408563,
+        "expected_sha256": "b388e1ba16952dd131437e995fe06413cd54f744816ddd4e86c698f609159d17",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/npu-load-fc64-b/checkpoint.pt",
+        "sha256": "b388e1ba16952dd131437e995fe06413cd54f744816ddd4e86c698f609159d17",
+        "step": 1121,
+        "task": "npu-load-fc64-b"
+      },
+      {
+        "bytes": 208193837,
+        "bytes_match": true,
+        "expected_bytes": 208193837,
+        "expected_sha256": "a3c3809b1be851691c614e975f00a0fb7b187fe75f0cc0caab421f885dac941c",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/npu-load-x32-l128-b/checkpoint.pt",
+        "sha256": "a3c3809b1be851691c614e975f00a0fb7b187fe75f0cc0caab421f885dac941c",
+        "step": 265,
+        "task": "npu-load-x32-l128-b"
+      },
+      {
+        "bytes": 378792621,
+        "bytes_match": true,
+        "expected_bytes": 378792621,
+        "expected_sha256": "cd30737b8400a8614f6f2f0095deafda8bba9bbdac569129d8ba621ab8acb9e7",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/npu-load-x64-l128-b/checkpoint.pt",
+        "sha256": "cd30737b8400a8614f6f2f0095deafda8bba9bbdac569129d8ba621ab8acb9e7",
+        "step": 177,
+        "task": "npu-load-x64-l128-b"
+      },
+      {
+        "bytes": 122962541,
+        "bytes_match": true,
+        "expected_bytes": 122962541,
+        "expected_sha256": "d4abf3578a34eb3f79a1457473c259403d32ed187f59facc9cd221a9566e8ffe",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/npu-load-x16-l256-b/checkpoint.pt",
+        "sha256": "d4abf3578a34eb3f79a1457473c259403d32ed187f59facc9cd221a9566e8ffe",
+        "step": 241,
+        "task": "npu-load-x16-l256-b"
+      },
+      {
+        "bytes": 244000069,
+        "bytes_match": true,
+        "expected_bytes": 244000069,
+        "expected_sha256": "4b2356a38a39a85c96e56817cca310c23b0d19042ce3f3f848572ea93139ee59",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/npu-load-timed-mixed16-b/checkpoint.pt",
+        "sha256": "4b2356a38a39a85c96e56817cca310c23b0d19042ce3f3f848572ea93139ee59",
+        "step": 181,
+        "task": "npu-load-timed-mixed16-b"
+      },
+      {
+        "bytes": 437705910,
+        "bytes_match": true,
+        "expected_bytes": 437705910,
+        "expected_sha256": "1a8b40945f6bad0079dbce598ab36af24f476990a1536a02a2d01505ff497b32",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/npu-load-timed16-l128-b/checkpoint.pt",
+        "sha256": "1a8b40945f6bad0079dbce598ab36af24f476990a1536a02a2d01505ff497b32",
+        "step": 91,
+        "task": "npu-load-timed16-l128-b"
+      },
+      {
+        "bytes": 84325293,
+        "bytes_match": true,
+        "expected_bytes": 84325293,
+        "expected_sha256": "34f133d7bb227de403acd2d4810d52be885f2338c112d2d42e151c1931b96cc5",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/npu-load-shannon16-b/checkpoint.pt",
+        "sha256": "34f133d7bb227de403acd2d4810d52be885f2338c112d2d42e151c1931b96cc5",
+        "step": 373,
+        "task": "npu-load-shannon16-b"
+      },
+      {
+        "bytes": 60959983,
+        "bytes_match": true,
+        "expected_bytes": 60959983,
+        "expected_sha256": "cb2997601985c4e1bcc4765df1fe71e4badface8db677b50bb80d0f19dc6fe77",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/cpu-concurrent-exchange-x-b/checkpoint.pt",
+        "sha256": "cb2997601985c4e1bcc4765df1fe71e4badface8db677b50bb80d0f19dc6fe77",
+        "step": 169,
+        "task": "cpu-concurrent-exchange-x-b"
+      },
+      {
+        "bytes": 24991453,
+        "bytes_match": true,
+        "expected_bytes": 24991453,
+        "expected_sha256": "57f4604e8d8a1d0c506bdd4a522a21f2b78f37d89c4707404ca5f72118c626ed",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/cpu-concurrent-transformer-b/checkpoint.pt",
+        "sha256": "57f4604e8d8a1d0c506bdd4a522a21f2b78f37d89c4707404ca5f72118c626ed",
+        "step": 3633,
+        "task": "cpu-concurrent-transformer-b"
+      },
+      {
+        "bytes": 80227503,
+        "bytes_match": true,
+        "expected_bytes": 80227503,
+        "expected_sha256": "cc76e066808bc989866ce18a8729bbe0a08ff0ce3f989c3d2198ea57799bea20",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/cpu-load-exchange-x-b/checkpoint.pt",
+        "sha256": "cc76e066808bc989866ce18a8729bbe0a08ff0ce3f989c3d2198ea57799bea20",
+        "step": 206,
+        "task": "cpu-load-exchange-x-b"
+      },
+      {
+        "bytes": 27055773,
+        "bytes_match": true,
+        "expected_bytes": 27055773,
+        "expected_sha256": "87bc8b680edadfc1b794b540ccb88d5e7155ffc33d1d2c67d136bd05be003990",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/cpu-load-transformer-b/checkpoint.pt",
+        "sha256": "87bc8b680edadfc1b794b540ccb88d5e7155ffc33d1d2c67d136bd05be003990",
+        "step": 5115,
+        "task": "cpu-load-transformer-b"
+      },
+      {
+        "bytes": 80227693,
+        "bytes_match": true,
+        "expected_bytes": 80227693,
+        "expected_sha256": "137fabc62ca54f78d296a3ad845ee6f1c4f22a7a42c43a11663b9c25ee16ba1f",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/capacity-x8-l64/checkpoint.pt",
+        "sha256": "137fabc62ca54f78d296a3ad845ee6f1c4f22a7a42c43a11663b9c25ee16ba1f",
+        "step": 215,
+        "task": "capacity-x8-l64"
+      },
+      {
+        "bytes": 84325229,
+        "bytes_match": true,
+        "expected_bytes": 84325229,
+        "expected_sha256": "843bfc4c01cd229938fda5928afb50cba6cd0fef79b21191cc924dd01645498c",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/capacity-x16-l64/checkpoint.pt",
+        "sha256": "843bfc4c01cd229938fda5928afb50cba6cd0fef79b21191cc924dd01645498c",
+        "step": 205,
+        "task": "capacity-x16-l64"
+      },
+      {
+        "bytes": 131055277,
+        "bytes_match": true,
+        "expected_bytes": 131055277,
+        "expected_sha256": "4a1aa3a652d0114ebfc35b7fc645c1334f01a1dd2bb3c6beb1c5c20682c2c1a6",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/capacity-x32-l64/checkpoint.pt",
+        "sha256": "4a1aa3a652d0114ebfc35b7fc645c1334f01a1dd2bb3c6beb1c5c20682c2c1a6",
+        "step": 181,
+        "task": "capacity-x32-l64"
+      },
+      {
+        "bytes": 378656109,
+        "bytes_match": true,
+        "expected_bytes": 378656109,
+        "expected_sha256": "f868968f06be271df39c1a86b1548f112b1722e44e1103d4eec5323549a1998d",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/capacity-x64-l64/checkpoint.pt",
+        "sha256": "f868968f06be271df39c1a86b1548f112b1722e44e1103d4eec5323549a1998d",
+        "step": 143,
+        "task": "capacity-x64-l64"
+      },
+      {
+        "bytes": 80244781,
+        "bytes_match": true,
+        "expected_bytes": 80244781,
+        "expected_sha256": "415b31b066ce8a206a1ef1b6fb6268888b7f82aa8aa2239e622f104e89e940de",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/capacity-x8-l128/checkpoint.pt",
+        "sha256": "415b31b066ce8a206a1ef1b6fb6268888b7f82aa8aa2239e622f104e89e940de",
+        "step": 193,
+        "task": "capacity-x8-l128"
+      },
+      {
+        "bytes": 80278893,
+        "bytes_match": true,
+        "expected_bytes": 80278893,
+        "expected_sha256": "17b504daa71da292822ceccb046e704ec5e5744ec772c716966d455d23257ab6",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/capacity-x8-l256/checkpoint.pt",
+        "sha256": "17b504daa71da292822ceccb046e704ec5e5744ec772c716966d455d23257ab6",
+        "step": 141,
+        "task": "capacity-x8-l256"
+      },
+      {
+        "bytes": 143792051,
+        "bytes_match": true,
+        "expected_bytes": 143792051,
+        "expected_sha256": "28c2cdbee6f47896dd0d62483725af938b97b8443e2d4c13a02f038c5000db58",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/capacity-fc8-l64/checkpoint.pt",
+        "sha256": "28c2cdbee6f47896dd0d62483725af938b97b8443e2d4c13a02f038c5000db58",
+        "step": 841,
+        "task": "capacity-fc8-l64"
+      },
+      {
+        "bytes": 162880115,
+        "bytes_match": true,
+        "expected_bytes": 162880115,
+        "expected_sha256": "6b3f1fb0220f25dddfb11d4494e49a65d3683f2a9e4befd7b4f9210429ae2322",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/capacity-fc16-l64/checkpoint.pt",
+        "sha256": "6b3f1fb0220f25dddfb11d4494e49a65d3683f2a9e4befd7b4f9210429ae2322",
+        "step": 841,
+        "task": "capacity-fc16-l64"
+      },
+      {
+        "bytes": 201056243,
+        "bytes_match": true,
+        "expected_bytes": 201056243,
+        "expected_sha256": "6587ebf38d9afdff64116758bec822d6c678a6f96166ab820029aded888ceeca",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/capacity-fc32-l64/checkpoint.pt",
+        "sha256": "6587ebf38d9afdff64116758bec822d6c678a6f96166ab820029aded888ceeca",
+        "step": 757,
+        "task": "capacity-fc32-l64"
+      },
+      {
+        "bytes": 99122163,
+        "bytes_match": true,
+        "expected_bytes": 99122163,
+        "expected_sha256": "89dc85bda87c668e297108762757178a2eb30a97d0b91a7ce3175d9d12b2a02b",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/capacity-tf8-l64/checkpoint.pt",
+        "sha256": "89dc85bda87c668e297108762757178a2eb30a97d0b91a7ce3175d9d12b2a02b",
+        "step": 4370,
+        "task": "capacity-tf8-l64"
+      },
+      {
+        "bytes": 136695219,
+        "bytes_match": true,
+        "expected_bytes": 136695219,
+        "expected_sha256": "433591a10f2962c48b521239c026a2693590adbbccbd074ed5d0839acbe33dc2",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/capacity-tf32-l128/checkpoint.pt",
+        "sha256": "433591a10f2962c48b521239c026a2693590adbbccbd074ed5d0839acbe33dc2",
+        "step": 3326,
+        "task": "capacity-tf32-l128"
+      },
+      {
+        "bytes": 186769907,
+        "bytes_match": true,
+        "expected_bytes": 186769907,
+        "expected_sha256": "f0e6bea0fbf70497c3b2af34d13268f8d08c8d89bf046ec9d9636eaf32ccd7b5",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/capacity-tf64-l128/checkpoint.pt",
+        "sha256": "f0e6bea0fbf70497c3b2af34d13268f8d08c8d89bf046ec9d9636eaf32ccd7b5",
+        "step": 2161,
+        "task": "capacity-tf64-l128"
+      },
+      {
+        "bytes": 143792115,
+        "bytes_match": true,
+        "expected_bytes": 143792115,
+        "expected_sha256": "55d012f610811dd28acf92cc4e25e450b2353833d3a49e18393af6f53434abff",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.0001-s20261119/checkpoint.pt",
+        "sha256": "55d012f610811dd28acf92cc4e25e450b2353833d3a49e18393af6f53434abff",
+        "step": 257,
+        "task": "screen-fc-lr0.0001-s20261119"
+      },
+      {
+        "bytes": 143792115,
+        "bytes_match": true,
+        "expected_bytes": 143792115,
+        "expected_sha256": "5e75657f6f8cea2be4faf369608dba50620d0be00a3828d08ef720d8786c4ae4",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.0001-s20261120/checkpoint.pt",
+        "sha256": "5e75657f6f8cea2be4faf369608dba50620d0be00a3828d08ef720d8786c4ae4",
+        "step": 257,
+        "task": "screen-fc-lr0.0001-s20261120"
+      },
+      {
+        "bytes": 143792115,
+        "bytes_match": true,
+        "expected_bytes": 143792115,
+        "expected_sha256": "03f86e51f013eb2df6efcde9e91e468f12f283baca07e7e4554bcac09d2f0ae9",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.0003-s20261119/checkpoint.pt",
+        "sha256": "03f86e51f013eb2df6efcde9e91e468f12f283baca07e7e4554bcac09d2f0ae9",
+        "step": 257,
+        "task": "screen-fc-lr0.0003-s20261119"
+      },
+      {
+        "bytes": 143792115,
+        "bytes_match": true,
+        "expected_bytes": 143792115,
+        "expected_sha256": "2b2e4f69c10711233960e1b5da3140ebe7cf0facb3cc1401c8418faabf4818eb",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.0003-s20261120/checkpoint.pt",
+        "sha256": "2b2e4f69c10711233960e1b5da3140ebe7cf0facb3cc1401c8418faabf4818eb",
+        "step": 257,
+        "task": "screen-fc-lr0.0003-s20261120"
+      },
+      {
+        "bytes": 143792115,
+        "bytes_match": true,
+        "expected_bytes": 143792115,
+        "expected_sha256": "f0c1f112276983b12946a6d9221fab1f8dc755bdce5a6206b61b2705a722f8af",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.001-s20261119/checkpoint.pt",
+        "sha256": "f0c1f112276983b12946a6d9221fab1f8dc755bdce5a6206b61b2705a722f8af",
+        "step": 257,
+        "task": "screen-fc-lr0.001-s20261119"
+      },
+      {
+        "bytes": 143792115,
+        "bytes_match": true,
+        "expected_bytes": 143792115,
+        "expected_sha256": "a53d9be1703888d0cb364be6732ae6a6fb82bde2e4b29b2ca523278760e467d6",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.001-s20261120/checkpoint.pt",
+        "sha256": "a53d9be1703888d0cb364be6732ae6a6fb82bde2e4b29b2ca523278760e467d6",
+        "step": 257,
+        "task": "screen-fc-lr0.001-s20261120"
+      },
+      {
+        "bytes": 143792947,
+        "bytes_match": true,
+        "expected_bytes": 143792947,
+        "expected_sha256": "eea57b09281d5f9b06fd95e587d9fd1e59a147827f0fc4db8be1624d0c8e4cc5",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/continue-fc-s20261119/checkpoint.pt",
+        "sha256": "eea57b09281d5f9b06fd95e587d9fd1e59a147827f0fc4db8be1624d0c8e4cc5",
+        "step": 1025,
+        "task": "continue-fc-s20261119"
+      },
+      {
+        "bytes": 143792947,
+        "bytes_match": true,
+        "expected_bytes": 143792947,
+        "expected_sha256": "ea544fb99a41e8454be2b3c0a23a094eb4f8aac64c15358b96e6189050ba302c",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/continue-fc-s20261120/checkpoint.pt",
+        "sha256": "ea544fb99a41e8454be2b3c0a23a094eb4f8aac64c15358b96e6189050ba302c",
+        "step": 1025,
+        "task": "continue-fc-s20261120"
+      },
+      {
+        "bytes": 60960173,
+        "bytes_match": true,
+        "expected_bytes": 60960173,
+        "expected_sha256": "9cd72b114c0bb36afaed1b4a0bcc680886c32807c917aa302df36d0492fb4a9e",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0001-s20261119/checkpoint.pt",
+        "sha256": "9cd72b114c0bb36afaed1b4a0bcc680886c32807c917aa302df36d0492fb4a9e",
+        "step": 257,
+        "task": "screen-x-lr0.0001-s20261119"
+      },
+      {
+        "bytes": 60960173,
+        "bytes_match": true,
+        "expected_bytes": 60960173,
+        "expected_sha256": "b5326b9fdfb16168f38fdcc49c9e48fb04acafc5015f436cc77c457a5b57de4b",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0001-s20261120/checkpoint.pt",
+        "sha256": "b5326b9fdfb16168f38fdcc49c9e48fb04acafc5015f436cc77c457a5b57de4b",
+        "step": 257,
+        "task": "screen-x-lr0.0001-s20261120"
+      },
+      {
+        "bytes": 60960173,
+        "bytes_match": true,
+        "expected_bytes": 60960173,
+        "expected_sha256": "f2e82cfb3aae71064870c373179bb00b9d372971639b47da3e9e9f6bf9f409d5",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0003-s20261119/checkpoint.pt",
+        "sha256": "f2e82cfb3aae71064870c373179bb00b9d372971639b47da3e9e9f6bf9f409d5",
+        "step": 257,
+        "task": "screen-x-lr0.0003-s20261119"
+      },
+      {
+        "bytes": 60960173,
+        "bytes_match": true,
+        "expected_bytes": 60960173,
+        "expected_sha256": "e1d2613a8ad723d283f946c55e1a9adf01bcb9d73eded76c757a33dddb42bafd",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0003-s20261120/checkpoint.pt",
+        "sha256": "e1d2613a8ad723d283f946c55e1a9adf01bcb9d73eded76c757a33dddb42bafd",
+        "step": 257,
+        "task": "screen-x-lr0.0003-s20261120"
+      },
+      {
+        "bytes": 60960173,
+        "bytes_match": true,
+        "expected_bytes": 60960173,
+        "expected_sha256": "e36724583640805ad021508e9127162baa84b8a006d87d6a72293b503df9e840",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261119/checkpoint.pt",
+        "sha256": "e36724583640805ad021508e9127162baa84b8a006d87d6a72293b503df9e840",
+        "step": 257,
+        "task": "screen-x-lr0.001-s20261119"
+      },
+      {
+        "bytes": 60960173,
+        "bytes_match": true,
+        "expected_bytes": 60960173,
+        "expected_sha256": "a502b72a4a9e933379877605851fd9f42714e37a5b6a910b941794476c08cfcc",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261120/checkpoint.pt",
+        "sha256": "a502b72a4a9e933379877605851fd9f42714e37a5b6a910b941794476c08cfcc",
+        "step": 257,
+        "task": "screen-x-lr0.001-s20261120"
+      },
+      {
+        "bytes": 92929075,
+        "bytes_match": true,
+        "expected_bytes": 92929075,
+        "expected_sha256": "c364e876fbd99af1df1d072c3997d4949df1a26038eeafa92b44d858e3a6c616",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-tf-lr0.0001-s20261119/checkpoint.pt",
+        "sha256": "c364e876fbd99af1df1d072c3997d4949df1a26038eeafa92b44d858e3a6c616",
+        "step": 257,
+        "task": "screen-tf-lr0.0001-s20261119"
+      },
+      {
+        "bytes": 92929075,
+        "bytes_match": true,
+        "expected_bytes": 92929075,
+        "expected_sha256": "3df507859ca0dfd66fa12a8afc71953619ae936172691508c942de14f839a53b",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-tf-lr0.0001-s20261120/checkpoint.pt",
+        "sha256": "3df507859ca0dfd66fa12a8afc71953619ae936172691508c942de14f839a53b",
+        "step": 257,
+        "task": "screen-tf-lr0.0001-s20261120"
+      },
+      {
+        "bytes": 92929075,
+        "bytes_match": true,
+        "expected_bytes": 92929075,
+        "expected_sha256": "7ca68d79afa95a959a8f5c562ccb5ba789a32c52a742309fd9cc330953a74d2b",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-tf-lr0.0003-s20261119/checkpoint.pt",
+        "sha256": "7ca68d79afa95a959a8f5c562ccb5ba789a32c52a742309fd9cc330953a74d2b",
+        "step": 257,
+        "task": "screen-tf-lr0.0003-s20261119"
+      },
+      {
+        "bytes": 92929075,
+        "bytes_match": true,
+        "expected_bytes": 92929075,
+        "expected_sha256": "7bbf96f2bca2e445a5b931fa0bd5b6c165d932df624a9ba0233bdb89e92f231a",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-tf-lr0.0003-s20261120/checkpoint.pt",
+        "sha256": "7bbf96f2bca2e445a5b931fa0bd5b6c165d932df624a9ba0233bdb89e92f231a",
+        "step": 257,
+        "task": "screen-tf-lr0.0003-s20261120"
+      },
+      {
+        "bytes": 92929075,
+        "bytes_match": true,
+        "expected_bytes": 92929075,
+        "expected_sha256": "6a8e2dd3d6f87f9d2cb521fd3b938826ed38e6b6617cc2333bbc3cce73f9c59b",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-tf-lr0.001-s20261119/checkpoint.pt",
+        "sha256": "6a8e2dd3d6f87f9d2cb521fd3b938826ed38e6b6617cc2333bbc3cce73f9c59b",
+        "step": 257,
+        "task": "screen-tf-lr0.001-s20261119"
+      },
+      {
+        "bytes": 92929075,
+        "bytes_match": true,
+        "expected_bytes": 92929075,
+        "expected_sha256": "70d815f13d2a63868034377828128c655d55f3ba1449bcc1e65f44951a9f8265",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-tf-lr0.001-s20261120/checkpoint.pt",
+        "sha256": "70d815f13d2a63868034377828128c655d55f3ba1449bcc1e65f44951a9f8265",
+        "step": 257,
+        "task": "screen-tf-lr0.001-s20261120"
+      },
+      {
+        "bytes": 92929907,
+        "bytes_match": true,
+        "expected_bytes": 92929907,
+        "expected_sha256": "c546e2c25e47f71604f539352d7439e44528246ee646ab6af8e82ff94f0f02a9",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/continue-tf-s20261119/checkpoint.pt",
+        "sha256": "c546e2c25e47f71604f539352d7439e44528246ee646ab6af8e82ff94f0f02a9",
+        "step": 1025,
+        "task": "continue-tf-s20261119"
+      },
+      {
+        "bytes": 92929843,
+        "bytes_match": true,
+        "expected_bytes": 92929843,
+        "expected_sha256": "aa951356fdea1f12f3271f1346f98575de34cd292a2a3cd9aa140a3ca6a7dc5a",
+        "frozen_identity_matches": true,
+        "hash_matches": true,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/continue-tf-s20261120/checkpoint.pt",
+        "sha256": "aa951356fdea1f12f3271f1346f98575de34cd292a2a3cd9aa140a3ca6a7dc5a",
+        "step": 1025,
+        "task": "continue-tf-s20261120"
+      }
+    ],
+    "final_count": 70,
+    "scope": "SHA256 and length of all final checkpoint files plus source/data/runtime identity metadata. No checkpoint re-execution or device initialization; semantic recovery is reviewed separately from recorded fresh-process comparisons.",
+    "total_bytes": 9011835902,
+    "unexpected": []
+  },
+  "completed_observed_unix": 1795097376.2406418,
+  "counts": {
+    "completed": 70,
+    "failed": 2
+  },
+  "frozen_inputs": {
+    "all_match": true,
+    "file_count": 50,
+    "files": [
+      {
+        "expected_sha256": "8208b80d75d5de0a39089a54db7a24924819bb81a1ed6a61adaac931a2fddf95",
+        "kind": "frozen_experiment",
+        "matches": true,
+        "observed_sha256": "8208b80d75d5de0a39089a54db7a24924819bb81a1ed6a61adaac931a2fddf95",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen-v2/source/pilotlab/__init__.py"
+      },
+      {
+        "expected_sha256": "d327409f049891273c315c654870a6cbdda8b1162307cabe100225c11ddbcbdd",
+        "kind": "frozen_experiment",
+        "matches": true,
+        "observed_sha256": "d327409f049891273c315c654870a6cbdda8b1162307cabe100225c11ddbcbdd",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen-v2/source/pilotlab/data.py"
+      },
+      {
+        "expected_sha256": "d81bf90d3d85762f355c71375f47145aceff4e06167b95749f738372fbf3bcea",
+        "kind": "frozen_experiment",
+        "matches": true,
+        "observed_sha256": "d81bf90d3d85762f355c71375f47145aceff4e06167b95749f738372fbf3bcea",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen-v2/source/pilotlab/diagnose_shannon.py"
+      },
+      {
+        "expected_sha256": "d846049973ea6c7a952353b8a4ed25e2d89e9a67741e3c16e3dd67d39e802170",
+        "kind": "frozen_experiment",
+        "matches": true,
+        "observed_sha256": "d846049973ea6c7a952353b8a4ed25e2d89e9a67741e3c16e3dd67d39e802170",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen-v2/source/pilotlab/io.py"
+      },
+      {
+        "expected_sha256": "42ac16fa4353d47898dc0d40fbb4b689c50856f06007ccf43f887e65cc51becb",
+        "kind": "frozen_experiment",
+        "matches": true,
+        "observed_sha256": "42ac16fa4353d47898dc0d40fbb4b689c50856f06007ccf43f887e65cc51becb",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen-v2/source/pilotlab/models.py"
+      },
+      {
+        "expected_sha256": "680567ef8fed0835f62d890b9696120a1a6e3edb323f0b88437805171c2fc834",
+        "kind": "frozen_experiment",
+        "matches": true,
+        "observed_sha256": "680567ef8fed0835f62d890b9696120a1a6e3edb323f0b88437805171c2fc834",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen-v2/source/pilotlab/plan.py"
+      },
+      {
+        "expected_sha256": "a0452bf80628baf4cc6c02601200f2ea22b3b3218f611dfcdfaeb2f909f594b4",
+        "kind": "frozen_experiment",
+        "matches": true,
+        "observed_sha256": "a0452bf80628baf4cc6c02601200f2ea22b3b3218f611dfcdfaeb2f909f594b4",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen-v2/source/pilotlab/plan2.py"
+      },
+      {
+        "expected_sha256": "9b87332e2d4ca021b0adffb44e19d9eb5d477cf27eaf068042730f2ab20f2c00",
+        "kind": "frozen_experiment",
+        "matches": true,
+        "observed_sha256": "9b87332e2d4ca021b0adffb44e19d9eb5d477cf27eaf068042730f2ab20f2c00",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen-v2/source/pilotlab/report.py"
+      },
+      {
+        "expected_sha256": "dbd209fe22f252bc88aa13f27b616f0cb34bcaf468b03e85751edca6f2b9d7b7",
+        "kind": "frozen_experiment",
+        "matches": true,
+        "observed_sha256": "dbd209fe22f252bc88aa13f27b616f0cb34bcaf468b03e85751edca6f2b9d7b7",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen-v2/source/pilotlab/scheduler.py"
+      },
+      {
+        "expected_sha256": "9607cb8ac5f29af0e43a7de92eb36e0a4a0801eac1e493da972aba1df4360787",
+        "kind": "frozen_experiment",
+        "matches": true,
+        "observed_sha256": "9607cb8ac5f29af0e43a7de92eb36e0a4a0801eac1e493da972aba1df4360787",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen-v2/source/pilotlab/selection.py"
+      },
+      {
+        "expected_sha256": "15e08a2038b9d5270269a46e8cf4acc656868018a9e47cbac99854a9a1faa7ae",
+        "kind": "frozen_experiment",
+        "matches": true,
+        "observed_sha256": "15e08a2038b9d5270269a46e8cf4acc656868018a9e47cbac99854a9a1faa7ae",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen-v2/source/pilotlab/trace_shannon.py"
+      },
+      {
+        "expected_sha256": "d79a79f370babe4302fb7c2976d424425978047d32255d14b595cb6eeb2528ff",
+        "kind": "frozen_experiment",
+        "matches": true,
+        "observed_sha256": "d79a79f370babe4302fb7c2976d424425978047d32255d14b595cb6eeb2528ff",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen-v2/source/pilotlab/validate_shannon_capture.py"
+      },
+      {
+        "expected_sha256": "542b1f5b88389e902f2aedb19eb368321152f1fff012f66d553cfc0cccf349d8",
+        "kind": "frozen_experiment",
+        "matches": true,
+        "observed_sha256": "542b1f5b88389e902f2aedb19eb368321152f1fff012f66d553cfc0cccf349d8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen-v2/source/pilotlab/worker.py"
+      },
+      {
+        "expected_sha256": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195",
+        "kind": "frozen_foundation",
+        "matches": true,
+        "observed_sha256": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen/foundation/src/tide/__init__.py"
+      },
+      {
+        "expected_sha256": "1749c52190680ed82f38d981d751aaf84774aca6b9a995de716cd2573cecdb1f",
+        "kind": "frozen_foundation",
+        "matches": true,
+        "observed_sha256": "1749c52190680ed82f38d981d751aaf84774aca6b9a995de716cd2573cecdb1f",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen/foundation/src/tide/allocation.py"
+      },
+      {
+        "expected_sha256": "0a8231713a2801ed397cee093c5d1112867a2057fc20804717fd39fd9e1609e8",
+        "kind": "frozen_foundation",
+        "matches": true,
+        "observed_sha256": "0a8231713a2801ed397cee093c5d1112867a2057fc20804717fd39fd9e1609e8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen/foundation/src/tide/attention.py"
+      },
+      {
+        "expected_sha256": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+        "kind": "frozen_foundation",
+        "matches": true,
+        "observed_sha256": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen/foundation/src/tide/checkpoint.py"
+      },
+      {
+        "expected_sha256": "2b890c0ae9eac381aa3ab9726eb386339345f62dc7b3e27433ecd5a0b1c0299f",
+        "kind": "frozen_foundation",
+        "matches": true,
+        "observed_sha256": "2b890c0ae9eac381aa3ab9726eb386339345f62dc7b3e27433ecd5a0b1c0299f",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen/foundation/src/tide/config.py"
+      },
+      {
+        "expected_sha256": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449",
+        "kind": "frozen_foundation",
+        "matches": true,
+        "observed_sha256": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen/foundation/src/tide/ffn_packing.py"
+      },
+      {
+        "expected_sha256": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1",
+        "kind": "frozen_foundation",
+        "matches": true,
+        "observed_sha256": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen/foundation/src/tide/grouped_linear.py"
+      },
+      {
+        "expected_sha256": "789cc6b7543bc156ba0f650791194c716454f1bda422d59c791ce8231c69b4f2",
+        "kind": "frozen_foundation",
+        "matches": true,
+        "observed_sha256": "789cc6b7543bc156ba0f650791194c716454f1bda422d59c791ce8231c69b4f2",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen/foundation/src/tide/kv.py"
+      },
+      {
+        "expected_sha256": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+        "kind": "frozen_foundation",
+        "matches": true,
+        "observed_sha256": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen/foundation/src/tide/layout.py"
+      },
+      {
+        "expected_sha256": "1911afe3b66b199eb7e066ea57c5900fead1e390ebb5894818d423284850255e",
+        "kind": "frozen_foundation",
+        "matches": true,
+        "observed_sha256": "1911afe3b66b199eb7e066ea57c5900fead1e390ebb5894818d423284850255e",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen/foundation/src/tide/model.py"
+      },
+      {
+        "expected_sha256": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc",
+        "kind": "frozen_foundation",
+        "matches": true,
+        "observed_sha256": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen/foundation/src/tide/parameters.py"
+      },
+      {
+        "expected_sha256": "0f77def73da20f467756e5dc1f701f25942565f762e82be5d23218ecee39d05f",
+        "kind": "frozen_foundation",
+        "matches": true,
+        "observed_sha256": "0f77def73da20f467756e5dc1f701f25942565f762e82be5d23218ecee39d05f",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen/foundation/src/tide/placement.py"
+      },
+      {
+        "expected_sha256": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+        "kind": "frozen_foundation",
+        "matches": true,
+        "observed_sha256": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen/foundation/src/tide/placement_ownership.py"
+      },
+      {
+        "expected_sha256": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+        "kind": "frozen_foundation",
+        "matches": true,
+        "observed_sha256": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen/foundation/src/tide/precision.py"
+      },
+      {
+        "expected_sha256": "bae0d61c805b68fcf97800f40baa17ff549d90c3e2a47763cfc9f687a7c752f1",
+        "kind": "frozen_foundation",
+        "matches": true,
+        "observed_sha256": "bae0d61c805b68fcf97800f40baa17ff549d90c3e2a47763cfc9f687a7c752f1",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen/foundation/src/tide/reception.py"
+      },
+      {
+        "expected_sha256": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+        "kind": "frozen_foundation",
+        "matches": true,
+        "observed_sha256": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen/foundation/src/tide/region.py"
+      },
+      {
+        "expected_sha256": "514ee30c5077d416c02cec81380280eb45509f20922a0f812657b93d2d8b7e80",
+        "kind": "frozen_foundation",
+        "matches": true,
+        "observed_sha256": "514ee30c5077d416c02cec81380280eb45509f20922a0f812657b93d2d8b7e80",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen/foundation/src/tide/region_batch.py"
+      },
+      {
+        "expected_sha256": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950",
+        "kind": "frozen_foundation",
+        "matches": true,
+        "observed_sha256": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen/foundation/src/tide/region_execution.py"
+      },
+      {
+        "expected_sha256": "fd082f035185d04af6bc3ba27b949a8f065ccdf62f8b32a1b442accbfa6f2b6d",
+        "kind": "frozen_foundation",
+        "matches": true,
+        "observed_sha256": "fd082f035185d04af6bc3ba27b949a8f065ccdf62f8b32a1b442accbfa6f2b6d",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen/foundation/src/tide/region_placement.py"
+      },
+      {
+        "expected_sha256": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+        "kind": "frozen_foundation",
+        "matches": true,
+        "observed_sha256": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen/foundation/src/tide/ssd.py"
+      },
+      {
+        "expected_sha256": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2",
+        "kind": "frozen_foundation",
+        "matches": true,
+        "observed_sha256": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen/foundation/src/tide/ssd_memory.py"
+      },
+      {
+        "expected_sha256": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+        "kind": "frozen_foundation",
+        "matches": true,
+        "observed_sha256": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen/foundation/src/tide/topology.py"
+      },
+      {
+        "expected_sha256": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06",
+        "kind": "frozen_foundation",
+        "matches": true,
+        "observed_sha256": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen/foundation/src/tide/topology_hb.py"
+      },
+      {
+        "expected_sha256": "122f912828ff701de8dd449b75a473fb03082a3ae0bb40dee50d5d90f5f23b1b",
+        "kind": "data_manifest",
+        "matches": true,
+        "observed_sha256": "122f912828ff701de8dd449b75a473fb03082a3ae0bb40dee50d5d90f5f23b1b",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/manifest.json"
+      },
+      {
+        "expected_bytes": 64935,
+        "expected_sha256": "455f8baf28a3d0fe53517d83d96e14c6186122be85298b8811ddc693fb114936",
+        "kind": "data_file",
+        "matches": true,
+        "observed_bytes": 64935,
+        "observed_sha256": "455f8baf28a3d0fe53517d83d96e14c6186122be85298b8811ddc693fb114936",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/tokenizer-training-document-ids.txt"
+      },
+      {
+        "expected_bytes": 550678,
+        "expected_sha256": "830de1c70c9bbdcc3e778446f7c2f6f0fa4366874facbf4bcba2521f184ee7b7",
+        "kind": "data_file",
+        "matches": true,
+        "observed_bytes": 550678,
+        "observed_sha256": "830de1c70c9bbdcc3e778446f7c2f6f0fa4366874facbf4bcba2521f184ee7b7",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/tokenizer.json"
+      },
+      {
+        "expected_bytes": 5500206,
+        "expected_sha256": "563dd9b280201439114c2a5069926a636fd0187ee24f2900731de10675553d22",
+        "kind": "data_file",
+        "matches": true,
+        "observed_bytes": 5500206,
+        "observed_sha256": "563dd9b280201439114c2a5069926a636fd0187ee24f2900731de10675553d22",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/train.documents.jsonl"
+      },
+      {
+        "expected_bytes": 462016,
+        "expected_sha256": "c6a3223cd23dc323ff83e80ecb556872e1a8313ee2afa4d27399e7b3bad71f3e",
+        "kind": "data_file",
+        "matches": true,
+        "observed_bytes": 462016,
+        "observed_sha256": "c6a3223cd23dc323ff83e80ecb556872e1a8313ee2afa4d27399e7b3bad71f3e",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/train.documents.npy"
+      },
+      {
+        "expected_bytes": 266448088,
+        "expected_sha256": "4d71ceecd9c8ab317faa1e4a9f2a6cb546b62a9661571a9bc26063130199256f",
+        "kind": "data_file",
+        "matches": true,
+        "observed_bytes": 266448088,
+        "observed_sha256": "4d71ceecd9c8ab317faa1e4a9f2a6cb546b62a9661571a9bc26063130199256f",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/train.tokens.bin"
+      },
+      {
+        "expected_bytes": 107576,
+        "expected_sha256": "1f8b346d1d5b3c0187eb3b3d0be2c442a9b2c02eb65c022bfc8ede3067c1b366",
+        "kind": "data_file",
+        "matches": true,
+        "observed_bytes": 107576,
+        "observed_sha256": "1f8b346d1d5b3c0187eb3b3d0be2c442a9b2c02eb65c022bfc8ede3067c1b366",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/validation.documents.jsonl"
+      },
+      {
+        "expected_bytes": 9344,
+        "expected_sha256": "11910e02b71aee5e7812304cdc2c571d20ad46961f65fab783513553ad4322f0",
+        "kind": "data_file",
+        "matches": true,
+        "observed_bytes": 9344,
+        "observed_sha256": "11910e02b71aee5e7812304cdc2c571d20ad46961f65fab783513553ad4322f0",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/validation.documents.npy"
+      },
+      {
+        "expected_bytes": 5451898,
+        "expected_sha256": "a79732e9bdb5b73697a21e484b03272b288e9a7915c271b33a4614919663fef5",
+        "kind": "data_file",
+        "matches": true,
+        "observed_bytes": 5451898,
+        "observed_sha256": "a79732e9bdb5b73697a21e484b03272b288e9a7915c271b33a4614919663fef5",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/validation.tokens.bin"
+      },
+      {
+        "expected_sha256": "dc040228b4388b24bb96446fb2b2e330b6c438812f0cc3038ac1ce417f2b0492",
+        "kind": "plan",
+        "matches": true,
+        "observed_sha256": "dc040228b4388b24bb96446fb2b2e330b6c438812f0cc3038ac1ce417f2b0492",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/frozen-v2/plan.json"
+      },
+      {
+        "expected_sha256": "dc040228b4388b24bb96446fb2b2e330b6c438812f0cc3038ac1ce417f2b0492",
+        "kind": "plan",
+        "matches": true,
+        "observed_sha256": "dc040228b4388b24bb96446fb2b2e330b6c438812f0cc3038ac1ce417f2b0492",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/plan.json"
+      },
+      {
+        "expected_sha256": "dc040228b4388b24bb96446fb2b2e330b6c438812f0cc3038ac1ce417f2b0492",
+        "kind": "plan",
+        "matches": true,
+        "observed_sha256": "dc040228b4388b24bb96446fb2b2e330b6c438812f0cc3038ac1ce417f2b0492",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/configs/pilot-round2/plan.json"
+      },
+      {
+        "expected_sha256": "09fb039e72b8373babfa762dd08485758ce4f2d5b22633ce2f216a4d665b216a",
+        "kind": "launcher",
+        "matches": true,
+        "observed_sha256": "09fb039e72b8373babfa762dd08485758ce4f2d5b22633ce2f216a4d665b216a",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/run-round.sh"
+      },
+      {
+        "expected_sha256": "3fa3bd1614e6eea01665e50dc5f4b90ea870ff43c52a602900e20de7d5e41b16",
+        "kind": "foundation_patch",
+        "matches": true,
+        "observed_sha256": "3fa3bd1614e6eea01665e50dc5f4b90ea870ff43c52a602900e20de7d5e41b16",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/patches/pilot-round2-shannon-cap.patch"
+      }
+    ]
+  },
+  "lifecycle": {
+    "all_checked_processes_gone": true,
+    "cgroup_exists": false,
+    "cgroup_path": "/sys/fs/cgroup/systemd/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r2-round-20261119.service",
+    "cgroup_pids": [],
+    "live_recorded_identities": [],
+    "proc_cgroup_matches": [],
+    "recorded_identity_count": 332,
+    "recorded_pid_count": 332,
+    "recorded_process_group_matches": [],
+    "remaining_pid_only_records": [],
+    "reused_pids": [],
+    "scheduler_all_task_processes_terminated": true,
+    "systemd": {
+      "ActiveState": "failed",
+      "ControlGroup": "",
+      "ExecMainExitTimestamp": "Thu 2026-11-19 21:46:28 CST",
+      "ExecMainStartTimestamp": "Thu 2026-11-19 20:51:31 CST",
+      "ExecMainStatus": "1",
+      "MainPID": "0",
+      "Result": "exit-code",
+      "SubState": "failed"
+    }
+  },
+  "observed_unix": 1795097366.4971588,
+  "queue": {
+    "admitted_tasks": 56,
+    "all_round_job_locks_released": true,
+    "all_round_manifests_removed": true,
+    "device_locks": [
+      {
+        "owners": [],
+        "physical_id": 0
+      },
+      {
+        "owners": [],
+        "physical_id": 2
+      },
+      {
+        "owners": [],
+        "physical_id": 4
+      },
+      {
+        "owners": [],
+        "physical_id": 5
+      },
+      {
+        "owners": [],
+        "physical_id": 7
+      },
+      {
+        "owners": [],
+        "physical_id": 8
+      },
+      {
+        "owners": [],
+        "physical_id": 10
+      },
+      {
+        "owners": [],
+        "physical_id": 11
+      },
+      {
+        "owners": [],
+        "physical_id": 14
+      }
+    ],
+    "no_round_device_lock_owners": true,
+    "runtime_directory": "/run/user/1003",
+    "status_counts": {
+      "completed": 56
+    },
+    "tasks": [
+      {
+        "job_id": "pilot-r2-20261119-3246765-npu-isolated-exchange-x-a-e04ee5c7",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          0
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "npu-isolated-exchange-x-a"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-npu-isolated-transformer-a-12ce297e",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          2
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "npu-isolated-transformer-a"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-npu-isolated-exchange-x-b-ded36574",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          0
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "npu-isolated-exchange-x-b"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-npu-isolated-transformer-b-22c4cf2d",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          2
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "npu-isolated-transformer-b"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-npu-concurrent-exchange-x-a-79dae858",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          0
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "npu-concurrent-exchange-x-a"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-npu-concurrent-transformer-a-d3fcd9bf",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          2
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "npu-concurrent-transformer-a"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-npu-load-fc32-a-80014a12",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          4
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "npu-load-fc32-a"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-npu-load-x32-a-1757908f",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          5
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "npu-load-x32-a"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-npu-load-x64-a-e9e52e1d",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          7
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "npu-load-x64-a"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-npu-load-x16-l128-a-99da75ea",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          8
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "npu-load-x16-l128-a"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-npu-load-x16-l256-a-1698e1f5",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          10
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "npu-load-x16-l256-a"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-npu-load-timed16-a-90748064",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          11
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "npu-load-timed16-a"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-npu-load-shannon8-a-8c7f4de1",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          14
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "npu-load-shannon8-a"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-npu-concurrent-exchange-x-b-1100a2c8",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          0
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "npu-concurrent-exchange-x-b"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-npu-concurrent-transformer-b-15731ed3",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          2
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "npu-concurrent-transformer-b"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-npu-load-fc64-b-c788fc21",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          4
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "npu-load-fc64-b"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-npu-load-x32-l128-b-9cbdc3d9",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          5
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "npu-load-x32-l128-b"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-npu-load-x64-l128-b-10b3d663",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          7
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "npu-load-x64-l128-b"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-npu-load-x16-l256-b-368194d4",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          8
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "npu-load-x16-l256-b"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-npu-load-timed-mixed16-b-174adeec",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          10
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "npu-load-timed-mixed16-b"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-npu-load-timed16-l128-b-82a8cd6c",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          11
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "npu-load-timed16-l128-b"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-npu-load-shannon16-b-f3f824fe",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          14
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "npu-load-shannon16-b"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-capacity-x8-l64-57a84872",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          11
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "capacity-x8-l64"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-capacity-x16-l64-9862f1d9",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          7
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "capacity-x16-l64"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-capacity-x32-l64-b35e8266",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          5
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "capacity-x32-l64"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-capacity-x64-l64-fad22085",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          10
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "capacity-x64-l64"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-capacity-x8-l128-b2c2fdc1",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          4
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "capacity-x8-l128"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-capacity-x8-l256-34eeade1",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          8
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "capacity-x8-l256"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-capacity-fc8-l64-2aa35a4e",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          0
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "capacity-fc8-l64"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-capacity-fc16-l64-a87249ba",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          2
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "capacity-fc16-l64"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-capacity-fc32-l64-887974f7",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          14
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "capacity-fc32-l64"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-capacity-tf8-l64-51b49fd0",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          11
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "capacity-tf8-l64"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-capacity-tf32-l128-152d7722",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          7
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "capacity-tf32-l128"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-capacity-tf64-l128-a9edf4b3",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          5
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "capacity-tf64-l128"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-screen-fc-lr0.0001-s20261119-f0ae17bf",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          11
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "screen-fc-lr0.0001-s20261119"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-screen-fc-lr0.0001-s20261120-ca581697",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          7
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "screen-fc-lr0.0001-s20261120"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-screen-fc-lr0.0003-s20261119-aa318d6a",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          5
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "screen-fc-lr0.0003-s20261119"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-screen-fc-lr0.0003-s20261120-b2a4e79b",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          10
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "screen-fc-lr0.0003-s20261120"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-screen-fc-lr0.001-s20261119-c738d1ec",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          4
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "screen-fc-lr0.001-s20261119"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-screen-fc-lr0.001-s20261120-dd70d5ea",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          8
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "screen-fc-lr0.001-s20261120"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-continue-fc-s20261119-799309de",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          11
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "continue-fc-s20261119"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-continue-fc-s20261120-222aa0ef",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          7
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "continue-fc-s20261120"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-screen-x-lr0.0001-s20261119-514ee09c",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          0
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "screen-x-lr0.0001-s20261119"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-screen-x-lr0.0001-s20261120-0f1d7403",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          2
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "screen-x-lr0.0001-s20261120"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-screen-x-lr0.0003-s20261119-fe3394f1",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          14
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "screen-x-lr0.0003-s20261119"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-screen-x-lr0.0003-s20261120-16f44ac3",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          11
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "screen-x-lr0.0003-s20261120"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-screen-x-lr0.001-s20261119-b5fcfcad",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          7
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "screen-x-lr0.001-s20261119"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-screen-x-lr0.001-s20261120-09b17f08",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          5
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "screen-x-lr0.001-s20261120"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-screen-tf-lr0.0001-s20261119-92eb2e5b",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          10
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "screen-tf-lr0.0001-s20261119"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-screen-tf-lr0.0001-s20261120-bb46ec83",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          4
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "screen-tf-lr0.0001-s20261120"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-screen-tf-lr0.0003-s20261119-34912ce0",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          8
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "screen-tf-lr0.0003-s20261119"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-screen-tf-lr0.0003-s20261120-07e33468",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          10
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "screen-tf-lr0.0003-s20261120"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-screen-tf-lr0.001-s20261119-67cc49be",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          4
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "screen-tf-lr0.001-s20261119"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-screen-tf-lr0.001-s20261120-02c9c80b",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          8
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "screen-tf-lr0.001-s20261120"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-continue-tf-s20261119-70e50aaa",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          5
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "continue-tf-s20261119"
+      },
+      {
+        "job_id": "pilot-r2-20261119-3246765-continue-tf-s20261120-e88cce36",
+        "job_lock_owners": [],
+        "manifest_present": false,
+        "physical_ids": [
+          10
+        ],
+        "return_code": 0,
+        "status": "completed",
+        "task": "continue-tf-s20261120"
+      }
+    ]
+  },
+  "round": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round",
+  "scheduler_sha256": "5c7591003f78defca3a1a4e2a90fe3acbc5d1ac2180b40b30243b4099c437b82",
+  "scheduler_stable": true,
+  "scheduler_status": "completed_with_failures",
+  "schema": "pilot-r2-terminal-audit-v1"
+}

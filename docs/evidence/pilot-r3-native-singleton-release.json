@@ -1,0 +1,35 @@
+{
+  "allocation_unix": 1795165621.766685,
+  "corpus_loss_tokens": 0,
+  "device_seconds": 7.867451906204224,
+  "finished_unix": 1795165721.1815352,
+  "lock_checks": [
+    {
+      "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+      "owners": [],
+      "path": "/run/user/1003/ascend-job-queue/jobs/tide-r3-native-singleton-diagnostic-r01.lock",
+      "status": "unlocked"
+    },
+    {
+      "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+      "owners": [],
+      "path": "/run/user/1003/ascend-device-locks/physical-1.lock",
+      "status": "unlocked"
+    }
+  ],
+  "probe_pid": 3117442,
+  "probe_pid_absent": true,
+  "queue": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r01/native-probe-queue.json",
+    "sha256": "421884d4ba80fd8efdcd0df1722f7288b3de743e0e96e910e8ba69ac70d0d10b"
+  },
+  "queue_manifest_absent": true,
+  "release_unix": 1795165629.634137,
+  "result": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r01/native-probe-result.json",
+    "sha256": "5111ad26494dd3cccfc9220310055719d09870dc4e5b41ca9f2116d36c534bbe"
+  },
+  "schema": "pilot-r3-native-singleton-release-v1",
+  "scope": "short joined queue invocation; no separate durable service or cgroup claimed",
+  "status": "released"
+}

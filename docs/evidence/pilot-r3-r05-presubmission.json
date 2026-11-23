@@ -1,0 +1,68 @@
+{
+  "budget_remaining": {
+    "budget_ledger": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/budget.json",
+    "deadline_unix": 1797698913.9318287,
+    "max_device_seconds": 25920000,
+    "observed_unix": 1795144116.431949,
+    "remaining_device_seconds": 25732489.43037241,
+    "remaining_preparation_device_seconds": 168469.78724810109,
+    "remaining_preparation_processed_tokens": 53353024,
+    "remaining_wall_seconds": 2554797.499879837,
+    "started_unix": 1795106913.9318287
+  },
+  "cpu_affinity_count": 320,
+  "limits": {
+    "all_worker_compute_threads": 320,
+    "cpu_compute_threads": 160,
+    "cpu_workers": 40,
+    "hbm_admission_bytes": 51539607552,
+    "inflight_checkpoint_bytes": 25769803776,
+    "max_npu_devices": 8,
+    "max_rss_bytes": 1000000000000,
+    "max_workers": 80,
+    "npu_workers_per_device": 16,
+    "pipeline_models": 32
+  },
+  "observed_unix": 1795144116.4441242,
+  "plan": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r05/campaign-plan.json",
+    "sha256": "235142a3eff06c5d6d3b86c0cf8c8c7b00d395fadc94f8de6d03c1f09b7e714e"
+  },
+  "prepared": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r05/campaign-prepared.json",
+    "sha256": "7f0926ff7502084c37fd9d4cf41714a67766b8ced6f318ea76dfb2254834f17d"
+  },
+  "reconciliation": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-r04-reconciliation.json",
+    "sha256": "cf78179101b8f76971168caeeae38f9cd67877ecc906be8d48cf0969e2b63b39"
+  },
+  "resources": {
+    "available_storage_bytes": 212402577408,
+    "filesystem_free_bytes": 1667242110976,
+    "observed_unix": 1795144116.4441085,
+    "quota": {
+      "filesystem": "/dev/mapper/ascend_data-data",
+      "grace_epoch": 0,
+      "hard_bytes": 751619276800,
+      "soft_bytes": 322122547200,
+      "used_bytes": 109719969792
+    },
+    "scope": "input snapshot headroom only; campaign forecasts all resolved controls before release",
+    "snapshot_source_bytes": 0,
+    "storage_reserve_bytes": 25769803776
+  },
+  "schema": "pilot-r3-resume-presubmission-v1",
+  "scientific_scope": "execution preparation only; original failed attempts, Shannon recovery disagreement and tolerance gates retained; B remains closed",
+  "source_policy": "new controller and separately identified resume adapter; original r04 worker/source identity/foundation/data/environment preserved",
+  "status": "passed",
+  "validation": {
+    "actual_requests_unchanged": 120,
+    "actual_resume_receipts_validated": 16,
+    "adapter": "23 CPU checks, including full-state/step-fingerprint continuation and zero-new-token final-evaluation continuation",
+    "integration": "223 passed in 48.87s; subsequent affected scheduler/adoption/report/audit/pipeline/preparation checks: 215 passed in 18.48s",
+    "readonly_import_report": {
+      "observation_errors": [],
+      "verified_completed": 127
+    }
+  }
+}

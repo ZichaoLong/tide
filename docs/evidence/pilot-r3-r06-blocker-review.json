@@ -1,0 +1,257 @@
+{
+  "actual_current_resources": {
+    "basis": "fresh terminal audit of cgroup, all recorded PID/start identities and cooperative queue ownership",
+    "cpu_workers": 0,
+    "npu_cards_held": 0,
+    "npu_workers": 0
+  },
+  "blocking_reason": "Blocked: selected_recipe_confirmation_failed:exchange-d64-k-independent-9af84f69cb-a3-2026112001-r2",
+  "budget": {
+    "deadline_unix": 1797698913.9318287,
+    "ledger": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/budget.json",
+      "sha256": "c437426f0b76dc4407ae18e56326219277912f561cb80a83212d6e2de12909c9"
+    },
+    "limit_card_hours": 7200.0,
+    "used_card_hours": 58.1441410948957
+  },
+  "completed_a3_gate_diagnosis": [
+    {
+      "expected_phase_start_tokens": 1048576,
+      "gate_reasons": [
+        "declared_real_continuation_not_established"
+      ],
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 3,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "id": "exchange-d64-k-independent-9af84f69cb-a3-2026112001-r2",
+      "prior_and_current_source_identity_equal": true,
+      "prior_checkpoint_bound": true,
+      "prior_checkpoint_tokens": 1655552,
+      "prior_result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r05/round/tasks/exchange-d64-k-independent-9af84f69cb-a3-2026112001-r2/attempt-0/result.json",
+        "sha256": "c679a6f6eabb602a398b0d227831aec830649d18f709b1969cb41ec92fd162ea"
+      },
+      "prior_training": {
+        "from_steps": 4096,
+        "from_tokens": 1048576,
+        "seconds": 811.4102198295295,
+        "segment_steps": 2371,
+        "segment_tokens": 606976,
+        "steps": 6467,
+        "target_tokens": 2097152,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 1655552,
+        "tokens_per_second": 748.0507210366669
+      },
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/exchange-d64-k-independent-9af84f69cb-a3-2026112001-r2/attempt-0/result.json",
+        "sha256": "3848e828d7bf04a45b94b1c8c1e9fe37f0a68c0414470e7f3362d3914d6b19dd"
+      },
+      "resume_load": {
+        "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+        "status": "exact"
+      },
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/exchange-d64-k-independent-9af84f69cb-a3-2026112001-r2/task.json",
+        "sha256": "35dc6b52c40a5ea8f4d08619ad808de0f0a161e3e1e8713691b6025337c4894d"
+      },
+      "training": {
+        "from_steps": 6467,
+        "from_tokens": 1655552,
+        "seconds": 617.4196437709033,
+        "segment_steps": 1725,
+        "segment_tokens": 441600,
+        "steps": 8192,
+        "target_tokens": 2097152,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 2097152,
+        "tokens_per_second": 715.2347750112367
+      },
+      "validation_final_nll": 5.361666321754456,
+      "validation_initial_nll": 5.705313049256802
+    },
+    {
+      "expected_phase_start_tokens": 1048576,
+      "gate_reasons": [
+        "declared_real_continuation_not_established"
+      ],
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 3,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "id": "exchange-d64-k-independent-9af84f69cb-a3-2026112002-r2",
+      "prior_and_current_source_identity_equal": true,
+      "prior_checkpoint_bound": true,
+      "prior_checkpoint_tokens": 1639680,
+      "prior_result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r05/round/tasks/exchange-d64-k-independent-9af84f69cb-a3-2026112002-r2/attempt-0/result.json",
+        "sha256": "cb4d9103a9b7beb31d5b9cf71dd4891f8cb33048fca2efa0b3f023ce13869733"
+      },
+      "prior_training": {
+        "from_steps": 4096,
+        "from_tokens": 1048576,
+        "seconds": 812.5768238343298,
+        "segment_steps": 2309,
+        "segment_tokens": 591104,
+        "steps": 6405,
+        "target_tokens": 2097152,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 1639680,
+        "tokens_per_second": 727.4438338159098
+      },
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/exchange-d64-k-independent-9af84f69cb-a3-2026112002-r2/attempt-0/result.json",
+        "sha256": "85287dbf08eab42cbbe4213ba89d7eda8cadde3f67f4b31a54d5b537fc87d75c"
+      },
+      "resume_load": {
+        "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+        "status": "exact"
+      },
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/exchange-d64-k-independent-9af84f69cb-a3-2026112002-r2/task.json",
+        "sha256": "6db568c7ae61c721c9472cc9fdff2e109a8fe7a8320545083186384465417f3d"
+      },
+      "training": {
+        "from_steps": 6405,
+        "from_tokens": 1639680,
+        "seconds": 643.6379304118454,
+        "segment_steps": 1787,
+        "segment_tokens": 457472,
+        "steps": 8192,
+        "target_tokens": 2097152,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 2097152,
+        "tokens_per_second": 710.7598517496891
+      },
+      "validation_final_nll": 5.363668777048588,
+      "validation_initial_nll": 5.688704580068588
+    }
+  ],
+  "counts": {
+    "completed": 283,
+    "failed": 67,
+    "pending": 43
+  },
+  "execution": {
+    "declared_subject_models": null,
+    "observed_subject_models": 32,
+    "pending_result_bindings": 0,
+    "selected_models": 24,
+    "task_counts": {
+      "completed": 283,
+      "failed": 67,
+      "pending": 43
+    },
+    "verified_completed_tasks": 283
+  },
+  "exposure": {
+    "completed_control_models": 0,
+    "completed_healthy_subject_models": 0,
+    "completed_subject_models": 0,
+    "distinct_formal_models_execution_completed": 0,
+    "distinct_formal_models_reached_target": 0,
+    "formal_target_per_trajectory": 12582912,
+    "live_progress_policy": "heartbeats shown per task; not added to verified result exposure",
+    "physically_computed_loss_tokens_by_category": {
+      "initialization": 1721600,
+      "preparation": 995840,
+      "tuning": 71061504
+    },
+    "rule": "union of [from_tokens,tokens) by frozen recipe/model/seed identity; retries and confirmation do not duplicate exposure",
+    "unique_loss_tokens_by_category": {
+      "initialization": 1721600,
+      "preparation": 946688,
+      "tuning": 71061504
+    }
+  },
+  "failed_attempt_summary": {
+    "count": 67,
+    "qualification": "checkpoint file existence is not resume acceptance; terminal bindings and recovery contracts remain to be reconciled",
+    "result_status": {
+      "absent": 1,
+      "budget_exhausted": 64,
+      "completed": 1,
+      "running": 1
+    },
+    "stop_reason": {
+      "None": 2,
+      "signal": 64,
+      "target_reached": 1
+    },
+    "with_result_checkpoint_file": 65,
+    "without_result_checkpoint": [
+      {
+        "checkpoint_exists": false,
+        "device": "npu:0",
+        "id": "multiscale_settle-d64-s-group5-6e6cec4898-init-2026112002",
+        "result_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/multiscale_settle-d64-s-group5-6e6cec4898-init-2026112002/attempt-0/result.json",
+        "result_status": "absent",
+        "stop_reason": null
+      },
+      {
+        "checkpoint_exists": false,
+        "device": "npu:0",
+        "id": "exchange-d64-s-independent-9bdefe8e73-a1-2026112002-r5",
+        "result_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/exchange-d64-s-independent-9bdefe8e73-a1-2026112002-r5/attempt-0/result.json",
+        "result_status": "running",
+        "stop_reason": null
+      }
+    ]
+  },
+  "frozen_input_integrity": {
+    "all_passed": true,
+    "data_file_count": 14,
+    "source_file_count": 130
+  },
+  "imported_completed": 218,
+  "new_completed": 65,
+  "next_work": [
+    "repair phase-continuation gate to verify the bound complete ancestral chain without changing task identity or numerical thresholds",
+    "reconcile dynamic shutdown result bindings, checkpoint retirements and accounting findings; preserve original failures and debits",
+    "qualify reusable results and checkpoints before any authorized relay launch"
+  ],
+  "observed_beijing": "2026-11-20T12:19:55.192579+08:00",
+  "observed_unix": 1795148395.1925788,
+  "release": {
+    "cgroup_released": true,
+    "processes": {
+      "gone_count": 370,
+      "main_pid": 0,
+      "recorded_identity_count": 370,
+      "released": true
+    },
+    "queue_released": true
+  },
+  "scheduler": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/scheduler.json",
+    "sha256": "57c347ea18bec4b817e494358340615ae1175ed544e9b09c1825c0f2cb688acb"
+  },
+  "schema": "pilot-r3-r06-status-review-v1",
+  "scientific_scope": "observed healthy completed CPU A3 segments and exact state loads do not qualify long-run trajectory equivalence or formal learning; original Shannon tolerance failures retained",
+  "scope": "read-only status and failure diagnosis; no repairs, gate changes, retries or training submitted",
+  "stage_b_gate": "closed",
+  "status": "a_blocked_needs_repair",
+  "stopped_beijing": "2026-11-20T12:00:19.218028+08:00",
+  "terminal_audit": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-campaign-r06-terminal-audit.json",
+    "sha256": "8ee86bb6a171617e4177151758885d935c7af73cb4129f1c363dd852597c839d"
+  },
+  "terminal_audit_status": "incomplete",
+  "terminal_finding_count": 164,
+  "terminal_findings_by_reason": {
+    "result": 1,
+    "retirement_not_authorized_for_this_artifact": 48,
+    "scheduler_group_debit_mismatch": 9,
+    "shared_worker_double_charged_device_seconds": 27,
+    "shared_worker_result_binding_mismatch": 79
+  },
+  "unit": "tide-pilot-r3-campaign-r06.service"
+}

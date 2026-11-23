@@ -1,0 +1,887 @@
+{
+  "budget": {
+    "absolute_deadline_unix": 1797698913.9318287,
+    "accounting_rule": "sum all claims and unclaimed segment reservations once; uncertain failures retain the full reservation; no reset",
+    "ledger_snapshot": {
+      "observed_unix": 1795139616.7710419,
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/budget.json",
+      "scope": "mutable shared ledger snapshot; later authorized segments may advance it",
+      "sha256": "dea63a00af6e4a282e6dff24bce5642d5e2b85673daade4c2da8418ec453272c"
+    },
+    "maximum_device_seconds": 25920000,
+    "maximum_preparation_device_seconds": 172800,
+    "maximum_preparation_processed_tokens": 67108864,
+    "repair_attempts": {
+      "r01": {
+        "qualifier": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r01/round/repair-report.json",
+          "sha256": "59bf3803712cba1c12d6c61c24a838df773ddcdcd2ff78fe52fe4eedfb17a098"
+        },
+        "round": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r01/round",
+        "segment": {
+          "device_seconds": 11.886451005935669,
+          "preparation": true,
+          "preparation_device_seconds": 11.886451005935669,
+          "preparation_reserved_tokens": 1024,
+          "status": "a_blocked_needs_repair",
+          "updated_unix": 1795139017.5078466
+        },
+        "token_claim": {
+          "accounting_scope": "successful optimizer/evaluation exposure; uncertain attempts retain full reservation",
+          "created_unix": 1795138997.0366738,
+          "observed_completed_loss_tokens": 512,
+          "plan_sha256": "35f016d153e7f245384c23aaa6e8071b802f98ae4cbe506f54edde9af095de8a",
+          "reserved_tokens": 1024,
+          "status": "blocked",
+          "updated_unix": 1795139017.5375583
+        }
+      },
+      "r02": {
+        "qualifier": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/round/repair-report.json",
+          "sha256": "fb2a140766e59ce55a763eb1752084332c778c6e69ac23d60941bb5234c82ee2"
+        },
+        "round": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/round",
+        "segment": {
+          "device_seconds": 21.972901105880737,
+          "preparation": true,
+          "preparation_device_seconds": 21.972901105880737,
+          "preparation_reserved_tokens": 1024,
+          "status": "completed",
+          "updated_unix": 1795139243.6216497
+        },
+        "token_claim": {
+          "accounting_scope": "successful optimizer/evaluation exposure; uncertain attempts retain full reservation",
+          "created_unix": 1795139214.2827349,
+          "observed_completed_loss_tokens": 1024,
+          "plan_sha256": "c982b669225d1f6749c4a67afa0b02761734f9a2527793047fb25eda2e2f13ab",
+          "reserved_tokens": 1024,
+          "status": "passed",
+          "updated_unix": 1795139243.653679
+        }
+      }
+    },
+    "repair_conservatively_reserved_tokens": 2048,
+    "repair_device_seconds": 33.859352111816406,
+    "repair_observed_completed_loss_tokens": 1536,
+    "same_local_deadline_unix": 1795140784.0566764,
+    "started_unix": 1795106913.9318287,
+    "total_device_seconds_at_observation": 179589.79205342755,
+    "total_preparation_device_seconds_at_observation": 3352.4310733936727,
+    "total_preparation_reserved_tokens_at_observation": 13478592
+  },
+  "evidence": {
+    "checkpoint_index": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/round/tasks/shannon-repair-numeric-and-replay/attempt-0/checkpoint.json",
+      "sha256": "5b02cfb42432911b3033cdd15ccd3ff0907a085c398f90f2639dad79f2f6e476"
+    },
+    "cpu_review": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-shannon-active-set-repair.json",
+      "sha256": "d88239cb5047d2299942de92dab4192f9b0ef4b54b6e42a51f995057bf6a0545"
+    },
+    "numerical": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/round/tasks/shannon-repair-numeric-and-replay/attempt-0/numerical.json",
+      "sha256": "22a9dcbd7e4714c6c886bb902d610a7e9836ae70bc8737a7caf440a7ba477fdf"
+    },
+    "plan": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/repair-plan.json",
+      "sha256": "c982b669225d1f6749c4a67afa0b02761734f9a2527793047fb25eda2e2f13ab"
+    },
+    "prepared": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/prepared.json",
+      "sha256": "eec41838d9967ae55240979890006ae204d4f24bb38a1c1cac10594969c5ee8e"
+    },
+    "qualifier": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/round/repair-report.json",
+      "sha256": "fb2a140766e59ce55a763eb1752084332c778c6e69ac23d60941bb5234c82ee2"
+    },
+    "restore_result": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/round/tasks/shannon-repair-numeric-and-replay/attempt-0/restored/restore-result.json",
+      "sha256": "e33c7da4b604125528bc5257fec99ee591f8d4a99994ea0e20b6e4c86e946bb3"
+    },
+    "task": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/round/tasks/shannon-repair-numeric-and-replay/task.json",
+      "sha256": "7bf8dd0ade739e0d206f6d078b71544c2c12428ba40ecffd2867f6b74beef320"
+    },
+    "terminal_audit": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-repair-preflight-r02-terminal-audit.json",
+      "sha256": "e801f9db42449e70fa9ec09b0c7eb5f0e0a4ae4ec7068b4eca7eb99a2fc464a6"
+    },
+    "worker_log": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/round/tasks/shannon-repair-numeric-and-replay/attempt-0/stdout.log",
+      "sha256": "3b5684b672f9b1e0650671f633b31410a90ed3708352b433c21d2344982e1c49"
+    },
+    "worker_result": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/round/tasks/shannon-repair-numeric-and-replay/attempt-0/result.json",
+      "sha256": "cbeb8f516aede7c22439bb2085a59d022719e0746c42e8d7703d936046983808"
+    }
+  },
+  "execution": {
+    "fresh_process_update": [
+      {
+        "gradient_norm": 0.8345206379890442,
+        "loss": 7.109472751617432,
+        "seconds": 1.4517579972743988,
+        "update": 1
+      }
+    ],
+    "logical_device": "npu:0",
+    "model_id": "exchange-d64-k-shannon-615836a776",
+    "observed_updates": 4,
+    "phase": "preflight",
+    "physical_device": 11,
+    "precision": "fp32",
+    "queue": "ordinary exclusive two-sample admission; one NPU, priority 0",
+    "scheduler": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/round/scheduler.json",
+      "sha256": "635f43bf81fa862e690ca98ae6fd5a327953b0c801414343527ab86e30b36436"
+    },
+    "scope": "the fresh process repeats parent update 3 from the prefix saved after update 2; it is not a fourth successive learning update",
+    "status": "completed",
+    "three_parent_updates": [
+      {
+        "gradient_norm": 0.8053363561630249,
+        "loss": 7.150318145751953,
+        "seconds": 1.2351715341210365,
+        "update": 1
+      },
+      {
+        "gradient_norm": 0.7984452247619629,
+        "loss": 7.133736610412598,
+        "seconds": 0.7271605581045151,
+        "update": 2
+      },
+      {
+        "gradient_norm": 0.8345206379890442,
+        "loss": 7.109472751617432,
+        "seconds": 0.7514425478875637,
+        "update": 3
+      }
+    ],
+    "unit": "tide-pilot-r3-repair-preflight-r02.service"
+  },
+  "learning": {
+    "reason": "repeated fixed input and four diagnostic executions cannot establish held-out quality or long-trajectory learning",
+    "status": "not_measured"
+  },
+  "limits": [
+    "original numerical guards and prior recovery failures remain in force",
+    "genuinely unrepresentable positive senders remain errors",
+    "source-specific long learning and general restoration remain unqualified by this small diagnostic",
+    "quad stage-A evidence transfer additionally requires the coordinator-owned exact 24-model forward/backward/optimizer/state proof"
+  ],
+  "numerical": {
+    "actual_failure_row": {
+      "atol": 1.401298464324817e-45,
+      "bounds": true,
+      "finite": true,
+      "gradient_support": true,
+      "id": "actual-failure-row",
+      "passed": true,
+      "positive_support": true,
+      "reference": {
+        "method": "80-digit CPU Decimal constrained entropy dual and analytic active-face VJP",
+        "score_vjp": [
+          5.890558523325096e-08,
+          -5.890558523325096e-08
+        ],
+        "values": [
+          0.9999999410944113,
+          5.8905588703119336e-08
+        ]
+      },
+      "rtol": 3e-05,
+      "score_vjp": [
+        5.8905648359086626e-08,
+        -5.890564480637295e-08
+      ],
+      "value_within_threshold": true,
+      "values": [
+        0.9999999403953552,
+        5.8905648359086626e-08
+      ],
+      "vjp_within_threshold": true
+    },
+    "atol": 1.401298464324817e-45,
+    "case_summaries": [
+      {
+        "atol": 1.401298464324817e-45,
+        "bounds": true,
+        "finite": true,
+        "gradient_support": true,
+        "id": "n16-k1-gap16.6473",
+        "passed": true,
+        "positive_support": true,
+        "rtol": 3e-05,
+        "value_within_threshold": true,
+        "vjp_within_threshold": true
+      },
+      {
+        "atol": 1.401298464324817e-45,
+        "bounds": true,
+        "finite": true,
+        "gradient_support": true,
+        "id": "n16-k1-gap40",
+        "passed": true,
+        "positive_support": true,
+        "rtol": 3e-05,
+        "value_within_threshold": true,
+        "vjp_within_threshold": true
+      },
+      {
+        "atol": 1.401298464324817e-45,
+        "bounds": true,
+        "finite": true,
+        "gradient_support": true,
+        "id": "n16-k1-mixed-bounds",
+        "passed": true,
+        "positive_support": true,
+        "rtol": 3e-05,
+        "value_within_threshold": true,
+        "vjp_within_threshold": true
+      },
+      {
+        "atol": 1.401298464324817e-45,
+        "bounds": true,
+        "finite": true,
+        "gradient_support": true,
+        "id": "n16-k2-gap16.6473",
+        "passed": true,
+        "positive_support": true,
+        "rtol": 3e-05,
+        "value_within_threshold": true,
+        "vjp_within_threshold": true
+      },
+      {
+        "atol": 1.401298464324817e-45,
+        "bounds": true,
+        "finite": true,
+        "gradient_support": true,
+        "id": "n16-k2-gap40",
+        "passed": true,
+        "positive_support": true,
+        "rtol": 3e-05,
+        "value_within_threshold": true,
+        "vjp_within_threshold": true
+      },
+      {
+        "atol": 1.401298464324817e-45,
+        "bounds": true,
+        "finite": true,
+        "gradient_support": true,
+        "id": "n16-k2-mixed-bounds",
+        "passed": true,
+        "positive_support": true,
+        "rtol": 3e-05,
+        "value_within_threshold": true,
+        "vjp_within_threshold": true
+      },
+      {
+        "atol": 1.401298464324817e-45,
+        "bounds": true,
+        "finite": true,
+        "gradient_support": true,
+        "id": "n16-k4-gap16.6473",
+        "passed": true,
+        "positive_support": true,
+        "rtol": 3e-05,
+        "value_within_threshold": true,
+        "vjp_within_threshold": true
+      },
+      {
+        "atol": 1.401298464324817e-45,
+        "bounds": true,
+        "finite": true,
+        "gradient_support": true,
+        "id": "n16-k4-gap40",
+        "passed": true,
+        "positive_support": true,
+        "rtol": 3e-05,
+        "value_within_threshold": true,
+        "vjp_within_threshold": true
+      },
+      {
+        "atol": 1.401298464324817e-45,
+        "bounds": true,
+        "finite": true,
+        "gradient_support": true,
+        "id": "n16-k4-mixed-bounds",
+        "passed": true,
+        "positive_support": true,
+        "rtol": 3e-05,
+        "value_within_threshold": true,
+        "vjp_within_threshold": true
+      },
+      {
+        "atol": 1.401298464324817e-45,
+        "bounds": true,
+        "finite": true,
+        "gradient_support": true,
+        "id": "n16-k8-gap16.6473",
+        "passed": true,
+        "positive_support": true,
+        "rtol": 3e-05,
+        "value_within_threshold": true,
+        "vjp_within_threshold": true
+      },
+      {
+        "atol": 1.401298464324817e-45,
+        "bounds": true,
+        "finite": true,
+        "gradient_support": true,
+        "id": "n16-k8-gap40",
+        "passed": true,
+        "positive_support": true,
+        "rtol": 3e-05,
+        "value_within_threshold": true,
+        "vjp_within_threshold": true
+      },
+      {
+        "atol": 1.401298464324817e-45,
+        "bounds": true,
+        "finite": true,
+        "gradient_support": true,
+        "id": "n16-k8-mixed-bounds",
+        "passed": true,
+        "positive_support": true,
+        "rtol": 3e-05,
+        "value_within_threshold": true,
+        "vjp_within_threshold": true
+      },
+      {
+        "atol": 1.401298464324817e-45,
+        "bounds": true,
+        "finite": true,
+        "gradient_support": true,
+        "id": "actual-failure-row",
+        "passed": true,
+        "positive_support": true,
+        "rtol": 3e-05,
+        "value_within_threshold": true,
+        "vjp_within_threshold": true
+      },
+      {
+        "atol": 1.401298464324817e-45,
+        "bounds": true,
+        "finite": true,
+        "gradient_support": true,
+        "id": "near-exhausted-floors",
+        "passed": true,
+        "positive_support": true,
+        "rtol": 3e-05,
+        "value_within_threshold": true,
+        "vjp_within_threshold": true
+      },
+      {
+        "error": "Shannon allocation underflow would erase a positive sender",
+        "id": "n16-k1-unrepresentable-positive-guard",
+        "passed": true
+      },
+      {
+        "error": "Shannon allocation underflow would erase a positive sender",
+        "id": "n16-k2-unrepresentable-positive-guard",
+        "passed": true
+      },
+      {
+        "error": "Shannon allocation underflow would erase a positive sender",
+        "id": "n16-k4-unrepresentable-positive-guard",
+        "passed": true
+      },
+      {
+        "error": "Shannon allocation underflow would erase a positive sender",
+        "id": "n16-k8-unrepresentable-positive-guard",
+        "passed": true
+      }
+    ],
+    "independent_reference": "80-digit CPU Decimal constrained entropy dual solve and analytic active-face score VJP; production NPU FP32 outputs compared separately",
+    "mechanism": "Shannon total/active-face rounding error; representable positive sender erased",
+    "original_error": "Shannon allocation underflow would erase a positive sender",
+    "original_underflow_guard_cases": 4,
+    "rtol": 3e-05,
+    "scope": "allocation values, positive-sender support, representable score-gradient support, finiteness, bounds, and strict original guard on these fixed cases",
+    "status": "passed",
+    "value_support_and_score_vjp_cases": 14
+  },
+  "original_attempt_preserved": {
+    "cause": "diagnostic wrapper did not create the checkpoint parent directory",
+    "completed_loss_tokens": 512,
+    "error": "[Errno 2] No such file or directory: '/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r01/round/tasks/shannon-repair-numeric-and-replay/attempt-0/checkpoints/.diagnostic-prefix.pt7qullbfp'",
+    "foundation_same_between_repair_snapshots": true,
+    "generic_audit_limitation": "r01 submission omitted direct prepared_sha256; original audit and submission are unchanged",
+    "generic_audit_status": "incomplete",
+    "only_project_python_change_between_repair_snapshots": [
+      "repair_probe3.py"
+    ],
+    "repair": "saved.parent.mkdir(parents=True, exist_ok=True) in a separately frozen r02 wrapper",
+    "result": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r01/round/tasks/shannon-repair-numeric-and-replay/attempt-0/result.json",
+      "sha256": "64002188bbf81f2b9873dadb03b347aff60e0ef7c2cd698c4f62bfecf457ecfe"
+    },
+    "status": "failed",
+    "transitive_launch_binding": {
+      "draft_links": {
+        "launcher": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r01/repair-launch.sh",
+          "sha256": "f6e9e214710597248c40e63a576cc133f1941c4d9852505b231ca2dbfa26e6ec"
+        },
+        "plan_path": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r01/repair-plan.json",
+          "sha256": "35f016d153e7f245384c23aaa6e8071b802f98ae4cbe506f54edde9af095de8a"
+        },
+        "prepared_path": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r01/prepared.json",
+          "sha256": "7eeef3f0fedd769d0de17e0707fcf8adf22328567b4d6f52165891b2cbea5138"
+        }
+      },
+      "launch_draft": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r01/repair-launch-draft.json",
+        "sha256": "1ecf236155f5943475431b45c7ce6fe0e10c7201003d8febf44d47d932161b8b"
+      },
+      "local_deadline_unix": 1795140784.0566764,
+      "method": "submission SHA256 binds immutable draft; draft SHA256 binds prepared, plan, and launcher",
+      "status": "passed",
+      "submission": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r01/submission.json",
+        "sha256": "66c2df10ec7e35c0fdb54a4c372da891df66670874d0dc1def6a13d446b95e01"
+      },
+      "submitted_argv_exactly_matches_draft": true
+    }
+  },
+  "performance": {
+    "reason": "diagnostic timings include mechanism checks, initialization, checkpointing and child startup; no throughput comparison",
+    "status": "not_benchmarked"
+  },
+  "recovery": {
+    "new_diagnostic_prefix_loading": {
+      "atol": 0,
+      "exact": true,
+      "failed_field_count": 0,
+      "failed_fields": [],
+      "fields": 602,
+      "finite": true,
+      "integer_equal": true,
+      "max_abs": 0.0,
+      "rng_exact": true,
+      "rtol": 0,
+      "structure_equal": true,
+      "within_tolerance": true
+    },
+    "old_campaign_checkpoint_resume": "not certified across the source change",
+    "one_update_trajectory": {
+      "atol": 1e-05,
+      "exact": false,
+      "failed_field_count": 0,
+      "failed_fields": [],
+      "fields": 706,
+      "finite": true,
+      "integer_equal": true,
+      "max_abs": 3.725290298461914e-09,
+      "rtol": 0.0001,
+      "status": "within_threshold",
+      "structure_equal": true,
+      "within_tolerance": true
+    },
+    "original_failure_state_loading": {
+      "atol": 0,
+      "exact": true,
+      "failed_field_count": 0,
+      "failed_fields": [],
+      "fields": 602,
+      "finite": true,
+      "integer_equal": true,
+      "max_abs": 0.0,
+      "rng_exact": null,
+      "rtol": 0,
+      "structure_equal": true,
+      "within_tolerance": true
+    },
+    "original_trajectory_thresholds_preserved": true,
+    "prefix": {
+      "kind": "diagnostic_prefix_not_campaign_checkpoint",
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/round/tasks/shannon-repair-numeric-and-replay/attempt-0/checkpoints/diagnostic-prefix.pt",
+      "sha256": "4d25715d2c21bbbc3d52720fec97271461e4563c04f7205a4f5423d19230f922",
+      "size_bytes": 14846065,
+      "steps": 2,
+      "tokens": 154880
+    },
+    "prefix_kind": "diagnostic prefix under the repaired source; not a campaign checkpoint",
+    "prefix_token_counter_scope": "154368 historical tokens plus 512 diagnostic tokens; only 1024 newly processed tokens charged to r02",
+    "prior_shannon_recovery_failure": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r2-preflight-triage.json",
+      "sha256": "c7983bc60911eb29e3f6525ef5c9f1ff4aeadde96e6cbdc336913d24c2b080d8"
+    },
+    "real_campaign_stream_continuation": "not exercised; the captured batch is deliberately reused"
+  },
+  "reviewed_utc": "2026-11-20T01:53:36.769808+00:00",
+  "schema": "pilot-r3-shannon-npu-repair-review-v1",
+  "scope": "finite repaired-source NPU numerical and saved-input diagnostic qualification; not campaign learning acceptance or old-source checkpoint migration",
+  "source": {
+    "changed_nonshannon_paths": false,
+    "foundation_python_changes": [
+      "allocation.py"
+    ],
+    "foundation_python_file_counts": {
+      "new": 25,
+      "old": 25
+    },
+    "new_allocation": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/foundation/src/tide/allocation.py",
+      "sha256": "a8e4346837e7db763d3b778126090c82719c8192679606b4b1b508e576a4e74e"
+    },
+    "old_allocation": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/allocation.py",
+      "sha256": "004051c7178380b270e2cce020661bd144ed9afd78c98271d9e5c253beb9d65f"
+    },
+    "python_version": "3.12.13",
+    "quad_pool_contract": {
+      "excluded_shannon_helpers": [
+        "_compensated_sum",
+        "_shannon_bound_delta",
+        "_shannon_centered_parts",
+        "_shannon_solve",
+        "_two_product",
+        "_two_sum"
+      ],
+      "method": "reviewed-shannon-patch-quad-specialization-v1",
+      "projection_sha256": "593511bc85a37ab22697b9259a743479496791f8b2e795bf0cbd498c62abc374",
+      "quad_pool_contract": "unchanged"
+    },
+    "repair_wrapper": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/source/pilotlab/repair_probe3.py",
+      "sha256": "b7d81bd0fb9894645bdd7d2b71b5bf871d60d14b65ccb11b495f387edfbdcf87"
+    },
+    "runtime_packages": {
+      "numpy": "2.5.2",
+      "torch": "2.12.0+cpu",
+      "torch-npu": "2.12.0.post3"
+    },
+    "upstream_working_allocation": {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/src/tide/allocation.py",
+      "sha256": "a8e4346837e7db763d3b778126090c82719c8192679606b4b1b508e576a4e74e"
+    }
+  },
+  "status": "passed",
+  "terminal": {
+    "r01": {
+      "artifact_records": [
+        {
+          "kind": "task",
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r01/round/tasks/shannon-repair-numeric-and-replay/task.json",
+          "sha256": "9b147daa501c437b24475bb321345ac74da1584b4f12b515c9149088af4689ef",
+          "status": "passed",
+          "task_id": "shannon-repair-numeric-and-replay"
+        },
+        {
+          "kind": "result",
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r01/round/tasks/shannon-repair-numeric-and-replay/attempt-0/result.json",
+          "sha256": "64002188bbf81f2b9873dadb03b347aff60e0ef7c2cd698c4f62bfecf457ecfe",
+          "status": "passed",
+          "task_id": "shannon-repair-numeric-and-replay"
+        },
+        {
+          "kind": "checkpoint_index",
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r01/round/tasks/shannon-repair-numeric-and-replay/attempt-0/checkpoint.json",
+          "status": "not_created",
+          "task_id": "shannon-repair-numeric-and-replay"
+        }
+      ],
+      "findings": [
+        {
+          "expected_sha256": null,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r01/prepared.json",
+          "reason": "expected_digest_not_recorded",
+          "sha256": "7eeef3f0fedd769d0de17e0707fcf8adf22328567b4d6f52165891b2cbea5138",
+          "size_bytes": 24818,
+          "status": "unknown"
+        }
+      ],
+      "frozen_data_records_verified": 14,
+      "frozen_source_files_verified": 60,
+      "launch_transitive_binding": {
+        "draft_links": {
+          "launcher": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r01/repair-launch.sh",
+            "sha256": "f6e9e214710597248c40e63a576cc133f1941c4d9852505b231ca2dbfa26e6ec"
+          },
+          "plan_path": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r01/repair-plan.json",
+            "sha256": "35f016d153e7f245384c23aaa6e8071b802f98ae4cbe506f54edde9af095de8a"
+          },
+          "prepared_path": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r01/prepared.json",
+            "sha256": "7eeef3f0fedd769d0de17e0707fcf8adf22328567b4d6f52165891b2cbea5138"
+          }
+        },
+        "launch_draft": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r01/repair-launch-draft.json",
+          "sha256": "1ecf236155f5943475431b45c7ce6fe0e10c7201003d8febf44d47d932161b8b"
+        },
+        "local_deadline_unix": 1795140784.0566764,
+        "method": "submission SHA256 binds immutable draft; draft SHA256 binds prepared, plan, and launcher",
+        "status": "passed",
+        "submission": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r01/submission.json",
+          "sha256": "66c2df10ec7e35c0fdb54a4c372da891df66670874d0dc1def6a13d446b95e01"
+        },
+        "submitted_argv_exactly_matches_draft": true
+      },
+      "lifecycle": {
+        "cgroup": {
+          "members": [],
+          "path": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-repair-preflight-r01.service",
+          "released": true,
+          "status": "absent"
+        },
+        "processes": {
+          "cgroup_members_unobservable_in_process_snapshot": [],
+          "errors": [],
+          "gone_count": 3,
+          "live_processes": [],
+          "main_pid": 0,
+          "malformed_identities": [],
+          "recorded_identity_count": 3,
+          "released": true,
+          "reused_pids": [],
+          "status": "released",
+          "zombies": []
+        },
+        "queue": {
+          "attempts": [
+            {
+              "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r01/round/tasks/shannon-repair-numeric-and-replay/attempt-0",
+              "device_locks": [
+                {
+                  "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+                  "owned_by_this_run": false,
+                  "owners": [],
+                  "path": "/run/user/1003/ascend-device-locks/physical-11.lock",
+                  "status": "unlocked"
+                }
+              ],
+              "job_id": "r3-repair-preflight-r01-shannon-repair-numeric-and-replay-0",
+              "job_lock": {
+                "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+                "owners": [],
+                "path": "/run/user/1003/ascend-job-queue/jobs/r3-repair-preflight-r01-shannon-repair-numeric-and-replay-0.lock",
+                "status": "unlocked"
+              },
+              "manifest": {
+                "path": "/run/user/1003/ascend-job-queue/jobs/r3-repair-preflight-r01-shannon-repair-numeric-and-replay-0.json",
+                "status": "missing"
+              },
+              "queue_state": {
+                "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r01/round/tasks/shannon-repair-numeric-and-replay/attempt-0/queue.json",
+                "sha256": "195054892e0d63e4e7d1618fbbe513851338a2644ea5202c6f77634a7f089d3a",
+                "status": "passed"
+              },
+              "recorded_status": "failed",
+              "released": true,
+              "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+              "shared_group": null,
+              "status": "released",
+              "task_id": "shannon-repair-numeric-and-replay"
+            }
+          ],
+          "released": true,
+          "runtime_directory": "/run/user/1003",
+          "status": "released"
+        },
+        "status": "terminal",
+        "systemd": {
+          "expected_cgroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-repair-preflight-r01.service",
+          "expected_cgroup_basis": "observed user slice + exact service unit name",
+          "properties": {
+            "ActiveState": "failed",
+            "ControlGroup": "",
+            "ExecMainCode": "1",
+            "ExecMainStatus": "1",
+            "InvocationID": "c3f9029f947c44399aa706deb8fcd19a",
+            "LoadState": "loaded",
+            "MainPID": "0",
+            "Result": "exit-code",
+            "Slice": "background.slice",
+            "SubState": "failed"
+          },
+          "return_code": 0,
+          "status": "observed",
+          "unit": "tide-pilot-r3-repair-preflight-r01.service"
+        }
+      },
+      "original_review": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-repair-preflight-r01-terminal-audit.json",
+        "sha256": "094950c1f92a44ece3ccae856ff3f0ab031f3871f682c38b122ae15537decede"
+      },
+      "rechecked_unix": 1795139616.2968595,
+      "status": "incomplete"
+    },
+    "r02": {
+      "artifact_records": [
+        {
+          "kind": "task",
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/round/tasks/shannon-repair-numeric-and-replay/task.json",
+          "sha256": "7bf8dd0ade739e0d206f6d078b71544c2c12428ba40ecffd2867f6b74beef320",
+          "status": "passed",
+          "task_id": "shannon-repair-numeric-and-replay"
+        },
+        {
+          "kind": "result",
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/round/tasks/shannon-repair-numeric-and-replay/attempt-0/result.json",
+          "sha256": "cbeb8f516aede7c22439bb2085a59d022719e0746c42e8d7703d936046983808",
+          "status": "passed",
+          "task_id": "shannon-repair-numeric-and-replay"
+        },
+        {
+          "kind": "checkpoint_index",
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/round/tasks/shannon-repair-numeric-and-replay/attempt-0/checkpoint.json",
+          "sha256": "5b02cfb42432911b3033cdd15ccd3ff0907a085c398f90f2639dad79f2f6e476",
+          "status": "passed",
+          "task_id": "shannon-repair-numeric-and-replay"
+        },
+        {
+          "expected_sha256": "4d25715d2c21bbbc3d52720fec97271461e4563c04f7205a4f5423d19230f922",
+          "kind": "checkpoint",
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/round/tasks/shannon-repair-numeric-and-replay/attempt-0/checkpoints/diagnostic-prefix.pt",
+          "sha256": "4d25715d2c21bbbc3d52720fec97271461e4563c04f7205a4f5423d19230f922",
+          "size_bytes": 14846065,
+          "status": "passed",
+          "task_id": "shannon-repair-numeric-and-replay"
+        }
+      ],
+      "findings": [],
+      "frozen_data_records_verified": 14,
+      "frozen_source_files_verified": 60,
+      "launch_transitive_binding": {
+        "draft_links": {
+          "launcher": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/repair-launch.sh",
+            "sha256": "d8f5593b0c8290709f6e2857102cc42dbaacad5fb33f82fd440c990aa296cfcd"
+          },
+          "plan_path": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/repair-plan.json",
+            "sha256": "c982b669225d1f6749c4a67afa0b02761734f9a2527793047fb25eda2e2f13ab"
+          },
+          "prepared_path": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/prepared.json",
+            "sha256": "eec41838d9967ae55240979890006ae204d4f24bb38a1c1cac10594969c5ee8e"
+          }
+        },
+        "launch_draft": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/repair-launch-draft.json",
+          "sha256": "6589352536f262575525a0af4060bd878713591b2ce6a8aeb88924aaeb18312a"
+        },
+        "local_deadline_unix": 1795140784.0566764,
+        "method": "submission SHA256 binds immutable draft; draft SHA256 binds prepared, plan, and launcher",
+        "status": "passed",
+        "submission": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/submission.json",
+          "sha256": "699c5c076b07a24277b3580c251bdd6a54da4983ec705d5f93e09f076e30e519"
+        },
+        "submitted_argv_exactly_matches_draft": true
+      },
+      "lifecycle": {
+        "cgroup": {
+          "members": [],
+          "path": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-repair-preflight-r02.service",
+          "released": true,
+          "status": "absent"
+        },
+        "processes": {
+          "cgroup_members_unobservable_in_process_snapshot": [],
+          "errors": [],
+          "gone_count": 3,
+          "live_processes": [],
+          "main_pid": 0,
+          "malformed_identities": [],
+          "recorded_identity_count": 3,
+          "released": true,
+          "reused_pids": [],
+          "status": "released",
+          "zombies": []
+        },
+        "queue": {
+          "attempts": [
+            {
+              "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/round/tasks/shannon-repair-numeric-and-replay/attempt-0",
+              "device_locks": [
+                {
+                  "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+                  "owned_by_this_run": false,
+                  "owners": [],
+                  "path": "/run/user/1003/ascend-device-locks/physical-11.lock",
+                  "status": "unlocked"
+                }
+              ],
+              "job_id": "r3-repair-preflight-r02-shannon-repair-numeric-and-replay-0",
+              "job_lock": {
+                "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+                "owners": [],
+                "path": "/run/user/1003/ascend-job-queue/jobs/r3-repair-preflight-r02-shannon-repair-numeric-and-replay-0.lock",
+                "status": "unlocked"
+              },
+              "manifest": {
+                "path": "/run/user/1003/ascend-job-queue/jobs/r3-repair-preflight-r02-shannon-repair-numeric-and-replay-0.json",
+                "status": "missing"
+              },
+              "queue_state": {
+                "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/round/tasks/shannon-repair-numeric-and-replay/attempt-0/queue.json",
+                "sha256": "c50832cd59ebde124c8fd2e493eaa689b08bb17e4e32824550b9359241be6990",
+                "status": "passed"
+              },
+              "recorded_status": "completed",
+              "released": true,
+              "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+              "shared_group": null,
+              "status": "released",
+              "task_id": "shannon-repair-numeric-and-replay"
+            }
+          ],
+          "released": true,
+          "runtime_directory": "/run/user/1003",
+          "status": "released"
+        },
+        "status": "terminal",
+        "systemd": {
+          "expected_cgroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-repair-preflight-r02.service",
+          "expected_cgroup_basis": "observed user slice + exact service unit name",
+          "properties": {
+            "ActiveState": "inactive",
+            "ControlGroup": "",
+            "ExecMainCode": "0",
+            "ExecMainStatus": "0",
+            "InvocationID": "",
+            "LoadState": "not-found",
+            "MainPID": "0",
+            "Result": "success",
+            "Slice": "",
+            "SubState": "dead"
+          },
+          "return_code": 0,
+          "status": "observed",
+          "unit": "tide-pilot-r3-repair-preflight-r02.service"
+        }
+      },
+      "original_review": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-repair-preflight-r02-terminal-audit.json",
+        "sha256": "e801f9db42449e70fa9ec09b0c7eb5f0e0a4ae4ec7068b4eca7eb99a2fc464a6"
+      },
+      "rechecked_unix": 1795139616.7673159,
+      "status": "passed"
+    }
+  },
+  "warnings": {
+    "fresh_process_stderr_bound_by": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/round/tasks/shannon-repair-numeric-and-replay/attempt-0/result.json",
+      "sha256": "cbeb8f516aede7c22439bb2085a59d022719e0746c42e8d7703d936046983808"
+    },
+    "full_parent_log": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/round/tasks/shannon-repair-numeric-and-replay/attempt-0/stdout.log",
+      "sha256": "3b5684b672f9b1e0650671f633b31410a90ed3708352b433c21d2344982e1c49"
+    },
+    "host_fallback_warning_observed": false,
+    "observed": [
+      "CANN/SoC requires 32-padding memory allocation",
+      "requested internal format emitted base-format tensor"
+    ],
+    "scope": "log inspection only; not a pure-device execution trace qualification"
+  }
+}

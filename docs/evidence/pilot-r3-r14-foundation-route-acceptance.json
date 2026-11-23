@@ -1,0 +1,667 @@
+{
+  "authority": {
+    "commit": "3150ae64806b77091660b9c5ef6ec74d050646b9",
+    "files_digest": "cfc1b5ead59b36443133ae95478df83b924edeaf6a8ff211065b31e7132f3fbe",
+    "files_sha256": {
+      "__init__.py": "51b2da0ae87b715638de8ef789edabdada69ad43c05b19e0ef79eefa0113dd3c",
+      "allocation.py": "ead87a2b240437f7bc3898f218ccae46d2fd3a2371946b5bae4f4d33b9d8f176",
+      "attention.py": "fc6faa1ff5897b1ed43a2b7a5a1db54294aaf1f04ee669ce84b734e9efeab4a2",
+      "checkpoint.py": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+      "config.py": "5c15208fde72446a185ac7323d023b9d5ba6ee898e045e3d8b75b4f97495c28a",
+      "ffn_packing.py": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449",
+      "grouped_linear.py": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1",
+      "kv.py": "39bc279b687dffb72e91ea984faaac5bb5ac7530ed5f86f364eb00d8137d6773",
+      "layout.py": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+      "model.py": "d17439269aecc1304b5a09fab1a765d1a339486955f8317990e9faa168afbc94",
+      "parameters.py": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc",
+      "placement.py": "8c0e73f1e5d1190d0fee602d4c2122b990c7974135803a8199b794fa71a61ae2",
+      "placement_ownership.py": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+      "precision.py": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+      "reception.py": "3fd496749a3e3fddd4983237eb0ea6b192a1c2cc0b226c46d7d927b456415eb4",
+      "region.py": "ab57fe6bb2204c8d3dc9ebd2ec14a5469968f5b2f627c6d9bdd12b12d9f678ba",
+      "region_batch.py": "787f64c9fc2fb186f3956b4593e2bbbd67185df2fd97a3c94cf23607334504f0",
+      "region_execution.py": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950",
+      "region_placement.py": "b8aa232d045c965fb4d2e70bbc9fd17a6c1daf6cadb8b724527d8a378b3abdeb",
+      "scaled_arithmetic.py": "21b696170e73ae28a3238a4db7dd9b613d92a2b0eb88610df74a5d01a8006c62",
+      "shannon_support.py": "29507db503a88d880614142411004fa7eaa39a77374a6e1c1dc640501c5f6105",
+      "ssd.py": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+      "ssd_memory.py": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2",
+      "topology.py": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+      "topology_hb.py": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06",
+      "weighted_mean.py": "6c993386c66f611c371c75e2e66a52dec7954c4fb9078819aab23f13d6c76d88"
+    },
+    "remote_head_at_acceptance": "3150ae64806b77091660b9c5ef6ec74d050646b9"
+  },
+  "diagnosis": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-r14-timed-route-vjp.json",
+    "sha256": "3d8e92aab1dad2364595a9ce5f65680673b47357b4fe8a9d13a4d2a58827fb36"
+  },
+  "directed_tests": {
+    "cpu": {
+      "passed": 146,
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/route-r15-release/cpu-tests.log",
+      "sha256": "f7816a46c98aaddd1c973e783bc1f01f548a58bc13da189e91ef537653ab1771"
+    },
+    "migration": {
+      "passed": 92,
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/route-r15-release/migration-tests.log",
+      "sha256": "6c6f27edb23b580c07afbff6fd83dc4e0b65ec943f7b8aa8262bde455dffb0a4"
+    },
+    "npu": {
+      "passed": 67,
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/route-r15-release/npu-tests.log",
+      "sha256": "c7b83a5f86bbe119420833a5f257f8192ad42565d6759dc72c9eebfc4cf870e0"
+    }
+  },
+  "failure_input": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r14/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2/attempt-0/failure.pt",
+    "sha256": "3232ddcf0f627366cdd7b082d02eacea7d7c9cbd815f9d77d3d2f1183ae94b22"
+  },
+  "observed_local": "2026-11-21T20:32:29+08:00",
+  "old_result": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r14/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2/attempt-0/result.json",
+    "sha256": "55946a826902bd98b82e94e14a321f26faee3ea4f4d293c630deaf0becfbc6e2"
+  },
+  "original_task": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r14/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2/attempt-0/task.json",
+    "sha256": "604f84de1bef529aeb34c8eb01b5972fbc72025fe09be9a15bbb3f042c6402a0"
+  },
+  "physical_queue": {
+    "npu-captures-queue.json": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/route-r15-release/npu-captures-queue.json",
+      "sha256": "827ab0d69a4155be9fbf645327af6945254bed38bb070bc6846316bbe9976c7a"
+    },
+    "npu-replay-queue.json": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/route-r15-release/npu-replay-queue.json",
+      "sha256": "660c570e77aaf9580f0aa9ae71f75ffd5a9966da1d478e210347c259931321dc"
+    },
+    "npu-tests-queue.json": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/route-r15-release/npu-tests-queue.json",
+      "sha256": "71d73107b99e41abee08099b9456da6d200caed0db0f95a60f3f8731dac61e81"
+    }
+  },
+  "prior_fault_2727": {
+    "cpu": {
+      "actual_module": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/route-r15-release/base/src/tide/__init__.py",
+      "device": "cpu",
+      "fault_step": 2727,
+      "files_digest": "cfc1b5ead59b36443133ae95478df83b924edeaf6a8ff211065b31e7132f3fbe",
+      "grad_norm": 1.1955583095550537,
+      "gradient_fp64": {
+        "atol": 1e-05,
+        "exact": false,
+        "failed_field_count": 0,
+        "failed_fields": [],
+        "fields": 123,
+        "finite": true,
+        "integer_equal": true,
+        "max_abs": 2.1200658113090798e-07,
+        "rtol": 0.0001,
+        "structure_equal": true,
+        "within_tolerance": true
+      },
+      "logits_bitwise_equal": true,
+      "logits_sha256": "ee43c1ff0aa81067a48812bc71d2fea46fe39748f63ff7a0b71efddc80165236",
+      "loss": 5.667013645172119,
+      "next_parameters_and_adamw_finite": true,
+      "next_state_sha256": "8d8ad3c4f2a79ad69c72ca4a06c0b54589d3034bfe43fd16ff8de82271b67cd8",
+      "passed": true,
+      "physical_device": null,
+      "pid": 2716695,
+      "private_state_bitwise_equal": true,
+      "roots": 123,
+      "support": {
+        "refined_rows": 0,
+        "repaired_coordinates": 0,
+        "repaired_rows": 0
+      }
+    },
+    "npu": {
+      "actual_module": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/route-r15-release/base/src/tide/__init__.py",
+      "device": "npu:0",
+      "fault_step": 2727,
+      "files_digest": "cfc1b5ead59b36443133ae95478df83b924edeaf6a8ff211065b31e7132f3fbe",
+      "grad_norm": 1.1957027912139893,
+      "gradient_fp64": {
+        "atol": 1e-05,
+        "exact": false,
+        "failed_field_count": 0,
+        "failed_fields": [],
+        "fields": 123,
+        "finite": true,
+        "integer_equal": true,
+        "max_abs": 7.906252907918798e-08,
+        "rtol": 0.0001,
+        "structure_equal": true,
+        "within_tolerance": true
+      },
+      "logits_bitwise_equal": true,
+      "logits_sha256": "6f774f431bdf44e632ae0fa33330602f1623c43f81e5d1af1ad54ae7f38277c8",
+      "loss": 5.6670145988464355,
+      "next_parameters_and_adamw_finite": true,
+      "next_state_sha256": "e65f4d05aeb958a8573ae6af168d670d601d2b08b17a17f9f182bea849e4fcf4",
+      "passed": true,
+      "physical_device": "9",
+      "pid": 2717050,
+      "private_state_bitwise_equal": true,
+      "roots": 123,
+      "support": {
+        "refined_rows": 0,
+        "repaired_coordinates": 0,
+        "repaired_rows": 0
+      }
+    }
+  },
+  "qualification": {
+    "cpu": {
+      "capture": {
+        "actual_module": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/route-r15-release/base/src/tide/__init__.py",
+        "device": "cpu",
+        "fault_step": 3252,
+        "files_digest": "cfc1b5ead59b36443133ae95478df83b924edeaf6a8ff211065b31e7132f3fbe",
+        "grad_norm": 1.1709678173065186,
+        "gradient_fp64": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 123,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 5.327222628200012e-07,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "logits_bitwise_equal": true,
+        "logits_sha256": "116a588f9e07680fe93e73bdd66c7a15df67f0a161445a76d68c5b09aca63301",
+        "loss": 6.206477165222168,
+        "next_parameters_and_adamw_finite": true,
+        "next_state_sha256": "276f55f0d6aac5c90ae7f77a7ff31f3948d1f69381f627a2d82fb663c5a7acc3",
+        "passed": true,
+        "physical_device": null,
+        "pid": 2716638,
+        "private_state_bitwise_equal": true,
+        "roots": 123,
+        "support": {
+          "refined_rows": 0,
+          "repaired_coordinates": 0,
+          "repaired_rows": 0
+        }
+      },
+      "fp64_reference": {
+        "all_finite": true,
+        "capture_task": "multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2",
+        "gradient_file": {
+          "path": ".local/pilot-r3/r14-vjp-3252/cpu-reference-grad.pt",
+          "sha256": "34fcd59f0329b67894ed7b249d8379f058c680f1803e357f01a9c15d2d640cf7"
+        },
+        "maximum": 0.08017898975272483,
+        "norm_unclipped": 1.1710859813941834,
+        "objective": 6.206477000704048,
+        "root_gradients": 123
+      }
+    },
+    "npu": {
+      "capture": {
+        "actual_module": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/route-r15-release/base/src/tide/__init__.py",
+        "device": "npu:0",
+        "fault_step": 3252,
+        "files_digest": "cfc1b5ead59b36443133ae95478df83b924edeaf6a8ff211065b31e7132f3fbe",
+        "grad_norm": 1.171086072921753,
+        "gradient_fp64": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 123,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 3.1622267471220766e-07,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "logits_bitwise_equal": true,
+        "logits_sha256": "6b2557ad01489401ed7507b6bac90c018891be0f3441de18152da9fd12b336f8",
+        "loss": 6.206477642059326,
+        "next_parameters_and_adamw_finite": true,
+        "next_state_sha256": "897c007275be1fb2b290150282756f957a821b828904e0b9dc4f5cb9274657c1",
+        "passed": true,
+        "physical_device": "9",
+        "pid": 2717033,
+        "private_state_bitwise_equal": true,
+        "roots": 123,
+        "support": {
+          "refined_rows": 0,
+          "repaired_coordinates": 0,
+          "repaired_rows": 0
+        }
+      },
+      "direct": {
+        "actual_module": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/route-r15-release/base/src/tide/__init__.py",
+        "device": "npu:0",
+        "fault_batch_matched": true,
+        "fault_step": 3252,
+        "files_digest": "cfc1b5ead59b36443133ae95478df83b924edeaf6a8ff211065b31e7132f3fbe",
+        "new_checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/route-r15-release/replay/checkpoints/step-000003256-f4b79b6d9e.pt",
+          "sha256": "2a0086176dd1671b1270d0d4440f74094fe9f122ff94a3481ba29cdd470f1795",
+          "size_bytes": 86028127,
+          "state_sha256": "cab5c6a54be4db78f9351cdb52b3c063a39830768e2f4c594f9b17ae6aa6d979",
+          "steps": 3256,
+          "tokens": 416768
+        },
+        "official_checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r14/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2/attempt-0/checkpoints/step-000003221-685b31687a.pt",
+          "sha256": "4a6472307444b170a4af369f74a0bd259289517ecb05ead9278cdf81caa3cd81",
+          "size_bytes": 86028127,
+          "state_sha256": "e7c94da4b4e1ee183d9b4b8ea999c51d3fa91c6e7234a7f1a4f271d18ece3699",
+          "steps": 3221,
+          "tokens": 412288
+        },
+        "original_error": "allocation VJP exceeds the requested dtype range",
+        "original_state_loaded_exact": true,
+        "passed": true,
+        "physical_device": "1",
+        "pid": 2716868,
+        "rng_sha256": "2dbffd2d0d6fcc5e54c26e88e8f4409f7b288d787ca9b7fa4ea31af7c52ca66e",
+        "stream_sha256": "69aa0e56c4a8bce190692f92ed82b38c392e1fb8bece839ab4ba89d033851e03",
+        "updates": [
+          {
+            "grad_norm": 1.2705503702163696,
+            "loss": 6.191125392913818,
+            "lr": 0.000998295724244764,
+            "objective": 6.191125392913818,
+            "step": 3222,
+            "tokens": 412416
+          },
+          {
+            "grad_norm": 1.2268298864364624,
+            "loss": 6.11958122253418,
+            "lr": 0.0009982944670398732,
+            "objective": 6.11958122253418,
+            "step": 3223,
+            "tokens": 412544
+          },
+          {
+            "grad_norm": 1.3270760774612427,
+            "loss": 5.980754852294922,
+            "lr": 0.0009982932093723284,
+            "objective": 5.980754852294922,
+            "step": 3224,
+            "tokens": 412672
+          },
+          {
+            "grad_norm": 1.330322504043579,
+            "loss": 6.653112411499023,
+            "lr": 0.0009982919512421307,
+            "objective": 6.653112411499023,
+            "step": 3225,
+            "tokens": 412800
+          },
+          {
+            "grad_norm": 1.3733700513839722,
+            "loss": 6.4834303855896,
+            "lr": 0.0009982906926492814,
+            "objective": 6.4834303855896,
+            "step": 3226,
+            "tokens": 412928
+          },
+          {
+            "grad_norm": 1.2044421434402466,
+            "loss": 6.229525566101074,
+            "lr": 0.000998289433593782,
+            "objective": 6.229525566101074,
+            "step": 3227,
+            "tokens": 413056
+          },
+          {
+            "grad_norm": 1.3274216651916504,
+            "loss": 5.793313980102539,
+            "lr": 0.0009982881740756336,
+            "objective": 5.793313980102539,
+            "step": 3228,
+            "tokens": 413184
+          },
+          {
+            "grad_norm": 1.6519722938537598,
+            "loss": 5.966687202453613,
+            "lr": 0.0009982869140948375,
+            "objective": 5.966687202453613,
+            "step": 3229,
+            "tokens": 413312
+          },
+          {
+            "grad_norm": 1.4681661128997803,
+            "loss": 6.173126220703125,
+            "lr": 0.000998285653651395,
+            "objective": 6.173126220703125,
+            "step": 3230,
+            "tokens": 413440
+          },
+          {
+            "grad_norm": 1.4920685291290283,
+            "loss": 6.4117817878723145,
+            "lr": 0.0009982843927453073,
+            "objective": 6.4117817878723145,
+            "step": 3231,
+            "tokens": 413568
+          },
+          {
+            "grad_norm": 1.243727445602417,
+            "loss": 6.4085307121276855,
+            "lr": 0.000998283131376576,
+            "objective": 6.4085307121276855,
+            "step": 3232,
+            "tokens": 413696
+          },
+          {
+            "grad_norm": 1.394229531288147,
+            "loss": 5.658805847167969,
+            "lr": 0.0009982818695452023,
+            "objective": 5.658805847167969,
+            "step": 3233,
+            "tokens": 413824
+          },
+          {
+            "grad_norm": 1.2676103115081787,
+            "loss": 6.021554946899414,
+            "lr": 0.0009982806072511873,
+            "objective": 6.021554946899414,
+            "step": 3234,
+            "tokens": 413952
+          },
+          {
+            "grad_norm": 1.2813093662261963,
+            "loss": 6.08902645111084,
+            "lr": 0.0009982793444945326,
+            "objective": 6.08902645111084,
+            "step": 3235,
+            "tokens": 414080
+          },
+          {
+            "grad_norm": 1.2944148778915405,
+            "loss": 5.672390937805176,
+            "lr": 0.0009982780812752392,
+            "objective": 5.672390937805176,
+            "step": 3236,
+            "tokens": 414208
+          },
+          {
+            "grad_norm": 1.480638027191162,
+            "loss": 6.022564888000488,
+            "lr": 0.0009982768175933088,
+            "objective": 6.022564888000488,
+            "step": 3237,
+            "tokens": 414336
+          },
+          {
+            "grad_norm": 1.2540466785430908,
+            "loss": 5.816634178161621,
+            "lr": 0.0009982755534487422,
+            "objective": 5.816634178161621,
+            "step": 3238,
+            "tokens": 414464
+          },
+          {
+            "grad_norm": 1.4657303094863892,
+            "loss": 6.327024459838867,
+            "lr": 0.0009982742888415411,
+            "objective": 6.327024459838867,
+            "step": 3239,
+            "tokens": 414592
+          },
+          {
+            "grad_norm": 1.3155947923660278,
+            "loss": 5.545235633850098,
+            "lr": 0.0009982730237717067,
+            "objective": 5.545235633850098,
+            "step": 3240,
+            "tokens": 414720
+          },
+          {
+            "grad_norm": 1.2409865856170654,
+            "loss": 5.833003520965576,
+            "lr": 0.00099827175823924,
+            "objective": 5.833003520965576,
+            "step": 3241,
+            "tokens": 414848
+          },
+          {
+            "grad_norm": 1.4102646112442017,
+            "loss": 6.076208591461182,
+            "lr": 0.000998270492244143,
+            "objective": 6.076208591461182,
+            "step": 3242,
+            "tokens": 414976
+          },
+          {
+            "grad_norm": 1.2921013832092285,
+            "loss": 6.061431884765625,
+            "lr": 0.0009982692257864162,
+            "objective": 6.061431884765625,
+            "step": 3243,
+            "tokens": 415104
+          },
+          {
+            "grad_norm": 1.2652990818023682,
+            "loss": 6.234334945678711,
+            "lr": 0.0009982679588660614,
+            "objective": 6.234334945678711,
+            "step": 3244,
+            "tokens": 415232
+          },
+          {
+            "grad_norm": 1.2183125019073486,
+            "loss": 5.748180866241455,
+            "lr": 0.0009982666914830798,
+            "objective": 5.748180866241455,
+            "step": 3245,
+            "tokens": 415360
+          },
+          {
+            "grad_norm": 1.1727919578552246,
+            "loss": 5.565420150756836,
+            "lr": 0.0009982654236374729,
+            "objective": 5.565420150756836,
+            "step": 3246,
+            "tokens": 415488
+          },
+          {
+            "grad_norm": 1.4528831243515015,
+            "loss": 5.115078926086426,
+            "lr": 0.0009982641553292417,
+            "objective": 5.115078926086426,
+            "step": 3247,
+            "tokens": 415616
+          },
+          {
+            "grad_norm": 1.2993277311325073,
+            "loss": 5.629517078399658,
+            "lr": 0.0009982628865583877,
+            "objective": 5.629517078399658,
+            "step": 3248,
+            "tokens": 415744
+          },
+          {
+            "grad_norm": 1.5051097869873047,
+            "loss": 6.556332588195801,
+            "lr": 0.000998261617324912,
+            "objective": 6.556332588195801,
+            "step": 3249,
+            "tokens": 415872
+          },
+          {
+            "grad_norm": 1.210566759109497,
+            "loss": 6.12363338470459,
+            "lr": 0.000998260347628816,
+            "objective": 6.12363338470459,
+            "step": 3250,
+            "tokens": 416000
+          },
+          {
+            "grad_norm": 1.2432411909103394,
+            "loss": 5.774509906768799,
+            "lr": 0.0009982590774701011,
+            "objective": 5.774509906768799,
+            "step": 3251,
+            "tokens": 416128
+          },
+          {
+            "grad_norm": 1.1711266040802002,
+            "loss": 6.206488609313965,
+            "lr": 0.0009982578068487688,
+            "objective": 6.206488609313965,
+            "step": 3252,
+            "tokens": 416256
+          },
+          {
+            "grad_norm": 1.349358320236206,
+            "loss": 6.167181491851807,
+            "lr": 0.00099825653576482,
+            "objective": 6.167181491851807,
+            "step": 3253,
+            "tokens": 416384
+          },
+          {
+            "grad_norm": 1.4724348783493042,
+            "loss": 6.257658004760742,
+            "lr": 0.000998255264218256,
+            "objective": 6.257658004760742,
+            "step": 3254,
+            "tokens": 416512
+          },
+          {
+            "grad_norm": 1.321592926979065,
+            "loss": 6.4707818031311035,
+            "lr": 0.0009982539922090787,
+            "objective": 6.4707818031311035,
+            "step": 3255,
+            "tokens": 416640
+          },
+          {
+            "grad_norm": 1.2582074403762817,
+            "loss": 6.01483154296875,
+            "lr": 0.0009982527197372887,
+            "objective": 6.01483154296875,
+            "step": 3256,
+            "tokens": 416768
+          },
+          {
+            "counts": {
+              "refined_rows": 0,
+              "repaired_coordinates": 0,
+              "repaired_rows": 0
+            },
+            "grad_norm": 1.2002477645874023,
+            "gradient_tensors": 123,
+            "input_sha256": "42f5a86d10d5a712104a9499eca75dae51d0b521501a7fa06970c77a5cd9db16",
+            "loss": 5.992766380310059,
+            "lr": 0.0009982514468028878,
+            "objective": 5.992766380310059,
+            "reset": true,
+            "state_sha256": {
+              "adamw": "a5414b415496a0222e3f4c60b6a53916949cb887bb6d2e3edfd885595ee45aab",
+              "gradients_after_clip": "5cd8fde056eb0982d484aebc507d93a075495787a6152fe886e3df966a038c89",
+              "model": "3bf4722d2e26cb6aec4ea6415a1da19c1f410da10895b3f80976831d8ae88c83",
+              "private_state": "9ebc295d92b5e342354c54b8a80852fdf15fe9d0ad8a4b8b1b9e6899d8518e41"
+            },
+            "step": 3257,
+            "tokens": 416896
+          }
+        ]
+      },
+      "restored": {
+        "actual_module": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/route-r15-release/base/src/tide/__init__.py",
+        "checkpoint_sha256": "2a0086176dd1671b1270d0d4440f74094fe9f122ff94a3481ba29cdd470f1795",
+        "comparison": {
+          "adamw": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 504,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 4.656612873077393e-10,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "gradients_after_clip": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 123,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 1.862645149230957e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "model": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 144,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 1.862645149230957e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "private_state": {
+            "atol": 1e-05,
+            "exact": true,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 110,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 0.0,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "device": "npu:0",
+        "discrete_exact": true,
+        "fault_step": 3252,
+        "files_digest": "cfc1b5ead59b36443133ae95478df83b924edeaf6a8ff211065b31e7132f3fbe",
+        "loaded_state_exact": true,
+        "passed": true,
+        "physical_device": "1",
+        "pid": 2721325,
+        "scalar_abs_diffs": {
+          "grad_norm": 0.0,
+          "loss": 4.76837158203125e-07,
+          "objective": 4.76837158203125e-07
+        },
+        "step": 3257
+      }
+    }
+  },
+  "reproduction": {
+    "driver": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/scripts/accept_r14_routing.py",
+      "sha256": "17880d6e40e68156cf388aef22981625ae61eff16a9dd223df0b52405f4c2826"
+    },
+    "entry": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/route-r15-release/qualify.sh",
+      "sha256": "207f3d18c9f88cc181c957a875fdeaed36d2d7cc71c07dcb0666c7836a580efe"
+    },
+    "raw_outputs": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/route-r15-release/replay",
+    "shared_replay": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/scripts/accept_r11_quad.py",
+      "sha256": "3a686ceca301262e15662e70b7095d210d1dbb3beae233d51d265b1fbf6387d5"
+    },
+    "source_archive": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/route-r15-release/base/src"
+  },
+  "schema": "pilot-r3-timed-route-acceptance-v1",
+  "scope": "\u4e24\u4e2a\u539f\u6545\u969c\u6279\u6b21\u3001\u539f 3221 \u6b65\u6b63\u5f0f\u68c0\u67e5\u70b9\u3001NPU 3222\u20133257 \u6b65\u3001\u53e6\u4e00\u8fdb\u7a0b\u52a0\u8f7d 3256 \u5e76\u590d\u6838 3257\u3002\u53c2\u6570\u548c AdamW \u6570\u503c\u6309\u539f\u5bb9\u5dee\uff0c\u652f\u6301\u3001\u6570\u636e\u3001\u6062\u590d\u72b6\u6001\u6458\u8981\u5206\u522b\u6838\u9a8c\u3002"
+}

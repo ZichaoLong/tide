@@ -1,0 +1,396 @@
+{
+  "authority": {
+    "commit": "29c4798f121b324f811b2a35a908e9d5e74b0cc7",
+    "files_digest": "cb9e9e14e27fb5e332bcb0ebffce37fb450f322d95da00e3e35d9790c5b8a29a",
+    "files_sha256": {
+      "__init__.py": "51b2da0ae87b715638de8ef789edabdada69ad43c05b19e0ef79eefa0113dd3c",
+      "allocation.py": "ead87a2b240437f7bc3898f218ccae46d2fd3a2371946b5bae4f4d33b9d8f176",
+      "attention.py": "fc6faa1ff5897b1ed43a2b7a5a1db54294aaf1f04ee669ce84b734e9efeab4a2",
+      "checkpoint.py": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+      "config.py": "5c15208fde72446a185ac7323d023b9d5ba6ee898e045e3d8b75b4f97495c28a",
+      "ffn_packing.py": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449",
+      "grouped_linear.py": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1",
+      "kv.py": "39bc279b687dffb72e91ea984faaac5bb5ac7530ed5f86f364eb00d8137d6773",
+      "layout.py": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+      "model.py": "a1641c2ae6c9ba6ab21d293544d388bfd1d3e1d63250b2a2790fed6aa7a403c6",
+      "parameters.py": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc",
+      "placement.py": "6c20e7375171ec61253257448fe86ff71495789ae45102d2ef34d1f29b1af994",
+      "placement_ownership.py": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+      "precision.py": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+      "reception.py": "3fd496749a3e3fddd4983237eb0ea6b192a1c2cc0b226c46d7d927b456415eb4",
+      "region.py": "ab57fe6bb2204c8d3dc9ebd2ec14a5469968f5b2f627c6d9bdd12b12d9f678ba",
+      "region_batch.py": "787f64c9fc2fb186f3956b4593e2bbbd67185df2fd97a3c94cf23607334504f0",
+      "region_execution.py": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950",
+      "region_placement.py": "53b864e9f7b350c766b7b79ed1b32ddeeae01bafda86e81ee02e860cbf2edc60",
+      "scaled_arithmetic.py": "21b696170e73ae28a3238a4db7dd9b613d92a2b0eb88610df74a5d01a8006c62",
+      "shannon_support.py": "29507db503a88d880614142411004fa7eaa39a77374a6e1c1dc640501c5f6105",
+      "ssd.py": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+      "ssd_memory.py": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2",
+      "topology.py": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+      "topology_hb.py": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06",
+      "weighted_mean.py": "6c993386c66f611c371c75e2e66a52dec7954c4fb9078819aab23f13d6c76d88"
+    },
+    "remote_head_at_acceptance": "29c4798f121b324f811b2a35a908e9d5e74b0cc7"
+  },
+  "diagnosis": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-r13-timed-ingress-vjp.json",
+    "sha256": "048a9919398045cb4a0c6b371b5ba8eba74a9d76a5b685adbde1302b85a15c20"
+  },
+  "directed_tests": {
+    "cpu": {
+      "passed": 144,
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/ingress-r14-release/cpu-tests.log",
+      "sha256": "e742c31f49c919834eb34a8e50796da0aa160d6ddddfc42497ab05e2d7e1d7ec"
+    },
+    "migration": {
+      "passed": 55,
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/ingress-r14-release/migration-tests.log",
+      "sha256": "beba1116089c8818377ebbd4bf86b3b5f4abd6582af3160024e3b2940f8cdbbb"
+    },
+    "npu": {
+      "passed": 65,
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/ingress-r14-release/npu-tests.log",
+      "sha256": "0917321ed18ab1a6569ffb4cda24649d9729fb15cc5dc20f7f933a5155a9312e"
+    }
+  },
+  "failure_input": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2/attempt-0/failure.pt",
+    "sha256": "6d9a69be1a63ff4ed909b9fa179ba7d27f58e6a30a95b97493f6ef47ed757464"
+  },
+  "observed_local": "2026-11-21T18:39:01+08:00",
+  "old_result": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2/attempt-0/result.json",
+    "sha256": "e0a1e85a2d2919a80365488992ee992047e37807d789883d5502c238fa566a4e"
+  },
+  "original_task": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2/attempt-0/task.json",
+    "sha256": "9738fb80c2ad33dd7eafefb6c76b2bae30f22d7c281a2bea16e7b15dcf98a424"
+  },
+  "physical_queue": {
+    "npu-replay-queue.json": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/ingress-r14-release/npu-replay-queue.json",
+      "sha256": "0f2aafc8fbefb88a252680f7ce2b1c158b0cdc83522c4702b701b9730ad17eda"
+    },
+    "npu-tests-queue.json": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/ingress-r14-release/npu-tests-queue.json",
+      "sha256": "48fed5f1cd8323841d5bf65c6762116b5b66691d1829af40c473f0768179f34a"
+    }
+  },
+  "qualification": {
+    "cpu": {
+      "capture": {
+        "actual_module": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/ingress-r14-release/base/src/tide/__init__.py",
+        "device": "cpu",
+        "fault_step": 2727,
+        "files_digest": "cb9e9e14e27fb5e332bcb0ebffce37fb450f322d95da00e3e35d9790c5b8a29a",
+        "grad_norm": 1.1955583095550537,
+        "gradient_fp64": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 123,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 2.1200658113090798e-07,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "logits_bitwise_equal": true,
+        "logits_sha256": "ee43c1ff0aa81067a48812bc71d2fea46fe39748f63ff7a0b71efddc80165236",
+        "loss": 5.667013645172119,
+        "next_parameters_and_adamw_finite": true,
+        "next_state_sha256": "8d8ad3c4f2a79ad69c72ca4a06c0b54589d3034bfe43fd16ff8de82271b67cd8",
+        "passed": true,
+        "physical_device": null,
+        "pid": 2388160,
+        "private_state_bitwise_equal": true,
+        "roots": 123,
+        "support": {
+          "refined_rows": 0,
+          "repaired_coordinates": 0,
+          "repaired_rows": 0
+        }
+      },
+      "fp64_reference": {
+        "capture_task": "multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2",
+        "gradient_file": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/ingress-r14-release/replay/fp64-gradients.pt",
+          "sha256": "b10fa6a337263361fbbd3388875131018237a4fc833c7ea55ff633bb86b8ed92"
+        },
+        "objective": 5.667013757457969,
+        "roots": 123
+      }
+    },
+    "npu": {
+      "capture": {
+        "actual_module": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/ingress-r14-release/base/src/tide/__init__.py",
+        "device": "npu:0",
+        "fault_step": 2727,
+        "files_digest": "cb9e9e14e27fb5e332bcb0ebffce37fb450f322d95da00e3e35d9790c5b8a29a",
+        "grad_norm": 1.1957027912139893,
+        "gradient_fp64": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 123,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 9.691109397261255e-08,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "logits_bitwise_equal": true,
+        "logits_sha256": "6f774f431bdf44e632ae0fa33330602f1623c43f81e5d1af1ad54ae7f38277c8",
+        "loss": 5.667013645172119,
+        "next_parameters_and_adamw_finite": true,
+        "next_state_sha256": "e65f4d05aeb958a8573ae6af168d670d601d2b08b17a17f9f182bea849e4fcf4",
+        "passed": true,
+        "physical_device": "1",
+        "pid": 2388894,
+        "private_state_bitwise_equal": true,
+        "roots": 123,
+        "support": {
+          "refined_rows": 0,
+          "repaired_coordinates": 0,
+          "repaired_rows": 0
+        }
+      },
+      "direct": {
+        "actual_module": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/ingress-r14-release/base/src/tide/__init__.py",
+        "device": "npu:0",
+        "fault_batch_matched": true,
+        "fault_step": 2727,
+        "files_digest": "cb9e9e14e27fb5e332bcb0ebffce37fb450f322d95da00e3e35d9790c5b8a29a",
+        "new_checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/ingress-r14-release/replay/checkpoints/step-000002731-fd65468887.pt",
+          "sha256": "a999b5a5fb44510225eec7057b118be1fbad0313eeff3c0a9cb2cee9bf5d5375",
+          "size_bytes": 86027999,
+          "state_sha256": "6a3a55554b1658ef501cb50ce0a92303888d731f2d9f645cefc2c2126ed8b43e",
+          "steps": 2731,
+          "tokens": 349568
+        },
+        "official_checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2/attempt-0/checkpoints/step-000002720-ed60e141ed.pt",
+          "sha256": "5cafd6b557c5d1ba3338872c2cc3859f3d3bd229963a598d825fb2a4838a704e",
+          "size_bytes": 86027935,
+          "state_sha256": "3b71530ec735fe4aabf17f563d1aa4fafc4274894c510b068ab82115042464e1",
+          "steps": 2720,
+          "tokens": 348160
+        },
+        "original_error": "allocation VJP exceeds the requested dtype range",
+        "original_state_loaded_exact": true,
+        "passed": true,
+        "physical_device": "1",
+        "pid": 2389497,
+        "rng_sha256": "2dbffd2d0d6fcc5e54c26e88e8f4409f7b288d787ca9b7fa4ea31af7c52ca66e",
+        "stream_sha256": "a03c1a517411be8ec6db991786392ceaa82053459ec23ba378108483ec6b1a6c",
+        "updates": [
+          {
+            "grad_norm": 1.4277682304382324,
+            "loss": 6.213892459869385,
+            "lr": 0.0009988673785746819,
+            "objective": 6.213892459869385,
+            "step": 2721,
+            "tokens": 348288
+          },
+          {
+            "grad_norm": 1.3462456464767456,
+            "loss": 6.5596089363098145,
+            "lr": 0.0009988663533126716,
+            "objective": 6.5596089363098145,
+            "step": 2722,
+            "tokens": 348416
+          },
+          {
+            "grad_norm": 1.1541393995285034,
+            "loss": 6.34133243560791,
+            "lr": 0.000998865327587417,
+            "objective": 6.34133243560791,
+            "step": 2723,
+            "tokens": 348544
+          },
+          {
+            "grad_norm": 1.3639781475067139,
+            "loss": 6.054463863372803,
+            "lr": 0.000998864301398919,
+            "objective": 6.054463863372803,
+            "step": 2724,
+            "tokens": 348672
+          },
+          {
+            "grad_norm": 1.2839421033859253,
+            "loss": 5.992550849914551,
+            "lr": 0.0009988632747471788,
+            "objective": 5.992550849914551,
+            "step": 2725,
+            "tokens": 348800
+          },
+          {
+            "grad_norm": 1.1791409254074097,
+            "loss": 5.755709648132324,
+            "lr": 0.0009988622476321974,
+            "objective": 5.755709648132324,
+            "step": 2726,
+            "tokens": 348928
+          },
+          {
+            "grad_norm": 1.1957026720046997,
+            "loss": 5.667013168334961,
+            "lr": 0.0009988612200539759,
+            "objective": 5.667013168334961,
+            "step": 2727,
+            "tokens": 349056
+          },
+          {
+            "grad_norm": 1.2038624286651611,
+            "loss": 6.007392883300781,
+            "lr": 0.0009988601920125153,
+            "objective": 6.007392883300781,
+            "step": 2728,
+            "tokens": 349184
+          },
+          {
+            "grad_norm": 1.3883559703826904,
+            "loss": 5.7436747550964355,
+            "lr": 0.0009988591635078168,
+            "objective": 5.7436747550964355,
+            "step": 2729,
+            "tokens": 349312
+          },
+          {
+            "grad_norm": 1.3233695030212402,
+            "loss": 6.511897563934326,
+            "lr": 0.0009988581345398812,
+            "objective": 6.511897563934326,
+            "step": 2730,
+            "tokens": 349440
+          },
+          {
+            "grad_norm": 1.296819806098938,
+            "loss": 6.221090316772461,
+            "lr": 0.0009988571051087098,
+            "objective": 6.221090316772461,
+            "step": 2731,
+            "tokens": 349568
+          },
+          {
+            "counts": {
+              "refined_rows": 0,
+              "repaired_coordinates": 0,
+              "repaired_rows": 0
+            },
+            "grad_norm": 1.3001666069030762,
+            "gradient_tensors": 123,
+            "input_sha256": "8cea4eec975bd9a37f04c27091af9b378e6afe723c246c3735fefbcdcfe5de4b",
+            "loss": 6.355681419372559,
+            "lr": 0.0009988560752143038,
+            "objective": 6.355681419372559,
+            "reset": false,
+            "state_sha256": {
+              "adamw": "3010970f4545e71ed6316a0c0aa6b5f54cad776272a16a03da0ac7951c936544",
+              "gradients_after_clip": "c312bbbf29946ecb110e6eb9736f043a383ea174709a9dcf46900fdff156acda",
+              "model": "1c7c15f1cd77d0c35035f5109a7daa4240890c80b130aaf9828f7af2fcc6d048",
+              "private_state": "1dc6889f3ffde1f93124b992856f40945b4ae45ed5900f78a18f6b3a8fe1344f"
+            },
+            "step": 2732,
+            "tokens": 349696
+          }
+        ]
+      },
+      "restored": {
+        "actual_module": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/ingress-r14-release/base/src/tide/__init__.py",
+        "checkpoint_sha256": "a999b5a5fb44510225eec7057b118be1fbad0313eeff3c0a9cb2cee9bf5d5375",
+        "comparison": {
+          "adamw": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 504,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 3.026798367500305e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "gradients_after_clip": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 123,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 2.9802322387695312e-08,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "model": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 144,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 1.5795230865478516e-06,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "private_state": {
+            "atol": 1e-05,
+            "exact": true,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 110,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 0.0,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "device": "npu:0",
+        "discrete_exact": true,
+        "fault_step": 2727,
+        "files_digest": "cb9e9e14e27fb5e332bcb0ebffce37fb450f322d95da00e3e35d9790c5b8a29a",
+        "loaded_state_exact": true,
+        "passed": true,
+        "physical_device": "1",
+        "pid": 2391824,
+        "scalar_abs_diffs": {
+          "grad_norm": 1.1920928955078125e-07,
+          "loss": 0.0,
+          "objective": 0.0
+        },
+        "step": 2732
+      }
+    }
+  },
+  "reproduction": {
+    "driver": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/scripts/accept_r13_ingress.py",
+      "sha256": "9fc819645411014a6f5839480544ecf209a0878c8f428ca46693f9e0336f11cb"
+    },
+    "entry": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/ingress-r14-release/qualify.sh",
+      "sha256": "54d59b89c3f345dfc7cc3364401e21e286453d931b2fbf342aeeb1610fa03e7e"
+    },
+    "raw_outputs": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/ingress-r14-release/replay",
+    "shared_replay": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/scripts/accept_r11_quad.py",
+      "sha256": "3a686ceca301262e15662e70b7095d210d1dbb3beae233d51d265b1fbf6387d5"
+    },
+    "source_archive": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/ingress-r14-release/base/src"
+  },
+  "schema": "pilot-r3-timed-ingress-acceptance-v1",
+  "scope": "\u539f\u5931\u8d25\u6279\u6b21\u3001\u539f 2720 \u6b65\u68c0\u67e5\u70b9\u3001NPU 2721\u20132732 \u6b65\u3001\u53e6\u4e00\u8fdb\u7a0b\u52a0\u8f7d 2731 \u5e76\u590d\u6838 2732\u3002\u53c2\u6570\u548c AdamW \u6570\u503c\u6309\u539f\u5bb9\u5dee\uff0c\u652f\u6301\u3001\u6570\u636e\u3001\u6062\u590d\u72b6\u6001\u6458\u8981\u5206\u522b\u6838\u9a8c\u3002"
+}

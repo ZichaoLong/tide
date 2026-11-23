@@ -1,0 +1,77 @@
+{
+  "fault_task": "exchange-d128-x_reverse-pool-26a8635043-a2-2026112002-r2",
+  "original_audit": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-campaign-r16-terminal-audit.json",
+    "sha256": "3ef2c7f706953058d48c5b03ecda3ec2dcd2e01fd2fde4a282b1e85707b8c232"
+  },
+  "resolution": {
+    "completed_worker_receipts": {},
+    "excluded_unpublished_generations": {
+      "multiscale_settle-d128-x-singleton7-281f04cf8c-a2-2026112002-r1": {
+        "adoptable_index": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r16/round/tasks/multiscale_settle-d128-x-singleton7-281f04cf8c-a2-2026112002-r1/attempt-0/checkpoint.json",
+          "sha256": "28523224f7bf90f51c53f4e8c7f5f8969094b02280811919e717f7f5a0541832"
+        },
+        "unpublished": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r16/round/tasks/multiscale_settle-d128-x-singleton7-281f04cf8c-a2-2026112002-r1/attempt-0/checkpoints/step-000003353-0e00da9cac.pt",
+          "sha256": "f8a56985a9f563559a96f2b27961632d8cd15fe5279bc6c61a69139b21a71fe1"
+        }
+      },
+      "multiscale_settle-d128-x_reverse-singleton7-655942fdd4-a1-2026112002-r2": {
+        "adoptable_index": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r16/round/tasks/multiscale_settle-d128-x_reverse-singleton7-655942fdd4-a1-2026112002-r2/attempt-0/checkpoint.json",
+          "sha256": "543f82ffc31f4802018ce8328f121a3a3ced1503e5b64a7acf39ebbd8fbf1365"
+        },
+        "unpublished": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r16/round/tasks/multiscale_settle-d128-x_reverse-singleton7-655942fdd4-a1-2026112002-r2/attempt-0/checkpoints/step-000000708-77b8b036f3.pt",
+          "sha256": "41daf538bcfa78fd441d739b1846c3bc3fe008c26f8231c69e6793deaab9cdf3"
+        }
+      }
+    },
+    "signal_results": {
+      "multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r5": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r16/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r5/attempt-0/result.json",
+        "sha256": "b49085ef62ea7162069f43af092b3d0d463bd112d8748dee4dd8cfe263bdc43e"
+      },
+      "multiscale_timed-d128-s-group5-37506fa4ee-a2-2026112001-r2": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r16/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-a2-2026112001-r2/attempt-0/result.json",
+        "sha256": "6105de6e9c925004ed61bc6e2f5ac554a40ea359886554eb94d86c90a5dd49ee"
+      },
+      "multiscale_timed-d128-x-mixed9-ae4ffdec56-a1-2026112001-r1": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r16/round/tasks/multiscale_timed-d128-x-mixed9-ae4ffdec56-a1-2026112001-r1/attempt-0/result.json",
+        "sha256": "5e89f41ffaf54d810337b4a62f73a93499161171c270eedd867259a55b8d5bba"
+      },
+      "multiscale_timed-d128-x-mixed9-ae4ffdec56-a1-2026112002-r1": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r16/round/tasks/multiscale_timed-d128-x-mixed9-ae4ffdec56-a1-2026112002-r1/attempt-0/result.json",
+        "sha256": "09f55323291a0194cc89dcb589827de263e6871a1988bd4743b97421bc174cf6"
+      }
+    },
+    "stale_owner_receipts": {
+      "group-000009": {
+        "charged_through_unix": 1795274198.8024023,
+        "device_locks": [
+          {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owned_by_this_run": false,
+            "owners": [],
+            "path": "/run/user/1003/ascend-device-locks/physical-10.lock",
+            "status": "unlocked"
+          }
+        ],
+        "device_seconds": 2833.82444691658,
+        "job_lock": {
+          "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+          "owners": [],
+          "path": "/run/user/1003/ascend-job-queue/jobs/r3-campaign-r16-group-000009.lock",
+          "status": "unlocked"
+        },
+        "physical_id": 10
+      }
+    }
+  },
+  "scheduler": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r16/round/scheduler.json",
+    "sha256": "aef13ba8c5806f9a40b9fc57e7e1e1504bfca23844945b1b8cb900e9848b116a"
+  },
+  "schema": "pilot-r3-failed-shutdown-review-v1"
+}

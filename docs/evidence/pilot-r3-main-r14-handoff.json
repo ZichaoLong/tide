@@ -1,0 +1,428 @@
+{
+  "actual_fault_migration": {
+    "formal_checkpoint": {
+      "checkpoint": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r14/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2/attempt-0/checkpoints/step-000002761-33b9d4a2cf.pt",
+        "sha256": "bb4dfa2b55faaa5c8b04ff0a80301a8bf7f10d0816380a1647a519b8b842bfda",
+        "size_bytes": 86028063,
+        "state_sha256": "292178f3c1f35fa263db48ff7dfd39c876d81bd436c8c77707ac04d75ec47692",
+        "steps": 2761,
+        "tokens": 353408
+      },
+      "fallback_used": false,
+      "file_digest_verified": true,
+      "observed_unix": 1795257864.416374,
+      "scope": "decoded on the host from the live service checkpoint with its frozen r14 worker; normal generation retirement applies",
+      "source_identity_sha256": "c798d69d8e59df6f86bd40f89f3eba3942609de6a2fb78cb8e49ff625333c409",
+      "state_digest_verified": true,
+      "steps": 2761,
+      "task_contract_verified": true,
+      "task_id": "multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2",
+      "tokens": 353408
+    },
+    "original_checkpoint": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2/attempt-0/checkpoints/step-000002720-ed60e141ed.pt",
+      "sha256": "5cafd6b557c5d1ba3338872c2cc3859f3d3bd229963a598d825fb2a4838a704e",
+      "size_bytes": 86027935,
+      "state_sha256": "3b71530ec735fe4aabf17f563d1aa4fafc4274894c510b068ab82115042464e1",
+      "steps": 2720,
+      "tokens": 348160
+    },
+    "reached_fault_step": true,
+    "receipt": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r14/source-migrations/multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2.json",
+      "sha256": "627bc0db53a92b56861bc83144fe991848cdd17910bb52b6fd7cfc5df0cc2405"
+    },
+    "source_verified": true
+  },
+  "authority": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-r13-foundation-ingress-acceptance.json",
+    "sha256": "6b46b5e69520cdde98bd00f8485f7e09040c2431ad7e5673eb32c38b5165243f"
+  },
+  "budget_before_submission": {
+    "budget_ledger": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/budget.json",
+    "deadline_unix": 1797698913.9318287,
+    "max_device_seconds": 25920000,
+    "observed_unix": 1795257624.7228374,
+    "remaining_device_seconds": 25424674.629971694,
+    "remaining_preparation_device_seconds": 151081.40256207436,
+    "remaining_preparation_processed_tokens": 46527680,
+    "remaining_wall_seconds": 2441289.208991289,
+    "started_unix": 1795106913.9318287
+  },
+  "controller_group": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r14.service",
+  "deferred_subjects": 74,
+  "first_wave": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/ingress-r14-release/preview/first-wave.json",
+    "sha256": "9f939fd28deb5ea1927f99e254ca14334323473288a1cb279acf6d46f0cf5390"
+  },
+  "foundation": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r14/foundation",
+  "foundation_commit": "29c4798f121b324f811b2a35a908e9d5e74b0cc7",
+  "inspection": "python .local/pilot-r3/inspect.py",
+  "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r14/campaign.log",
+  "migration": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r14/stage-a-migration.json",
+    "sha256": "9fe20294f499f9dfc234dfc639ed85a4a13c4c54f449407e027c0218a0b399a0"
+  },
+  "observed_local": "2026-11-21T18:47:59+08:00",
+  "prospective_subjects": 270,
+  "readiness": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-r13-restart-readiness.json",
+    "sha256": "9f5401b3d6d95ee4d4fa8b8af2a633f28e5a0a1ace9647c327c59981a08f315f"
+  },
+  "resource_policy": {
+    "budget_ledger": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/budget.json",
+    "deadline_unix": 1797698913.9318287,
+    "exclusive_max_hbm_bytes": 55834574848,
+    "max_cpu_task_threads": 160,
+    "max_cpu_workers": 40,
+    "max_inflight_checkpoint_bytes": 25769803776,
+    "max_rss_bytes": 1000000000000,
+    "max_workers": null,
+    "npu_workers_per_device": 16,
+    "shared_max_hbm_bytes": 51539607552,
+    "target_npu_devices": 8
+  },
+  "runtime": {
+    "affinity_cpus": 160,
+    "blocking_reason": null,
+    "controller_group": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r14.service",
+    "controller_pid": 2396482,
+    "cpu_workers": 0,
+    "fault_task": {
+      "all_observed_updates_finite": true,
+      "contiguous_steps": [
+        2721,
+        2809
+      ],
+      "env": {
+        "ASCEND_RT_VISIBLE_DEVICES": "1"
+      },
+      "heartbeat": {
+        "loss": 5.931486129760742,
+        "phase": "a2",
+        "pid": 2397931,
+        "schema": "pilot-r3-worker-heartbeat-v1",
+        "seconds": 426.5601786188781,
+        "status": "training",
+        "steps": 2809,
+        "target_tokens": 1048576,
+        "task_id": "multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2",
+        "tokens": 359552,
+        "updated_unix": 1795258075.5152416
+      },
+      "id": "multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2",
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r14/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2/attempt-0/steps.jsonl",
+      "latest": {
+        "grad_norm": 1.314695119857788,
+        "loss": 5.931486129760742,
+        "lr": 0.000998775382335643,
+        "objective": 5.931486129760742,
+        "sampled_diagnostics": false,
+        "seconds": 5.0796210169792175,
+        "state_reset": true,
+        "step": 2809,
+        "time_unix": 1795258075.5146346,
+        "tokens": 359552
+      },
+      "original_fault_and_successors": [
+        {
+          "grad_norm": 1.1957027912139893,
+          "loss": 5.667013168334961,
+          "lr": 0.0009988612200539759,
+          "objective": 5.667013168334961,
+          "sampled_diagnostics": false,
+          "seconds": 3.9031364247202873,
+          "state_reset": false,
+          "step": 2727,
+          "time_unix": 1795257676.619638,
+          "tokens": 349056
+        },
+        {
+          "grad_norm": 1.2038620710372925,
+          "loss": 6.007394313812256,
+          "lr": 0.0009988601920125153,
+          "objective": 6.007394313812256,
+          "sampled_diagnostics": false,
+          "seconds": 3.9745439775288105,
+          "state_reset": false,
+          "step": 2728,
+          "time_unix": 1795257680.604356,
+          "tokens": 349184
+        },
+        {
+          "grad_norm": 1.38835608959198,
+          "loss": 5.7436747550964355,
+          "lr": 0.0009988591635078168,
+          "objective": 5.7436747550964355,
+          "sampled_diagnostics": false,
+          "seconds": 4.27148462086916,
+          "state_reset": true,
+          "step": 2729,
+          "time_unix": 1795257684.8856015,
+          "tokens": 349312
+        },
+        {
+          "grad_norm": 1.3233717679977417,
+          "loss": 6.511896133422852,
+          "lr": 0.0009988581345398812,
+          "objective": 6.511896133422852,
+          "sampled_diagnostics": false,
+          "seconds": 4.1093447506427765,
+          "state_reset": false,
+          "step": 2730,
+          "time_unix": 1795257689.000063,
+          "tokens": 349440
+        },
+        {
+          "grad_norm": 1.2968186140060425,
+          "loss": 6.221090316772461,
+          "lr": 0.0009988571051087098,
+          "objective": 6.221090316772461,
+          "sampled_diagnostics": false,
+          "seconds": 4.2884261906147,
+          "state_reset": false,
+          "step": 2731,
+          "time_unix": 1795257693.291211,
+          "tokens": 349568
+        },
+        {
+          "grad_norm": 1.3001658916473389,
+          "loss": 6.3556809425354,
+          "lr": 0.0009988560752143038,
+          "objective": 6.3556809425354,
+          "sampled_diagnostics": false,
+          "seconds": 4.50391498953104,
+          "state_reset": false,
+          "step": 2732,
+          "time_unix": 1795257697.8066556,
+          "tokens": 349696
+        }
+      ],
+      "owner": "group-000000",
+      "physical_id": 1,
+      "pid": 2397931,
+      "prefix_bytes": 23860,
+      "prefix_sha256": "9aebfb087cde8f7ce6a32689e3b566f6398cca7acca497769f1445c8c71eba57",
+      "status": "running",
+      "worker_cgroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r14.service",
+      "worker_identity": {
+        "pgrp": 2397931,
+        "pid": 2397931,
+        "ppid": 2396627,
+        "rss_bytes": 2417106944,
+        "start_ticks": 2284381181,
+        "state": "S"
+      },
+      "worker_seen_on_physical_device": true
+    },
+    "leased_devices_by_group": {
+      "group-000000": 1,
+      "group-000001": 9,
+      "group-000002": 11,
+      "group-000003": 5,
+      "group-000004": 10,
+      "group-000005": 0,
+      "group-000006": 8,
+      "group-000007": 14
+    },
+    "npu_leases": 8,
+    "npu_smi": {
+      "disappeared_before_cgroup_check": [],
+      "owned_workers_by_device": {
+        "0": [
+          2399917,
+          2402301,
+          2409440,
+          2409851,
+          2413243,
+          2414817,
+          2415168
+        ],
+        "1": [
+          2397931,
+          2399731,
+          2403277,
+          2403459
+        ],
+        "10": [
+          2401765,
+          2404544,
+          2408948,
+          2409288,
+          2410011,
+          2415154,
+          2418585,
+          2419256
+        ],
+        "11": [
+          2398643,
+          2400657,
+          2404155,
+          2404414,
+          2407907,
+          2408134,
+          2408684,
+          2409146
+        ],
+        "14": [
+          2400935,
+          2403204,
+          2409927,
+          2410353,
+          2422617,
+          2422933,
+          2423476,
+          2424101
+        ],
+        "5": [
+          2399159,
+          2401036,
+          2404104,
+          2404304,
+          2411990,
+          2412264,
+          2412479,
+          2413106
+        ],
+        "8": [
+          2400326,
+          2402839,
+          2409241,
+          2413079,
+          2413391,
+          2414910,
+          2415278
+        ],
+        "9": [
+          2398207,
+          2422504,
+          2426308,
+          2430023,
+          2430197,
+          2430502,
+          2430775
+        ]
+      },
+      "sample_ended_unix": 1795258079.4304483,
+      "sample_started_unix": 1795258076.9197433,
+      "source": "npu-smi info -m and info; PID membership checked against the exact service cgroup",
+      "unrelated_processes_on_leased_cards": {}
+    },
+    "npu_workers": 65,
+    "observed_local": "2026-11-21T18:47:59+08:00",
+    "observed_unix": 1795258079.4304483,
+    "old_outstanding_by_disposition_and_status": {
+      "carry_checkpoint": {
+        "completed": 1,
+        "pending": 5,
+        "running": 9
+      },
+      "not_started": {
+        "pending": 153,
+        "running": 11
+      },
+      "signal": {
+        "completed": 3,
+        "pending": 1,
+        "running": 46
+      },
+      "timed_ingress_repair": {
+        "running": 1
+      }
+    },
+    "physical_cores": 160,
+    "registered": 234,
+    "resources": {
+      "available_storage_bytes": 80520441856,
+      "filesystem_free_bytes": 1350743330816,
+      "observed_unix": 1795258078.0234113,
+      "quota": {
+        "filesystem": "/dev/mapper/ascend_data-data",
+        "grace_epoch": 0,
+        "hard_bytes": 751619276800,
+        "soft_bytes": 322122547200,
+        "used_bytes": 241602105344
+      },
+      "rss_bytes": 156326723584
+    },
+    "scheduler_observed_unix": 1795258078.077006,
+    "selected": 42,
+    "service": {
+      "ActiveState": "active",
+      "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r14.service",
+      "ExecMainCode": "0",
+      "ExecMainStatus": "0",
+      "InvocationID": "2b9d57e3a3fd459aa161f9231b9672c8",
+      "LoadState": "loaded",
+      "MainPID": "2396482",
+      "Result": "success",
+      "Slice": "background.slice",
+      "SubState": "running"
+    },
+    "stage": "stage-a-training-pipeline",
+    "stage_b_gate": "closed",
+    "status": "running",
+    "task_counts": {
+      "completed": 4,
+      "pending": 163,
+      "running": 67
+    }
+  },
+  "schema": "pilot-r3-main-r14-handoff-v1",
+  "service": {
+    "ActiveState": "active",
+    "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r14.service",
+    "ExecMainCode": "0",
+    "ExecMainStatus": "0",
+    "InvocationID": "2b9d57e3a3fd459aa161f9231b9672c8",
+    "LoadState": "loaded",
+    "MainPID": "2396482",
+    "Result": "success",
+    "Slice": "background.slice",
+    "SubState": "running"
+  },
+  "source_identity_sha256": "c798d69d8e59df6f86bd40f89f3eba3942609de6a2fb78cb8e49ff625333c409",
+  "source_migration": {
+    "all_registered": true,
+    "dispositions": {
+      "carry_checkpoint": 15,
+      "not_started": 164,
+      "signal": 50,
+      "timed_ingress_repair": 1
+    },
+    "old_outstanding": 230,
+    "prior_completions": 1462,
+    "recovered_completed_receipts": {
+      "fc-d256-k-depth3-2f03e71304-a1-2026112002-r0": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/fc-d256-k-depth3-2f03e71304-a1-2026112002-r0/attempt-0/result.json",
+        "sha256": "9f31d33aaebd8b6f0cec0acc22ab1b10166069f83c665d84f8ff3b4c32d56f75"
+      }
+    },
+    "selected": 42
+  },
+  "stage_b_gate": "closed",
+  "stop": "systemctl --user stop tide-pilot-r3-campaign-r14.service",
+  "storage_before_submission": {
+    "available_storage_bytes": 90551701504,
+    "filesystem_free_bytes": 1360781344768,
+    "observed_unix": 1795257624.755411,
+    "quota": {
+      "filesystem": "/dev/mapper/ascend_data-data",
+      "grace_epoch": 0,
+      "hard_bytes": 751619276800,
+      "soft_bytes": 322122547200,
+      "used_bytes": 231570845696
+    },
+    "scope": "input snapshot headroom only; campaign forecasts all resolved controls before release",
+    "snapshot_source_bytes": 0,
+    "storage_reserve_bytes": 51539607552
+  },
+  "submission": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r14/submission.json",
+    "sha256": "6a90ed564a69174b62e9635fc913e0c669071f0af6fbae7026bba93ceaeffe23"
+  },
+  "submitted_unix": 1795257624.7586288,
+  "unit": "tide-pilot-r3-campaign-r14.service",
+  "worker_source": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r14/source"
+}

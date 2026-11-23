@@ -1,0 +1,187 @@
+{
+  "cause": {
+    "classification": "Shannon total/active-face rounding error; representable positive sender erased",
+    "cpu_reproduction": {
+      "bad_sender_count": 1,
+      "call": 1,
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/diagnostic-shannon-underflow-r01/frozen-cpu/allocation-failure.pt",
+      "rows": [
+        {
+          "c": [
+            1.0,
+            0.0
+          ],
+          "index": [
+            0,
+            0
+          ],
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "reference": {
+            "method": "independent 80-digit Decimal KKT dual solve",
+            "positive_support": [
+              true,
+              true
+            ],
+            "target": 1.0,
+            "values": [
+              0.9999999410944113,
+              5.8905588703119336e-08
+            ]
+          },
+          "scores": [
+            6.040277004241943,
+            -10.60705280303955
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "sha256": "38b264bc8275d84fd0a601755deecc20b314b5e0f3a0b9be1fb496c5804875f8"
+    },
+    "device_attribution": "same original guard reproduced on CPU; this witness does not require NPU FTZ",
+    "mechanisms": [
+      "rounded multiplier classified an interior sender as capped",
+      "subtracting rounded capped mass erased the positive residual",
+      "uncompensated initial totals could incorrectly select the slack branch",
+      "near-exhausted floor/cap comparisons could lose a genuine remaining mass"
+    ]
+  },
+  "change": {
+    "algorithm": "finite monotone bounded exponential active-set normalization with two-term mass/product comparisons",
+    "foundation_python_changes": [
+      {
+        "after_sha256": "a8e4346837e7db763d3b778126090c82719c8192679606b4b1b508e576a4e74e",
+        "before_sha256": "004051c7178380b270e2cce020661bd144ed9afd78c98271d9e5c253beb9d65f",
+        "file": "src/tide/allocation.py"
+      }
+    ],
+    "gradient": "explicit selected faces and anchor-centered Shannon coupled cotangents",
+    "guards": "original positive-sender failure retained; no clamp/floor/epsilon or threshold relaxation",
+    "public_dtype": "unchanged FP32; CPU FP64 reference path retained",
+    "quad_and_pool": "production numerical branches unchanged; independent transfer proof belongs to main coordinator"
+  },
+  "cpu_checks": {
+    "actual_capture_replay": {
+      "allocation_sha256": "a8e4346837e7db763d3b778126090c82719c8192679606b4b1b508e576a4e74e",
+      "learning_conclusion": null,
+      "report_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/diagnostic-shannon-underflow-r01/repaired-cpu-final/report.json",
+      "report_sha256": "210a591ac92efbe45f54d21a375dee1b48289f58698e215f0fb52d51295fb6fe",
+      "saved_input_reused": true,
+      "updates": [
+        {
+          "grad_norm": 0.8052301406860352,
+          "gradient_sha256": "cbcb6796d7d3433cdc036c9c99719feb5cf5a8e5ac9ebdfd4d1b2c25006e0955",
+          "index": 1,
+          "loss": 7.1503167152404785,
+          "parameter_sha256": "6a61bd6718e164b8b6fecb55c546ad2bf609b6b33af2f3c592ccec6d19d3ca4b",
+          "seconds": 0.6206209845840931,
+          "state_digest": "6455e3d43549fffa3187e4cadd7ec5c0b4fe45b1fec1f59af2f8e9221e74e6de"
+        },
+        {
+          "grad_norm": 0.798341691493988,
+          "gradient_sha256": "b4508cf3a6c9e69773fb7724315dcb8a9ebf92964ad3d607125ac65ec5f4582b",
+          "index": 2,
+          "loss": 7.1337361335754395,
+          "parameter_sha256": "a2102ecc95f47dcfc86e0944b218d4fb050c38fdc5ea5ee5d7d2d8084c14487a",
+          "seconds": 0.6514973901212215,
+          "state_digest": "957d7865be20386cc1e57b7a6f5b2abc8f9be0e1ab39812fbacd70b78a7b2240"
+        },
+        {
+          "grad_norm": 0.834412693977356,
+          "gradient_sha256": "ba0d3073ddbacd44183180b96d1ea0096c38eb2276b899c6a061f1c50f52df3a",
+          "index": 3,
+          "loss": 7.109471797943115,
+          "parameter_sha256": "774ff8c07070c68ba43fcdd431fb9f0a37080f250b11f153532dcfd662e090aa",
+          "seconds": 0.5966391116380692,
+          "state_digest": "f1d4f205a6efd527650245b5a4fcdc43a4b8346969cac87880b8b04355514352"
+        }
+      ]
+    },
+    "additional_independent_decimal_bounded_cases": {
+      "budgets": [
+        1,
+        2,
+        4,
+        8
+      ],
+      "candidates": 16,
+      "passed": 32,
+      "seed": 20261120
+    },
+    "allocation_range_cap_reachability_and_new_active_set": {
+      "command": "PYTHONPATH=src python -m pytest -q tests/test_shannon_active_set.py tests/test_allocation.py tests/test_allocation_range.py tests/test_shannon_cap.py tests/test_numerical_reachability.py",
+      "passed": 143,
+      "seconds": 11.2
+    },
+    "diagnostic_contract": {
+      "passed": 4,
+      "seconds": 0.31
+    },
+    "fresh_process_replayed_update": {
+      "atol": 1e-05,
+      "exact": true,
+      "failed_field_count": 0,
+      "failed_fields": [],
+      "fields": 706,
+      "finite": true,
+      "integer_equal": true,
+      "max_abs": 0.0,
+      "rtol": 0.0001,
+      "structure_equal": true,
+      "within_tolerance": true
+    }
+  },
+  "execution_status": "CPU scoped checks complete; no device submission performed by this diagnostic",
+  "new_files": {
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/tests/test_shannon_active_set.py": "9cd110b575618ed176f07a5908308a92746695f5b46e0dadab334674313b2346",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/diagnose_shannon3.py": "e43ebb2609ee874a495c8b5c2a2c63be4f7ce57721023f91160e13a671449fca",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/tests/test_pilot_shannon3_repair.py": "316e2350997018ce7bcded1c36426dfa9d6bfe89a97f07bdb2cd0d2646283c54"
+  },
+  "original": {
+    "checkpoint": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/exchange-d64-k-shannon-615836a776-a1-2026112001-r1/attempt-0/checkpoints/step-000000505-f9fce549d4.pt",
+      "sha256": "5072b4b226be36c36dc7ffe14e54c412f8aa160b84c44a03986e17478b6f8561",
+      "size_bytes": 14855537,
+      "state_sha256": "5871755e3f6e11ead5b768e933f4544360864e2df5d98408bcd7aa746bf2050c",
+      "steps": 505,
+      "tokens": 129280
+    },
+    "completed_steps": 603,
+    "completed_tokens": 154368,
+    "error": "Shannon allocation underflow would erase a positive sender",
+    "failure_capture": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/exchange-d64-k-shannon-615836a776-a1-2026112001-r1/attempt-0/failure.pt",
+      "sha256": "48422682c47c17d6a96278e0cd3daea89ea4d19b29467fc1199ea82fb5a5f4cb"
+    },
+    "frozen_source_files_verified": 52,
+    "result_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/exchange-d64-k-shannon-615836a776-a1-2026112001-r1/attempt-0/result.json",
+    "result_sha256": "6ec6bc9496ee9f6126b12b9c97ca169efcfc104834f6b31cc8e4bb80d20daa5d"
+  },
+  "qualification": {
+    "learning": "not measured; repeated-input diagnostic updates do not establish model quality",
+    "npu": "not qualified by this CPU review; bounded frozen device replay remains required",
+    "original_campaign_checkpoint_resume": "not certified across source change",
+    "performance": "not benchmarked; diagnostic timings do not certify throughput",
+    "recovery_atol": 1e-05,
+    "recovery_rtol": 0.0001,
+    "remaining_limits": [
+      "genuinely unrepresentable positive senders still fail",
+      "stored c remains the slope representation; no all-range unquantized log-mass claim",
+      "finite unprovable active-face progress remains an explicit failure"
+    ],
+    "reuse": "quad evidence requires separate exact branch/source and whole-update equivalence; Shannon requires new source qualification"
+  },
+  "retained_failure": {
+    "error": "Shannon allocation underflow would erase a positive sender",
+    "report_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/diagnostic-shannon-underflow-r01/frozen-cpu/report.json",
+    "report_sha256": "ed1829831e24d070e6cd907598a302e5a5c2e20c25478cd743bc10e09303f330",
+    "status": "failed"
+  },
+  "reviewed_utc": "2026-11-20T01:32:17.844045+00:00",
+  "schema": "pilot-r3-shannon-active-set-repair-review-v1"
+}

@@ -1,0 +1,3356 @@
+{
+  "artifacts": {
+    "files": [
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-settle-sigkill-native-r02/task.json",
+        "sha256": "a10c1b1b19ecc4c2f1ab999e8ce3ed6a9ec105833b128e230273d7b9b77723e9",
+        "status": "passed",
+        "task_id": "risk-trained-settle-sigkill-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-settle-sigkill-native-r02/attempt-0/result.json",
+        "sha256": "ec3fac5b95fe3318b62989514862550dda3f6485cbfa6c9ef8f80f0e580c8b16",
+        "status": "passed",
+        "task_id": "risk-trained-settle-sigkill-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-settle-sigkill-native-r02/attempt-0/checkpoint.json",
+        "sha256": "3bc414802ca8f5af7172bd31dbbf5397c8ee023e3dd2a9f3c2ef52b9d5627bb0",
+        "status": "passed",
+        "task_id": "risk-trained-settle-sigkill-native-r02"
+      },
+      {
+        "expected_sha256": "44924ec77efe552bdfa7b1606bf2778086c0bf315c98ab0eeec1264ce4146148",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-settle-sigkill-native-r02/attempt-0/checkpoints/step-000002498-465c5c3271.pt",
+        "sha256": "44924ec77efe552bdfa7b1606bf2778086c0bf315c98ab0eeec1264ce4146148",
+        "size_bytes": 21251781,
+        "status": "passed",
+        "task_id": "risk-trained-settle-sigkill-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-timed-sigkill-native-r02/task.json",
+        "sha256": "3361be3e3f4282c9628676494b09cd8b266fa5b27f4b5a0d1657a64374d65234",
+        "status": "passed",
+        "task_id": "risk-trained-timed-sigkill-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-timed-sigkill-native-r02/attempt-0/result.json",
+        "sha256": "7437332473ba71cb8d802d147e561c783d154af0378f3d3a842a0e68799c92f9",
+        "status": "passed",
+        "task_id": "risk-trained-timed-sigkill-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-timed-sigkill-native-r02/attempt-0/checkpoint.json",
+        "sha256": "9cf273929f1b351fd5e2aea89f627d03ad96af5c26c9d02d9feabeedca3c88fa",
+        "status": "passed",
+        "task_id": "risk-trained-timed-sigkill-native-r02"
+      },
+      {
+        "expected_sha256": "c9a03408e859af00cc2a43b512e74318275fbeee78f921fd6edc840449efd9f8",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-timed-sigkill-native-r02/attempt-0/checkpoints/step-000000452-7dd033b337.pt",
+        "sha256": "c9a03408e859af00cc2a43b512e74318275fbeee78f921fd6edc840449efd9f8",
+        "size_bytes": 57621885,
+        "status": "passed",
+        "task_id": "risk-trained-timed-sigkill-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-fc-s-npu-native-r02/task.json",
+        "sha256": "25ba868d1e40c0741e80625355f450f21417a60e445e1ac1b23cd8d434e7a9fd",
+        "status": "passed",
+        "task_id": "risk-trained-fc-s-npu-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-fc-s-npu-native-r02/attempt-0/result.json",
+        "sha256": "a0735517bca9d55cf6c1aecf140a2a4eebd012846931cee30c508a18118c401e",
+        "status": "passed",
+        "task_id": "risk-trained-fc-s-npu-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-fc-s-npu-native-r02/attempt-0/checkpoint.json",
+        "sha256": "d3b8535324a080d05b12b95e31e22cbab9f1ee382a33252984e0b82b2b33503c",
+        "status": "passed",
+        "task_id": "risk-trained-fc-s-npu-native-r02"
+      },
+      {
+        "expected_sha256": "a4988500d830f395734360cecb98d7b488dd5c44a00d18e9ad4b85cc95449a26",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-fc-s-npu-native-r02/attempt-0/checkpoints/step-000008207-51c9601bb2.pt",
+        "sha256": "a4988500d830f395734360cecb98d7b488dd5c44a00d18e9ad4b85cc95449a26",
+        "size_bytes": 9119021,
+        "status": "passed",
+        "task_id": "risk-trained-fc-s-npu-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-00-2026112001-native-r02/task.json",
+        "sha256": "9334c8a5126e73b6beda156170288c576dcb39590ddd5ca7f9ddfc55ca34afc2",
+        "status": "passed",
+        "task_id": "risk-cold-00-2026112001-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-00-2026112001-native-r02/attempt-0/result.json",
+        "sha256": "8047e64903c95110452f13115a3f46042b420b9f6cfa188f5c75033d535e7468",
+        "status": "passed",
+        "task_id": "risk-cold-00-2026112001-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-00-2026112001-native-r02/attempt-0/checkpoint.json",
+        "sha256": "55450a7868e89302f359743bc5e0e5a1035e9b9317bcb6a25dae900fc43b49e3",
+        "status": "passed",
+        "task_id": "risk-cold-00-2026112001-native-r02"
+      },
+      {
+        "expected_sha256": "aff299285e965620c0ff800f3839bf32cc74a305f52c15d1c482f9dc1a3557e8",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-00-2026112001-native-r02/attempt-0/checkpoints/step-000000015-de3e3e14f8.pt",
+        "sha256": "aff299285e965620c0ff800f3839bf32cc74a305f52c15d1c482f9dc1a3557e8",
+        "size_bytes": 9502187,
+        "status": "passed",
+        "task_id": "risk-cold-00-2026112001-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-00-2026112002-native-r02/task.json",
+        "sha256": "c0d2e56696c11d457960d33118c09a6412c20a9786b56abf8d7257e7f3cf5661",
+        "status": "passed",
+        "task_id": "risk-cold-00-2026112002-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-00-2026112002-native-r02/attempt-0/result.json",
+        "sha256": "3d02be4ea1e4be411e0af0e4cf5759f2582daba924e519201c1d5034e07171e7",
+        "status": "passed",
+        "task_id": "risk-cold-00-2026112002-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-00-2026112002-native-r02/attempt-0/checkpoint.json",
+        "sha256": "6de28998885f37fefd0cbe936e16452a229638b8b79e94fbe899226df5d53c20",
+        "status": "passed",
+        "task_id": "risk-cold-00-2026112002-native-r02"
+      },
+      {
+        "expected_sha256": "071817cdb12732171742781a749910eb7409af8fbfb0d0b188dd01576d60a7f9",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-00-2026112002-native-r02/attempt-0/checkpoints/step-000000015-b05e40bd88.pt",
+        "sha256": "071817cdb12732171742781a749910eb7409af8fbfb0d0b188dd01576d60a7f9",
+        "size_bytes": 9502187,
+        "status": "passed",
+        "task_id": "risk-cold-00-2026112002-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-01-2026112001-native-r02/task.json",
+        "sha256": "fc8c73f0193d7bda24e6ba4301641f61d88b09522fa656d218943f7126f800b5",
+        "status": "passed",
+        "task_id": "risk-cold-01-2026112001-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-01-2026112001-native-r02/attempt-0/result.json",
+        "sha256": "4d6d347e7e0870e03f29a57323f721e9183ffa1faeca4c2f9e5319cf5d0be65c",
+        "status": "passed",
+        "task_id": "risk-cold-01-2026112001-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-01-2026112001-native-r02/attempt-0/checkpoint.json",
+        "sha256": "9dca680344a7d818f7f6f1b5f4be50839ce3309cdf069618b8fdac3205fe1be3",
+        "status": "passed",
+        "task_id": "risk-cold-01-2026112001-native-r02"
+      },
+      {
+        "expected_sha256": "705d911dc9f43a3f8a9953495a9a841ac36d8fb9d1a22e79495003fac990cc20",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-01-2026112001-native-r02/attempt-0/checkpoints/step-000000015-e8d541ffd4.pt",
+        "sha256": "705d911dc9f43a3f8a9953495a9a841ac36d8fb9d1a22e79495003fac990cc20",
+        "size_bytes": 11418247,
+        "status": "passed",
+        "task_id": "risk-cold-01-2026112001-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-01-2026112002-native-r02/task.json",
+        "sha256": "a95339ac7f702869e013eeba68d1b1e4feaccf19d6093913517328d4592241c7",
+        "status": "passed",
+        "task_id": "risk-cold-01-2026112002-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-01-2026112002-native-r02/attempt-0/result.json",
+        "sha256": "7468b043d7541506b1acbe67245010c3ef309d1c57953af9b9412f0e4a3a58a4",
+        "status": "passed",
+        "task_id": "risk-cold-01-2026112002-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-01-2026112002-native-r02/attempt-0/checkpoint.json",
+        "sha256": "6d1237ca354c968518f0e88137fb3f8e8c27b9d62fe685bc0b5388b7e8b63333",
+        "status": "passed",
+        "task_id": "risk-cold-01-2026112002-native-r02"
+      },
+      {
+        "expected_sha256": "483eaca8b793fe4799b21b897a54e479f08c5d9c29e39c042d95c31886fd360b",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-01-2026112002-native-r02/attempt-0/checkpoints/step-000000015-b41e9757f6.pt",
+        "sha256": "483eaca8b793fe4799b21b897a54e479f08c5d9c29e39c042d95c31886fd360b",
+        "size_bytes": 11418247,
+        "status": "passed",
+        "task_id": "risk-cold-01-2026112002-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-02-2026112001-native-r02/task.json",
+        "sha256": "4771b21bc303c54a5a5d2daeee976a1f1a023bec9f55f67d362c08de3ba3b35a",
+        "status": "passed",
+        "task_id": "risk-cold-02-2026112001-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-02-2026112001-native-r02/attempt-0/result.json",
+        "sha256": "7ca6bc155bd42820f976979b8b57bc7c36b85bdbf060481ddc7873ec5a8143e5",
+        "status": "passed",
+        "task_id": "risk-cold-02-2026112001-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-02-2026112001-native-r02/attempt-0/checkpoint.json",
+        "sha256": "0808c15f0333b84f7c5f2bfc808d629156308d671448de5dc8c318f269016062",
+        "status": "passed",
+        "task_id": "risk-cold-02-2026112001-native-r02"
+      },
+      {
+        "expected_sha256": "78873db05813f852f6c0c45ee01a56be91e9b841dad9bbe04ee48cbed3158cb4",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-02-2026112001-native-r02/attempt-0/checkpoints/step-000000015-b1a6c891cd.pt",
+        "sha256": "78873db05813f852f6c0c45ee01a56be91e9b841dad9bbe04ee48cbed3158cb4",
+        "size_bytes": 14365665,
+        "status": "passed",
+        "task_id": "risk-cold-02-2026112001-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-02-2026112002-native-r02/task.json",
+        "sha256": "9dc70222b1630b2d5b6cf2ba5eb0d79d4c81b9a822c35f71f4eb1e40b5459fe3",
+        "status": "passed",
+        "task_id": "risk-cold-02-2026112002-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-02-2026112002-native-r02/attempt-0/result.json",
+        "sha256": "477fb5741ec27fec5aa54b9b20b728318c803e4545e85d384469d3fbb42c2a44",
+        "status": "passed",
+        "task_id": "risk-cold-02-2026112002-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-02-2026112002-native-r02/attempt-0/checkpoint.json",
+        "sha256": "56608dda4bdc4d03412d7f2f0b2939eb2687966c61102f2c0603ff65a2e0d4db",
+        "status": "passed",
+        "task_id": "risk-cold-02-2026112002-native-r02"
+      },
+      {
+        "expected_sha256": "9216fefb6ed8bdc8468254180b8faaa2c1e1d3ee20b202bd701844e2fdf79e21",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-02-2026112002-native-r02/attempt-0/checkpoints/step-000000015-b57820c1f3.pt",
+        "sha256": "9216fefb6ed8bdc8468254180b8faaa2c1e1d3ee20b202bd701844e2fdf79e21",
+        "size_bytes": 14365665,
+        "status": "passed",
+        "task_id": "risk-cold-02-2026112002-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-03-2026112001-native-r02/task.json",
+        "sha256": "28dc574f799b4e7f7067d5b88e700d86c4eea44228e9710efe8bbb8bdd386c93",
+        "status": "passed",
+        "task_id": "risk-cold-03-2026112001-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-03-2026112001-native-r02/attempt-0/result.json",
+        "sha256": "28486c1c6f7128cd395da990011c00ac7fff2617a857aeae58bea80102f897b0",
+        "status": "passed",
+        "task_id": "risk-cold-03-2026112001-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-03-2026112001-native-r02/attempt-0/checkpoint.json",
+        "sha256": "e014a25ab4dede72424d099c52093f008f9fdc27ebdf7e35bda703aa5b5ede7c",
+        "status": "passed",
+        "task_id": "risk-cold-03-2026112001-native-r02"
+      },
+      {
+        "expected_sha256": "ed6e2078cf0f2f938e6f843a173f6e61a0ddc2870e5e23b7401aa481809af76f",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-03-2026112001-native-r02/attempt-0/checkpoints/step-000000015-22977f7bea.pt",
+        "sha256": "ed6e2078cf0f2f938e6f843a173f6e61a0ddc2870e5e23b7401aa481809af76f",
+        "size_bytes": 24274223,
+        "status": "passed",
+        "task_id": "risk-cold-03-2026112001-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-03-2026112002-native-r02/task.json",
+        "sha256": "5fef2645593f2b9e9e0fbcb986bc9b9fd65b4941e0b1a9d6eca920f20aa03b49",
+        "status": "passed",
+        "task_id": "risk-cold-03-2026112002-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-03-2026112002-native-r02/attempt-0/result.json",
+        "sha256": "3e4a20f0a49f1328fef2fea5b5f4562077a723078e1bcab552cade190a12dc05",
+        "status": "passed",
+        "task_id": "risk-cold-03-2026112002-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-03-2026112002-native-r02/attempt-0/checkpoint.json",
+        "sha256": "6d682f41703188a9aa39c7d9aaec43d4806cfa84fe788a9089cfd982f466bd43",
+        "status": "passed",
+        "task_id": "risk-cold-03-2026112002-native-r02"
+      },
+      {
+        "expected_sha256": "578547ce489c62349e751b59a79b96348f9f33b525f98230d19d6e04e94e03bc",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-03-2026112002-native-r02/attempt-0/checkpoints/step-000000015-adbdd97c31.pt",
+        "sha256": "578547ce489c62349e751b59a79b96348f9f33b525f98230d19d6e04e94e03bc",
+        "size_bytes": 24274223,
+        "status": "passed",
+        "task_id": "risk-cold-03-2026112002-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-04-2026112001-native-r02/task.json",
+        "sha256": "c0c34c4762a86f6f6693482c6dc1791be365ebc5e277822f27bd0bc561ba6273",
+        "status": "passed",
+        "task_id": "risk-cold-04-2026112001-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-04-2026112001-native-r02/attempt-0/result.json",
+        "sha256": "db6d464e29199a55d714e0d833201704240aa749c4b6ca81902eb538afca4415",
+        "status": "passed",
+        "task_id": "risk-cold-04-2026112001-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-04-2026112001-native-r02/attempt-0/checkpoint.json",
+        "sha256": "c09a066b8f65ffa1029154acba306703ffefc36bcbf895b9adb6055f1b32ecf3",
+        "status": "passed",
+        "task_id": "risk-cold-04-2026112001-native-r02"
+      },
+      {
+        "expected_sha256": "02d157b4a191f6c87901e7bdb3267dcd3b1bf80a077a3e4809641f08ca4f0f95",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-04-2026112001-native-r02/attempt-0/checkpoints/step-000000015-51d1e6ef56.pt",
+        "sha256": "02d157b4a191f6c87901e7bdb3267dcd3b1bf80a077a3e4809641f08ca4f0f95",
+        "size_bytes": 68347201,
+        "status": "passed",
+        "task_id": "risk-cold-04-2026112001-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-04-2026112002-native-r02/task.json",
+        "sha256": "605cb3b72cd500c4ecc8f776b1f15ddd15192097adb60c7b2cb6dc03cabc48bc",
+        "status": "passed",
+        "task_id": "risk-cold-04-2026112002-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-04-2026112002-native-r02/attempt-0/result.json",
+        "sha256": "54b85fe528a042274cc7f65672aa6fb7fba1c010d15323529320406e9bc65a23",
+        "status": "passed",
+        "task_id": "risk-cold-04-2026112002-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-04-2026112002-native-r02/attempt-0/checkpoint.json",
+        "sha256": "6939e63a4367c04c6d0e73062ec7bc70f3f7eda705d62bbd83fd667f55c017be",
+        "status": "passed",
+        "task_id": "risk-cold-04-2026112002-native-r02"
+      },
+      {
+        "expected_sha256": "78b8612496f5410adf148afde6744beafb9213d68e96fe9468fda0dfefd6dd6a",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-04-2026112002-native-r02/attempt-0/checkpoints/step-000000015-a419c28bee.pt",
+        "sha256": "78b8612496f5410adf148afde6744beafb9213d68e96fe9468fda0dfefd6dd6a",
+        "size_bytes": 68347201,
+        "status": "passed",
+        "task_id": "risk-cold-04-2026112002-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-05-2026112001-native-r02/task.json",
+        "sha256": "4fc7a769775ac72c1514b83a8ade3e9ca9eaf04168d12e3a68ae9aabae8b22aa",
+        "status": "passed",
+        "task_id": "risk-cold-05-2026112001-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-05-2026112001-native-r02/attempt-0/result.json",
+        "sha256": "cd8b9cf33b6c88ae064baeff26fb522e4629e4dcb448d081404eeb3e3f3399fc",
+        "status": "passed",
+        "task_id": "risk-cold-05-2026112001-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-05-2026112001-native-r02/attempt-0/checkpoint.json",
+        "sha256": "cb77719f38e205769bdcf9ec86db2adc5846a180285b3c258cbfd0602f6e6eee",
+        "status": "passed",
+        "task_id": "risk-cold-05-2026112001-native-r02"
+      },
+      {
+        "expected_sha256": "10f0885ca65d0b8bce5ac3b9fd1c553f06eb82da00692a33b9a096ecdcf89213",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-05-2026112001-native-r02/attempt-0/checkpoints/step-000000015-b95bf5a2b7.pt",
+        "sha256": "10f0885ca65d0b8bce5ac3b9fd1c553f06eb82da00692a33b9a096ecdcf89213",
+        "size_bytes": 95687575,
+        "status": "passed",
+        "task_id": "risk-cold-05-2026112001-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-05-2026112002-native-r02/task.json",
+        "sha256": "46615982718273fb36ffcd2d9b84968bf46a337cd05680efc1e5aaa374e90491",
+        "status": "passed",
+        "task_id": "risk-cold-05-2026112002-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-05-2026112002-native-r02/attempt-0/result.json",
+        "sha256": "e9443dbcb9be0395a25bbf9fc570c8c89d7b0eb342da07a7b786c0b50bf5ffaf",
+        "status": "passed",
+        "task_id": "risk-cold-05-2026112002-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-05-2026112002-native-r02/attempt-0/checkpoint.json",
+        "sha256": "4ad93cb9e3c9b316310ebf4feeeac73ecdc59f3e4a699dd59bcda1d05d98846a",
+        "status": "passed",
+        "task_id": "risk-cold-05-2026112002-native-r02"
+      },
+      {
+        "expected_sha256": "9146fbd27ac9f834b18ddcc785178a1aabe3081999d78e157b21fee2f2a8d0a1",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-05-2026112002-native-r02/attempt-0/checkpoints/step-000000015-1144278a3f.pt",
+        "sha256": "9146fbd27ac9f834b18ddcc785178a1aabe3081999d78e157b21fee2f2a8d0a1",
+        "size_bytes": 95687575,
+        "status": "passed",
+        "task_id": "risk-cold-05-2026112002-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-06-2026112001-native-r02/task.json",
+        "sha256": "67196119bda1a9ef579e2e2188b7f3d86bfdc004e0f758cfdd33a65c78287416",
+        "status": "passed",
+        "task_id": "risk-cold-06-2026112001-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-06-2026112001-native-r02/attempt-0/result.json",
+        "sha256": "93691be4a5135eebf72a4d3943d07c188b1a3ec6dc5ba6767b62f66d4f6e5b24",
+        "status": "passed",
+        "task_id": "risk-cold-06-2026112001-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-06-2026112001-native-r02/attempt-0/checkpoint.json",
+        "sha256": "96b5b6c723c81ea353e04e545072c061ee3589a4a252abb293089c04da30434d",
+        "status": "passed",
+        "task_id": "risk-cold-06-2026112001-native-r02"
+      },
+      {
+        "expected_sha256": "6173e41919096c99c7482cd39adfc71fab86330b783ecdc192c2765eac229c91",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-06-2026112001-native-r02/attempt-0/checkpoints/step-000000015-43f7df02a4.pt",
+        "sha256": "6173e41919096c99c7482cd39adfc71fab86330b783ecdc192c2765eac229c91",
+        "size_bytes": 140776435,
+        "status": "passed",
+        "task_id": "risk-cold-06-2026112001-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-06-2026112002-native-r02/task.json",
+        "sha256": "b77af92660997a8083a0a872190eea48785eb5079ff60e5e401655a3e2115bb0",
+        "status": "passed",
+        "task_id": "risk-cold-06-2026112002-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-06-2026112002-native-r02/attempt-0/result.json",
+        "sha256": "8b2a9566af492d95695b929c112ace8902513c3c7098fd1cd5c45f5409e4f4bb",
+        "status": "passed",
+        "task_id": "risk-cold-06-2026112002-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-06-2026112002-native-r02/attempt-0/checkpoint.json",
+        "sha256": "2c5c25964e75ad65abc33c213baa994f2de1393166bc724d596f093a949c4b08",
+        "status": "passed",
+        "task_id": "risk-cold-06-2026112002-native-r02"
+      },
+      {
+        "expected_sha256": "7193b6d517da0e74cba817694943888110ce4090afcb32e39b47bc81f351bbc9",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-06-2026112002-native-r02/attempt-0/checkpoints/step-000000015-c01c38429f.pt",
+        "sha256": "7193b6d517da0e74cba817694943888110ce4090afcb32e39b47bc81f351bbc9",
+        "size_bytes": 140776435,
+        "status": "passed",
+        "task_id": "risk-cold-06-2026112002-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-07-2026112001-native-r02/task.json",
+        "sha256": "952f2280073bb8aecf101fe96ab8c30bb7ad295d8e6362064a9cb5e560a5238d",
+        "status": "passed",
+        "task_id": "risk-cold-07-2026112001-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-07-2026112001-native-r02/attempt-0/result.json",
+        "sha256": "efe2fe692830727054048b1d61a098cd71e791a5eba9e7f9b6a36823c04ca10f",
+        "status": "passed",
+        "task_id": "risk-cold-07-2026112001-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-07-2026112001-native-r02/attempt-0/checkpoint.json",
+        "sha256": "6b7fc0594ce8cf8ece1d83422051606516463e6b0beb530ed3755ff9e8193098",
+        "status": "passed",
+        "task_id": "risk-cold-07-2026112001-native-r02"
+      },
+      {
+        "expected_sha256": "a39190071c18be6d8a5b2e6de2b88b210f81abaa47daeeecf484dc808460ee54",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-07-2026112001-native-r02/attempt-0/checkpoints/step-000000015-cff2f137fb.pt",
+        "sha256": "a39190071c18be6d8a5b2e6de2b88b210f81abaa47daeeecf484dc808460ee54",
+        "size_bytes": 83670061,
+        "status": "passed",
+        "task_id": "risk-cold-07-2026112001-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-07-2026112002-native-r02/task.json",
+        "sha256": "c13e024f5faaed05e854febfe26e559457045268b430876dc10439ee1a3b2c8f",
+        "status": "passed",
+        "task_id": "risk-cold-07-2026112002-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-07-2026112002-native-r02/attempt-0/result.json",
+        "sha256": "f1ed5388067f55456776d212c7b89977cb255c674c6a5e4890f75664d7ec130f",
+        "status": "passed",
+        "task_id": "risk-cold-07-2026112002-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-07-2026112002-native-r02/attempt-0/checkpoint.json",
+        "sha256": "97f4ccb8aa7b1da88753e5270a3a6b5575b0ddd44b36a1c6dea56cedadfa207e",
+        "status": "passed",
+        "task_id": "risk-cold-07-2026112002-native-r02"
+      },
+      {
+        "expected_sha256": "ba3768d2cbee7dd56c37fa3d965bcadc233029e490a3c06e126c09736dbe759c",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-07-2026112002-native-r02/attempt-0/checkpoints/step-000000015-c1f8ac9f73.pt",
+        "sha256": "ba3768d2cbee7dd56c37fa3d965bcadc233029e490a3c06e126c09736dbe759c",
+        "size_bytes": 83670061,
+        "status": "passed",
+        "task_id": "risk-cold-07-2026112002-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-08-2026112001-native-r02/task.json",
+        "sha256": "ce8aa5bbcb338cdf9aef9557806f832744c39d0ebde1b3c53955263420d5b016",
+        "status": "passed",
+        "task_id": "risk-cold-08-2026112001-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-08-2026112001-native-r02/attempt-0/result.json",
+        "sha256": "dff7937ceb2ba3f7eb684d67d8423ed100b32c4bba83b12e03f504aee2318e19",
+        "status": "passed",
+        "task_id": "risk-cold-08-2026112001-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-08-2026112001-native-r02/attempt-0/checkpoint.json",
+        "sha256": "bc0ac1dfdcd7961771776d166a665d3dc3d39c1d46fc3df95ba1cb507db7be8d",
+        "status": "passed",
+        "task_id": "risk-cold-08-2026112001-native-r02"
+      },
+      {
+        "expected_sha256": "fc6f9ab7b6dfe4c0aabfb1c156e04a531dfbb95d9b2fbb162f0c40bc8369e6e0",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-08-2026112001-native-r02/attempt-0/checkpoints/step-000000015-fbe8e8e32c.pt",
+        "sha256": "fc6f9ab7b6dfe4c0aabfb1c156e04a531dfbb95d9b2fbb162f0c40bc8369e6e0",
+        "size_bytes": 87834141,
+        "status": "passed",
+        "task_id": "risk-cold-08-2026112001-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-08-2026112002-native-r02/task.json",
+        "sha256": "602a43f40d0893560c0433829758748d1476795111be950a5f51226578aaa2d0",
+        "status": "passed",
+        "task_id": "risk-cold-08-2026112002-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-08-2026112002-native-r02/attempt-0/result.json",
+        "sha256": "5fc9d7d0dba64e5281e527d9d02502089e332ecbcb4a8c6a10023393d7a5b2e8",
+        "status": "passed",
+        "task_id": "risk-cold-08-2026112002-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-08-2026112002-native-r02/attempt-0/checkpoint.json",
+        "sha256": "78e62f9f5222a8df87d4a9da52867e0382865a0dda25af6630e20e1857046ad2",
+        "status": "passed",
+        "task_id": "risk-cold-08-2026112002-native-r02"
+      },
+      {
+        "expected_sha256": "021d6132fe9c3145e55d619b03da6f6cf828f66747086ec72ed10908d1a948d4",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-08-2026112002-native-r02/attempt-0/checkpoints/step-000000015-ce25b98226.pt",
+        "sha256": "021d6132fe9c3145e55d619b03da6f6cf828f66747086ec72ed10908d1a948d4",
+        "size_bytes": 87834141,
+        "status": "passed",
+        "task_id": "risk-cold-08-2026112002-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-09-2026112001-native-r02/task.json",
+        "sha256": "412a17b766df6d193293a5890c1845219c8a4ae920a2eeb61d8d622814ab38e6",
+        "status": "passed",
+        "task_id": "risk-cold-09-2026112001-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-09-2026112001-native-r02/attempt-0/result.json",
+        "sha256": "146b937ca4b4c8a5803908c9478573d58ac667fe8129b6eb543de821147b8a7f",
+        "status": "passed",
+        "task_id": "risk-cold-09-2026112001-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-09-2026112001-native-r02/attempt-0/checkpoint.json",
+        "sha256": "8f934fb1a6480c7c988f624df225b8b2b6295576ba6f3190df2624d5b5db2fe5",
+        "status": "passed",
+        "task_id": "risk-cold-09-2026112001-native-r02"
+      },
+      {
+        "expected_sha256": "eb0c842fbe04b6ad2b722207362bc2337203eb7567b5676282473561ebcdf710",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-09-2026112001-native-r02/attempt-0/checkpoints/step-000000015-fa23b94c19.pt",
+        "sha256": "eb0c842fbe04b6ad2b722207362bc2337203eb7567b5676282473561ebcdf710",
+        "size_bytes": 230973897,
+        "status": "passed",
+        "task_id": "risk-cold-09-2026112001-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-09-2026112002-native-r02/task.json",
+        "sha256": "4e1c1eb597715829577ccd3e9b7d24a562c7bcbe698f3b3d841c875fed397cc4",
+        "status": "passed",
+        "task_id": "risk-cold-09-2026112002-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-09-2026112002-native-r02/attempt-0/result.json",
+        "sha256": "05f4dc45ea694bbe47fead5ac457e4c362f39cbcf6790b5769a8eda7238b80cb",
+        "status": "passed",
+        "task_id": "risk-cold-09-2026112002-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-09-2026112002-native-r02/attempt-0/checkpoint.json",
+        "sha256": "954c11a16c659639ddbef47123cc2181e532a0e418dd800153d7246c4fb6f860",
+        "status": "passed",
+        "task_id": "risk-cold-09-2026112002-native-r02"
+      },
+      {
+        "expected_sha256": "1b76f414c911318d401d83a8275e71b1e9759a8cea6349589f130a40b126f3bc",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-09-2026112002-native-r02/attempt-0/checkpoints/step-000000015-fb848b37cb.pt",
+        "sha256": "1b76f414c911318d401d83a8275e71b1e9759a8cea6349589f130a40b126f3bc",
+        "size_bytes": 230973897,
+        "status": "passed",
+        "task_id": "risk-cold-09-2026112002-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-10-2026112001-native-r02/task.json",
+        "sha256": "5e87f7682167639e6566a9c2e4113a380dd81fb8673b0356b00e9c48be06e502",
+        "status": "passed",
+        "task_id": "risk-cold-10-2026112001-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-10-2026112001-native-r02/attempt-0/result.json",
+        "sha256": "736831b67253df0be9617b9ace716ea5b9b2b91fe2121b89e1c5601cdd0ebfcf",
+        "status": "passed",
+        "task_id": "risk-cold-10-2026112001-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-10-2026112001-native-r02/attempt-0/checkpoint.json",
+        "sha256": "8922f7780fa4b011be5f40a7e331db4747ff98edfcd5749423133edc1c7e67c4",
+        "status": "passed",
+        "task_id": "risk-cold-10-2026112001-native-r02"
+      },
+      {
+        "expected_sha256": "64537134c23bd9d747a99a85aa2c65c3e67c9a46a8d6aebdf7dded299dd09916",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-10-2026112001-native-r02/attempt-0/checkpoints/step-000000015-4a21733ef5.pt",
+        "sha256": "64537134c23bd9d747a99a85aa2c65c3e67c9a46a8d6aebdf7dded299dd09916",
+        "size_bytes": 58219367,
+        "status": "passed",
+        "task_id": "risk-cold-10-2026112001-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-10-2026112002-native-r02/task.json",
+        "sha256": "482fd4b7f07336806ca451e42ded55a0c2231e44cab9607eb5c63cd14c09b468",
+        "status": "passed",
+        "task_id": "risk-cold-10-2026112002-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-10-2026112002-native-r02/attempt-0/result.json",
+        "sha256": "e5eafddd6c55166cf2bbd8aa3ca35b18b9a5f928b9a09d03000d1b5c3968e3b0",
+        "status": "passed",
+        "task_id": "risk-cold-10-2026112002-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-10-2026112002-native-r02/attempt-0/checkpoint.json",
+        "sha256": "fd7c1b4336d313db1f4217154cfcb701e7c16a62073ce53074efc6c1a57cad01",
+        "status": "passed",
+        "task_id": "risk-cold-10-2026112002-native-r02"
+      },
+      {
+        "expected_sha256": "7e36b23532e8d03f91acc8a975e5eaf29a69c7ca1a783f433474fffa49ebd45d",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-10-2026112002-native-r02/attempt-0/checkpoints/step-000000015-63e36ed64e.pt",
+        "sha256": "7e36b23532e8d03f91acc8a975e5eaf29a69c7ca1a783f433474fffa49ebd45d",
+        "size_bytes": 58219367,
+        "status": "passed",
+        "task_id": "risk-cold-10-2026112002-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-11-2026112001-native-r02/task.json",
+        "sha256": "68948b44ad438a38e7f471ff834463e0bd2cbaa3a6da92cf9f4ac6ef374c6b5b",
+        "status": "passed",
+        "task_id": "risk-cold-11-2026112001-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-11-2026112001-native-r02/attempt-0/result.json",
+        "sha256": "450d67510e769a06a624c0c877004f475658f08130f120092fde59bc2fa69f0d",
+        "status": "passed",
+        "task_id": "risk-cold-11-2026112001-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-11-2026112001-native-r02/attempt-0/checkpoint.json",
+        "sha256": "7c2752319e01456d92fd1cc78cdbc5fd535ed8d75c8c6f94b2d1848c79209f37",
+        "status": "passed",
+        "task_id": "risk-cold-11-2026112001-native-r02"
+      },
+      {
+        "expected_sha256": "11399906dc874c8283f8950b8e85b8228d20bfbe0bc3e664049da25b516791d2",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-11-2026112001-native-r02/attempt-0/checkpoints/step-000000015-5d33d9db9b.pt",
+        "sha256": "11399906dc874c8283f8950b8e85b8228d20bfbe0bc3e664049da25b516791d2",
+        "size_bytes": 83670061,
+        "status": "passed",
+        "task_id": "risk-cold-11-2026112001-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-11-2026112002-native-r02/task.json",
+        "sha256": "47ee66f84d6a453ea81b5fe1e5f3069b5bff0e1fa936b6759caa15ac80024328",
+        "status": "passed",
+        "task_id": "risk-cold-11-2026112002-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-11-2026112002-native-r02/attempt-0/result.json",
+        "sha256": "868d91a6cc037cd163d81f061b22b5787ad6010bb804e4bd643ff7cc8edc9173",
+        "status": "passed",
+        "task_id": "risk-cold-11-2026112002-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-11-2026112002-native-r02/attempt-0/checkpoint.json",
+        "sha256": "fd33ad636422821c76faec81d381c609415c8e887562fcc37fb7277062448a42",
+        "status": "passed",
+        "task_id": "risk-cold-11-2026112002-native-r02"
+      },
+      {
+        "expected_sha256": "4b57e20685c49bf41b3b4738c62df6f7a5611c5d578959d6207991c8f3ba2d8b",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-11-2026112002-native-r02/attempt-0/checkpoints/step-000000015-e380472b22.pt",
+        "sha256": "4b57e20685c49bf41b3b4738c62df6f7a5611c5d578959d6207991c8f3ba2d8b",
+        "size_bytes": 83670061,
+        "status": "passed",
+        "task_id": "risk-cold-11-2026112002-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-12-2026112001-native-r02/task.json",
+        "sha256": "79b7a4d5b61d8299f5ab1a1bb2c33f44d1ce4d12ed04f84ba5c7617142430b70",
+        "status": "passed",
+        "task_id": "risk-cold-12-2026112001-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-12-2026112001-native-r02/attempt-0/result.json",
+        "sha256": "9f523f31d8e2a525966aed5c6d12bdbeb6a25a6848c2908550ddc7eba0f62bf4",
+        "status": "passed",
+        "task_id": "risk-cold-12-2026112001-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-12-2026112001-native-r02/attempt-0/checkpoint.json",
+        "sha256": "60c0396b0b05aeacea2d0a433bc494df2ff4551b7c21ad982c4a98ac2f4b84c5",
+        "status": "passed",
+        "task_id": "risk-cold-12-2026112001-native-r02"
+      },
+      {
+        "expected_sha256": "927a5880e029032653a1dc36e5682958f3c16c5a45992ac322c14fcf65393aaa",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-12-2026112001-native-r02/attempt-0/checkpoints/step-000000015-54e6b003ce.pt",
+        "sha256": "927a5880e029032653a1dc36e5682958f3c16c5a45992ac322c14fcf65393aaa",
+        "size_bytes": 166051137,
+        "status": "passed",
+        "task_id": "risk-cold-12-2026112001-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-12-2026112002-native-r02/task.json",
+        "sha256": "d93a0149728f26ff5a1749d35b6d8451ae0981154c79b1d8fba96726c7bbe9c6",
+        "status": "passed",
+        "task_id": "risk-cold-12-2026112002-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-12-2026112002-native-r02/attempt-0/result.json",
+        "sha256": "4b477d478d9b6ff0f638a20c25be8cfb5a53fc0a8954c9c23d275bf834d831ed",
+        "status": "passed",
+        "task_id": "risk-cold-12-2026112002-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-12-2026112002-native-r02/attempt-0/checkpoint.json",
+        "sha256": "5dcf7f16c239a477e3ce5fdd7af89f31cf54a5f13b09703025ec3549ca0194df",
+        "status": "passed",
+        "task_id": "risk-cold-12-2026112002-native-r02"
+      },
+      {
+        "expected_sha256": "18c644b1402e59ddb49eae2a5ced6a95c90654e81bd6ad14e564dbf8949bb005",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-12-2026112002-native-r02/attempt-0/checkpoints/step-000000015-02d3c2a725.pt",
+        "sha256": "18c644b1402e59ddb49eae2a5ced6a95c90654e81bd6ad14e564dbf8949bb005",
+        "size_bytes": 166051137,
+        "status": "passed",
+        "task_id": "risk-cold-12-2026112002-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-13-2026112001-native-r02/task.json",
+        "sha256": "09c5be017cf1dbf9d30f0e7b394a022ae6720e08594e9278338df9880d3e25ec",
+        "status": "passed",
+        "task_id": "risk-cold-13-2026112001-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-13-2026112001-native-r02/attempt-0/result.json",
+        "sha256": "cd619d43a1a6ecce95cd630548d750a7fb15e89ade8d1346331ae4b6523824d6",
+        "status": "passed",
+        "task_id": "risk-cold-13-2026112001-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-13-2026112001-native-r02/attempt-0/checkpoint.json",
+        "sha256": "73e2d540273d4b235512f5c59e2b8137fd45c6ba84fdc481a24067cd3bd4fb84",
+        "status": "passed",
+        "task_id": "risk-cold-13-2026112001-native-r02"
+      },
+      {
+        "expected_sha256": "cd4d8fb6c47bebef68643021456f2f0084f687bb1a09b0f8136ed4f12a69c128",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-13-2026112001-native-r02/attempt-0/checkpoints/step-000000015-5ac62e901b.pt",
+        "sha256": "cd4d8fb6c47bebef68643021456f2f0084f687bb1a09b0f8136ed4f12a69c128",
+        "size_bytes": 61386025,
+        "status": "passed",
+        "task_id": "risk-cold-13-2026112001-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-13-2026112002-native-r02/task.json",
+        "sha256": "9e8cfa6e82617f7a162be05bb629b8c37baaec62d214752edbfdba6f5a0dbdc8",
+        "status": "passed",
+        "task_id": "risk-cold-13-2026112002-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-13-2026112002-native-r02/attempt-0/result.json",
+        "sha256": "a109252eba1b9f324e5d2791ce88a5e79474f6830e266a2810ad4a5ee0d80a5f",
+        "status": "passed",
+        "task_id": "risk-cold-13-2026112002-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-13-2026112002-native-r02/attempt-0/checkpoint.json",
+        "sha256": "3d81176fb21f41886ac00486adb40440124b3220cb1635166765db62fdb8b858",
+        "status": "passed",
+        "task_id": "risk-cold-13-2026112002-native-r02"
+      },
+      {
+        "expected_sha256": "074fdeff0443f493ef5748c6bec138d36ec711a39aed5c5d6816ab32e262d514",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-13-2026112002-native-r02/attempt-0/checkpoints/step-000000015-1e670d576b.pt",
+        "sha256": "074fdeff0443f493ef5748c6bec138d36ec711a39aed5c5d6816ab32e262d514",
+        "size_bytes": 61386025,
+        "status": "passed",
+        "task_id": "risk-cold-13-2026112002-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-14-2026112001-native-r02/task.json",
+        "sha256": "1a317b453b8f55416563dfbfa64e849cb4dc9214d28c4fdee45b6cea7c70b77f",
+        "status": "passed",
+        "task_id": "risk-cold-14-2026112001-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-14-2026112001-native-r02/attempt-0/result.json",
+        "sha256": "f3909d87de39d4d7b5eed648c45111e730f5bc29c0270feaed5d8e5c921b53d8",
+        "status": "passed",
+        "task_id": "risk-cold-14-2026112001-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-14-2026112001-native-r02/attempt-0/checkpoint.json",
+        "sha256": "ba91545cb21ee5eeed4906f1e8cb383703a45aeb15ce0022f3b0a8e57cf09083",
+        "status": "passed",
+        "task_id": "risk-cold-14-2026112001-native-r02"
+      },
+      {
+        "expected_sha256": "9f001508a2ea7c2c74801ab4706ab6d3ef4690fab8a48f873511edf4a22b9ac9",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-14-2026112001-native-r02/attempt-0/checkpoints/step-000000015-d30160560e.pt",
+        "sha256": "9f001508a2ea7c2c74801ab4706ab6d3ef4690fab8a48f873511edf4a22b9ac9",
+        "size_bytes": 109123333,
+        "status": "passed",
+        "task_id": "risk-cold-14-2026112001-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-14-2026112002-native-r02/task.json",
+        "sha256": "96e41b19937cab1a6cfce12172a751fae9ca163a305e44dae641e2425fbb2275",
+        "status": "passed",
+        "task_id": "risk-cold-14-2026112002-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-14-2026112002-native-r02/attempt-0/result.json",
+        "sha256": "d72fd9120934f67e908f6357612e30d68c1c035ab95d9487258630707ce72a6a",
+        "status": "passed",
+        "task_id": "risk-cold-14-2026112002-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-14-2026112002-native-r02/attempt-0/checkpoint.json",
+        "sha256": "5db6184240a38ac312340e14612680a5c6335b65b50bb3c490c015c66817162f",
+        "status": "passed",
+        "task_id": "risk-cold-14-2026112002-native-r02"
+      },
+      {
+        "expected_sha256": "81aa3f886072984615d0c13909e3ac1fefca86cc509f548f1fe86ff15e5f8513",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-14-2026112002-native-r02/attempt-0/checkpoints/step-000000015-bc9afa0da9.pt",
+        "sha256": "81aa3f886072984615d0c13909e3ac1fefca86cc509f548f1fe86ff15e5f8513",
+        "size_bytes": 109123333,
+        "status": "passed",
+        "task_id": "risk-cold-14-2026112002-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-15-2026112001-native-r02/task.json",
+        "sha256": "c6aa64e6520d8a6d47d8a5908f95d82956767c4df8e342cb5a383a01bef0b170",
+        "status": "passed",
+        "task_id": "risk-cold-15-2026112001-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-15-2026112001-native-r02/attempt-0/result.json",
+        "sha256": "00e1215392b9985d837d3ce796ae9a86f76da97fcae7dbb8a8430f022a41c21f",
+        "status": "passed",
+        "task_id": "risk-cold-15-2026112001-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-15-2026112001-native-r02/attempt-0/checkpoint.json",
+        "sha256": "b3ef306c127badb3e1988626973dd95e4c60014455a3446aa741c25f24202056",
+        "status": "passed",
+        "task_id": "risk-cold-15-2026112001-native-r02"
+      },
+      {
+        "expected_sha256": "d02f502785e476fbe6878bfe64e71910455b19eb685d0d93a95f4ae0ca3e5ba8",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-15-2026112001-native-r02/attempt-0/checkpoints/step-000000015-75a07da358.pt",
+        "sha256": "d02f502785e476fbe6878bfe64e71910455b19eb685d0d93a95f4ae0ca3e5ba8",
+        "size_bytes": 70172591,
+        "status": "passed",
+        "task_id": "risk-cold-15-2026112001-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-15-2026112002-native-r02/task.json",
+        "sha256": "37dc193bdea6185a65b55eefc369d0c9cc7fe73a37cf974f5ebc63c0a843a26f",
+        "status": "passed",
+        "task_id": "risk-cold-15-2026112002-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-15-2026112002-native-r02/attempt-0/result.json",
+        "sha256": "745bf04f98a8ca7d4d98abbb83d672e52dc940f9df468b22c8ed3658220c74dd",
+        "status": "passed",
+        "task_id": "risk-cold-15-2026112002-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-15-2026112002-native-r02/attempt-0/checkpoint.json",
+        "sha256": "b9a53c4424ad4dda095e7062d26ae5cee2184d13854c6f89c1704e60b9bfb2df",
+        "status": "passed",
+        "task_id": "risk-cold-15-2026112002-native-r02"
+      },
+      {
+        "expected_sha256": "e4be35d9586eb05c11f54f681683d3d8b3d48f7c97db33d9affe6b5b5f8f6e45",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-15-2026112002-native-r02/attempt-0/checkpoints/step-000000015-fc9b5c9f66.pt",
+        "sha256": "e4be35d9586eb05c11f54f681683d3d8b3d48f7c97db33d9affe6b5b5f8f6e45",
+        "size_bytes": 70172591,
+        "status": "passed",
+        "task_id": "risk-cold-15-2026112002-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-16-2026112001-native-r02/task.json",
+        "sha256": "1dcb7bd4bbb8c7bc14b39de97fd66d31ad5d50a3895415b3d1119890c9b21e66",
+        "status": "passed",
+        "task_id": "risk-cold-16-2026112001-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-16-2026112001-native-r02/attempt-0/result.json",
+        "sha256": "8138f05fd2acb308a09afb6a246d01ac90269378f2d4e273e6cc7e5237921fb5",
+        "status": "passed",
+        "task_id": "risk-cold-16-2026112001-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-16-2026112001-native-r02/attempt-0/checkpoint.json",
+        "sha256": "2e356434a76479274b8286ef0e59c9f0412c95e0a788922d44d46c8f150b08b9",
+        "status": "passed",
+        "task_id": "risk-cold-16-2026112001-native-r02"
+      },
+      {
+        "expected_sha256": "de09f5124e9415de62235f5148c13f1900e1383c2713166a608bd3df863aeef8",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-16-2026112001-native-r02/attempt-0/checkpoints/step-000000015-2655172471.pt",
+        "sha256": "de09f5124e9415de62235f5148c13f1900e1383c2713166a608bd3df863aeef8",
+        "size_bytes": 14085723,
+        "status": "passed",
+        "task_id": "risk-cold-16-2026112001-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-16-2026112002-native-r02/task.json",
+        "sha256": "cdedaec1fb246415aaa8dce802542a0af282e3e4260b5582e28295917377ea9a",
+        "status": "passed",
+        "task_id": "risk-cold-16-2026112002-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-16-2026112002-native-r02/attempt-0/result.json",
+        "sha256": "8c89cb0b8aa76571aa9c4728928bf04865554ed4b20b699f269a6d747ae9da50",
+        "status": "passed",
+        "task_id": "risk-cold-16-2026112002-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-16-2026112002-native-r02/attempt-0/checkpoint.json",
+        "sha256": "daa23b8990c28619a23c36bdb5608f80bdf8c11ce82e3916797847045c79ac8c",
+        "status": "passed",
+        "task_id": "risk-cold-16-2026112002-native-r02"
+      },
+      {
+        "expected_sha256": "7557d9d17e3c4ceab2b75f441de8afea180fbd6acdb63d481dde89b887814a08",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-16-2026112002-native-r02/attempt-0/checkpoints/step-000000015-4ba00a979c.pt",
+        "sha256": "7557d9d17e3c4ceab2b75f441de8afea180fbd6acdb63d481dde89b887814a08",
+        "size_bytes": 14085723,
+        "status": "passed",
+        "task_id": "risk-cold-16-2026112002-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-17-2026112001-native-r02/task.json",
+        "sha256": "93a36f6b8b25517a5229412fdee3a9c6a238431173c1a22b91b576d71f5a6c7b",
+        "status": "passed",
+        "task_id": "risk-cold-17-2026112001-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-17-2026112001-native-r02/attempt-0/result.json",
+        "sha256": "8e6b769298752528e4250fe80acb0fc947e9a79ffb3992c8c6ac805021be0dd4",
+        "status": "passed",
+        "task_id": "risk-cold-17-2026112001-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-17-2026112001-native-r02/attempt-0/checkpoint.json",
+        "sha256": "696318cfeacbbbb2633fcdaff3466475e74ecf15b76be1987ab534d191b36e79",
+        "status": "passed",
+        "task_id": "risk-cold-17-2026112001-native-r02"
+      },
+      {
+        "expected_sha256": "4da462fc4e6279b1668f3d2a3c1acf4bca2bfdd3803b32c67c364db7ea1661df",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-17-2026112001-native-r02/attempt-0/checkpoints/step-000000015-7841eff39f.pt",
+        "sha256": "4da462fc4e6279b1668f3d2a3c1acf4bca2bfdd3803b32c67c364db7ea1661df",
+        "size_bytes": 26578473,
+        "status": "passed",
+        "task_id": "risk-cold-17-2026112001-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-17-2026112002-native-r02/task.json",
+        "sha256": "9d1c44fe9d8bf2228a536c15aeee722a4f5076b9a77a6fc954f9a37a3d5927ce",
+        "status": "passed",
+        "task_id": "risk-cold-17-2026112002-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-17-2026112002-native-r02/attempt-0/result.json",
+        "sha256": "6219b038465c5669e1b4f48ccaac9d66f07a445456d16a75dbd7b83744c39bd3",
+        "status": "passed",
+        "task_id": "risk-cold-17-2026112002-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-17-2026112002-native-r02/attempt-0/checkpoint.json",
+        "sha256": "e8fab7531c8c761717463897785eb8197ec6d9530a0a142cd490b4dbcd8835ec",
+        "status": "passed",
+        "task_id": "risk-cold-17-2026112002-native-r02"
+      },
+      {
+        "expected_sha256": "35bc46194d4e2380012bf5dda6e1cc9eaf1d20e889e050e04add5264ae93f193",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-17-2026112002-native-r02/attempt-0/checkpoints/step-000000015-6543458a8c.pt",
+        "sha256": "35bc46194d4e2380012bf5dda6e1cc9eaf1d20e889e050e04add5264ae93f193",
+        "size_bytes": 26578473,
+        "status": "passed",
+        "task_id": "risk-cold-17-2026112002-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-18-2026112001-native-r02/task.json",
+        "sha256": "bdb0067097f149f447674bb7787300fbfc45671d3a8af75c3025e66685ba1cec",
+        "status": "passed",
+        "task_id": "risk-cold-18-2026112001-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-18-2026112001-native-r02/attempt-0/result.json",
+        "sha256": "f816499af7cb65a4953ccd788a09ab4151fd02133e76cbfcdf9e5b10180004ca",
+        "status": "passed",
+        "task_id": "risk-cold-18-2026112001-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-18-2026112001-native-r02/attempt-0/checkpoint.json",
+        "sha256": "0d4e95c686059541e68d44208cf563cb554e91029ce49a2a6a91593be6921212",
+        "status": "passed",
+        "task_id": "risk-cold-18-2026112001-native-r02"
+      },
+      {
+        "expected_sha256": "1388a4eecb354d1c7825fc8de1d48fd992c9fa3309545b0f14de2dedb2128899",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-18-2026112001-native-r02/attempt-0/checkpoints/step-000000015-81c9d60bca.pt",
+        "sha256": "1388a4eecb354d1c7825fc8de1d48fd992c9fa3309545b0f14de2dedb2128899",
+        "size_bytes": 13793727,
+        "status": "passed",
+        "task_id": "risk-cold-18-2026112001-native-r02"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-18-2026112002-native-r02/task.json",
+        "sha256": "699482e1a153ad4085dc12cbd03f0cf8a39c159a4dd42fe7a5d2b1ea78e803d0",
+        "status": "passed",
+        "task_id": "risk-cold-18-2026112002-native-r02"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-18-2026112002-native-r02/attempt-0/result.json",
+        "sha256": "630019dc5553c5883a57994f1f2b1e04137f8a53ee8f73b388c30f5645e785bf",
+        "status": "passed",
+        "task_id": "risk-cold-18-2026112002-native-r02"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-18-2026112002-native-r02/attempt-0/checkpoint.json",
+        "sha256": "24e8b0095bf519ab967f3ca35cd3434e411fd74dc4e4e71bb7ed398bc8dbade0",
+        "status": "passed",
+        "task_id": "risk-cold-18-2026112002-native-r02"
+      },
+      {
+        "expected_sha256": "244c08425349b029cd370e6c484dac0e202ef4f01f7d2ea7835e2b09bd29b0e8",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-18-2026112002-native-r02/attempt-0/checkpoints/step-000000015-a0cb66e943.pt",
+        "sha256": "244c08425349b029cd370e6c484dac0e202ef4f01f7d2ea7835e2b09bd29b0e8",
+        "size_bytes": 13793727,
+        "status": "passed",
+        "task_id": "risk-cold-18-2026112002-native-r02"
+      }
+    ],
+    "retirement_manifest": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/checkpoint-retirement.json",
+      "status": "not_present"
+    },
+    "scope": "full SHA256/size against recorded generation/result identities; payload decoding and numerical replay are not performed"
+  },
+  "execution": {
+    "blocking_reason": null,
+    "counts": {
+      "completed": 41
+    },
+    "scheduler": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/scheduler.json",
+      "sha256": "d7faea14a3d418f87042e908dbacaa0432fa6a851f40e87f3bb5fc9e12ccf4e6",
+      "status": "passed"
+    },
+    "stage": "numerical-risk-screen",
+    "stage_b_gate": "closed",
+    "status": "completed"
+  },
+  "finding_counts": {},
+  "findings": [],
+  "finished_unix": 1795170572.787155,
+  "inputs": {
+    "data_files": [
+      {
+        "expected_sha256": "2f4617d73b5dad4f6a343707382714738e8012432fda85d9f7e36f44b26a4e1a",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data/manifest.json",
+        "sha256": "2f4617d73b5dad4f6a343707382714738e8012432fda85d9f7e36f44b26a4e1a",
+        "size_bytes": 3505,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "122f912828ff701de8dd449b75a473fb03082a3ae0bb40dee50d5d90f5f23b1b",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/manifest.json",
+        "sha256": "122f912828ff701de8dd449b75a473fb03082a3ae0bb40dee50d5d90f5f23b1b",
+        "size_bytes": 4778,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "455f8baf28a3d0fe53517d83d96e14c6186122be85298b8811ddc693fb114936",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/tokenizer-training-document-ids.txt",
+        "sha256": "455f8baf28a3d0fe53517d83d96e14c6186122be85298b8811ddc693fb114936",
+        "size_bytes": 64935,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "830de1c70c9bbdcc3e778446f7c2f6f0fa4366874facbf4bcba2521f184ee7b7",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/tokenizer.json",
+        "sha256": "830de1c70c9bbdcc3e778446f7c2f6f0fa4366874facbf4bcba2521f184ee7b7",
+        "size_bytes": 550678,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "563dd9b280201439114c2a5069926a636fd0187ee24f2900731de10675553d22",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/train.documents.jsonl",
+        "sha256": "563dd9b280201439114c2a5069926a636fd0187ee24f2900731de10675553d22",
+        "size_bytes": 5500206,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "c6a3223cd23dc323ff83e80ecb556872e1a8313ee2afa4d27399e7b3bad71f3e",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/train.documents.npy",
+        "sha256": "c6a3223cd23dc323ff83e80ecb556872e1a8313ee2afa4d27399e7b3bad71f3e",
+        "size_bytes": 462016,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "4d71ceecd9c8ab317faa1e4a9f2a6cb546b62a9661571a9bc26063130199256f",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/train.tokens.bin",
+        "sha256": "4d71ceecd9c8ab317faa1e4a9f2a6cb546b62a9661571a9bc26063130199256f",
+        "size_bytes": 266448088,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "1f8b346d1d5b3c0187eb3b3d0be2c442a9b2c02eb65c022bfc8ede3067c1b366",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/validation.documents.jsonl",
+        "sha256": "1f8b346d1d5b3c0187eb3b3d0be2c442a9b2c02eb65c022bfc8ede3067c1b366",
+        "size_bytes": 107576,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "11910e02b71aee5e7812304cdc2c571d20ad46961f65fab783513553ad4322f0",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/validation.documents.npy",
+        "sha256": "11910e02b71aee5e7812304cdc2c571d20ad46961f65fab783513553ad4322f0",
+        "size_bytes": 9344,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "a79732e9bdb5b73697a21e484b03272b288e9a7915c271b33a4614919663fef5",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/validation.tokens.bin",
+        "sha256": "a79732e9bdb5b73697a21e484b03272b288e9a7915c271b33a4614919663fef5",
+        "size_bytes": 5451898,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d89e363ea004cf2a7ff10706281aba873443d1864217e20fcaa29fde9f8db24e",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data/selection.documents.npy",
+        "sha256": "d89e363ea004cf2a7ff10706281aba873443d1864217e20fcaa29fde9f8db24e",
+        "size_bytes": 4752,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "863e4d1d145e77d6efc5cb065c193ff6eb8de9f45240fdbc96c912fb48ad4a19",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data/selection.documents.jsonl",
+        "sha256": "863e4d1d145e77d6efc5cb065c193ff6eb8de9f45240fdbc96c912fb48ad4a19",
+        "size_bytes": 53908,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d13cadf05c613403380b3d270945e8e13a9dfe2194fdb244da810206b91a9d71",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data/confirmation.documents.npy",
+        "sha256": "d13cadf05c613403380b3d270945e8e13a9dfe2194fdb244da810206b91a9d71",
+        "size_bytes": 4720,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "a4e6072edd71a7805f338f8d12e2b84df95154f993e075b5f09c3d77154a26b6",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data/confirmation.documents.jsonl",
+        "sha256": "a4e6072edd71a7805f338f8d12e2b84df95154f993e075b5f09c3d77154a26b6",
+        "size_bytes": 53668,
+        "status": "passed"
+      }
+    ],
+    "scope": "full byte hashes; no data preparation, import of training code, or device initialization",
+    "source_files": [
+      {
+        "expected_sha256": "8208b80d75d5de0a39089a54db7a24924819bb81a1ed6a61adaac931a2fddf95",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/__init__.py",
+        "sha256": "8208b80d75d5de0a39089a54db7a24924819bb81a1ed6a61adaac931a2fddf95",
+        "size_bytes": 51,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "8cf9ca235a4c543993cc2a407871a54f71755881752ffdda14b9646cf69bbec2",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/attention_perf3.py",
+        "sha256": "8cf9ca235a4c543993cc2a407871a54f71755881752ffdda14b9646cf69bbec2",
+        "size_bytes": 14994,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "f33186397927edc4cd0944a306ed6d5b85c937cf1277c090385aa28de5a44578",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/audit3.py",
+        "sha256": "f33186397927edc4cd0944a306ed6d5b85c937cf1277c090385aa28de5a44578",
+        "size_bytes": 56197,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "e871f5f850337759f26144df21adfe5db79f985e342a587217ca897ae782454f",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/calibrate_shared3.py",
+        "sha256": "e871f5f850337759f26144df21adfe5db79f985e342a587217ca897ae782454f",
+        "size_bytes": 3769,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "db1804150b94b407bfe5f1854c2ae0c283eec71776bddc929b6f6dcb72c26bf6",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/catalog3.py",
+        "sha256": "db1804150b94b407bfe5f1854c2ae0c283eec71776bddc929b6f6dcb72c26bf6",
+        "size_bytes": 45958,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "ba0849c70da456b0f124686ed5cd74bf977be6eccd1e47123864124466dc195d",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/chain_receipt3.py",
+        "sha256": "ba0849c70da456b0f124686ed5cd74bf977be6eccd1e47123864124466dc195d",
+        "size_bytes": 12082,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "88d1d5353ad3efd6a25d7c6a7029a77ca3e5cec1532cf567d89bc942246c7e1d",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/continuation3.py",
+        "sha256": "88d1d5353ad3efd6a25d7c6a7029a77ca3e5cec1532cf567d89bc942246c7e1d",
+        "size_bytes": 5740,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d327409f049891273c315c654870a6cbdda8b1162307cabe100225c11ddbcbdd",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/data.py",
+        "sha256": "d327409f049891273c315c654870a6cbdda8b1162307cabe100225c11ddbcbdd",
+        "size_bytes": 16851,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "da91d2df3a59d840bdafe181721f579ce1a8d8a4203b5872a700a812e2587cbe",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/data3.py",
+        "sha256": "da91d2df3a59d840bdafe181721f579ce1a8d8a4203b5872a700a812e2587cbe",
+        "size_bytes": 9913,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d81bf90d3d85762f355c71375f47145aceff4e06167b95749f738372fbf3bcea",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/diagnose_shannon.py",
+        "sha256": "d81bf90d3d85762f355c71375f47145aceff4e06167b95749f738372fbf3bcea",
+        "size_bytes": 7479,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "e43ebb2609ee874a495c8b5c2a2c63be4f7ce57721023f91160e13a671449fca",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/diagnose_shannon3.py",
+        "sha256": "e43ebb2609ee874a495c8b5c2a2c63be4f7ce57721023f91160e13a671449fca",
+        "size_bytes": 12267,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "cbdd5ba06637a9dffbc5d7f277c7bab80909ebfc1e98dea1d47db7d81847dba9",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/gate3.py",
+        "sha256": "cbdd5ba06637a9dffbc5d7f277c7bab80909ebfc1e98dea1d47db7d81847dba9",
+        "size_bytes": 29948,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "aac824be10380b870a3de26890c0a94b9a3d7294f10bebbd763f2524dc737119",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/inspect3.py",
+        "sha256": "aac824be10380b870a3de26890c0a94b9a3d7294f10bebbd763f2524dc737119",
+        "size_bytes": 5610,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d846049973ea6c7a952353b8a4ed25e2d89e9a67741e3c16e3dd67d39e802170",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/io.py",
+        "sha256": "d846049973ea6c7a952353b8a4ed25e2d89e9a67741e3c16e3dd67d39e802170",
+        "size_bytes": 1296,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "7acb7497a8fe0b807c7f78a1f8a1bed11c23d8f5ff9b27d0359ddf2287af1333",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/lifecycle3.py",
+        "sha256": "7acb7497a8fe0b807c7f78a1f8a1bed11c23d8f5ff9b27d0359ddf2287af1333",
+        "size_bytes": 1718,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "42ac16fa4353d47898dc0d40fbb4b689c50856f06007ccf43f887e65cc51becb",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/models.py",
+        "sha256": "42ac16fa4353d47898dc0d40fbb4b689c50856f06007ccf43f887e65cc51becb",
+        "size_bytes": 11109,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "07f6c919215d1bc79fb433d8120c133e4ff5173b7ac192b018d64819498e9b71",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/models3.py",
+        "sha256": "07f6c919215d1bc79fb433d8120c133e4ff5173b7ac192b018d64819498e9b71",
+        "size_bytes": 25379,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "680567ef8fed0835f62d890b9696120a1a6e3edb323f0b88437805171c2fc834",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/plan.py",
+        "sha256": "680567ef8fed0835f62d890b9696120a1a6e3edb323f0b88437805171c2fc834",
+        "size_bytes": 7015,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "a0452bf80628baf4cc6c02601200f2ea22b3b3218f611dfcdfaeb2f909f594b4",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/plan2.py",
+        "sha256": "a0452bf80628baf4cc6c02601200f2ea22b3b3218f611dfcdfaeb2f909f594b4",
+        "size_bytes": 10629,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "cd8841d99e58605322a80f5e898bf299fce129bacc8c8b42191398aabbbe10a5",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/preflight3.py",
+        "sha256": "cd8841d99e58605322a80f5e898bf299fce129bacc8c8b42191398aabbbe10a5",
+        "size_bytes": 22793,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "19b9736bbd43e21e4faf8590ff8b4d5033630a35b4dcd9d41f68ec6076f26056",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/prepare3.py",
+        "sha256": "19b9736bbd43e21e4faf8590ff8b4d5033630a35b4dcd9d41f68ec6076f26056",
+        "size_bytes": 10415,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "fcb5446da851e35b478988b4d325ff3b09bfcc41a0134e3c1635b710418b3bf7",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/prepare_campaign3.py",
+        "sha256": "fcb5446da851e35b478988b4d325ff3b09bfcc41a0134e3c1635b710418b3bf7",
+        "size_bytes": 18709,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "c8006756956b217026bc985bcd234905f67285e4d587c49b6df2972ef8a45150",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/prepare_relay3.py",
+        "sha256": "c8006756956b217026bc985bcd234905f67285e4d587c49b6df2972ef8a45150",
+        "size_bytes": 27652,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "f45906f8aac6b1d73084275cf22dd3806ef890e9e8fd26a3fa731135f59c163e",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/prepare_resume3.py",
+        "sha256": "f45906f8aac6b1d73084275cf22dd3806ef890e9e8fd26a3fa731135f59c163e",
+        "size_bytes": 14470,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "17a76a5e6753457392249a69664a4193050d432549dbf38fab9d46a128a87ca6",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/prepare_revision3.py",
+        "sha256": "17a76a5e6753457392249a69664a4193050d432549dbf38fab9d46a128a87ca6",
+        "size_bytes": 12839,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "3758df7c482998535674d2077f4324e2d81c403b3815769bc56ad764cc1ea737",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/quad_transfer_probe3.py",
+        "sha256": "3758df7c482998535674d2077f4324e2d81c403b3815769bc56ad764cc1ea737",
+        "size_bytes": 30759,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "b7d81bd0fb9894645bdd7d2b71b5bf871d60d14b65ccb11b495f387edfbdcf87",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/repair_probe3.py",
+        "sha256": "b7d81bd0fb9894645bdd7d2b71b5bf871d60d14b65ccb11b495f387edfbdcf87",
+        "size_bytes": 21944,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "9b87332e2d4ca021b0adffb44e19d9eb5d477cf27eaf068042730f2ab20f2c00",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/report.py",
+        "sha256": "9b87332e2d4ca021b0adffb44e19d9eb5d477cf27eaf068042730f2ab20f2c00",
+        "size_bytes": 38257,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "5a5cb8eefe33f5fd92d6e9aaa89b833f631b778a73edb18bb48acc3c686848ce",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/report2.py",
+        "sha256": "5a5cb8eefe33f5fd92d6e9aaa89b833f631b778a73edb18bb48acc3c686848ce",
+        "size_bytes": 53533,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "86f3780a3dd6bfd7b0d3be563359f5839fefc40501f4106b551ff8f3f7dc1bbe",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/report3.py",
+        "sha256": "86f3780a3dd6bfd7b0d3be563359f5839fefc40501f4106b551ff8f3f7dc1bbe",
+        "size_bytes": 52645,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "4130a8f61143cb891f7b4c2b416697c5542e4005a28db125cbc3eb9c1b507c92",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/resume3.py",
+        "sha256": "4130a8f61143cb891f7b4c2b416697c5542e4005a28db125cbc3eb9c1b507c92",
+        "size_bytes": 7071,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "15102051674cfe53a517a09af917c505e3dcd505dd2433b14328d951a52e5bb7",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/resume_adapter3.py",
+        "sha256": "15102051674cfe53a517a09af917c505e3dcd505dd2433b14328d951a52e5bb7",
+        "size_bytes": 21991,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "8cae68f29c6bb044aba4246d385f6cf3842d8244b0a76c2974b08ef71d9150cd",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/risk_screen3.py",
+        "sha256": "8cae68f29c6bb044aba4246d385f6cf3842d8244b0a76c2974b08ef71d9150cd",
+        "size_bytes": 22346,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "084e50bedc753a14b901111c2e024377c1bfdfceffbf1e89e3df70d981f5c282",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/round3.py",
+        "sha256": "084e50bedc753a14b901111c2e024377c1bfdfceffbf1e89e3df70d981f5c282",
+        "size_bytes": 49502,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "dbd209fe22f252bc88aa13f27b616f0cb34bcaf468b03e85751edca6f2b9d7b7",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/scheduler.py",
+        "sha256": "dbd209fe22f252bc88aa13f27b616f0cb34bcaf468b03e85751edca6f2b9d7b7",
+        "size_bytes": 64519,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "8c5edc012a7bea52566de11f47cae44d35b6f6e1df50c05aae49dc459b627d91",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/scheduler3.py",
+        "sha256": "8c5edc012a7bea52566de11f47cae44d35b6f6e1df50c05aae49dc459b627d91",
+        "size_bytes": 39549,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "3d8e257124aba3d9eaed650b354016ff47991d0b85c45330b7fb2aec239a6008",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/scheduler_dynamic3.py",
+        "sha256": "3d8e257124aba3d9eaed650b354016ff47991d0b85c45330b7fb2aec239a6008",
+        "size_bytes": 26122,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "709eb9040ae58678ba9a03e518f8a568dada7847c224e16e484f83ddd863b9da",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/scheduler_shared3.py",
+        "sha256": "709eb9040ae58678ba9a03e518f8a568dada7847c224e16e484f83ddd863b9da",
+        "size_bytes": 39552,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "9607cb8ac5f29af0e43a7de92eb36e0a4a0801eac1e493da972aba1df4360787",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/selection.py",
+        "sha256": "9607cb8ac5f29af0e43a7de92eb36e0a4a0801eac1e493da972aba1df4360787",
+        "size_bytes": 6475,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "858706e4e840993ad21a01e977cfdd1252d488dbd1dfa5878fadea38a115994d",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/shared_npu3.py",
+        "sha256": "858706e4e840993ad21a01e977cfdd1252d488dbd1dfa5878fadea38a115994d",
+        "size_bytes": 60130,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "45eee0e710f774583290d1a643cb45233a595c4bfd49b14ab73204a494eaccd3",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/sharing_policy3.py",
+        "sha256": "45eee0e710f774583290d1a643cb45233a595c4bfd49b14ab73204a494eaccd3",
+        "size_bytes": 9409,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "15e08a2038b9d5270269a46e8cf4acc656868018a9e47cbac99854a9a1faa7ae",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/trace_shannon.py",
+        "sha256": "15e08a2038b9d5270269a46e8cf4acc656868018a9e47cbac99854a9a1faa7ae",
+        "size_bytes": 9881,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "17f7c3acd6a74e7cb1a1694a71c5d36c3ef5d836f48f1ceb8ad3406063141fe7",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/transfer3.py",
+        "sha256": "17f7c3acd6a74e7cb1a1694a71c5d36c3ef5d836f48f1ceb8ad3406063141fe7",
+        "size_bytes": 21483,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d79a79f370babe4302fb7c2976d424425978047d32255d14b595cb6eeb2528ff",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/validate_shannon_capture.py",
+        "sha256": "d79a79f370babe4302fb7c2976d424425978047d32255d14b595cb6eeb2528ff",
+        "size_bytes": 11094,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "542b1f5b88389e902f2aedb19eb368321152f1fff012f66d553cfc0cccf349d8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/worker.py",
+        "sha256": "542b1f5b88389e902f2aedb19eb368321152f1fff012f66d553cfc0cccf349d8",
+        "size_bytes": 46804,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "a5e9b27350521ef7bcd929f001add25679ed7e26482287c7937340cf30d4f3a8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/source/pilotlab/worker3.py",
+        "sha256": "a5e9b27350521ef7bcd929f001add25679ed7e26482287c7937340cf30d4f3a8",
+        "size_bytes": 42154,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/foundation/src/tide/__init__.py",
+        "sha256": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195",
+        "size_bytes": 805,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "a8e4346837e7db763d3b778126090c82719c8192679606b4b1b508e576a4e74e",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/foundation/src/tide/allocation.py",
+        "sha256": "a8e4346837e7db763d3b778126090c82719c8192679606b4b1b508e576a4e74e",
+        "size_bytes": 33534,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "c163d02d95c7e62d6cf9ed83638bfea79cdb354253bcebd7ca104681a954257c",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/foundation/src/tide/attention.py",
+        "sha256": "c163d02d95c7e62d6cf9ed83638bfea79cdb354253bcebd7ca104681a954257c",
+        "size_bytes": 38118,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/foundation/src/tide/checkpoint.py",
+        "sha256": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+        "size_bytes": 3864,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "01e4be6898e1d5a156ff29c2739509c30b65b372ff65c39584b3b4f1a72d520a",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/foundation/src/tide/config.py",
+        "sha256": "01e4be6898e1d5a156ff29c2739509c30b65b372ff65c39584b3b4f1a72d520a",
+        "size_bytes": 9832,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/foundation/src/tide/ffn_packing.py",
+        "sha256": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449",
+        "size_bytes": 3257,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/foundation/src/tide/grouped_linear.py",
+        "sha256": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1",
+        "size_bytes": 6143,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "6ce42c759d8bfa9843c006d0bbda31ad1bc0602b0c9584718d73959bc11a3e3b",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/foundation/src/tide/kv.py",
+        "sha256": "6ce42c759d8bfa9843c006d0bbda31ad1bc0602b0c9584718d73959bc11a3e3b",
+        "size_bytes": 9397,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/foundation/src/tide/layout.py",
+        "sha256": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+        "size_bytes": 1392,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "6e38b6d6e0382688cc8b7e01de8f87adff35e8777cbd9d41a87dd705c44e936d",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/foundation/src/tide/model.py",
+        "sha256": "6e38b6d6e0382688cc8b7e01de8f87adff35e8777cbd9d41a87dd705c44e936d",
+        "size_bytes": 26288,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/foundation/src/tide/parameters.py",
+        "sha256": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc",
+        "size_bytes": 16680,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "0f77def73da20f467756e5dc1f701f25942565f762e82be5d23218ecee39d05f",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/foundation/src/tide/placement.py",
+        "sha256": "0f77def73da20f467756e5dc1f701f25942565f762e82be5d23218ecee39d05f",
+        "size_bytes": 24247,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/foundation/src/tide/placement_ownership.py",
+        "sha256": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+        "size_bytes": 7434,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/foundation/src/tide/precision.py",
+        "sha256": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+        "size_bytes": 3825,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "43f72f3f1a55263b8d1185a41f0bf2711b7e1179cd664710ced08e70563b45c4",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/foundation/src/tide/reception.py",
+        "sha256": "43f72f3f1a55263b8d1185a41f0bf2711b7e1179cd664710ced08e70563b45c4",
+        "size_bytes": 4893,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/foundation/src/tide/region.py",
+        "sha256": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+        "size_bytes": 3805,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "514ee30c5077d416c02cec81380280eb45509f20922a0f812657b93d2d8b7e80",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/foundation/src/tide/region_batch.py",
+        "sha256": "514ee30c5077d416c02cec81380280eb45509f20922a0f812657b93d2d8b7e80",
+        "size_bytes": 7509,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/foundation/src/tide/region_execution.py",
+        "sha256": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950",
+        "size_bytes": 6144,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "fd082f035185d04af6bc3ba27b949a8f065ccdf62f8b32a1b442accbfa6f2b6d",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/foundation/src/tide/region_placement.py",
+        "sha256": "fd082f035185d04af6bc3ba27b949a8f065ccdf62f8b32a1b442accbfa6f2b6d",
+        "size_bytes": 16586,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "21b696170e73ae28a3238a4db7dd9b613d92a2b0eb88610df74a5d01a8006c62",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/foundation/src/tide/scaled_arithmetic.py",
+        "sha256": "21b696170e73ae28a3238a4db7dd9b613d92a2b0eb88610df74a5d01a8006c62",
+        "size_bytes": 4140,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/foundation/src/tide/ssd.py",
+        "sha256": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+        "size_bytes": 12466,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/foundation/src/tide/ssd_memory.py",
+        "sha256": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2",
+        "size_bytes": 10412,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/foundation/src/tide/topology.py",
+        "sha256": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+        "size_bytes": 11283,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/foundation/src/tide/topology_hb.py",
+        "sha256": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06",
+        "size_bytes": 6204,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "6c993386c66f611c371c75e2e66a52dec7954c4fb9078819aab23f13d6c76d88",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/foundation/src/tide/weighted_mean.py",
+        "sha256": "6c993386c66f611c371c75e2e66a52dec7954c4fb9078819aab23f13d6c76d88",
+        "size_bytes": 8236,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "76739252826a1b59cbf68f4faed8e787d9f436e069934026a2ed23b8401a56eb",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/qualification/test_attention_singleton.py",
+        "sha256": "76739252826a1b59cbf68f4faed8e787d9f436e069934026a2ed23b8401a56eb",
+        "size_bytes": 5070,
+        "status": "passed"
+      }
+    ]
+  },
+  "interpretation": "passed means observed terminal release and recorded file integrity only; execution failure, numerical/discrete validity, recovery trajectory and learning remain separate conclusions",
+  "launch_binding": [
+    {
+      "expected_sha256": "d8ae038dee2394ee7ae32e04c7fc67235ad21bc9f4113ce36be2ea37f6551421",
+      "path": ".local/pilot-r3/risk-screen-r02/frozen/prepared.json",
+      "sha256": "d8ae038dee2394ee7ae32e04c7fc67235ad21bc9f4113ce36be2ea37f6551421",
+      "size_bytes": 29115,
+      "status": "passed"
+    },
+    {
+      "expected_sha256": "f55b5144b5d2d184d1219684a989549631b60a86d15a4780cd4df38483c3a5ef",
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/risk-launch.sh",
+      "sha256": "f55b5144b5d2d184d1219684a989549631b60a86d15a4780cd4df38483c3a5ef",
+      "size_bytes": 879,
+      "status": "passed"
+    },
+    {
+      "expected_sha256": "a13484630c92cc229ef53463d81c5a17dd0fc2607b21c62364f0dd383893d9b5",
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/risk-plan.json",
+      "sha256": "a13484630c92cc229ef53463d81c5a17dd0fc2607b21c62364f0dd383893d9b5",
+      "size_bytes": 774851,
+      "status": "passed"
+    }
+  ],
+  "lifecycle": {
+    "cgroup": {
+      "members": [],
+      "path": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-risk-screen-r02.service",
+      "released": true,
+      "status": "absent"
+    },
+    "processes": {
+      "cgroup_members_unobservable_in_process_snapshot": [],
+      "errors": [],
+      "gone_count": 133,
+      "live_processes": [],
+      "main_pid": 0,
+      "malformed_identities": [],
+      "recorded_identity_count": 133,
+      "released": true,
+      "reused_pids": [],
+      "status": "released",
+      "zombies": []
+    },
+    "queue": {
+      "attempts": [
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-settle-sigkill-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-9.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-trained-settle-sigkill-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-trained-settle-sigkill-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-trained-settle-sigkill-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-settle-sigkill-native-r02/attempt-0/queue.json",
+            "sha256": "fd806a1291cdd4930f88df49150360b47fef30bcb99cea5d78ae07ce7a0a7125",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-trained-settle-sigkill-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-timed-sigkill-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-1.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-trained-timed-sigkill-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-trained-timed-sigkill-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-trained-timed-sigkill-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-timed-sigkill-native-r02/attempt-0/queue.json",
+            "sha256": "5db2212ad6e89a7e292a7fee30f118ecdf772fd7133e6b20c5ad53cdd48f0c0c",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-trained-timed-sigkill-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-fc-s-npu-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-11.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-trained-fc-s-npu-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-trained-fc-s-npu-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-trained-fc-s-npu-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-fc-s-npu-native-r02/attempt-0/queue.json",
+            "sha256": "dba59eb0e09db394e236429ba1ddd8f0ecc1159f2dadde1afb3eebcb36f5a4f2",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-trained-fc-s-npu-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-00-2026112001-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-7.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-00-2026112001-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-00-2026112001-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-00-2026112001-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-00-2026112001-native-r02/attempt-0/queue.json",
+            "sha256": "0db3066ff2db257d4a7ff08531adb205be8482622da437cc929a893b1611acf5",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-00-2026112001-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-00-2026112002-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-5.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-00-2026112002-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-00-2026112002-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-00-2026112002-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-00-2026112002-native-r02/attempt-0/queue.json",
+            "sha256": "de28c728651ce5cd79895eea2b8b4eca8e9ee4fac85f7549273157a576ae434c",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-00-2026112002-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-01-2026112001-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-10.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-01-2026112001-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-01-2026112001-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-01-2026112001-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-01-2026112001-native-r02/attempt-0/queue.json",
+            "sha256": "73679c74e6356ef51feea34407faef27b5e110938c76949556c79dc0f7348cdd",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-01-2026112001-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-01-2026112002-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-11.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-01-2026112002-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-01-2026112002-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-01-2026112002-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-01-2026112002-native-r02/attempt-0/queue.json",
+            "sha256": "31948d77c385009fb68b1e3796583ba52ad54892a074321f8bb662a47c764326",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-01-2026112002-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-02-2026112001-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-0.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-02-2026112001-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-02-2026112001-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-02-2026112001-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-02-2026112001-native-r02/attempt-0/queue.json",
+            "sha256": "6afc417baf97488b678f8afeb914d201c0b35e827b7c496bc93661ffe2c5c490",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-02-2026112001-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-02-2026112002-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-7.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-02-2026112002-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-02-2026112002-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-02-2026112002-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-02-2026112002-native-r02/attempt-0/queue.json",
+            "sha256": "3a39e91206db68a557302c354c9e78df04a05544b162eb1ac53227830c8ef5bb",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-02-2026112002-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-03-2026112001-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-9.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-03-2026112001-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-03-2026112001-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-03-2026112001-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-03-2026112001-native-r02/attempt-0/queue.json",
+            "sha256": "7ac27e507e6acef4a155fb9a2402b46a6d8fe640f814027214cb95f51701e89e",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-03-2026112001-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-03-2026112002-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-5.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-03-2026112002-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-03-2026112002-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-03-2026112002-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-03-2026112002-native-r02/attempt-0/queue.json",
+            "sha256": "00e8c985a68406701487bd99d5f727a74d28ed2311df0805625f5cbc5bcbe262",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-03-2026112002-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-04-2026112001-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-11.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-04-2026112001-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-04-2026112001-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-04-2026112001-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-04-2026112001-native-r02/attempt-0/queue.json",
+            "sha256": "21e3aade016d483023a017484ad4dea1641ee53f974bc70716f49f36197305ad",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-04-2026112001-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-04-2026112002-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-10.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-04-2026112002-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-04-2026112002-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-04-2026112002-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-04-2026112002-native-r02/attempt-0/queue.json",
+            "sha256": "1e1e63840ca98dc46ea567d6d2690d8d7a5bc28a20a7d0d5243b0a993ff2074f",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-04-2026112002-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-05-2026112001-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-0.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-05-2026112001-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-05-2026112001-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-05-2026112001-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-05-2026112001-native-r02/attempt-0/queue.json",
+            "sha256": "403b9713def48d5421d52e9d468dd815a4828cefb399f6b4d002116c043c445e",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-05-2026112001-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-05-2026112002-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-7.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-05-2026112002-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-05-2026112002-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-05-2026112002-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-05-2026112002-native-r02/attempt-0/queue.json",
+            "sha256": "45279bfc24e66dd278eb50bea243e8e9b1ac47a05a0f5b9ce145a3912f4b608f",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-05-2026112002-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-06-2026112001-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-1.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-06-2026112001-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-06-2026112001-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-06-2026112001-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-06-2026112001-native-r02/attempt-0/queue.json",
+            "sha256": "048755c506956d7b4e351a1845ace451fdec52eefabcaa8878149bd36253789d",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-06-2026112001-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-06-2026112002-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-9.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-06-2026112002-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-06-2026112002-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-06-2026112002-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-06-2026112002-native-r02/attempt-0/queue.json",
+            "sha256": "d885f377da0cba9f2408e1b0f874f7b4ee4e52ec4ca8ddad56ac43ed60aaeccc",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-06-2026112002-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-07-2026112001-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-5.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-07-2026112001-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-07-2026112001-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-07-2026112001-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-07-2026112001-native-r02/attempt-0/queue.json",
+            "sha256": "a17a474c487776868449e11fd927fee6a051e0eae50c39e2164dbf6267b07d2c",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-07-2026112001-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-07-2026112002-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-0.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-07-2026112002-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-07-2026112002-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-07-2026112002-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-07-2026112002-native-r02/attempt-0/queue.json",
+            "sha256": "ce20aa6c8284ec41f1f5e6707d05475ddeba87390bb385e142105875dcd8fd0d",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-07-2026112002-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-08-2026112001-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-7.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-08-2026112001-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-08-2026112001-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-08-2026112001-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-08-2026112001-native-r02/attempt-0/queue.json",
+            "sha256": "9115cfa2615df30c25cc431719f3caff3de66a6b73561d3bfa1ea297b58cfc50",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-08-2026112001-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-08-2026112002-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-1.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-08-2026112002-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-08-2026112002-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-08-2026112002-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-08-2026112002-native-r02/attempt-0/queue.json",
+            "sha256": "c51c36de7330b3ff1bae4b55d3384ebe28bbc5c3f31d7f36b9fc40d565ac4286",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-08-2026112002-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-09-2026112001-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-9.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-09-2026112001-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-09-2026112001-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-09-2026112001-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-09-2026112001-native-r02/attempt-0/queue.json",
+            "sha256": "bc6196b711df0341d35d004866f1807cc562da3ccae91ee9728cbcde0a4d9a4a",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-09-2026112001-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-09-2026112002-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-4.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-09-2026112002-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-09-2026112002-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-09-2026112002-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-09-2026112002-native-r02/attempt-0/queue.json",
+            "sha256": "ca3398c0585a69747c29183ceccc30f81b47baae0d9bdb4b6481219ea5ddbb63",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-09-2026112002-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-10-2026112001-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-5.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-10-2026112001-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-10-2026112001-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-10-2026112001-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-10-2026112001-native-r02/attempt-0/queue.json",
+            "sha256": "07f80c119b76cb5da73ae679b69564774b20b6a646a393d30a962ae299fcf4b8",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-10-2026112001-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-10-2026112002-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-0.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-10-2026112002-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-10-2026112002-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-10-2026112002-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-10-2026112002-native-r02/attempt-0/queue.json",
+            "sha256": "d59aa9a2b92bb9951a0532fcc3ca7229e2c9d1b6829ad4a8749a05cd96ecf012",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-10-2026112002-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-11-2026112001-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-7.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-11-2026112001-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-11-2026112001-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-11-2026112001-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-11-2026112001-native-r02/attempt-0/queue.json",
+            "sha256": "736dfaa6efb0296f5e9304618d26595283a5c130f4adc048ee80b2faadc88507",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-11-2026112001-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-11-2026112002-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-1.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-11-2026112002-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-11-2026112002-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-11-2026112002-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-11-2026112002-native-r02/attempt-0/queue.json",
+            "sha256": "4e6c51ddab58ef0d4b9b7f4a9efe9a0d20e1eef09171acc0e31d4d612aeb93ed",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-11-2026112002-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-12-2026112001-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-5.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-12-2026112001-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-12-2026112001-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-12-2026112001-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-12-2026112001-native-r02/attempt-0/queue.json",
+            "sha256": "a80d34252a0b1195aa7fabc0a7c29ad56da6405c70e10c5552ae4c0f0e764e95",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-12-2026112001-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-12-2026112002-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-0.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-12-2026112002-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-12-2026112002-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-12-2026112002-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-12-2026112002-native-r02/attempt-0/queue.json",
+            "sha256": "d3fd9e3501d3587e128472e3fae676ad5433dfe0aca58c725e242bf563218b3d",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-12-2026112002-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-13-2026112001-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-7.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-13-2026112001-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-13-2026112001-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-13-2026112001-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-13-2026112001-native-r02/attempt-0/queue.json",
+            "sha256": "124da05c0d72539e100f39c82d97681854c0512e56654d527385568e364d43d2",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-13-2026112001-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-13-2026112002-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-1.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-13-2026112002-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-13-2026112002-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-13-2026112002-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-13-2026112002-native-r02/attempt-0/queue.json",
+            "sha256": "44ca5c94f404034ff7ba40111efec35c2eecb978195d0eb61839556576de0d02",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-13-2026112002-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-14-2026112001-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-5.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-14-2026112001-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-14-2026112001-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-14-2026112001-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-14-2026112001-native-r02/attempt-0/queue.json",
+            "sha256": "e889544b5e9a24f34a9a825f5f9ce0aa71555327fc4805588928ab5df9817ad8",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-14-2026112001-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-14-2026112002-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-9.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-14-2026112002-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-14-2026112002-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-14-2026112002-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-14-2026112002-native-r02/attempt-0/queue.json",
+            "sha256": "49841e1c2a83711b1d915889943f3284a6b3527a17b5ef80d039f6e09dd31752",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-14-2026112002-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-15-2026112001-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-11.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-15-2026112001-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-15-2026112001-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-15-2026112001-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-15-2026112001-native-r02/attempt-0/queue.json",
+            "sha256": "2e056103323094a65a3e5b9426c1682e17e6f0396e75f8669ec22d7b7efed7a6",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-15-2026112001-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-15-2026112002-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-10.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-15-2026112002-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-15-2026112002-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-15-2026112002-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-15-2026112002-native-r02/attempt-0/queue.json",
+            "sha256": "59df2f57f35b446d6415a0ab9ca8b30097fe2133cc2aedc3e00d61830afb7e3c",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-15-2026112002-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-16-2026112001-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-0.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-16-2026112001-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-16-2026112001-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-16-2026112001-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-16-2026112001-native-r02/attempt-0/queue.json",
+            "sha256": "3a136665a620a28abdba96971cd6cf1b4658c1b19e2e3913a6e5cbe4f93d8dfe",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-16-2026112001-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-16-2026112002-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-4.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-16-2026112002-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-16-2026112002-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-16-2026112002-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-16-2026112002-native-r02/attempt-0/queue.json",
+            "sha256": "71ed25b5f34598cb4ed928bcb93410766e4c9175692116b594380a8483d495a8",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-16-2026112002-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-17-2026112001-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-11.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-17-2026112001-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-17-2026112001-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-17-2026112001-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-17-2026112001-native-r02/attempt-0/queue.json",
+            "sha256": "0787e5217633a81037cbdeb05952a1342c0a5e78d62166d8e8d12256d7ab8a3e",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-17-2026112001-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-17-2026112002-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-9.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-17-2026112002-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-17-2026112002-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-17-2026112002-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-17-2026112002-native-r02/attempt-0/queue.json",
+            "sha256": "ff8471635eae2ce8a03d2193027ffec77aa7ede52d6d7f16fe47ed61084b5426",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-17-2026112002-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-18-2026112001-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-5.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-18-2026112001-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-18-2026112001-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-18-2026112001-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-18-2026112001-native-r02/attempt-0/queue.json",
+            "sha256": "a8f9c452066792f8af1b434d8f907275bad7a8759521c18d66bdd1f50c4d2813",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-18-2026112001-native-r02"
+        },
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-18-2026112002-native-r02/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-11.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-frozen-risk-cold-18-2026112002-native-r02-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-18-2026112002-native-r02-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-frozen-risk-cold-18-2026112002-native-r02-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-18-2026112002-native-r02/attempt-0/queue.json",
+            "sha256": "0c2327a95b6f19ca07f114e994f46caf907f1a2167cb52a6752a073af2b7a72a",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "risk-cold-18-2026112002-native-r02"
+        }
+      ],
+      "released": true,
+      "runtime_directory": "/run/user/1003",
+      "status": "released"
+    },
+    "status": "terminal",
+    "systemd": {
+      "expected_cgroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-risk-screen-r02.service",
+      "expected_cgroup_basis": "observed user slice + exact service unit name",
+      "properties": {
+        "ActiveState": "inactive",
+        "ControlGroup": "",
+        "ExecMainCode": "0",
+        "ExecMainStatus": "0",
+        "InvocationID": "",
+        "LoadState": "not-found",
+        "MainPID": "0",
+        "Result": "success",
+        "Slice": "",
+        "SubState": "dead"
+      },
+      "return_code": 0,
+      "status": "observed",
+      "unit": "tide-pilot-r3-risk-screen-r02.service"
+    }
+  },
+  "physical_accounting": {
+    "checks": [],
+    "status": "not_applicable"
+  },
+  "prepared": {
+    "path": ".local/pilot-r3/risk-screen-r02/frozen/prepared.json",
+    "sha256": "d8ae038dee2394ee7ae32e04c7fc67235ad21bc9f4113ce36be2ea37f6551421",
+    "status": "passed"
+  },
+  "round": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round",
+  "schema": "pilot-r3-terminal-audit-v1",
+  "selected_references": {
+    "checks": [],
+    "external_reference_count": 0
+  },
+  "shared_groups": {
+    "checks": [],
+    "groups": {},
+    "scheduler_live": false
+  },
+  "started_unix": 1795170570.1929767,
+  "status": "passed",
+  "unit": "tide-pilot-r3-risk-screen-r02.service"
+}

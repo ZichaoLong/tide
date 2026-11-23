@@ -1,0 +1,182 @@
+{
+  "completed_before_signal": {
+    "lattice-d256-k-depth2-c24a34d6ed-a1-2026112001-r0": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r16/round/tasks/lattice-d256-k-depth2-c24a34d6ed-a1-2026112001-r0/attempt-0/result.json",
+      "sha256": "0e25fce96273bbcf29d60b774597d43ce26b5d631c129575e9b6194a8128acd5"
+    }
+  },
+  "current_stage_a": {
+    "blocking_reason": "Blocked: a2: shared_group_not_completed:worker_process_failed:exchange-d128-x_reverse-pool-26a8635043-a2-2026112002-r2:1",
+    "counts": {
+      "completed": 46,
+      "failed": 31,
+      "pending": 199,
+      "stopped_budget": 55
+    },
+    "status": "a_blocked_needs_repair",
+    "unit": "tide-pilot-r3-campaign-r16.service"
+  },
+  "foundation": {
+    "published_head": "b93eeae761b5e691f5786cf8098dc23cb714b8bb",
+    "python_files_digest": "10c091d59fa14b630668b138b42ce7950abb0377fbb613aad6d1694d9b1f448a"
+  },
+  "inputs": {
+    "campaign_plan": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r16/campaign-plan.json",
+      "sha256": "7b9f7cdd4ec44f20d691c02ee0105f3a5c7810835e4d1ee9b709f19dc37c8715"
+    },
+    "foundation_acceptance": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-r16-foundation-pool-acceptance.json",
+      "sha256": "8ec66ae8df21fe77fb0291321ef9908eac9066c8f1dbea40e10dd79bbff0f608"
+    },
+    "scheduler": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r16/round/scheduler.json",
+      "sha256": "aef13ba8c5806f9a40b9fc57e7e1e1504bfca23844945b1b8cb900e9848b116a"
+    },
+    "selected": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r16/round/selected.json",
+      "sha256": "fd1e7b14b2f54b34f3c0c276539ddbba6bc3f26018ffe3c4f9a7cd9964f21ff3"
+    },
+    "terminal_audit": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-r16-terminal-reconciliation.json",
+      "sha256": "8e5467cf825382c5ad5218376b73a518791b826e7e6cfe2747bc4775c5d88c8b"
+    }
+  },
+  "observed_local": "2026-11-22T00:26:03+08:00",
+  "schema": "pilot-r3-stage-a-followup-review-v1",
+  "stage_a_scope": {
+    "already_selected": 49,
+    "exposed_subject_ids": [
+      "exchange-d128-k-base-4aac2dcb10",
+      "exchange-d128-k-capacity-74eba502b1",
+      "exchange-d128-k-independent-d3d8980f6a",
+      "exchange-d128-k-narrowwide-a8b4f1078d",
+      "exchange-d128-k-pool-25a642ea44",
+      "exchange-d128-k-shannon-b4f9572c1e",
+      "exchange-d128-s-base-0f1647288b",
+      "exchange-d128-s-capacity-32268b8664",
+      "exchange-d128-s-independent-9e3c5ca87d",
+      "exchange-d128-s-narrowwide-5d192e0d6d",
+      "exchange-d128-s-pool-0f81d87b81",
+      "exchange-d128-s-shannon-4274ad3518",
+      "exchange-d128-x-base-2ab17f45cd",
+      "exchange-d128-x-capacity-faa7acc649",
+      "exchange-d128-x-independent-1edb3a093d",
+      "exchange-d128-x-narrowwide-f2f75f7e7f",
+      "exchange-d128-x-pool-5c0c9ad46d",
+      "exchange-d128-x-shannon-71abfc07a5",
+      "exchange-d128-x_reverse-base-817dc5b466",
+      "exchange-d128-x_reverse-capacity-e1bd082588",
+      "exchange-d128-x_reverse-independent-9faca6385c",
+      "exchange-d128-x_reverse-narrowwide-a276d01a16",
+      "exchange-d128-x_reverse-pool-26a8635043",
+      "exchange-d128-x_reverse-shannon-86ba13b249",
+      "exchange-d256-k-base-4f97098597",
+      "exchange-d256-k-capacity-afae2c3e83",
+      "exchange-d256-k-independent-7ec4f58bca",
+      "exchange-d256-k-narrowwide-c37cf9388b",
+      "exchange-d256-k-pool-2ad67d691b",
+      "exchange-d256-k-shannon-417a5ef511",
+      "exchange-d256-s-base-05c8908295",
+      "exchange-d256-s-capacity-171c8b98d0",
+      "exchange-d256-s-independent-c47e3ed498",
+      "exchange-d256-s-narrowwide-d1af418efa",
+      "exchange-d256-s-pool-c419779d1a",
+      "exchange-d256-s-shannon-2b8b292dbc",
+      "fc-d128-k-ffn1-e8be37f2b7",
+      "fc-d128-k-shared-f9498953c0",
+      "fc-d128-s-base-5c4809c97b",
+      "fc-d128-s-depth3-fbc6080d7d",
+      "fc-d128-s-ffn1-f45d256eab",
+      "fc-d128-s-shared-cbe5e2ff4e",
+      "fc-d256-k-base-0e3021c331",
+      "fc-d256-k-depth3-2f03e71304",
+      "fc-d256-k-ffn1-2b14f30d4a",
+      "fc-d256-k-shared-b862e34fe3",
+      "fc-d256-s-base-7e5a1b3415",
+      "fc-d256-s-depth3-91e5cfbe4e",
+      "fc-d256-s-ffn1-ca290fd261",
+      "fc-d256-s-shared-6af703487d",
+      "lattice-d128-k-base-78dbac086a",
+      "lattice-d128-k-depth2-87732fbcda",
+      "lattice-d128-k-ffn2-848b8b0ddd",
+      "lattice-d128-k-layershared-91f7652530",
+      "lattice-d128-k-memoryshared-ce62b8f81b",
+      "lattice-d128-k-nodes4-1f22ba3272",
+      "lattice-d128-k-receive128-ee1edca248",
+      "lattice-d128-k-receive64-c05227ce86",
+      "lattice-d128-s-base-0a353237f5",
+      "lattice-d128-s-depth2-00b9531d37",
+      "lattice-d128-s-ffn2-5c6ff7f21c",
+      "lattice-d128-s-layershared-6312958b4e",
+      "lattice-d128-s-memoryshared-4a1c5168a4",
+      "lattice-d128-s-nodes4-87a2e4a9d9",
+      "lattice-d128-s-receive128-1ede806cba",
+      "lattice-d128-s-receive64-cd47a49acb",
+      "lattice-d256-k-base-416b5585a2",
+      "lattice-d256-k-depth2-c24a34d6ed",
+      "lattice-d256-k-ffn2-e4a5b07a08",
+      "lattice-d256-k-layershared-1bb62cd81d",
+      "lattice-d256-k-memoryshared-719a561efa",
+      "lattice-d256-k-nodes4-910f84829b",
+      "lattice-d256-k-receive128-959d85255b",
+      "lattice-d256-k-receive64-c3e271805b",
+      "lattice-d256-s-base-7f0fca324e",
+      "lattice-d256-s-depth2-8bfed52ede",
+      "lattice-d256-s-ffn2-5372474eb5",
+      "lattice-d256-s-layershared-015f2cec51",
+      "lattice-d256-s-memoryshared-f80260ac11",
+      "lattice-d256-s-nodes4-3f686fda6a",
+      "lattice-d256-s-receive128-0a7681b33e",
+      "lattice-d256-s-receive64-2d8d03e9f1",
+      "multiscale_settle-d128-k-group5-b152141dc5",
+      "multiscale_settle-d128-k-mixed9-e96a17a14d",
+      "multiscale_settle-d128-k-singleton7-43b1716b2d",
+      "multiscale_settle-d128-s-group5-e393757acf",
+      "multiscale_settle-d128-s-mixed9-5bc345edf5",
+      "multiscale_settle-d128-s-singleton7-ffd53c4df7",
+      "multiscale_settle-d128-x-group5-4380cdb1f8",
+      "multiscale_settle-d128-x-mixed9-70e3fa0199",
+      "multiscale_settle-d128-x-singleton7-281f04cf8c",
+      "multiscale_settle-d128-x_reverse-group5-5850ce5a6d",
+      "multiscale_settle-d128-x_reverse-mixed9-35343ff0aa",
+      "multiscale_settle-d128-x_reverse-singleton7-655942fdd4",
+      "multiscale_settle-d256-k-group5-53ebbbaa25",
+      "multiscale_settle-d256-k-mixed9-0fad868c8b",
+      "multiscale_settle-d256-k-singleton7-cad34be170",
+      "multiscale_timed-d128-k-group5-b74cd801f3",
+      "multiscale_timed-d128-k-mixed9-b193254132",
+      "multiscale_timed-d128-k-singleton7-eaab60796a",
+      "multiscale_timed-d128-s-group5-37506fa4ee",
+      "multiscale_timed-d128-s-mixed9-542e33dbf6",
+      "multiscale_timed-d128-s-singleton7-139de547de",
+      "multiscale_timed-d128-x-group5-4b26d12571",
+      "multiscale_timed-d128-x-mixed9-ae4ffdec56",
+      "multiscale_timed-d128-x-singleton7-8ac3511b6a",
+      "multiscale_timed-d128-x_reverse-group5-f83e81e4af",
+      "multiscale_timed-d128-x_reverse-mixed9-99820c3100",
+      "multiscale_timed-d128-x_reverse-singleton7-2f58b0a0f6",
+      "multiscale_timed-d256-k-group5-27d7c0e70b",
+      "multiscale_timed-d256-k-mixed9-fa94f99487",
+      "multiscale_timed-d256-k-singleton7-ffd4b110ac"
+    ],
+    "prospective_recipe_check": {
+      "canonical_prospective_subjects_sha256": "c724771307ff15ca36257c50cf30edb2a13a6c8f20a70d69604c331dfab8b765"
+    },
+    "subject_count": 270
+  },
+  "stage_b_gate": "closed",
+  "worker_and_checkpoint_review": {
+    "fault_task_id": "exchange-d128-x_reverse-pool-26a8635043-a2-2026112002-r2",
+    "inherited_choices": 49,
+    "inherited_completed": 1679,
+    "official_checkpoint": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r16/round/tasks/exchange-d128-x_reverse-pool-26a8635043-a2-2026112002-r2/attempt-0/checkpoints/step-000003640-25c3958406.pt",
+      "sha256": "705e187c791f2a0d1eed86246e1cb20074140fd5661a0544785e3902e1327bba",
+      "size_bytes": 33908393,
+      "state_sha256": "eaabd945837ec13a84c683255aac3d3bec6fb0540591d754845261b19a05727f",
+      "steps": 3640,
+      "tokens": 931840
+    }
+  }
+}

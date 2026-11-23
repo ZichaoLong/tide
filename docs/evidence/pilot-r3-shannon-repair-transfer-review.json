@@ -1,0 +1,85 @@
+{
+  "allocation_contract": {
+    "excluded_shannon_helpers": [
+      "_compensated_sum",
+      "_shannon_bound_delta",
+      "_shannon_centered_parts",
+      "_shannon_solve",
+      "_two_product",
+      "_two_sum"
+    ],
+    "method": "reviewed-shannon-patch-quad-specialization-v1",
+    "projection_sha256": "593511bc85a37ab22697b9259a743479496791f8b2e795bf0cbd498c62abc374",
+    "quad_pool_contract": "unchanged"
+  },
+  "atol": 1e-05,
+  "changed_nonshannon_paths": false,
+  "checkpoint_migration": "not authorized by this review; old checkpoints retain their original source identity",
+  "evidence": {
+    "cpu_review": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-shannon-active-set-repair.json",
+      "sha256": "d88239cb5047d2299942de92dab4192f9b0ef4b54b6e42a51f995057bf6a0545"
+    },
+    "npu_numerical": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/round/tasks/shannon-repair-numeric-and-replay/attempt-0/numerical.json",
+      "sha256": "22a9dcbd7e4714c6c886bb902d610a7e9836ae70bc8737a7caf440a7ba477fdf"
+    },
+    "npu_prepared": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/prepared.json",
+      "sha256": "eec41838d9967ae55240979890006ae204d4f24bb38a1c1cac10594969c5ee8e"
+    },
+    "npu_qualifier": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/round/repair-report.json",
+      "sha256": "fb2a140766e59ce55a763eb1752084332c778c6e69ac23d60941bb5234c82ee2"
+    },
+    "npu_review": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-shannon-npu-repair-review.json",
+      "sha256": "f1cc59521560efbef687d510e82c7f85e960818be4d3c597b0044c80225d9d4d"
+    },
+    "npu_terminal_audit": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-repair-preflight-r02-terminal-audit.json",
+      "sha256": "e801f9db42449e70fa9ec09b0c7eb5f0e0a4ae4ec7068b4eca7eb99a2fc464a6"
+    },
+    "npu_worker_result": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/round/tasks/shannon-repair-numeric-and-replay/attempt-0/result.json",
+      "sha256": "cbeb8f516aede7c22439bb2085a59d022719e0746c42e8d7703d936046983808"
+    }
+  },
+  "learning_conclusion": null,
+  "new_allocation": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/repair-preflight-r02/foundation/src/tide/allocation.py",
+    "sha256": "a8e4346837e7db763d3b778126090c82719c8192679606b4b1b508e576a4e74e"
+  },
+  "new_allocation_sha256": "a8e4346837e7db763d3b778126090c82719c8192679606b4b1b508e576a4e74e",
+  "old_allocation": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/allocation.py",
+    "sha256": "004051c7178380b270e2cce020661bd144ed9afd78c98271d9e5c253beb9d65f"
+  },
+  "old_allocation_sha256": "004051c7178380b270e2cce020661bd144ed9afd78c98271d9e5c253beb9d65f",
+  "performance_conclusion": null,
+  "preserved_failure": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r2-preflight-triage.json",
+    "sha256": "c7983bc60911eb29e3f6525ef5c9f1ff4aeadde96e6cbdc336913d24c2b080d8"
+  },
+  "quad_pool_contract": "unchanged",
+  "reviewed_claims": {
+    "cpu_numerics": "143 targeted upstream checks and 32 independent bounded Decimal cases passed under the bound CPU review",
+    "npu_checkpoint_loading": "602 fields and RNG exact in the fresh process",
+    "npu_numerics": "18 fixed scalar value/support/score-VJP/guard cases passed",
+    "npu_one_update_trajectory": "706 fields finite and within atol=1e-5, rtol=1e-4; not bitwise exact",
+    "quad_pool_ast_projection": "identical after conservative specialization of this Shannon-only patch"
+  },
+  "reviewed_utc": "2026-11-20T01:53:36.769808+00:00",
+  "rtol": 0.0001,
+  "schema": "pilot-r3-shannon-repair-review-v1",
+  "source_comparison": {
+    "changed_foundation_python_paths": [
+      "allocation.py"
+    ],
+    "new_foundation_python_files": 25,
+    "old_foundation_python_files": 25,
+    "scope": "foundation Python numerical paths; project lifecycle source is reviewed separately by the transfer gate"
+  },
+  "status": "passed",
+  "transfer_limit": "this review is necessary but insufficient for stage-A transfer; an independent exact three-update proof for all 24 selected quad models must bind the actual old and new campaign source identities"
+}

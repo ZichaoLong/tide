@@ -1,0 +1,87 @@
+{
+  "changes": [
+    {
+      "file": "continuation3.py",
+      "sha256": "88d1d5353ad3efd6a25d7c6a7029a77ca3e5cec1532cf567d89bc942246c7e1d"
+    },
+    {
+      "file": "gate3.py",
+      "sha256": "cbdd5ba06637a9dffbc5d7f277c7bab80909ebfc1e98dea1d47db7d81847dba9"
+    },
+    {
+      "file": "scheduler3.py",
+      "sha256": "8c5edc012a7bea52566de11f47cae44d35b6f6e1df50c05aae49dc459b627d91"
+    },
+    {
+      "file": "scheduler_shared3.py",
+      "sha256": "709eb9040ae58678ba9a03e518f8a568dada7847c224e16e484f83ddd863b9da"
+    },
+    {
+      "file": "scheduler_dynamic3.py",
+      "sha256": "3d8e257124aba3d9eaed650b354016ff47991d0b85c45330b7fb2aec239a6008"
+    },
+    {
+      "file": "shared_npu3.py",
+      "sha256": "858706e4e840993ad21a01e977cfdd1252d488dbd1dfa5878fadea38a115994d"
+    },
+    {
+      "file": "audit3.py",
+      "sha256": "f33186397927edc4cd0944a306ed6d5b85c937cf1277c090385aa28de5a44578"
+    },
+    {
+      "file": "prepare_relay3.py",
+      "sha256": "c8006756956b217026bc985bcd234905f67285e4d587c49b6df2972ef8a45150"
+    }
+  ],
+  "checks": [
+    {
+      "passed": 210,
+      "suite": "continuation/gate/chain/scheduler_shared/dynamic/runner/audit"
+    },
+    {
+      "passed": 193,
+      "suite": "CPU resume/relay preparation/report/scheduler3/round3"
+    }
+  ],
+  "memory_scope": "1 TB project reservation/watchdog, no effective independent service memory cgroup",
+  "observed_unix": 1795149365.8310556,
+  "preserved": "r04 frozen worker/foundation/data/environment; numerical thresholds, original failure records and all budget debits",
+  "reconciliation": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-campaign-r06-terminal-reconciliation.json",
+    "sha256": "f253f114e93bc8d68efebb124b56d3e1dfbb77ecb23205889d1cfb38acb54266"
+  },
+  "resources": {
+    "cpu_affinity_count": 320,
+    "memory_available_bytes": 1998939459584,
+    "observed_unix": 1795149365.8194113,
+    "remaining": {
+      "budget_ledger": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/budget.json",
+      "deadline_unix": 1797698913.9318287,
+      "max_device_seconds": 25920000,
+      "observed_unix": 1795149365.8307436,
+      "remaining_device_seconds": 25710681.092058375,
+      "remaining_preparation_device_seconds": 166016.07274884358,
+      "remaining_preparation_processed_tokens": 52430912,
+      "remaining_wall_seconds": 2549548.101085186,
+      "started_unix": 1795106913.9318287
+    },
+    "storage": {
+      "available_storage_bytes": 193387319296,
+      "filesystem_free_bytes": 1633707032576,
+      "observed_unix": 1795149365.830705,
+      "quota": {
+        "filesystem": "/dev/mapper/ascend_data-data",
+        "grace_epoch": 0,
+        "hard_bytes": 751619276800,
+        "soft_bytes": 322122547200,
+        "used_bytes": 128735227904
+      },
+      "scope": "input snapshot headroom only; campaign forecasts all resolved controls before release",
+      "snapshot_source_bytes": 1293144,
+      "storage_reserve_bytes": 25769803776
+    }
+  },
+  "schema": "pilot-r3-r07-repair-review-v1",
+  "status": "validated_not_submitted",
+  "test_scope": "Synthetic destructive checks, real CPU state continuation, fake NPU lease with real child shutdown; no new NPU training used for checks"
+}

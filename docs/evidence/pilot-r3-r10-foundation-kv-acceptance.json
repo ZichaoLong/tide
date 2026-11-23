@@ -1,0 +1,500 @@
+{
+  "authority": {
+    "commit": "17c7d6755eea83c98fa984bc1a55230b9817eaa4",
+    "files_digest": "9b97d42f38073d8b7ca6befee01ad79939b27a3505ab0616e9edb96fca8d25fa",
+    "files_sha256": {
+      "__init__.py": "51b2da0ae87b715638de8ef789edabdada69ad43c05b19e0ef79eefa0113dd3c",
+      "allocation.py": "ead87a2b240437f7bc3898f218ccae46d2fd3a2371946b5bae4f4d33b9d8f176",
+      "attention.py": "c163d02d95c7e62d6cf9ed83638bfea79cdb354253bcebd7ca104681a954257c",
+      "checkpoint.py": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+      "config.py": "5c15208fde72446a185ac7323d023b9d5ba6ee898e045e3d8b75b4f97495c28a",
+      "ffn_packing.py": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449",
+      "grouped_linear.py": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1",
+      "kv.py": "39bc279b687dffb72e91ea984faaac5bb5ac7530ed5f86f364eb00d8137d6773",
+      "layout.py": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+      "model.py": "556321b417e0ad86b9c73ccd63f5bae315d488b0020db7354a4320750292d9f1",
+      "parameters.py": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc",
+      "placement.py": "0f77def73da20f467756e5dc1f701f25942565f762e82be5d23218ecee39d05f",
+      "placement_ownership.py": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+      "precision.py": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+      "reception.py": "43f72f3f1a55263b8d1185a41f0bf2711b7e1179cd664710ced08e70563b45c4",
+      "region.py": "e661b32a3dbfcf89587434b258335cec4f482c7b4a1bbe8d75db8b2670ddad39",
+      "region_batch.py": "829c5d60553acca1f0d1d6f914df3fa5fe8977083efe98586048f8ca97bae1d5",
+      "region_execution.py": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950",
+      "region_placement.py": "fd082f035185d04af6bc3ba27b949a8f065ccdf62f8b32a1b442accbfa6f2b6d",
+      "scaled_arithmetic.py": "21b696170e73ae28a3238a4db7dd9b613d92a2b0eb88610df74a5d01a8006c62",
+      "shannon_support.py": "29507db503a88d880614142411004fa7eaa39a77374a6e1c1dc640501c5f6105",
+      "ssd.py": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+      "ssd_memory.py": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2",
+      "topology.py": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+      "topology_hb.py": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06",
+      "weighted_mean.py": "6c993386c66f611c371c75e2e66a52dec7954c4fb9078819aab23f13d6c76d88"
+    }
+  },
+  "cpu_tests": {
+    "old_regression_failures": 2,
+    "passed": 139,
+    "xfail": 3
+  },
+  "diagnosis": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-r10-kv-no-write.json",
+    "sha256": "6bcbd20227b6ddcaeb673046a44f7cbbbc464b9e1b8b3534944854807f7905b3"
+  },
+  "failure_input": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r10/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a1-2026112001-r2/attempt-0/failure.pt",
+    "sha256": "deb4c7f8f5144f62a19646ea3ab7ae7f8dc1a97239697403bb4536cfe0aec3fb"
+  },
+  "measured_local": "2026-11-21T12:15:46+08:00",
+  "npu_tests": {
+    "log": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/kv-r10-accept-iUW8Xt/npu-tests.log",
+      "sha256": "ad3ef9c2eb79334fa4d179f98e741ab21effb809f2bd699254cea3ad58ce1273"
+    },
+    "passed": 58,
+    "xfail": 3
+  },
+  "old_result": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r10/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a1-2026112001-r2/attempt-0/result.json",
+    "sha256": "1b67d25850bb61d1d116962c233f8e5fdd4fcbc5dd769c60cbfd9361e2ff8307"
+  },
+  "original_task": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r10/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a1-2026112001-r2/attempt-0/task.json",
+    "sha256": "28ac2dc893def5ffaa72d90d9333a41d1fe1cca98cc33953867cc9d889d94c49"
+  },
+  "qualification": {
+    "npu": {
+      "direct": {
+        "fault_batch_matched": true,
+        "new_checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/kv-r10-accept-iUW8Xt/replay/checkpoints/step-000001139-3491c6621f.pt",
+          "sha256": "84dae9acb392c55034bee0e625399d7354cee70aaecac8c2ff6cb12d9757fc24",
+          "size_bytes": 86027807,
+          "state_sha256": "c529535c634074914ce3432306cda4da767f07a031baccf86b7fc783c8e2e67e",
+          "steps": 1139,
+          "tokens": 145792
+        },
+        "official_checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r10/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a1-2026112001-r2/attempt-0/checkpoints/step-000001126-2ef7b622be.pt",
+          "sha256": "40c7d74085da9ef0c834ccda550b8320855d9ab3ac3e9a30cbbf5b67ff7de633",
+          "size_bytes": 86027743,
+          "state_sha256": "490fb58ef109ff702d137b7dc31bc1d140aebfcb0b911e18dce5338c47c2917d",
+          "steps": 1126,
+          "tokens": 144128
+        },
+        "original_error": "mass-scaled attention exceeds the arithmetic range; no clipping is applied",
+        "original_state_loaded_exact": true,
+        "physical_device": "1",
+        "rng_sha256": "2dbffd2d0d6fcc5e54c26e88e8f4409f7b288d787ca9b7fa4ea31af7c52ca66e",
+        "stream_sha256": "a532f79d7d1d3b2df788c81b9da7da794149533f4babc185f63a33766ada6da1",
+        "updates": [
+          {
+            "counts": {
+              "refined_rows": 0,
+              "repaired_coordinates": 0,
+              "repaired_rows": 0
+            },
+            "grad_norm": 1.3501064777374268,
+            "gradient_tensors": 123,
+            "input_sha256": "3cd911cee8a9684541b188b6b5df243a9dddb3d2a6dcfd04870bd540c6a860fb",
+            "loss": 6.305902481079102,
+            "lr": 0.0009999121763036897,
+            "objective": 6.305902481079102,
+            "reset": false,
+            "state_sha256": {
+              "adamw": "1b5df3b41ab2d32f02d954169ff791155b25f4965053000c4c12831d2aec0427",
+              "gradients_after_clip": "e778d259ef6032023a87431dd73a9b9dbcd00026a73a8913a4b6abbfd20e786e",
+              "model": "358bdc2cd3a2058e7733a460217c245e805f4b4aa4312264dab9b586e4fc4961",
+              "private_state": "1202048948fc45335c1b454d24a37e647dfbb7107a1f5358f67ed25c6d0a3859"
+            },
+            "step": 1127,
+            "tokens": 144256
+          },
+          {
+            "counts": {
+              "refined_rows": 0,
+              "repaired_coordinates": 0,
+              "repaired_rows": 0
+            },
+            "grad_norm": 1.3860020637512207,
+            "gradient_tensors": 123,
+            "input_sha256": "8ec10082e72a66288840bc3dd879a9ba94db2a5db69087bdd968f5bf8dec36b6",
+            "loss": 6.087019443511963,
+            "lr": 0.0009999118904753018,
+            "objective": 6.087019443511963,
+            "reset": false,
+            "state_sha256": {
+              "adamw": "9d1b7a1c304668eb8b50ba2ccf02bab7b3988853de968953376c240f54198fb2",
+              "gradients_after_clip": "6ef66ceadb2980284e521ae0ae43021d7243ad07143b557d123ae8a8884bc3e4",
+              "model": "bbf44da0540ca973d05d3d317aee1bd3801de3bdc8590492ea9b36aeefe3cfa1",
+              "private_state": "c2194fd7303a15656e2895c5007583f3ca01b59c070c987bbc0a718ff9ce5b03"
+            },
+            "step": 1128,
+            "tokens": 144384
+          },
+          {
+            "counts": {
+              "refined_rows": 0,
+              "repaired_coordinates": 0,
+              "repaired_rows": 0
+            },
+            "grad_norm": 1.390795350074768,
+            "gradient_tensors": 123,
+            "input_sha256": "362ce545d6aa3e869fbdcebf835cb5c29645e137e48dcb17b791742037781358",
+            "loss": 7.024963855743408,
+            "lr": 0.0009999116041825905,
+            "objective": 7.024963855743408,
+            "reset": true,
+            "state_sha256": {
+              "adamw": "36efe0ee420bd99ae98bff4246136e4ea453dd0d85c4fc19344b693ea9ee55d3",
+              "gradients_after_clip": "98f38bb767fd0fe7bf234dc70bc2299ef865e096582af23f1ca19a36fec4a54f",
+              "model": "6042754d226c973b4be5eda6c4ca1de427c2e84b2f7e8fd07bb3df30e1657974",
+              "private_state": "96b15bed34de5d7a682ece707aea5bd2ab8dca784054c53a0ed35c0609c96714"
+            },
+            "step": 1129,
+            "tokens": 144512
+          },
+          {
+            "counts": {
+              "refined_rows": 0,
+              "repaired_coordinates": 0,
+              "repaired_rows": 0
+            },
+            "grad_norm": 1.4499679803848267,
+            "gradient_tensors": 123,
+            "input_sha256": "72eb0bbe2e49e60ceea8b82c3a7c420cb8caab82a6148e1b67952f4db8fcfcb3",
+            "loss": 7.232542037963867,
+            "lr": 0.0009999113174255561,
+            "objective": 7.232542037963867,
+            "reset": false,
+            "state_sha256": {
+              "adamw": "32d8e7f645fec4a65d6e045e47127531277dce2e25919f7721c43513ab8064ab",
+              "gradients_after_clip": "0fa16c1718b38fff7532ab1fe353d602addac111f260ca656a9f353b0128d8ed",
+              "model": "a9a9b0d3aaeb09d185ab5d9984b83bd18046508c7ceb5d515ac5311571847cad",
+              "private_state": "c3b049e8108940a1cc5d709a6ace83e9ec524f0d73901b5f7482e2e15b42fe21"
+            },
+            "step": 1130,
+            "tokens": 144640
+          },
+          {
+            "counts": {
+              "refined_rows": 0,
+              "repaired_coordinates": 0,
+              "repaired_rows": 0
+            },
+            "grad_norm": 1.4067437648773193,
+            "gradient_tensors": 123,
+            "input_sha256": "0c21fa03778f709fc4bad531eca1fc5a3150311b5eb20da4fe101e05d58b15ef",
+            "loss": 7.182844161987305,
+            "lr": 0.0009999110302041988,
+            "objective": 7.182844161987305,
+            "reset": false,
+            "state_sha256": {
+              "adamw": "ee2d42f0b1d449a73c264a10474d017536798185b5b4dd1e4b4ac34f6f223179",
+              "gradients_after_clip": "2af793875d71bc44da4fc9015925879548aedf224a2a47ab4f7c44361bed8729",
+              "model": "644aea7d9d047e932e8f9454844350573ad4551bc601fe657641036f8f911e5a",
+              "private_state": "5eef2f9f9d6e59e7002c62b28a6c78efcf8a1c0c232a88b6472a31c6f2bc37c1"
+            },
+            "step": 1131,
+            "tokens": 144768
+          },
+          {
+            "counts": {
+              "refined_rows": 0,
+              "repaired_coordinates": 0,
+              "repaired_rows": 0
+            },
+            "grad_norm": 1.4129507541656494,
+            "gradient_tensors": 123,
+            "input_sha256": "bf3955afab28544b8cd0614edcfc362ff83fcc632b77a8e41ecc1eaa02bd7631",
+            "loss": 7.688735008239746,
+            "lr": 0.000999910742518519,
+            "objective": 7.688735008239746,
+            "reset": false,
+            "state_sha256": {
+              "adamw": "c275e172b2056ff3f045388bec32de5f306a3c162b4d09a37c071a69ce2a0b2e",
+              "gradients_after_clip": "eb26c6fb67841dcc583638ae69d3072266b9a59be408daf371de27009993ccb7",
+              "model": "e3ef43e16ec60bf6f8919b6464d01ec6ad6b248ca7b9d9dbbeffb0c0c6c66423",
+              "private_state": "f8540bc44a06187aedea8e42b5c1759fe2905bf1ad040ce7c1a230c9620dfac4"
+            },
+            "step": 1132,
+            "tokens": 144896
+          },
+          {
+            "counts": {
+              "refined_rows": 0,
+              "repaired_coordinates": 0,
+              "repaired_rows": 0
+            },
+            "grad_norm": 1.5062472820281982,
+            "gradient_tensors": 123,
+            "input_sha256": "66cb122f168ca83dae5be26f83cd8e70897adbe37f41c5c8edf77f14a68d8e39",
+            "loss": 6.242164134979248,
+            "lr": 0.0009999104543685173,
+            "objective": 6.242164134979248,
+            "reset": true,
+            "state_sha256": {
+              "adamw": "cfb3a9c220676c89f2ad0c1647a951eabbca3b1d4dd1235db854bba7a3fdb3a4",
+              "gradients_after_clip": "315673b2e01c48c298d5dca475dfb9dcb11d83b110bcb2b77f403cdbcddc40b3",
+              "model": "8b9a8335a3cb9a8a8756baf10bbbaee4232a8254fa45281f5d0232c4fca37392",
+              "private_state": "d5781092e3de12b185cbcdf25a6daad7ffdb42159ef7def882d4300b0e8864bf"
+            },
+            "step": 1133,
+            "tokens": 145024
+          },
+          {
+            "counts": {
+              "refined_rows": 0,
+              "repaired_coordinates": 0,
+              "repaired_rows": 0
+            },
+            "grad_norm": 1.3137179613113403,
+            "gradient_tensors": 123,
+            "input_sha256": "230f057cc0e0d5f2a491b52352cae42663295654bf66a52d6e8ee62dab8590d1",
+            "loss": 6.703977584838867,
+            "lr": 0.0009999101657541933,
+            "objective": 6.703977584838867,
+            "reset": false,
+            "state_sha256": {
+              "adamw": "c8560e9bee706bd1f8356940c995a704ac1f6cfad7ef28abb5b7d09f6c2abe4c",
+              "gradients_after_clip": "5958778073d018b685c22f647ff8eaa282202e2d8086de1e84068488769aa6c2",
+              "model": "4748c89293f5534d0d1230c0ab0c65a5a4d8f8380fdb0c70f3e6a35dbe32bdd8",
+              "private_state": "3d5b33b3131c71ff15905cfbe1dd26122087146d34e5df4cdfd33451b3782eaa"
+            },
+            "step": 1134,
+            "tokens": 145152
+          },
+          {
+            "counts": {
+              "refined_rows": 0,
+              "repaired_coordinates": 0,
+              "repaired_rows": 0
+            },
+            "grad_norm": 1.1541017293930054,
+            "gradient_tensors": 123,
+            "input_sha256": "d60df9252ad2cacc9fb6ab514da8104315c25b9c5bd6f1d8caf8e0390b5808f1",
+            "loss": 5.85547399520874,
+            "lr": 0.000999909876675548,
+            "objective": 5.85547399520874,
+            "reset": false,
+            "state_sha256": {
+              "adamw": "f3ab6173ef03e524db03e5fd508105d4ca4bd4526db2cbf9f0ba81a82b42e4e9",
+              "gradients_after_clip": "5627c1e140da9980427925ac3fe077f39fde9d9698a90223706bfbb2188af8b1",
+              "model": "41edb5f588c7fd86aa09fd0600976256de9fa82be2e146dc1b73b1d001585933",
+              "private_state": "9e573308e1f956acf0a69ff0db2192397d6baddf72468e2a288b1b9eb7c29700"
+            },
+            "step": 1135,
+            "tokens": 145280
+          },
+          {
+            "counts": {
+              "refined_rows": 0,
+              "repaired_coordinates": 0,
+              "repaired_rows": 0
+            },
+            "grad_norm": 1.4621706008911133,
+            "gradient_tensors": 123,
+            "input_sha256": "15f20ad4dda7edcbb724e86c90e39574cbd21ce8b75643cc45ed7dd84a90ea94",
+            "loss": 6.530588150024414,
+            "lr": 0.0009999095871325815,
+            "objective": 6.530588150024414,
+            "reset": false,
+            "state_sha256": {
+              "adamw": "ec4f645a2061a5a91cef17c452052d68c764f12340d42c82ccd8871917308de6",
+              "gradients_after_clip": "e6518d066e1ed0f3c19b5ce27e086c43641bcea6cca3aecd68f1eb2e74e35a9e",
+              "model": "6643c1d54cd9481282d616ed1c2cc3db0b8807a8994589c47ce2c87996723899",
+              "private_state": "7d5a0e5cfd83212881293b39b1c67b7ecd090437da16d11cfe9aa366f49ac10c"
+            },
+            "step": 1136,
+            "tokens": 145408
+          },
+          {
+            "counts": {
+              "refined_rows": 0,
+              "repaired_coordinates": 0,
+              "repaired_rows": 0
+            },
+            "grad_norm": 1.4236931800842285,
+            "gradient_tensors": 123,
+            "input_sha256": "d171a4a69aecd8da3db2b0b0a3e66e09483cfb4cde3fefc4a76ba6ae3627fc61",
+            "loss": 6.05774450302124,
+            "lr": 0.0009999092971252936,
+            "objective": 6.05774450302124,
+            "reset": true,
+            "state_sha256": {
+              "adamw": "af2fac5a4aa0ab268390cb5492744df7aafe94a864a9ef60d0f45418237d5826",
+              "gradients_after_clip": "9b0391405fa196e70478e274dfaa9783e3e754da30e40618ac29c9412731b3b2",
+              "model": "fe616d99db45786c2d6b897e3f04b44171b1177f5327efc5c9b73c8dd428b53e",
+              "private_state": "89a86506e691ffd3cd00056cf654f203948b3a7e2cd91c251728dcbd72d0a8ac"
+            },
+            "step": 1137,
+            "tokens": 145536
+          },
+          {
+            "counts": {
+              "refined_rows": 0,
+              "repaired_coordinates": 0,
+              "repaired_rows": 0
+            },
+            "grad_norm": 1.4841911792755127,
+            "gradient_tensors": 123,
+            "input_sha256": "75ce463a9eb18049a9a14f15d461a7cee8c74ebd2474a59c5b31ea8d951d8b6b",
+            "loss": 6.8336310386657715,
+            "lr": 0.0009999090066536852,
+            "objective": 6.8336310386657715,
+            "reset": false,
+            "state_sha256": {
+              "adamw": "1944346db462c92bc882566ec8b02c57ee1291bb1aa721b00dd8eff24f62da17",
+              "gradients_after_clip": "8b56938ff39ea1510b4347ac800ebb0c62d62b6e76735558a073580305409c94",
+              "model": "e63c74fd8e70fdb3661972fab643e34a8f14bea3635fe52c373c18e4073ca624",
+              "private_state": "97da6812780efa92f46d52c68044433a53a61c9f635716e52840a6ccfc6a4a05"
+            },
+            "step": 1138,
+            "tokens": 145664
+          },
+          {
+            "counts": {
+              "refined_rows": 0,
+              "repaired_coordinates": 0,
+              "repaired_rows": 0
+            },
+            "grad_norm": 1.399264931678772,
+            "gradient_tensors": 123,
+            "input_sha256": "b497a4ad2ffc2c9f66b1a5c67d99648cfe6ab77a5dd85b7f71b248cb6cdcedbb",
+            "loss": 6.935987949371338,
+            "lr": 0.0009999087157177564,
+            "objective": 6.935987949371338,
+            "reset": false,
+            "state_sha256": {
+              "adamw": "6fb18fb21ca616e29e607f3e53ef87ae1e9f5cb211aeb7868bd209e365af9ae0",
+              "gradients_after_clip": "5bcffc3465009aa338aa67fc506caa4d8058366afb53edafbd595d5eaff7c986",
+              "model": "e72e0237d91957721275647317cfc56fb2bbc66583154a6fad068cd368ae7085",
+              "private_state": "65001ddd9cdc49b16685eaf85328c87fba30768284bce7c75c977e232dce87b8"
+            },
+            "step": 1139,
+            "tokens": 145792
+          },
+          {
+            "counts": {
+              "refined_rows": 0,
+              "repaired_coordinates": 0,
+              "repaired_rows": 0
+            },
+            "grad_norm": 1.6099750995635986,
+            "gradient_tensors": 123,
+            "input_sha256": "a122c4596f9648275cbae6dc099bfea011f33a492cdec1ca489fe58b57c41c05",
+            "loss": 6.922846794128418,
+            "lr": 0.0009999084243175074,
+            "objective": 6.922846794128418,
+            "reset": false,
+            "state_sha256": {
+              "adamw": "4e249c9791e2f8b07eb3204ca226fd4cc10bd93f176167bd72374635e016c475",
+              "gradients_after_clip": "16b0fe82939d96d5b21736c7656d197d7617a2a8f5f58ef5ed23bd782f96cb78",
+              "model": "85e8c3d759222f001947f08efa9d1b12e3209464d5f0b0828103506690215596",
+              "private_state": "6633ea7264cfb22dbc2ee184137b7dd0532f2b9a60dafb8d3b713692160ad95a"
+            },
+            "step": 1140,
+            "tokens": 145920
+          }
+        ]
+      },
+      "restored": {
+        "checkpoint_sha256": "84dae9acb392c55034bee0e625399d7354cee70aaecac8c2ff6cb12d9757fc24",
+        "comparison": {
+          "adamw": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 504,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 9.313225746154785e-10,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "gradients_after_clip": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 123,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 1.1175870895385742e-08,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "model": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 144,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 6.854534149169922e-07,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "private_state": {
+            "atol": 1e-05,
+            "exact": true,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 110,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 0.0,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "discrete_exact": true,
+        "loaded_state_exact": true,
+        "passed": true,
+        "scalar_abs_diffs": {
+          "grad_norm": 0.0,
+          "loss": 0.0,
+          "objective": 0.0
+        },
+        "step": 1140
+      }
+    }
+  },
+  "queue": {
+    "elapsed_seconds": 88.17399755492806,
+    "job_id": "tide-r10-kv-accept-iUW8Xt",
+    "logical_device": "npu:0",
+    "logical_devices": [
+      "npu:0"
+    ],
+    "npu_count": 1,
+    "physical_id": 1,
+    "physical_ids": [
+      1
+    ],
+    "priority": 0,
+    "project": "tide-learning-lab",
+    "return_code": 0,
+    "schema_version": 1,
+    "status": "completed",
+    "timestamp": "2026-11-21T04:13:23.852705+00:00"
+  },
+  "raw_direct": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/kv-r10-accept-iUW8Xt/replay/direct.json",
+    "sha256": "c12c5d6ada6a966d059b453715ec01b28c0c35c318c035693f5a4b1f7d0c5481"
+  },
+  "raw_restored": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/kv-r10-accept-iUW8Xt/replay/restored.json",
+    "sha256": "549743d272153ed617516a5de6f324ba5763a5e9896f547e2afab438cd83ba4f"
+  },
+  "runner": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/scripts/accept_r10_kv.py",
+    "sha256": "45c866d657e5d9bc59e750a37c56596bd185fc62cb346c8824902ac572c726b9"
+  },
+  "schema": "pilot-r3-kv-no-write-acceptance-v1"
+}

@@ -1,0 +1,602 @@
+{
+  "authority": {
+    "added_since_frozen_r09": [
+      "shannon_support.py"
+    ],
+    "branch": "graph-execution-foundation",
+    "cap_patch": {
+      "path": "patches/pilot-round2-shannon-cap.patch",
+      "sha256": "3fa3bd1614e6eea01665e50dc5f4b90ea870ff43c52a602900e20de7d5e41b16"
+    },
+    "cap_patch_role": "round-2 audit attachment; equivalent to the allocation.py change in local foundation commit 049ecdcb, present in r09 frozen source",
+    "changes_since_frozen_r09": [
+      "__init__.py",
+      "allocation.py",
+      "config.py",
+      "model.py",
+      "region.py",
+      "region_batch.py",
+      "shannon_support.py"
+    ],
+    "files_sha256": {
+      "__init__.py": "51b2da0ae87b715638de8ef789edabdada69ad43c05b19e0ef79eefa0113dd3c",
+      "allocation.py": "ead87a2b240437f7bc3898f218ccae46d2fd3a2371946b5bae4f4d33b9d8f176",
+      "attention.py": "c163d02d95c7e62d6cf9ed83638bfea79cdb354253bcebd7ca104681a954257c",
+      "checkpoint.py": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+      "config.py": "5c15208fde72446a185ac7323d023b9d5ba6ee898e045e3d8b75b4f97495c28a",
+      "ffn_packing.py": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449",
+      "grouped_linear.py": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1",
+      "kv.py": "6ce42c759d8bfa9843c006d0bbda31ad1bc0602b0c9584718d73959bc11a3e3b",
+      "layout.py": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+      "model.py": "556321b417e0ad86b9c73ccd63f5bae315d488b0020db7354a4320750292d9f1",
+      "parameters.py": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc",
+      "placement.py": "0f77def73da20f467756e5dc1f701f25942565f762e82be5d23218ecee39d05f",
+      "placement_ownership.py": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+      "precision.py": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+      "reception.py": "43f72f3f1a55263b8d1185a41f0bf2711b7e1179cd664710ced08e70563b45c4",
+      "region.py": "e661b32a3dbfcf89587434b258335cec4f482c7b4a1bbe8d75db8b2670ddad39",
+      "region_batch.py": "829c5d60553acca1f0d1d6f914df3fa5fe8977083efe98586048f8ca97bae1d5",
+      "region_execution.py": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950",
+      "region_placement.py": "fd082f035185d04af6bc3ba27b949a8f065ccdf62f8b32a1b442accbfa6f2b6d",
+      "scaled_arithmetic.py": "21b696170e73ae28a3238a4db7dd9b613d92a2b0eb88610df74a5d01a8006c62",
+      "shannon_support.py": "29507db503a88d880614142411004fa7eaa39a77374a6e1c1dc640501c5f6105",
+      "ssd.py": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+      "ssd_memory.py": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2",
+      "topology.py": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+      "topology_hb.py": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06",
+      "weighted_mean.py": "6c993386c66f611c371c75e2e66a52dec7954c4fb9078819aab23f13d6c76d88"
+    },
+    "foundation_repo": "ZichaoLong/tide",
+    "hash_format": "SHA256 of UTF-8 JSON mapping of POSIX names relative to src/tide to lowercase file SHA256, sorted keys, compact separators",
+    "math_revision": "4f5b9f20a4030d68ee66ae2d26e34659a5e37234",
+    "new_policy_publication": "local working tree, content locked for acceptance",
+    "r09_allocation_sha256": "a8e4346837e7db763d3b778126090c82719c8192679606b4b1b508e576a4e74e",
+    "r09_python_file_count": 25,
+    "remote_check": "git ls-remote --exit-code https://github.com/ZichaoLong/tide.git refs/heads/graph-execution-foundation",
+    "remote_head_at_review": "b3a02979276fbd1ca448318ef05c7e3a4533c67b",
+    "round2_receipt": {
+      "path": "docs/evidence/pilot-r2-shannon-repair.json",
+      "sha256": "55d2fe8be99c20ef3e205fea8cb888f9edf07dfe60655d56b9b67f12525bd7a3"
+    },
+    "runtime_package": "src/tide",
+    "tree_sha256": "cbf9c33157bd744e240fc4e662862cd147a5ba78861452838c053e8945d1e4f4",
+    "working_tree_parent": "049ecdcbc39c80297b37a99591906acbefa1bc13"
+  },
+  "base_tests": {
+    "cli_file": "tests/test_train_example.py",
+    "cli_passed": 35,
+    "command_prefix": ".venv-instances/bin/python -m pytest -p no:cacheprovider -q",
+    "cpu_files": "tests/test_allocation*.py tests/test_shannon*.py tests/test_region_batch.py tests/test_models.py tests/test_stable_reception.py tests/test_checkpoint_update.py tests/test_reception_padding.py tests/test_reception_execution.py tests/test_attention_singleton.py tests/test_kv_memory.py",
+    "cpu_fp64_in_npu_suite": 1,
+    "cpu_passed": 322,
+    "environment": "PYTHONPATH=src TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1",
+    "npu_fp32_exercised": 15,
+    "npu_launcher": "TIDE_STABLE_DEVICE=npu:0",
+    "npu_queue": {
+      "elapsed_seconds": 15.085658922791481,
+      "job_id": "tide-tl007-floor-euw2",
+      "logical_device": "npu:0",
+      "logical_devices": [
+        "npu:0"
+      ],
+      "npu_count": 1,
+      "physical_id": 1,
+      "physical_ids": [
+        1
+      ],
+      "priority": 0,
+      "project": "graph-execution-foundation",
+      "return_code": 0,
+      "schema_version": 1,
+      "status": "completed",
+      "timestamp": "2026-11-20T15:37:03.439831+00:00"
+    },
+    "npu_suite_passed": 16,
+    "policy_test": {
+      "path": "../graph-execution-foundation/tests/test_shannon_positive_floor.py",
+      "sha256": "23b8275281b4dec51c2930dfe7623c63fb397e7dfed392281836bcc5c627ae88"
+    }
+  },
+  "downstream_cpu_regressions": {
+    "files": [
+      "tests/test_pilot_models3.py",
+      "tests/test_pilot_shannon3_repair.py",
+      "tests/test_pilot_resume3.py"
+    ],
+    "foundation_tree_sha256": "cbf9c33157bd744e240fc4e662862cd147a5ba78861452838c053e8945d1e4f4",
+    "passed": 28
+  },
+  "downstream_probe": {
+    "path": "scripts/accept_r09_shannon.py",
+    "sha256": "b67478b5c58d19b13bdec2dc129f1f77ee9c7cc75c6f3847009c7592e6d10ee3"
+  },
+  "failure_input": {
+    "path": ".local/pilot-r3/campaign-r09/round/tasks/multiscale_settle-d128-k-singleton7-43b1716b2d-a2-2026112001-r2/attempt-0/failure.pt",
+    "sha256": "376cbcab8a82b59b312ea0c525cc046768028f6f7738da427b7859f05220726e"
+  },
+  "npu_acceptance_queue": {
+    "elapsed_seconds": 34.060472801327705,
+    "job_id": "tide-tl007-accept-ew1",
+    "logical_device": "npu:0",
+    "logical_devices": [
+      "npu:0"
+    ],
+    "npu_count": 1,
+    "physical_id": 1,
+    "physical_ids": [
+      1
+    ],
+    "priority": 0,
+    "project": "tide-learning-lab",
+    "return_code": 0,
+    "schema_version": 1,
+    "status": "completed",
+    "timestamp": "2026-11-20T15:40:16.094490+00:00"
+  },
+  "old_r09_witness": {
+    "path": "docs/evidence/pilot-r3-r09-shannon-underflow.json",
+    "sha256": "a537b63c0c39425b87f48117054167a8c782acc9a6e99db5e808c2f8a7919961"
+  },
+  "original_task": {
+    "path": ".local/pilot-r3/campaign-r09/round/tasks/multiscale_settle-d128-k-singleton7-43b1716b2d-a2-2026112001-r2/task.json",
+    "sha256": "fc61ec0d4417154ad9ecf5b23d2d9850525c38935a9ba23703ce78b18b17330b"
+  },
+  "qualification": {
+    "cpu": {
+      "direct": {
+        "capture_owners_exact": true,
+        "capture_sha256": "376cbcab8a82b59b312ea0c525cc046768028f6f7738da427b7859f05220726e",
+        "new_checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/tl-req-007-ewMGyH/cpu/checkpoints/step-000001257-9e0ebba6e7.pt",
+          "sha256": "ca9ed087aacda9048078ede9bcd5be5575c8a11859330c59895d9e2749e6ed93",
+          "size_bytes": 60087293,
+          "state_sha256": "639e45458557d43d28afb162a8b6f6bd82620d7d25654500a031e124bdfefc0e",
+          "steps": 1257,
+          "tokens": 321792
+        },
+        "official_checkpoint": {
+          "fallback_used": false,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r09/round/tasks/multiscale_settle-d128-k-singleton7-43b1716b2d-a2-2026112001-r2/attempt-0/checkpoints/step-000001203-eda4c7da06.pt",
+          "rejected_generations": [],
+          "sha256": "35124c711e01558a5765c0e98d77b4b1de88a78d490374c06501d82db65d9fa2"
+        },
+        "physical_device": null,
+        "pid": 4184802,
+        "rng_sha256": "634a1015d42ab3e357b282fc65df851ae362f2e9cbfcfecc2dd4a457b26e0e3d",
+        "rows": {
+          "counts": {
+            "refined_rows": 23,
+            "repaired_coordinates": 23,
+            "repaired_rows": 23
+          },
+          "first_score_gradient": [
+            1.2151709361855564e-16,
+            -1.2151709361855564e-16
+          ],
+          "first_scores": [
+            -73.420654296875,
+            32.303375244140625
+          ],
+          "first_stored": [
+            1.401298464324817e-45,
+            1.0
+          ],
+          "max_relative_error_weak_strong_budget": [
+            8.346284374738389e-08,
+            8.346284374738389e-08,
+            8.346284374738389e-08
+          ]
+        },
+        "source_sha256": "cbf9c33157bd744e240fc4e662862cd147a5ba78861452838c053e8945d1e4f4",
+        "stream_alignment": {
+          "failure_batch_exact": true,
+          "from_step": 1203,
+          "to_step": 1256
+        },
+        "stream_sha256": "dbd9ca06d55e77c7ddf38ff62c241c74587e2af7b838e6ae05d56c181dacfff7",
+        "strict_error": "Shannon allocation underflow would erase a positive sender",
+        "updates": [
+          {
+            "counts": {
+              "refined_rows": 64,
+              "repaired_coordinates": 23,
+              "repaired_rows": 23
+            },
+            "grad_norm": 1.1153533458709717,
+            "gradient_tensors": 123,
+            "input_sha256": "bb38538638651975c3337da685d4f860a01c0a11cf3c9dca5551691a4ba0414e",
+            "loss": 5.55780553817749,
+            "lr": 0.0009990714908425663,
+            "objective": 5.55780553817749,
+            "reset": false,
+            "state_sha256": {
+              "adamw": "ba2551c22303ff71d51e94d03ddceb750cb2c15fed6c984cf64625b95ade2871",
+              "gradients_after_clip": "04d19df04ef1808fbaf3a2b009f235c43de9636b376fc89f7b004fbec50fed37",
+              "model": "0137caecb6dbd36d516635a7b382a95cdb0408e77be0b472484bf43a3b487d30",
+              "private_state": "7551881988122cb9dbddef90bae843ee6034308d2ffe585fe3981b0aedc8582b"
+            },
+            "step": 1256,
+            "tokens": 321536
+          },
+          {
+            "counts": {
+              "refined_rows": 115,
+              "repaired_coordinates": 56,
+              "repaired_rows": 56
+            },
+            "grad_norm": 1.0785359144210815,
+            "gradient_tensors": 123,
+            "input_sha256": "3a6fb6d21c9f93c62b2f99eaac5eccdcabc706e8c8bae47048c2283dd3cffae7",
+            "loss": 5.983538627624512,
+            "lr": 0.0009990696335362183,
+            "objective": 5.983538627624512,
+            "reset": true,
+            "state_sha256": {
+              "adamw": "6e8188a50fb2f916578e41e7fff6130f33816be9e1a2622f9f50db5f47495158",
+              "gradients_after_clip": "9a21b84e8b13013acb454d8486786144b9373bb79766e5804f6ce7c9edb67099",
+              "model": "08b6a507030801d1f55ee3d1f449c624327d260b8e1fa339a6aa2f723583f960",
+              "private_state": "acf92afabd9f944435f435ea229fed0fc8ef62a90934c209a051c22114acd900"
+            },
+            "step": 1257,
+            "tokens": 321792
+          },
+          {
+            "counts": {
+              "refined_rows": 143,
+              "repaired_coordinates": 111,
+              "repaired_rows": 111
+            },
+            "grad_norm": 1.1643590927124023,
+            "gradient_tensors": 123,
+            "input_sha256": "99cab4066d96ec181afe57863ed41d6a3c8f9a68dab06f1fba7ac9608d0fae84",
+            "loss": 6.211135387420654,
+            "lr": 0.000999067774376054,
+            "objective": 6.211135387420654,
+            "reset": false,
+            "state_sha256": {
+              "adamw": "761c097f9c611b0a7f43570fd81e5cac111fb64e4f92b4f0ea8f19ce1ff2cda9",
+              "gradients_after_clip": "c06e07649d0120468afc4726ad2c97e993536b7ba4666d8cbfd7a9e34ff26432",
+              "model": "1edef077e0bc572cad851074654242aab0f34898a54bab8223b481024454e8f0",
+              "private_state": "4546f07cc535d4c93a33772fb8f51240ca662898a1abc0d9a62d157bca44dd2c"
+            },
+            "step": 1258,
+            "tokens": 322048
+          }
+        ]
+      },
+      "receipts": [
+        {
+          "path": ".local/pilot-r3/tl-req-007-ewMGyH/cpu/direct.json",
+          "sha256": "2a3d63dd11554b0e09df6e4af529569a0db7c6fe1a3c61f78d369bf652572db9"
+        },
+        {
+          "path": ".local/pilot-r3/tl-req-007-ewMGyH/cpu/restored.json",
+          "sha256": "030004acfc4fee87dd7281aaa7ecd62626c88a717f5c01b9e15e6321d4cef3d2"
+        }
+      ],
+      "restored": {
+        "bitwise_replay": true,
+        "checkpoint_sha256": "ca9ed087aacda9048078ede9bcd5be5575c8a11859330c59895d9e2749e6ed93",
+        "comparison": {
+          "adamw": {
+            "atol": 1e-05,
+            "exact": true,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 504,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 0.0,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "gradients_after_clip": {
+            "atol": 1e-05,
+            "exact": true,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 123,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 0.0,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "model": {
+            "atol": 1e-05,
+            "exact": true,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 144,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 0.0,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "private_state": {
+            "atol": 1e-05,
+            "exact": true,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 96,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 0.0,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "discrete_exact": true,
+        "loaded_state_exact": true,
+        "passed": true,
+        "physical_device": null,
+        "pid": 4185119,
+        "scalar_abs_diffs": {
+          "grad_norm": 0.0,
+          "loss": 0.0,
+          "objective": 0.0
+        },
+        "step": 1258
+      }
+    },
+    "npu": {
+      "direct": {
+        "capture_owners_exact": true,
+        "capture_sha256": "376cbcab8a82b59b312ea0c525cc046768028f6f7738da427b7859f05220726e",
+        "new_checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/tl-req-007-ewMGyH/npu/checkpoints/step-000001257-d1345deb8b.pt",
+          "sha256": "b48098cfcf5b4b97fc33ccbcf38dec6e6342a222e2c1a0b9dc8ace67cdc8a13f",
+          "size_bytes": 60087547,
+          "state_sha256": "5b434757e76a5060196e300d5a21844ae7f3024a818cc704e2cfa848b8c5a3f0",
+          "steps": 1257,
+          "tokens": 321792
+        },
+        "official_checkpoint": {
+          "fallback_used": false,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r09/round/tasks/multiscale_settle-d128-k-singleton7-43b1716b2d-a2-2026112001-r2/attempt-0/checkpoints/step-000001203-eda4c7da06.pt",
+          "rejected_generations": [],
+          "sha256": "35124c711e01558a5765c0e98d77b4b1de88a78d490374c06501d82db65d9fa2"
+        },
+        "official_migration_step_1204": {
+          "counts": {
+            "refined_rows": 0,
+            "repaired_coordinates": 0,
+            "repaired_rows": 0
+          },
+          "grad_norm": 1.095512866973877,
+          "gradient_tensors": 123,
+          "input_sha256": "d41d0120be5717c4042d31b4231c69b1eae12c95197a89ab675845c643750684",
+          "loss": 6.141298294067383,
+          "lr": 0.0009991655160256064,
+          "objective": 6.141298294067383,
+          "reset": false,
+          "state_sha256": {
+            "adamw": "77346af9088ac263f2350edf3da747ccff9b03e4a118e11e883efeaa030716eb",
+            "gradients_after_clip": "22d112d4d379ed793a1afbb9f8cba8f8649871737592ed2126d004408c5e931f",
+            "model": "620aa58e5c70efacb4e79e3b88ba4fddbdde1c23b8377081c7c305a8f34114f6",
+            "private_state": "a458407e8e1b1136d00fb4f9c7d1b0f51cfab59db6780099a5677e556f546e23"
+          }
+        },
+        "physical_device": "1",
+        "pid": 4185035,
+        "rng_sha256": "2dbffd2d0d6fcc5e54c26e88e8f4409f7b288d787ca9b7fa4ea31af7c52ca66e",
+        "rows": {
+          "counts": {
+            "refined_rows": 23,
+            "repaired_coordinates": 23,
+            "repaired_rows": 23
+          },
+          "first_score_gradient": [
+            1.2151616717626958e-16,
+            -1.2151616717626958e-16
+          ],
+          "first_scores": [
+            -73.42066192626953,
+            32.303375244140625
+          ],
+          "first_stored": [
+            1.401298464324817e-45,
+            1.0
+          ],
+          "max_relative_error_weak_strong_budget": [
+            1.0952152962317996e-07,
+            1.0952152962317996e-07,
+            1.0952152962317996e-07
+          ]
+        },
+        "source_sha256": "cbf9c33157bd744e240fc4e662862cd147a5ba78861452838c053e8945d1e4f4",
+        "stream_alignment": {
+          "failure_batch_exact": true,
+          "from_step": 1203,
+          "to_step": 1256
+        },
+        "stream_sha256": "dbd9ca06d55e77c7ddf38ff62c241c74587e2af7b838e6ae05d56c181dacfff7",
+        "strict_error": "Shannon allocation underflow would erase a positive sender",
+        "updates": [
+          {
+            "counts": {
+              "refined_rows": 64,
+              "repaired_coordinates": 23,
+              "repaired_rows": 23
+            },
+            "grad_norm": 1.115505337715149,
+            "gradient_tensors": 123,
+            "input_sha256": "bb38538638651975c3337da685d4f860a01c0a11cf3c9dca5551691a4ba0414e",
+            "loss": 5.557805061340332,
+            "lr": 0.0009990714908425663,
+            "objective": 5.557805061340332,
+            "reset": false,
+            "state_sha256": {
+              "adamw": "5e8bb7c485ad7b4169d3cf5b62f8b194072e9d4122e8f01c2e25fc3e9c92d52f",
+              "gradients_after_clip": "f0163b91b5d8c89b3303a54ec6ae6a78dbd30100e50c101e90a7a606d257c51e",
+              "model": "272ed91ba05ba01c470b8d29ee6f412af77e9c38bb971709b4951bc41ebf795b",
+              "private_state": "5c2391ada7070958c63053f27de41e00cafbbdc16acb1345910c338e61e3389b"
+            },
+            "step": 1256,
+            "tokens": 321536
+          },
+          {
+            "counts": {
+              "refined_rows": 115,
+              "repaired_coordinates": 56,
+              "repaired_rows": 56
+            },
+            "grad_norm": 1.0786633491516113,
+            "gradient_tensors": 123,
+            "input_sha256": "3a6fb6d21c9f93c62b2f99eaac5eccdcabc706e8c8bae47048c2283dd3cffae7",
+            "loss": 5.983537197113037,
+            "lr": 0.0009990696335362183,
+            "objective": 5.983537197113037,
+            "reset": true,
+            "state_sha256": {
+              "adamw": "fceebda462a6d9cbb646e64c92b9aa78da75c4106e294cd2771c654f9267a792",
+              "gradients_after_clip": "8c4e4f7ebec49df400149024b33ea6d0d389c06ad67379b2f277b0dbca1bb8a0",
+              "model": "53e594c5e4086fdc054d8da4733914d8a876b79da52ae6c68a720a021722e047",
+              "private_state": "2ab748b23c914142f02d814bebbaddd19c413c7272b59e292f7ec8fa58046562"
+            },
+            "step": 1257,
+            "tokens": 321792
+          },
+          {
+            "counts": {
+              "refined_rows": 143,
+              "repaired_coordinates": 111,
+              "repaired_rows": 111
+            },
+            "grad_norm": 1.164513349533081,
+            "gradient_tensors": 123,
+            "input_sha256": "99cab4066d96ec181afe57863ed41d6a3c8f9a68dab06f1fba7ac9608d0fae84",
+            "loss": 6.211136817932129,
+            "lr": 0.000999067774376054,
+            "objective": 6.211136817932129,
+            "reset": false,
+            "state_sha256": {
+              "adamw": "82da696c8bf31203d2867cbd71e7c979af3c63b68ef025125fb3c92c5936b3bb",
+              "gradients_after_clip": "7417ffc7319dc3f61311d847a10f70900ea48dfe76ab49c6b4924582afa09fc4",
+              "model": "6c7ff689d67d72d1ec8428740ec64f99140841d0384741bf853aaa82c732885c",
+              "private_state": "5f22fe02f6752b5d7a2fea29a6a8dc274bda2de326e2b43cbc452ece92dcae8b"
+            },
+            "step": 1258,
+            "tokens": 322048
+          }
+        ]
+      },
+      "receipts": [
+        {
+          "path": ".local/pilot-r3/tl-req-007-ewMGyH/npu/direct.json",
+          "sha256": "3f5ba8ac723b3516d05af2c7d1b1adf4a07965021dd0462edbe09a45ceaff9c9"
+        },
+        {
+          "path": ".local/pilot-r3/tl-req-007-ewMGyH/npu/restored.json",
+          "sha256": "48ab360cd19ba9d806ccc5f1c280aa93967f2a5a767ecc679fca1e0d4a74c89a"
+        }
+      ],
+      "restored": {
+        "bitwise_replay": false,
+        "checkpoint_sha256": "b48098cfcf5b4b97fc33ccbcf38dec6e6342a222e2c1a0b9dc8ace67cdc8a13f",
+        "comparison": {
+          "adamw": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 504,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 9.313225746154785e-10,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "gradients_after_clip": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 123,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 3.725290298461914e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "model": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 144,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 1.862645149230957e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "private_state": {
+            "atol": 1e-05,
+            "exact": true,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 96,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 0.0,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "discrete_exact": true,
+        "loaded_state_exact": true,
+        "passed": true,
+        "physical_device": "1",
+        "pid": 4185460,
+        "scalar_abs_diffs": {
+          "grad_norm": 0.0,
+          "loss": 4.76837158203125e-07,
+          "objective": 4.76837158203125e-07
+        },
+        "step": 1258
+      }
+    }
+  },
+  "raw_directory": ".local/pilot-r3/tl-req-007-ewMGyH",
+  "reviewed_local": "2026-11-20T23:44:10+08:00",
+  "runtime": {
+    "diagnostic_rng": "seeded by frozen worker for the non-resumable failure capture; subsequent same-policy checkpoint includes RNG",
+    "implementation": "device ordinary bounded solve, host Decimal for exceptional rows, first-order VJP uses unrounded slope parts",
+    "input_stream_sha256": "2f4617d73b5dad4f6a343707382714738e8012432fda85d9f7e36f44b26a4e1a",
+    "model_recipe_change": {
+      "shannon_support_policy": {
+        "from": "strict (field absent)",
+        "to": "positive-floor-v1"
+      }
+    },
+    "module": "ascend/dev-workspace-9.2.0",
+    "packages": {
+      "numpy": "2.5.2",
+      "torch": "2.12.0+cpu",
+      "torch-npu": "2.12.0.post3"
+    },
+    "performance": "not benchmarked",
+    "policy": "positive-floor-v1",
+    "python": "3.12.13"
+  },
+  "schema": "tide-learning-lab-TL-REQ-007-acceptance-v1",
+  "scope": "Isolated opt-in r09 diagnostics on CPU FP32 and one Ascend NPU. No A/B result or change to the campaign lock.",
+  "worker_files": {
+    "data3.py": "da91d2df3a59d840bdafe181721f579ce1a8d8a4203b5872a700a812e2587cbe",
+    "models.py": "42ac16fa4353d47898dc0d40fbb4b689c50856f06007ccf43f887e65cc51becb",
+    "models3.py": "07f6c919215d1bc79fb433d8120c133e4ff5173b7ac192b018d64819498e9b71",
+    "worker.py": "542b1f5b88389e902f2aedb19eb368321152f1fff012f66d553cfc0cccf349d8",
+    "worker3.py": "a5e9b27350521ef7bcd929f001add25679ed7e26482287c7937340cf30d4f3a8"
+  },
+  "worker_source": ".local/pilot-r3/campaign-r08/frozen/source"
+}

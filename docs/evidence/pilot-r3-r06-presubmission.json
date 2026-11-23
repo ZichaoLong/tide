@@ -1,0 +1,103 @@
+{
+  "adoption": {
+    "additional_evaluation_by_model": {
+      "exchange-d64-k-base-8e5f1d5288": 64,
+      "exchange-d64-k-capacity-04e50b64a9": 64,
+      "exchange-d64-k-independent-9af84f69cb": 64,
+      "exchange-d64-k-narrowwide-fdc0f72367": 64,
+      "exchange-d64-k-pool-d1990a0160": 64,
+      "exchange-d64-k-shannon-615836a776": 64,
+      "multiscale_settle-d64-k-group5-4eb83f52ae": 64,
+      "multiscale_settle-d64-k-mixed9-42e89ddc50": 1632,
+      "multiscale_settle-d64-k-singleton7-121b8d2af3": 1632,
+      "multiscale_timed-d64-k-group5-716f8264e2": 18080
+    },
+    "additional_evaluation_reserved_tokens": 21792,
+    "completed": 218,
+    "not_started": 26,
+    "resume": 19,
+    "retry": 1
+  },
+  "checks": [
+    {
+      "passed": 209,
+      "suite": "scheduler3/shared/dynamic/runner/round3"
+    },
+    {
+      "passed": 57,
+      "suite": "dynamic runner and throughput policy, final"
+    },
+    {
+      "passed": 43,
+      "suite": "relay preparation and CPU recovery, incl v1 compatibility"
+    },
+    {
+      "passed": 134,
+      "suite": "report/audit/scheduler, integration"
+    },
+    {
+      "passed": 31,
+      "suite": "audit incl explicit conservative-debit accounting"
+    }
+  ],
+  "controller_inputs_frozen": true,
+  "launch": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/campaign-launch-draft.json",
+    "sha256": "2e52d779197a1eb875a51016be2ab27c65c7e2766db56fe7e8eab5558511611a"
+  },
+  "memory_scope": "1 TB reservation and process-tree RSS watchdog; host does not provide an effective per-service memory cgroup hard limit",
+  "numerical_scope": "CPU state-continuation witnesses only; no new NPU trajectory claim; original Shannon and strict tolerance failures unchanged",
+  "observed_unix": 1795146481.0803761,
+  "old_terminal_review": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/resume-import.json",
+    "sha256": "b089aeabb22bf8c1be1fea69e3cfed2f4c8d83f3cb00997ffcfc753b72ebf496"
+  },
+  "plan": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/campaign-plan.json",
+    "sha256": "7f87f73295c33784040d4c20005c916cf904b652d9866a1ba00291f5ac09f0d7"
+  },
+  "prepared": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/campaign-prepared.json",
+    "sha256": "fd1d406ce468d4cfe1dca36658ac5c5a94cb002a91265eb4a99a3309fa5f2ca4"
+  },
+  "remaining": {
+    "budget_ledger": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/budget.json",
+    "deadline_unix": 1797698913.9318287,
+    "max_device_seconds": 25920000,
+    "observed_unix": 1795146481.0914166,
+    "remaining_device_seconds": 25716319.100702833,
+    "remaining_preparation_device_seconds": 166706.1297786832,
+    "remaining_preparation_processed_tokens": 52914592,
+    "remaining_wall_seconds": 2552432.84041214,
+    "started_unix": 1795106913.9318287
+  },
+  "resources": {
+    "cpu_affinity_count": 320,
+    "memory_available_bytes": 1993202970624,
+    "storage": {
+      "available_storage_bytes": 205640105984,
+      "filesystem_free_bytes": 1653876109312,
+      "observed_unix": 1795146481.0914018,
+      "quota": {
+        "filesystem": "/dev/mapper/ascend_data-data",
+        "grace_epoch": 0,
+        "hard_bytes": 751619276800,
+        "soft_bytes": 322122547200,
+        "used_bytes": 116482441216
+      },
+      "scope": "input snapshot headroom only; campaign forecasts all resolved controls before release",
+      "snapshot_source_bytes": 0,
+      "storage_reserve_bytes": 25769803776
+    }
+  },
+  "review_tool": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/audit3.py",
+    "scope": "independent review tool; amended accounting comparison is not a change to frozen training/controller execution",
+    "sha256": "e1c1a1b605040d131be28433f9b7c64ccf6fc1ee8b414fc0308d3da61a9c7dde"
+  },
+  "schema": "pilot-r3-r06-presubmission-v1",
+  "status": "passed",
+  "test_count_scope": "suites overlap; do not sum their counts",
+  "unit": "tide-pilot-r3-campaign-r06.service",
+  "worker_source_preserved": true
+}

@@ -1,0 +1,44 @@
+{
+  "cgroup": {
+    "members": [],
+    "path": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-quad-transfer-r01.service",
+    "released": true,
+    "status": "absent"
+  },
+  "child_results_verified": 48,
+  "frozen_sources": "verified_old_and_new",
+  "live_identities": [],
+  "observed_unix": 1795140242.6098385,
+  "processed_loss_tokens": 36864,
+  "queue": "not_applicable_cpu_only",
+  "recorded_identity_count": 49,
+  "remaining_descendants": [],
+  "report": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/report.json",
+    "sha256": "c934dda5c6f36080fb3e0d6e2c0266564c83a55735672bfe8ebbe4aca0372643"
+  },
+  "reserved_tokens": 36864,
+  "schema": "pilot-r3-quad-proof-terminal-audit-v1",
+  "scope": "release and bound proof artifact integrity; no NPU trajectory or learning conclusion",
+  "status": "passed",
+  "systemd": {
+    "expected_cgroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-quad-transfer-r01.service",
+    "expected_cgroup_basis": "observed user slice + exact service unit name",
+    "properties": {
+      "ActiveState": "inactive",
+      "ControlGroup": "",
+      "ExecMainCode": "0",
+      "ExecMainStatus": "0",
+      "InvocationID": "",
+      "LoadState": "not-found",
+      "MainPID": "0",
+      "Result": "success",
+      "Slice": "",
+      "SubState": "dead"
+    },
+    "return_code": 0,
+    "status": "observed",
+    "unit": "tide-pilot-r3-quad-transfer-r01.service"
+  },
+  "unit": "tide-pilot-r3-quad-transfer-r01.service"
+}

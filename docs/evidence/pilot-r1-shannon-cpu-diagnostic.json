@@ -1,0 +1,237 @@
+{
+  "allocation_frozen_sha256": "b4d0e130c1a87391606e6abedfb2a9b0ab870bfb9027dc31b8c91135bdacd4ca",
+  "allocation_installed_sha256": "b4d0e130c1a87391606e6abedfb2a9b0ab870bfb9027dc31b8c91135bdacd4ca",
+  "causality": {
+    "atol": 1e-05,
+    "exact": true,
+    "failed_field_count": 0,
+    "failed_fields": [],
+    "fields": 1,
+    "finite": true,
+    "integer_equal": true,
+    "max_abs": 0.0,
+    "rtol": 0.0001,
+    "structure_equal": true,
+    "within_tolerance": true
+  },
+  "cpu_threads": 2,
+  "created_unix": 1795089559.282039,
+  "data_manifest_sha256": "122f912828ff701de8dd449b75a473fb03082a3ae0bb40dee50d5d90f5f23b1b",
+  "device": "cpu",
+  "diagnostic_source_sha256": "3937d837c8c601190a0ca9e55f374c8afbd8076fd88d03a3c0193ad6ed8ce0db",
+  "failures": [
+    {
+      "error": "allocation multiplier did not meet the total constraint",
+      "failed_row_count": 1,
+      "kind": "shannon",
+      "max_residual": 0.44631892442703247,
+      "phase": "scalar_witness",
+      "rows": [
+        {
+          "bisect": {
+            "c": [
+              0.09999999403953552,
+              0.44999998807907104
+            ],
+            "inside": [
+              true,
+              true
+            ],
+            "kind": "shannon",
+            "lower": [
+              0.0,
+              0.0
+            ],
+            "multiplier": [
+              -5.2014923095703125
+            ],
+            "reconstructed": [
+              0.5463189482688904,
+              0.0036810680758208036
+            ],
+            "remainder": [
+              0.550000011920929
+            ],
+            "shifted": [
+              0.0,
+              -5.0
+            ],
+            "solve": [
+              true
+            ],
+            "target": [
+              0.550000011920929
+            ],
+            "upper": [
+              0.10000000149011612,
+              1.0
+            ]
+          },
+          "c": [
+            0.10000000149011612,
+            0.0036810680758208036
+          ],
+          "high_active": [
+            false
+          ],
+          "high_total": [
+            1.0
+          ],
+          "index": [
+            0
+          ],
+          "low_active": [
+            true
+          ],
+          "low_total": [
+            0.550000011920929
+          ],
+          "lower": [
+            0.0,
+            0.0
+          ],
+          "mu": [
+            0.10000000149011612,
+            1.0
+          ],
+          "residual": [
+            0.44631892442703247
+          ],
+          "scores": [
+            5.0,
+            0.0
+          ],
+          "target": [
+            0.550000011920929
+          ],
+          "tolerance": [
+            2.098083541568485e-06
+          ],
+          "upper": [
+            0.10000000149011612,
+            1.0
+          ]
+        }
+      ],
+      "shape": [
+        1,
+        2
+      ]
+    }
+  ],
+  "foundation_commit": "bef26abb2458cfff003c84f376f93bc18a0b4106",
+  "frozen_models_sha256": "42ac16fa4353d47898dc0d40fbb4b689c50856f06007ccf43f887e65cc51becb",
+  "limits": [
+    "No training or backward",
+    "No NPU operations",
+    "No production or frozen source modification",
+    "Original tolerance preserved",
+    "CPU trajectory cannot identify the exact uncaptured NPU failing row"
+  ],
+  "parameters": 3106214,
+  "scalar_witness": {
+    "torch.float32": {
+      "cap_roundtrip": [
+        [
+          0.09999999403953552,
+          1.0
+        ]
+      ],
+      "dtype": "torch.float32",
+      "error": "allocation multiplier did not meet the total constraint",
+      "mu": [
+        [
+          0.10000000149011612,
+          1.0
+        ]
+      ],
+      "roundtrip_below_cap": [
+        [
+          true,
+          false
+        ]
+      ],
+      "scores": [
+        [
+          5.0,
+          0.0
+        ]
+      ],
+      "status": "failed",
+      "w": [
+        [
+          0.05000000074505806,
+          0.5
+        ]
+      ]
+    },
+    "torch.float64": {
+      "allocation": [
+        [
+          0.1,
+          0.45000000000000007
+        ]
+      ],
+      "cap_roundtrip": [
+        [
+          0.10000000000000002,
+          1.0
+        ]
+      ],
+      "dtype": "torch.float64",
+      "mu": [
+        [
+          0.1,
+          1.0
+        ]
+      ],
+      "roundtrip_below_cap": [
+        [
+          false,
+          false
+        ]
+      ],
+      "scores": [
+        [
+          5.0,
+          0.0
+        ]
+      ],
+      "status": "completed",
+      "w": [
+        [
+          0.05,
+          0.5
+        ]
+      ]
+    }
+  },
+  "schema": "pilot-r1-shannon-cpu-diagnostic-v1",
+  "seconds": 1.2703797817230225,
+  "task_sha256": "76f48585caef9437bcac85c72198e1967b38501378b04f8bc376197a8df2c54c",
+  "torch_version": "2.12.0+cpu",
+  "validation": [
+    {
+      "batch_index": 0,
+      "finite": true,
+      "seconds": 0.3661623001098633,
+      "shape": [
+        4,
+        64
+      ],
+      "status": "completed",
+      "tokens_sha256": "658f3fbc1e44fce1f917b6c15bdbf54e485b29e415c9615b540fcd0c470399b0"
+    },
+    {
+      "batch_index": 1,
+      "finite": true,
+      "seconds": 0.352520227432251,
+      "shape": [
+        4,
+        64
+      ],
+      "status": "completed",
+      "tokens_sha256": "825713ea8257eb0479f9e843bde98816b78c93c432845b3d9e869366873cb7d4"
+    }
+  ]
+}

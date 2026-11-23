@@ -1,0 +1,3180 @@
+{
+  "actual_completed_loss_tokens": 36864,
+  "all_seen_processes": {
+    "1511554:2272600613": {
+      "pgrp": 1511554,
+      "pid": 1511554,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272600613,
+      "state": "R"
+    },
+    "1511685:2272600960": {
+      "pgrp": 1511685,
+      "pid": 1511685,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272600960,
+      "state": "R"
+    },
+    "1511762:2272601309": {
+      "pgrp": 1511762,
+      "pid": 1511762,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272601309,
+      "state": "R"
+    },
+    "1511870:2272601658": {
+      "pgrp": 1511870,
+      "pid": 1511870,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272601658,
+      "state": "R"
+    },
+    "1512002:2272602012": {
+      "pgrp": 1512002,
+      "pid": 1512002,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272602012,
+      "state": "R"
+    },
+    "1512159:2272602348": {
+      "pgrp": 1512159,
+      "pid": 1512159,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272602348,
+      "state": "R"
+    },
+    "1512423:2272602689": {
+      "pgrp": 1512423,
+      "pid": 1512423,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272602689,
+      "state": "R"
+    },
+    "1512742:2272603049": {
+      "pgrp": 1512742,
+      "pid": 1512742,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272603049,
+      "state": "R"
+    },
+    "1512928:2272603398": {
+      "pgrp": 1512928,
+      "pid": 1512928,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272603398,
+      "state": "R"
+    },
+    "1513049:2272603740": {
+      "pgrp": 1513049,
+      "pid": 1513049,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272603740,
+      "state": "R"
+    },
+    "1513253:2272604091": {
+      "pgrp": 1513253,
+      "pid": 1513253,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272604091,
+      "state": "R"
+    },
+    "1513392:2272604464": {
+      "pgrp": 1513392,
+      "pid": 1513392,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272604464,
+      "state": "R"
+    },
+    "1513566:2272604842": {
+      "pgrp": 1513566,
+      "pid": 1513566,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272604842,
+      "state": "R"
+    },
+    "1513709:2272605206": {
+      "pgrp": 1513709,
+      "pid": 1513709,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272605206,
+      "state": "R"
+    },
+    "1513807:2272605547": {
+      "pgrp": 1513807,
+      "pid": 1513807,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272605547,
+      "state": "R"
+    },
+    "1513889:2272605893": {
+      "pgrp": 1513889,
+      "pid": 1513889,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272605893,
+      "state": "R"
+    },
+    "1514080:2272606252": {
+      "pgrp": 1514080,
+      "pid": 1514080,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272606252,
+      "state": "R"
+    },
+    "1514194:2272606639": {
+      "pgrp": 1514194,
+      "pid": 1514194,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272606639,
+      "state": "R"
+    },
+    "1514335:2272607019": {
+      "pgrp": 1514335,
+      "pid": 1514335,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272607019,
+      "state": "R"
+    },
+    "1514565:2272607505": {
+      "pgrp": 1514565,
+      "pid": 1514565,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272607505,
+      "state": "R"
+    },
+    "1514722:2272607997": {
+      "pgrp": 1514722,
+      "pid": 1514722,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272607997,
+      "state": "R"
+    },
+    "1514922:2272608379": {
+      "pgrp": 1514922,
+      "pid": 1514922,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272608379,
+      "state": "R"
+    },
+    "1515240:2272608761": {
+      "pgrp": 1515240,
+      "pid": 1515240,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272608761,
+      "state": "R"
+    },
+    "1515572:2272609154": {
+      "pgrp": 1515572,
+      "pid": 1515572,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272609154,
+      "state": "R"
+    },
+    "1515826:2272609531": {
+      "pgrp": 1515826,
+      "pid": 1515826,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272609531,
+      "state": "R"
+    },
+    "1515994:2272609897": {
+      "pgrp": 1515994,
+      "pid": 1515994,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272609897,
+      "state": "R"
+    },
+    "1516139:2272610267": {
+      "pgrp": 1516139,
+      "pid": 1516139,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272610267,
+      "state": "R"
+    },
+    "1516271:2272610649": {
+      "pgrp": 1516271,
+      "pid": 1516271,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272610649,
+      "state": "R"
+    },
+    "1516384:2272611050": {
+      "pgrp": 1516384,
+      "pid": 1516384,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272611050,
+      "state": "R"
+    },
+    "1516502:2272611436": {
+      "pgrp": 1516502,
+      "pid": 1516502,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272611436,
+      "state": "R"
+    },
+    "1516685:2272611827": {
+      "pgrp": 1516685,
+      "pid": 1516685,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272611827,
+      "state": "R"
+    },
+    "1516796:2272612221": {
+      "pgrp": 1516796,
+      "pid": 1516796,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272612221,
+      "state": "R"
+    },
+    "1516936:2272612613": {
+      "pgrp": 1516936,
+      "pid": 1516936,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272612613,
+      "state": "R"
+    },
+    "1517030:2272613011": {
+      "pgrp": 1517030,
+      "pid": 1517030,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272613011,
+      "state": "R"
+    },
+    "1517185:2272613413": {
+      "pgrp": 1517185,
+      "pid": 1517185,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272613413,
+      "state": "R"
+    },
+    "1517414:2272613907": {
+      "pgrp": 1517414,
+      "pid": 1517414,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272613907,
+      "state": "R"
+    },
+    "1517683:2272614434": {
+      "pgrp": 1517683,
+      "pid": 1517683,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272614434,
+      "state": "R"
+    },
+    "1518079:2272614828": {
+      "pgrp": 1518079,
+      "pid": 1518079,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272614828,
+      "state": "R"
+    },
+    "1518354:2272615222": {
+      "pgrp": 1518354,
+      "pid": 1518354,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272615222,
+      "state": "R"
+    },
+    "1518552:2272615624": {
+      "pgrp": 1518552,
+      "pid": 1518552,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272615624,
+      "state": "R"
+    },
+    "1518685:2272616006": {
+      "pgrp": 1518685,
+      "pid": 1518685,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272616006,
+      "state": "R"
+    },
+    "1518871:2272616414": {
+      "pgrp": 1518871,
+      "pid": 1518871,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272616414,
+      "state": "R"
+    },
+    "1519035:2272616799": {
+      "pgrp": 1519035,
+      "pid": 1519035,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272616799,
+      "state": "R"
+    },
+    "1519222:2272617192": {
+      "pgrp": 1519222,
+      "pid": 1519222,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272617192,
+      "state": "R"
+    },
+    "1519370:2272617592": {
+      "pgrp": 1519370,
+      "pid": 1519370,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272617592,
+      "state": "R"
+    },
+    "1519527:2272618004": {
+      "pgrp": 1519527,
+      "pid": 1519527,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272618004,
+      "state": "R"
+    },
+    "1519617:2272618405": {
+      "pgrp": 1519617,
+      "pid": 1519617,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272618405,
+      "state": "R"
+    },
+    "1519755:2272618812": {
+      "pgrp": 1519755,
+      "pid": 1519755,
+      "ppid": 1511537,
+      "rss_bytes": 4096,
+      "start_ticks": 2272618812,
+      "state": "R"
+    }
+  },
+  "blocking_reasons": [],
+  "children": {
+    "new:fc-d64-k-base-6a381e00da": {
+      "all_seen_processes": {
+        "1511685:2272600960": {
+          "pgrp": 1511685,
+          "pid": 1511685,
+          "ppid": 1511537,
+          "rss_bytes": 12963840,
+          "start_ticks": 2272600960,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "new",
+        "--model-id",
+        "fc-d64-k-base-6a381e00da",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-00-new",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-00-new.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-00-new",
+      "pid": 1511685,
+      "process": {
+        "pgrp": 1511685,
+        "pid": 1511685,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272600960,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-00-new/result.json",
+        "sha256": "b4ca448a9314a5f5befbebd10f69a821ef6a2aa0af3177c5efd99bbd35ad6c00"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139842.3624694
+    },
+    "new:fc-d64-k-depth3-82a8ff2b30": {
+      "all_seen_processes": {
+        "1511870:2272601658": {
+          "pgrp": 1511870,
+          "pid": 1511870,
+          "ppid": 1511537,
+          "rss_bytes": 13623296,
+          "start_ticks": 2272601658,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "new",
+        "--model-id",
+        "fc-d64-k-depth3-82a8ff2b30",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-01-new",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-01-new.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-01-new",
+      "pid": 1511870,
+      "process": {
+        "pgrp": 1511870,
+        "pid": 1511870,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272601658,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-01-new/result.json",
+        "sha256": "1f45e691a2cee9019526ce0a25f9e6bef96a8b2ac2ac79a6257555f7c08918c7"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139849.394316
+    },
+    "new:fc-d64-k-ffn1-ac09385120": {
+      "all_seen_processes": {
+        "1512159:2272602348": {
+          "pgrp": 1512159,
+          "pid": 1512159,
+          "ppid": 1511537,
+          "rss_bytes": 13201408,
+          "start_ticks": 2272602348,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "new",
+        "--model-id",
+        "fc-d64-k-ffn1-ac09385120",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-02-new",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-02-new.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-02-new",
+      "pid": 1512159,
+      "process": {
+        "pgrp": 1512159,
+        "pid": 1512159,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272602348,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-02-new/result.json",
+        "sha256": "3e6d982cc900fc1493e9638f6089da8886dbc7721923ccb46851284936c6698a"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139856.158968
+    },
+    "new:fc-d64-k-shared-6c8fbd0874": {
+      "all_seen_processes": {
+        "1512742:2272603049": {
+          "pgrp": 1512742,
+          "pid": 1512742,
+          "ppid": 1511537,
+          "rss_bytes": 12922880,
+          "start_ticks": 2272603049,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "new",
+        "--model-id",
+        "fc-d64-k-shared-6c8fbd0874",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-03-new",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-03-new.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-03-new",
+      "pid": 1512742,
+      "process": {
+        "pgrp": 1512742,
+        "pid": 1512742,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272603049,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-03-new/result.json",
+        "sha256": "04cbde3aed099350d2b106976d9a779f710cd6a86d4a5efcfb7dd4edd1283356"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139863.2514255
+    },
+    "new:fc-d64-s-base-30a947a88a": {
+      "all_seen_processes": {
+        "1513049:2272603740": {
+          "pgrp": 1513049,
+          "pid": 1513049,
+          "ppid": 1511537,
+          "rss_bytes": 13697024,
+          "start_ticks": 2272603740,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "new",
+        "--model-id",
+        "fc-d64-s-base-30a947a88a",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-04-new",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-04-new.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-04-new",
+      "pid": 1513049,
+      "process": {
+        "pgrp": 1513049,
+        "pid": 1513049,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272603740,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-04-new/result.json",
+        "sha256": "ce5dc37c988cb6cc8ac757126211ac99934a148cab93152da278147133ceac4d"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139870.1800847
+    },
+    "new:fc-d64-s-depth3-960007ce16": {
+      "all_seen_processes": {
+        "1513392:2272604464": {
+          "pgrp": 1513392,
+          "pid": 1513392,
+          "ppid": 1511537,
+          "rss_bytes": 13250560,
+          "start_ticks": 2272604464,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "new",
+        "--model-id",
+        "fc-d64-s-depth3-960007ce16",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-05-new",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-05-new.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-05-new",
+      "pid": 1513392,
+      "process": {
+        "pgrp": 1513392,
+        "pid": 1513392,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272604464,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-05-new/result.json",
+        "sha256": "d5e6b36d8669cc54ab7fb654d04cfc25eafdfa68f343530e7a68ab385e971ff3"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139877.6873186
+    },
+    "new:fc-d64-s-ffn1-ab57ed5c39": {
+      "all_seen_processes": {
+        "1513709:2272605206": {
+          "pgrp": 1513709,
+          "pid": 1513709,
+          "ppid": 1511537,
+          "rss_bytes": 13438976,
+          "start_ticks": 2272605206,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "new",
+        "--model-id",
+        "fc-d64-s-ffn1-ab57ed5c39",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-06-new",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-06-new.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-06-new",
+      "pid": 1513709,
+      "process": {
+        "pgrp": 1513709,
+        "pid": 1513709,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272605206,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-06-new/result.json",
+        "sha256": "e4e4719f9ad65bb9df8aa9d3b6c7146acbe6499c6b82c54b143794d149a022e1"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139884.7344584
+    },
+    "new:fc-d64-s-shared-7239f57e95": {
+      "all_seen_processes": {
+        "1513889:2272605893": {
+          "pgrp": 1513889,
+          "pid": 1513889,
+          "ppid": 1511537,
+          "rss_bytes": 18632704,
+          "start_ticks": 2272605893,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "new",
+        "--model-id",
+        "fc-d64-s-shared-7239f57e95",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-07-new",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-07-new.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-07-new",
+      "pid": 1513889,
+      "process": {
+        "pgrp": 1513889,
+        "pid": 1513889,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272605893,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-07-new/result.json",
+        "sha256": "b3d555c9382f9149f1de632b6aad45c6290b46b0121604e80b5a31ed2ca14bb5"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139891.7857122
+    },
+    "new:lattice-d64-k-base-23c0a95fd0": {
+      "all_seen_processes": {
+        "1514194:2272606639": {
+          "pgrp": 1514194,
+          "pid": 1514194,
+          "ppid": 1511537,
+          "rss_bytes": 13488128,
+          "start_ticks": 2272606639,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "new",
+        "--model-id",
+        "lattice-d64-k-base-23c0a95fd0",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-08-new",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-08-new.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-08-new",
+      "pid": 1514194,
+      "process": {
+        "pgrp": 1514194,
+        "pid": 1514194,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272606639,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-08-new/result.json",
+        "sha256": "d92a2a2b22425c7ca090ceec7ec953b822ef32764455538173f4f102c9b570d8"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139899.4605522
+    },
+    "new:lattice-d64-k-depth2-417579f46f": {
+      "all_seen_processes": {
+        "1514565:2272607505": {
+          "pgrp": 1514565,
+          "pid": 1514565,
+          "ppid": 1511537,
+          "rss_bytes": 13570048,
+          "start_ticks": 2272607505,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "new",
+        "--model-id",
+        "lattice-d64-k-depth2-417579f46f",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-09-new",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-09-new.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-09-new",
+      "pid": 1514565,
+      "process": {
+        "pgrp": 1514565,
+        "pid": 1514565,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272607505,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-09-new/result.json",
+        "sha256": "15b91b0eec4ec46cc61495b037d858ef6629418fb8f5b49527e32de215773bbe"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139909.2380595
+    },
+    "new:lattice-d64-k-ffn2-f4ae630b9b": {
+      "all_seen_processes": {
+        "1514922:2272608379": {
+          "pgrp": 1514922,
+          "pid": 1514922,
+          "ppid": 1511537,
+          "rss_bytes": 12922880,
+          "start_ticks": 2272608379,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "new",
+        "--model-id",
+        "lattice-d64-k-ffn2-f4ae630b9b",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-10-new",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-10-new.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-10-new",
+      "pid": 1514922,
+      "process": {
+        "pgrp": 1514922,
+        "pid": 1514922,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272608379,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-10-new/result.json",
+        "sha256": "acd8098e6753f78fcea9ad7b122457dc06af81447584712d0500e3a95af2ef14"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139916.8811636
+    },
+    "new:lattice-d64-k-layershared-f07cadf26f": {
+      "all_seen_processes": {
+        "1515572:2272609154": {
+          "pgrp": 1515572,
+          "pid": 1515572,
+          "ppid": 1511537,
+          "rss_bytes": 17240064,
+          "start_ticks": 2272609154,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "new",
+        "--model-id",
+        "lattice-d64-k-layershared-f07cadf26f",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-11-new",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-11-new.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-11-new",
+      "pid": 1515572,
+      "process": {
+        "pgrp": 1515572,
+        "pid": 1515572,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272609154,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-11-new/result.json",
+        "sha256": "9b4f99ef26f34d0307ae3de50f53ed5811456528dd79926202ee9d364a0dba86"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139924.5794156
+    },
+    "new:lattice-d64-k-memoryshared-f296b03e23": {
+      "all_seen_processes": {
+        "1515994:2272609897": {
+          "pgrp": 1515994,
+          "pid": 1515994,
+          "ppid": 1511537,
+          "rss_bytes": 18563072,
+          "start_ticks": 2272609897,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "new",
+        "--model-id",
+        "lattice-d64-k-memoryshared-f296b03e23",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-12-new",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-12-new.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-12-new",
+      "pid": 1515994,
+      "process": {
+        "pgrp": 1515994,
+        "pid": 1515994,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272609897,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-12-new/result.json",
+        "sha256": "dee1547a69c38cfe40ca22632609c1c9d102b2371563d2969cc313e19f867a20"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139931.940097
+    },
+    "new:lattice-d64-k-nodes4-1e06d38bdb": {
+      "all_seen_processes": {
+        "1516271:2272610649": {
+          "pgrp": 1516271,
+          "pid": 1516271,
+          "ppid": 1511537,
+          "rss_bytes": 13701120,
+          "start_ticks": 2272610649,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "new",
+        "--model-id",
+        "lattice-d64-k-nodes4-1e06d38bdb",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-13-new",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-13-new.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-13-new",
+      "pid": 1516271,
+      "process": {
+        "pgrp": 1516271,
+        "pid": 1516271,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272610649,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-13-new/result.json",
+        "sha256": "9df8db50fc99b44e63e3bcf29dc0eeb48d26508474a4866c23b2d35168b98dd5"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139939.7716534
+    },
+    "new:lattice-d64-k-receive128-f163ef6985": {
+      "all_seen_processes": {
+        "1516502:2272611436": {
+          "pgrp": 1516502,
+          "pid": 1516502,
+          "ppid": 1511537,
+          "rss_bytes": 12918784,
+          "start_ticks": 2272611436,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "new",
+        "--model-id",
+        "lattice-d64-k-receive128-f163ef6985",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-14-new",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-14-new.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-14-new",
+      "pid": 1516502,
+      "process": {
+        "pgrp": 1516502,
+        "pid": 1516502,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272611436,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-14-new/result.json",
+        "sha256": "2026295a61a0c001369bd297eeb293a114a88f9e5ac8694937a6791c61a9d314"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139947.5394619
+    },
+    "new:lattice-d64-k-receive64-3c1639c9b9": {
+      "all_seen_processes": {
+        "1516796:2272612221": {
+          "pgrp": 1516796,
+          "pid": 1516796,
+          "ppid": 1511537,
+          "rss_bytes": 13606912,
+          "start_ticks": 2272612221,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "new",
+        "--model-id",
+        "lattice-d64-k-receive64-3c1639c9b9",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-15-new",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-15-new.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-15-new",
+      "pid": 1516796,
+      "process": {
+        "pgrp": 1516796,
+        "pid": 1516796,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272612221,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-15-new/result.json",
+        "sha256": "6a3851b0d60caa1965de8ee6a9dd85e5b63b58665805ab40a8209b24115e913c"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139955.3973875
+    },
+    "new:lattice-d64-s-base-0895c1ce27": {
+      "all_seen_processes": {
+        "1517030:2272613011": {
+          "pgrp": 1517030,
+          "pid": 1517030,
+          "ppid": 1511537,
+          "rss_bytes": 13443072,
+          "start_ticks": 2272613011,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "new",
+        "--model-id",
+        "lattice-d64-s-base-0895c1ce27",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-16-new",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-16-new.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-16-new",
+      "pid": 1517030,
+      "process": {
+        "pgrp": 1517030,
+        "pid": 1517030,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272613011,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-16-new/result.json",
+        "sha256": "357cff59fb30916afa9cc56993cfcba73a2a435602a3e879a2357c4f42a08f77"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139963.3940456
+    },
+    "new:lattice-d64-s-depth2-5f26693f30": {
+      "all_seen_processes": {
+        "1517414:2272613907": {
+          "pgrp": 1517414,
+          "pid": 1517414,
+          "ppid": 1511537,
+          "rss_bytes": 13185024,
+          "start_ticks": 2272613907,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "new",
+        "--model-id",
+        "lattice-d64-s-depth2-5f26693f30",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-17-new",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-17-new.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-17-new",
+      "pid": 1517414,
+      "process": {
+        "pgrp": 1517414,
+        "pid": 1517414,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272613907,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-17-new/result.json",
+        "sha256": "3c9f5d09279296b95e84de349c2fe5a03824c155358eac4935d58a125bf5b9d0"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139973.605367
+    },
+    "new:lattice-d64-s-ffn2-0e362d7071": {
+      "all_seen_processes": {
+        "1518079:2272614828": {
+          "pgrp": 1518079,
+          "pid": 1518079,
+          "ppid": 1511537,
+          "rss_bytes": 13623296,
+          "start_ticks": 2272614828,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "new",
+        "--model-id",
+        "lattice-d64-s-ffn2-0e362d7071",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-18-new",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-18-new.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-18-new",
+      "pid": 1518079,
+      "process": {
+        "pgrp": 1518079,
+        "pid": 1518079,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272614828,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-18-new/result.json",
+        "sha256": "83d05692b469c8cada5d2c3965c69b73d68769d2c4a002e7fa5b55560cb0ebc2"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139981.4889126
+    },
+    "new:lattice-d64-s-layershared-351ff0ef53": {
+      "all_seen_processes": {
+        "1518552:2272615624": {
+          "pgrp": 1518552,
+          "pid": 1518552,
+          "ppid": 1511537,
+          "rss_bytes": 13574144,
+          "start_ticks": 2272615624,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "new",
+        "--model-id",
+        "lattice-d64-s-layershared-351ff0ef53",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-19-new",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-19-new.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-19-new",
+      "pid": 1518552,
+      "process": {
+        "pgrp": 1518552,
+        "pid": 1518552,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272615624,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-19-new/result.json",
+        "sha256": "7d9cdac4229142e989f38a95dd7ef790306be7d077e430f3d0bc243d54c59f85"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139989.323646
+    },
+    "new:lattice-d64-s-memoryshared-16897885fd": {
+      "all_seen_processes": {
+        "1518871:2272616414": {
+          "pgrp": 1518871,
+          "pid": 1518871,
+          "ppid": 1511537,
+          "rss_bytes": 13619200,
+          "start_ticks": 2272616414,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "new",
+        "--model-id",
+        "lattice-d64-s-memoryshared-16897885fd",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-20-new",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-20-new.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-20-new",
+      "pid": 1518871,
+      "process": {
+        "pgrp": 1518871,
+        "pid": 1518871,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272616414,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-20-new/result.json",
+        "sha256": "2f7acc38f7b782b677966ef2bf6b5031c7e013b41c826f992c7a257f666eca7e"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139997.2536137
+    },
+    "new:lattice-d64-s-nodes4-3b597e8e65": {
+      "all_seen_processes": {
+        "1519222:2272617192": {
+          "pgrp": 1519222,
+          "pid": 1519222,
+          "ppid": 1511537,
+          "rss_bytes": 13230080,
+          "start_ticks": 2272617192,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "new",
+        "--model-id",
+        "lattice-d64-s-nodes4-3b597e8e65",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-21-new",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-21-new.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-21-new",
+      "pid": 1519222,
+      "process": {
+        "pgrp": 1519222,
+        "pid": 1519222,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272617192,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-21-new/result.json",
+        "sha256": "6b832c1f11d02df724df6e44b68a7cca4f68118c75fe51564b446df458fb23e9"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795140005.1901941
+    },
+    "new:lattice-d64-s-receive128-623981f84d": {
+      "all_seen_processes": {
+        "1519527:2272618004": {
+          "pgrp": 1519527,
+          "pid": 1519527,
+          "ppid": 1511537,
+          "rss_bytes": 13242368,
+          "start_ticks": 2272618004,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "new",
+        "--model-id",
+        "lattice-d64-s-receive128-623981f84d",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-22-new",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-22-new.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-22-new",
+      "pid": 1519527,
+      "process": {
+        "pgrp": 1519527,
+        "pid": 1519527,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272618004,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-22-new/result.json",
+        "sha256": "28cd48b755d5c75a6e258d994fd8194906b6045fc4eda4aee321e4f2a6c4794a"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795140013.3153932
+    },
+    "new:lattice-d64-s-receive64-8a0fbc01ad": {
+      "all_seen_processes": {
+        "1519755:2272618812": {
+          "pgrp": 1519755,
+          "pid": 1519755,
+          "ppid": 1511537,
+          "rss_bytes": 13578240,
+          "start_ticks": 2272618812,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "new",
+        "--model-id",
+        "lattice-d64-s-receive64-8a0fbc01ad",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-23-new",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-23-new.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-23-new",
+      "pid": 1519755,
+      "process": {
+        "pgrp": 1519755,
+        "pid": 1519755,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272618812,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-23-new/result.json",
+        "sha256": "22f85438bf3794911d55293ad398265d32e3baa3a914d43a718915e7df2a1551"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795140021.4925292
+    },
+    "old:fc-d64-k-base-6a381e00da": {
+      "all_seen_processes": {
+        "1511554:2272600613": {
+          "pgrp": 1511554,
+          "pid": 1511554,
+          "ppid": 1511537,
+          "rss_bytes": 19034112,
+          "start_ticks": 2272600613,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "old",
+        "--model-id",
+        "fc-d64-k-base-6a381e00da",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-00-old",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-00-old.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-00-old",
+      "pid": 1511554,
+      "process": {
+        "pgrp": 1511554,
+        "pid": 1511554,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272600613,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-00-old/result.json",
+        "sha256": "c702d50dd8e2eb0a704e0e08ce9915e675effbf5fac0cf739c3d14ffcf999d1c"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139838.865594
+    },
+    "old:fc-d64-k-depth3-82a8ff2b30": {
+      "all_seen_processes": {
+        "1511762:2272601309": {
+          "pgrp": 1511762,
+          "pid": 1511762,
+          "ppid": 1511537,
+          "rss_bytes": 13701120,
+          "start_ticks": 2272601309,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "old",
+        "--model-id",
+        "fc-d64-k-depth3-82a8ff2b30",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-01-old",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-01-old.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-01-old",
+      "pid": 1511762,
+      "process": {
+        "pgrp": 1511762,
+        "pid": 1511762,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272601309,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-01-old/result.json",
+        "sha256": "515a313b804dba21d6a0fa674485ea42fec376eef661387e81cd651c4e934b86"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139845.8521686
+    },
+    "old:fc-d64-k-ffn1-ac09385120": {
+      "all_seen_processes": {
+        "1512002:2272602012": {
+          "pgrp": 1512002,
+          "pid": 1512002,
+          "ppid": 1511537,
+          "rss_bytes": 12931072,
+          "start_ticks": 2272602012,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "old",
+        "--model-id",
+        "fc-d64-k-ffn1-ac09385120",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-02-old",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-02-old.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-02-old",
+      "pid": 1512002,
+      "process": {
+        "pgrp": 1512002,
+        "pid": 1512002,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272602012,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-02-old/result.json",
+        "sha256": "cdfeca58d88e99fee263d45bb06e0d5860aa04321c0a9f7b5da0562b56fb5f5e"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139852.748877
+    },
+    "old:fc-d64-k-shared-6c8fbd0874": {
+      "all_seen_processes": {
+        "1512423:2272602689": {
+          "pgrp": 1512423,
+          "pid": 1512423,
+          "ppid": 1511537,
+          "rss_bytes": 13484032,
+          "start_ticks": 2272602689,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "old",
+        "--model-id",
+        "fc-d64-k-shared-6c8fbd0874",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-03-old",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-03-old.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-03-old",
+      "pid": 1512423,
+      "process": {
+        "pgrp": 1512423,
+        "pid": 1512423,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272602689,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-03-old/result.json",
+        "sha256": "ce730951c82adf266fe5e2c8b1c183ae9c2d7c034a4c05927cb8cb7bccb9ecaf"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139859.761272
+    },
+    "old:fc-d64-s-base-30a947a88a": {
+      "all_seen_processes": {
+        "1512928:2272603398": {
+          "pgrp": 1512928,
+          "pid": 1512928,
+          "ppid": 1511537,
+          "rss_bytes": 12963840,
+          "start_ticks": 2272603398,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "old",
+        "--model-id",
+        "fc-d64-s-base-30a947a88a",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-04-old",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-04-old.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-04-old",
+      "pid": 1512928,
+      "process": {
+        "pgrp": 1512928,
+        "pid": 1512928,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272603398,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-04-old/result.json",
+        "sha256": "ad567bd23dbb5e0961894d736602052a33ef1d1b7fcbbf1ef661316126293525"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139866.6661973
+    },
+    "old:fc-d64-s-depth3-960007ce16": {
+      "all_seen_processes": {
+        "1513253:2272604091": {
+          "pgrp": 1513253,
+          "pid": 1513253,
+          "ppid": 1511537,
+          "rss_bytes": 13692928,
+          "start_ticks": 2272604091,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "old",
+        "--model-id",
+        "fc-d64-s-depth3-960007ce16",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-05-old",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-05-old.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-05-old",
+      "pid": 1513253,
+      "process": {
+        "pgrp": 1513253,
+        "pid": 1513253,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272604091,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-05-old/result.json",
+        "sha256": "d0d04e6e5ed07f985c8118bc18a38699224a1615229309b2704348e329d56e80"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139873.9046988
+    },
+    "old:fc-d64-s-ffn1-ab57ed5c39": {
+      "all_seen_processes": {
+        "1513566:2272604842": {
+          "pgrp": 1513566,
+          "pid": 1513566,
+          "ppid": 1511537,
+          "rss_bytes": 13258752,
+          "start_ticks": 2272604842,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "old",
+        "--model-id",
+        "fc-d64-s-ffn1-ab57ed5c39",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-06-old",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-06-old.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-06-old",
+      "pid": 1513566,
+      "process": {
+        "pgrp": 1513566,
+        "pid": 1513566,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272604842,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-06-old/result.json",
+        "sha256": "690f85769752b2dcd1ccdca24c221101d397a51d907497ed278ed6239a082be5"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139881.3268719
+    },
+    "old:fc-d64-s-shared-7239f57e95": {
+      "all_seen_processes": {
+        "1513807:2272605547": {
+          "pgrp": 1513807,
+          "pid": 1513807,
+          "ppid": 1511537,
+          "rss_bytes": 13688832,
+          "start_ticks": 2272605547,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "old",
+        "--model-id",
+        "fc-d64-s-shared-7239f57e95",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-07-old",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-07-old.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-07-old",
+      "pid": 1513807,
+      "process": {
+        "pgrp": 1513807,
+        "pid": 1513807,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272605547,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-07-old/result.json",
+        "sha256": "c957b9378f3a73bb702bc6bc1fbdab9535afad91d656123ec077b74bfae270e6"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139888.1955824
+    },
+    "old:lattice-d64-k-base-23c0a95fd0": {
+      "all_seen_processes": {
+        "1514080:2272606252": {
+          "pgrp": 1514080,
+          "pid": 1514080,
+          "ppid": 1511537,
+          "rss_bytes": 13033472,
+          "start_ticks": 2272606252,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "old",
+        "--model-id",
+        "lattice-d64-k-base-23c0a95fd0",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-08-old",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-08-old.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-08-old",
+      "pid": 1514080,
+      "process": {
+        "pgrp": 1514080,
+        "pid": 1514080,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272606252,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-08-old/result.json",
+        "sha256": "36d351c44ffc0e3d2c6b130d38057ec8bc9c35c6cb560f3bee12688d32f96669"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139895.6627574
+    },
+    "old:lattice-d64-k-depth2-417579f46f": {
+      "all_seen_processes": {
+        "1514335:2272607019": {
+          "pgrp": 1514335,
+          "pid": 1514335,
+          "ppid": 1511537,
+          "rss_bytes": 13561856,
+          "start_ticks": 2272607019,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "old",
+        "--model-id",
+        "lattice-d64-k-depth2-417579f46f",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-09-old",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-09-old.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-09-old",
+      "pid": 1514335,
+      "process": {
+        "pgrp": 1514335,
+        "pid": 1514335,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272607019,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-09-old/result.json",
+        "sha256": "1eaa382d1837c46d1cb6a4882ea3537cd821841c33c17e4c1a4c91092f3072f2"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139904.320602
+    },
+    "old:lattice-d64-k-ffn2-f4ae630b9b": {
+      "all_seen_processes": {
+        "1514722:2272607997": {
+          "pgrp": 1514722,
+          "pid": 1514722,
+          "ppid": 1511537,
+          "rss_bytes": 13201408,
+          "start_ticks": 2272607997,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "old",
+        "--model-id",
+        "lattice-d64-k-ffn2-f4ae630b9b",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-10-old",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-10-old.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-10-old",
+      "pid": 1514722,
+      "process": {
+        "pgrp": 1514722,
+        "pid": 1514722,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272607997,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-10-old/result.json",
+        "sha256": "d7c5ae0bc2a0b349f3d798a2a386c63d463e075b0ce1aed1a40fdc4263c24ec0"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139913.0576422
+    },
+    "old:lattice-d64-k-layershared-f07cadf26f": {
+      "all_seen_processes": {
+        "1515240:2272608761": {
+          "pgrp": 1515240,
+          "pid": 1515240,
+          "ppid": 1511537,
+          "rss_bytes": 12972032,
+          "start_ticks": 2272608761,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "old",
+        "--model-id",
+        "lattice-d64-k-layershared-f07cadf26f",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-11-old",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-11-old.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-11-old",
+      "pid": 1515240,
+      "process": {
+        "pgrp": 1515240,
+        "pid": 1515240,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272608761,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-11-old/result.json",
+        "sha256": "858c3e4fdc995be5a880b63270c0638a2dd70a93f2b4727b23cd53a82a03f7ea"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139920.7995613
+    },
+    "old:lattice-d64-k-memoryshared-f296b03e23": {
+      "all_seen_processes": {
+        "1515826:2272609531": {
+          "pgrp": 1515826,
+          "pid": 1515826,
+          "ppid": 1511537,
+          "rss_bytes": 13414400,
+          "start_ticks": 2272609531,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "old",
+        "--model-id",
+        "lattice-d64-k-memoryshared-f296b03e23",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-12-old",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-12-old.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-12-old",
+      "pid": 1515826,
+      "process": {
+        "pgrp": 1515826,
+        "pid": 1515826,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272609531,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-12-old/result.json",
+        "sha256": "07571d2125996023583312d7c48dfbee03c214da252ca1401a893a21283eef9c"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139928.2345903
+    },
+    "old:lattice-d64-k-nodes4-1e06d38bdb": {
+      "all_seen_processes": {
+        "1516139:2272610267": {
+          "pgrp": 1516139,
+          "pid": 1516139,
+          "ppid": 1511537,
+          "rss_bytes": 13561856,
+          "start_ticks": 2272610267,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "old",
+        "--model-id",
+        "lattice-d64-k-nodes4-1e06d38bdb",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-13-old",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-13-old.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-13-old",
+      "pid": 1516139,
+      "process": {
+        "pgrp": 1516139,
+        "pid": 1516139,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272610267,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-13-old/result.json",
+        "sha256": "51d6f08e976d60dfaa45fd6e4e244d158df521eaa17f569f5d3058bcefe5fb5d"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139935.7560277
+    },
+    "old:lattice-d64-k-receive128-f163ef6985": {
+      "all_seen_processes": {
+        "1516384:2272611050": {
+          "pgrp": 1516384,
+          "pid": 1516384,
+          "ppid": 1511537,
+          "rss_bytes": 13246464,
+          "start_ticks": 2272611050,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "old",
+        "--model-id",
+        "lattice-d64-k-receive128-f163ef6985",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-14-old",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-14-old.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-14-old",
+      "pid": 1516384,
+      "process": {
+        "pgrp": 1516384,
+        "pid": 1516384,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272611050,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-14-old/result.json",
+        "sha256": "5f5b7d070201a1f20059325bc3f03f0115c72fcf31216f080ccab15bcf75975c"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139943.6309378
+    },
+    "old:lattice-d64-k-receive64-3c1639c9b9": {
+      "all_seen_processes": {
+        "1516685:2272611827": {
+          "pgrp": 1516685,
+          "pid": 1516685,
+          "ppid": 1511537,
+          "rss_bytes": 13561856,
+          "start_ticks": 2272611827,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "old",
+        "--model-id",
+        "lattice-d64-k-receive64-3c1639c9b9",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-15-old",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-15-old.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-15-old",
+      "pid": 1516685,
+      "process": {
+        "pgrp": 1516685,
+        "pid": 1516685,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272611827,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-15-old/result.json",
+        "sha256": "5dec77f2785ca3a92fb4c5738ff001aac76d53e1ffa340b7d39c17f870b5a0b8"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139951.4744942
+    },
+    "old:lattice-d64-s-base-0895c1ce27": {
+      "all_seen_processes": {
+        "1516936:2272612613": {
+          "pgrp": 1516936,
+          "pid": 1516936,
+          "ppid": 1511537,
+          "rss_bytes": 13312000,
+          "start_ticks": 2272612613,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "old",
+        "--model-id",
+        "lattice-d64-s-base-0895c1ce27",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-16-old",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-16-old.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-16-old",
+      "pid": 1516936,
+      "process": {
+        "pgrp": 1516936,
+        "pid": 1516936,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272612613,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-16-old/result.json",
+        "sha256": "ec533ffdf59979919250c78754886383d055a4634bca76dcaab334dcc43a841c"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139959.3789937
+    },
+    "old:lattice-d64-s-depth2-5f26693f30": {
+      "all_seen_processes": {
+        "1517185:2272613413": {
+          "pgrp": 1517185,
+          "pid": 1517185,
+          "ppid": 1511537,
+          "rss_bytes": 18763776,
+          "start_ticks": 2272613413,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "old",
+        "--model-id",
+        "lattice-d64-s-depth2-5f26693f30",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-17-old",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-17-old.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-17-old",
+      "pid": 1517185,
+      "process": {
+        "pgrp": 1517185,
+        "pid": 1517185,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272613413,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-17-old/result.json",
+        "sha256": "cc8b0d01a11ab3337261bef780d9f222f302b4acfc9879e4b7ec7c952d42abf4"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139968.335677
+    },
+    "old:lattice-d64-s-ffn2-0e362d7071": {
+      "all_seen_processes": {
+        "1517683:2272614434": {
+          "pgrp": 1517683,
+          "pid": 1517683,
+          "ppid": 1511537,
+          "rss_bytes": 17166336,
+          "start_ticks": 2272614434,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "old",
+        "--model-id",
+        "lattice-d64-s-ffn2-0e362d7071",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-18-old",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-18-old.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-18-old",
+      "pid": 1517683,
+      "process": {
+        "pgrp": 1517683,
+        "pid": 1517683,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272614434,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-18-old/result.json",
+        "sha256": "a9b24ef6e3990b23a4d187a87a3e7e4cf2e19dfc1f4b6b86f70ca555c3a21672"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139977.54318
+    },
+    "old:lattice-d64-s-layershared-351ff0ef53": {
+      "all_seen_processes": {
+        "1518354:2272615222": {
+          "pgrp": 1518354,
+          "pid": 1518354,
+          "ppid": 1511537,
+          "rss_bytes": 13570048,
+          "start_ticks": 2272615222,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "old",
+        "--model-id",
+        "lattice-d64-s-layershared-351ff0ef53",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-19-old",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-19-old.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-19-old",
+      "pid": 1518354,
+      "process": {
+        "pgrp": 1518354,
+        "pid": 1518354,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272615222,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-19-old/result.json",
+        "sha256": "02ccad6a9d3092057b6069f95e159161c730cd5cea7a1e8eef174c62b1835e38"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139985.5084167
+    },
+    "old:lattice-d64-s-memoryshared-16897885fd": {
+      "all_seen_processes": {
+        "1518685:2272616006": {
+          "pgrp": 1518685,
+          "pid": 1518685,
+          "ppid": 1511537,
+          "rss_bytes": 15142912,
+          "start_ticks": 2272616006,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "old",
+        "--model-id",
+        "lattice-d64-s-memoryshared-16897885fd",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-20-old",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-20-old.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-20-old",
+      "pid": 1518685,
+      "process": {
+        "pgrp": 1518685,
+        "pid": 1518685,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272616006,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-20-old/result.json",
+        "sha256": "999e02d0b37172e2dd74ee5ab465d5aa007f19b7a6e797ee20cfca80baa73d79"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795139993.4109704
+    },
+    "old:lattice-d64-s-nodes4-3b597e8e65": {
+      "all_seen_processes": {
+        "1519035:2272616799": {
+          "pgrp": 1519035,
+          "pid": 1519035,
+          "ppid": 1511537,
+          "rss_bytes": 13455360,
+          "start_ticks": 2272616799,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "old",
+        "--model-id",
+        "lattice-d64-s-nodes4-3b597e8e65",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-21-old",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-21-old.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-21-old",
+      "pid": 1519035,
+      "process": {
+        "pgrp": 1519035,
+        "pid": 1519035,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272616799,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-21-old/result.json",
+        "sha256": "cad542d8fe3eb4e44851defe24ad794078089f440ef052c59fcaf2ee903dc095"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795140001.19104
+    },
+    "old:lattice-d64-s-receive128-623981f84d": {
+      "all_seen_processes": {
+        "1519370:2272617592": {
+          "pgrp": 1519370,
+          "pid": 1519370,
+          "ppid": 1511537,
+          "rss_bytes": 13623296,
+          "start_ticks": 2272617592,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "old",
+        "--model-id",
+        "lattice-d64-s-receive128-623981f84d",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-22-old",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-22-old.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-22-old",
+      "pid": 1519370,
+      "process": {
+        "pgrp": 1519370,
+        "pid": 1519370,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272617592,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-22-old/result.json",
+        "sha256": "fd590c8c145d8181c3524afd49764c3cad0faea5dcecacfc0de3a3427a3495ec"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795140009.3104198
+    },
+    "old:lattice-d64-s-receive64-8a0fbc01ad": {
+      "all_seen_processes": {
+        "1519617:2272618405": {
+          "pgrp": 1519617,
+          "pid": 1519617,
+          "ppid": 1511537,
+          "rss_bytes": 13606912,
+          "start_ticks": 2272618405,
+          "state": "R"
+        }
+      },
+      "argv": [
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+        "-u",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py",
+        "--child-plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+        "--side",
+        "old",
+        "--model-id",
+        "lattice-d64-s-receive64-8a0fbc01ad",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-23-old",
+        "--parent-pid",
+        "1511537"
+      ],
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-23-old.log",
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-23-old",
+      "pid": 1519617,
+      "process": {
+        "pgrp": 1519617,
+        "pid": 1519617,
+        "ppid": 1511537,
+        "rss_bytes": 4096,
+        "start_ticks": 2272618405,
+        "state": "R"
+      },
+      "remaining_descendants": [],
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/children/model-23-old/result.json",
+        "sha256": "5901629c5c6e144a231af760bb76edcffd8ce53b0b97d21878301c348b900276"
+      },
+      "return_code": 0,
+      "terminal_observed_unix": 1795140017.3895564
+    }
+  },
+  "controller": {
+    "pgrp": 1511537,
+    "pid": 1511537,
+    "ppid": 2907797,
+    "start_ticks": 2272600558,
+    "state": "R"
+  },
+  "controller_cgroup": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-quad-transfer-r01.service",
+  "deadline_unix": 1795141635.1750164,
+  "device_seconds": 0,
+  "exact": true,
+  "finished_unix": 1795140021.495235,
+  "model_ids": [
+    "fc-d64-k-base-6a381e00da",
+    "fc-d64-k-depth3-82a8ff2b30",
+    "fc-d64-k-ffn1-ac09385120",
+    "fc-d64-k-shared-6c8fbd0874",
+    "fc-d64-s-base-30a947a88a",
+    "fc-d64-s-depth3-960007ce16",
+    "fc-d64-s-ffn1-ab57ed5c39",
+    "fc-d64-s-shared-7239f57e95",
+    "lattice-d64-k-base-23c0a95fd0",
+    "lattice-d64-k-depth2-417579f46f",
+    "lattice-d64-k-ffn2-f4ae630b9b",
+    "lattice-d64-k-layershared-f07cadf26f",
+    "lattice-d64-k-memoryshared-f296b03e23",
+    "lattice-d64-k-nodes4-1e06d38bdb",
+    "lattice-d64-k-receive128-f163ef6985",
+    "lattice-d64-k-receive64-3c1639c9b9",
+    "lattice-d64-s-base-0895c1ce27",
+    "lattice-d64-s-depth2-5f26693f30",
+    "lattice-d64-s-ffn2-0e362d7071",
+    "lattice-d64-s-layershared-351ff0ef53",
+    "lattice-d64-s-memoryshared-16897885fd",
+    "lattice-d64-s-nodes4-3b597e8e65",
+    "lattice-d64-s-receive128-623981f84d",
+    "lattice-d64-s-receive64-8a0fbc01ad"
+  ],
+  "new_source_identity": {
+    "data_manifest_sha256": "2f4617d73b5dad4f6a343707382714738e8012432fda85d9f7e36f44b26a4e1a",
+    "python_version": "3.12.13",
+    "runtime_packages": {
+      "numpy": "2.5.2",
+      "torch": "2.12.0+cpu",
+      "torch-npu": "2.12.0.post3"
+    },
+    "schema": "pilot-r3-source-v1",
+    "source_files": {
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/foundation/src/tide/__init__.py": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/foundation/src/tide/allocation.py": "a8e4346837e7db763d3b778126090c82719c8192679606b4b1b508e576a4e74e",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/foundation/src/tide/attention.py": "58602a6211632de9db1632c53cbcbf6b9890360ee4d0266d32bb536b1bec2214",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/foundation/src/tide/checkpoint.py": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/foundation/src/tide/config.py": "2b890c0ae9eac381aa3ab9726eb386339345f62dc7b3e27433ecd5a0b1c0299f",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/foundation/src/tide/ffn_packing.py": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/foundation/src/tide/grouped_linear.py": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/foundation/src/tide/kv.py": "6ce42c759d8bfa9843c006d0bbda31ad1bc0602b0c9584718d73959bc11a3e3b",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/foundation/src/tide/layout.py": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/foundation/src/tide/model.py": "1911afe3b66b199eb7e066ea57c5900fead1e390ebb5894818d423284850255e",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/foundation/src/tide/parameters.py": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/foundation/src/tide/placement.py": "0f77def73da20f467756e5dc1f701f25942565f762e82be5d23218ecee39d05f",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/foundation/src/tide/placement_ownership.py": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/foundation/src/tide/precision.py": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/foundation/src/tide/reception.py": "43f72f3f1a55263b8d1185a41f0bf2711b7e1179cd664710ced08e70563b45c4",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/foundation/src/tide/region.py": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/foundation/src/tide/region_batch.py": "514ee30c5077d416c02cec81380280eb45509f20922a0f812657b93d2d8b7e80",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/foundation/src/tide/region_execution.py": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/foundation/src/tide/region_placement.py": "fd082f035185d04af6bc3ba27b949a8f065ccdf62f8b32a1b442accbfa6f2b6d",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/foundation/src/tide/scaled_arithmetic.py": "21b696170e73ae28a3238a4db7dd9b613d92a2b0eb88610df74a5d01a8006c62",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/foundation/src/tide/ssd.py": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/foundation/src/tide/ssd_memory.py": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/foundation/src/tide/topology.py": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/foundation/src/tide/topology_hb.py": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/foundation/src/tide/weighted_mean.py": "6c993386c66f611c371c75e2e66a52dec7954c4fb9078819aab23f13d6c76d88",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/__init__.py": "8208b80d75d5de0a39089a54db7a24924819bb81a1ed6a61adaac931a2fddf95",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/audit3.py": "b8171de3565ec56e73135fa38350b1827bd6204517929b10a620227c7c694d09",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/calibrate_shared3.py": "e871f5f850337759f26144df21adfe5db79f985e342a587217ca897ae782454f",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/catalog3.py": "db1804150b94b407bfe5f1854c2ae0c283eec71776bddc929b6f6dcb72c26bf6",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/chain_receipt3.py": "ba0849c70da456b0f124686ed5cd74bf977be6eccd1e47123864124466dc195d",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/data.py": "d327409f049891273c315c654870a6cbdda8b1162307cabe100225c11ddbcbdd",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/data3.py": "da91d2df3a59d840bdafe181721f579ce1a8d8a4203b5872a700a812e2587cbe",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/diagnose_shannon.py": "d81bf90d3d85762f355c71375f47145aceff4e06167b95749f738372fbf3bcea",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/diagnose_shannon3.py": "e43ebb2609ee874a495c8b5c2a2c63be4f7ce57721023f91160e13a671449fca",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/gate3.py": "89b2eaa716a068e9c19d62e830e93c181ad5a600eaba7dc722981fbf240deed1",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/inspect3.py": "fa7ffab30189b3e611568841cbe1cfab6d2f351f0816f7a4b1267c251312706b",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/io.py": "d846049973ea6c7a952353b8a4ed25e2d89e9a67741e3c16e3dd67d39e802170",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/lifecycle3.py": "7acb7497a8fe0b807c7f78a1f8a1bed11c23d8f5ff9b27d0359ddf2287af1333",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/models.py": "42ac16fa4353d47898dc0d40fbb4b689c50856f06007ccf43f887e65cc51becb",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/models3.py": "07f6c919215d1bc79fb433d8120c133e4ff5173b7ac192b018d64819498e9b71",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/plan.py": "680567ef8fed0835f62d890b9696120a1a6e3edb323f0b88437805171c2fc834",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/plan2.py": "a0452bf80628baf4cc6c02601200f2ea22b3b3218f611dfcdfaeb2f909f594b4",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/preflight3.py": "cd8841d99e58605322a80f5e898bf299fce129bacc8c8b42191398aabbbe10a5",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/prepare3.py": "19b9736bbd43e21e4faf8590ff8b4d5033630a35b4dcd9d41f68ec6076f26056",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/prepare_campaign3.py": "fcb5446da851e35b478988b4d325ff3b09bfcc41a0134e3c1635b710418b3bf7",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/prepare_revision3.py": "0f0fce52ca6a1c93c1aaadbca78ad7a0784c685ee4ded0e0336a26c033753ec0",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/quad_transfer_probe3.py": "3758df7c482998535674d2077f4324e2d81c403b3815769bc56ad764cc1ea737",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/repair_probe3.py": "b7d81bd0fb9894645bdd7d2b71b5bf871d60d14b65ccb11b495f387edfbdcf87",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/report.py": "9b87332e2d4ca021b0adffb44e19d9eb5d477cf27eaf068042730f2ab20f2c00",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/report2.py": "5a5cb8eefe33f5fd92d6e9aaa89b833f631b778a73edb18bb48acc3c686848ce",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/report3.py": "644833fe0273d2f2944047adf9918563db191a782044f446db088d1c82f75b1e",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/round3.py": "c2cf76eec7138cbcb563d387e22a765ed150cf14a70e7f1b78d01d650bf3edbc",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/scheduler.py": "dbd209fe22f252bc88aa13f27b616f0cb34bcaf468b03e85751edca6f2b9d7b7",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/scheduler3.py": "f3ee3b71f82906ea5354f142b2daa1fa57d3a9ca78a8e2a99320dd00537c6e49",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/scheduler_shared3.py": "d37d6465f6c74718538c4c613b8db46b065204d4042260171d82fef90e674f55",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/selection.py": "9607cb8ac5f29af0e43a7de92eb36e0a4a0801eac1e493da972aba1df4360787",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/shared_npu3.py": "52359afa18b2ff4fc61ac93a828cb9a013cbe8c5f819e37e70b04aabb2470881",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/trace_shannon.py": "15e08a2038b9d5270269a46e8cf4acc656868018a9e47cbac99854a9a1faa7ae",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/transfer3.py": "17f7c3acd6a74e7cb1a1694a71c5d36c3ef5d836f48f1ceb8ad3406063141fe7",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/validate_shannon_capture.py": "d79a79f370babe4302fb7c2976d424425978047d32255d14b595cb6eeb2528ff",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/worker.py": "542b1f5b88389e902f2aedb19eb368321152f1fff012f66d553cfc0cccf349d8",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r03/source/pilotlab/worker3.py": "a5e9b27350521ef7bcd929f001add25679ed7e26482287c7937340cf30d4f3a8"
+    }
+  },
+  "observations": {
+    "fc-d64-k-base-6a381e00da": {
+      "backward": {
+        "new_sha256": "68a31277e233084842e7ccf3e4d57926a04593f65826aa48458c5f319b4262a4",
+        "old_sha256": "68a31277e233084842e7ccf3e4d57926a04593f65826aa48458c5f319b4262a4"
+      },
+      "forward": {
+        "new_sha256": "d6ae4d53e0b144b730879436335bab82c8d08e3b10efcd4fb8d6dd0da243377c",
+        "old_sha256": "d6ae4d53e0b144b730879436335bab82c8d08e3b10efcd4fb8d6dd0da243377c"
+      },
+      "optimizer": {
+        "new_sha256": "03e24a727c6cd756f8e9f295df79f8cd66a2cd757a7ca2a57a6b2acd41b591ad",
+        "old_sha256": "03e24a727c6cd756f8e9f295df79f8cd66a2cd757a7ca2a57a6b2acd41b591ad"
+      },
+      "state": {
+        "new_sha256": "eabca2835f2b3ccdda108d194fe08679278aca930cfb17a02ee83f7c783718b8",
+        "old_sha256": "eabca2835f2b3ccdda108d194fe08679278aca930cfb17a02ee83f7c783718b8"
+      }
+    },
+    "fc-d64-k-depth3-82a8ff2b30": {
+      "backward": {
+        "new_sha256": "edd4d578d39063973d76815caaf8e3e80241b6824b23a8b3b4bb5c096d25a181",
+        "old_sha256": "edd4d578d39063973d76815caaf8e3e80241b6824b23a8b3b4bb5c096d25a181"
+      },
+      "forward": {
+        "new_sha256": "be150f0bcb7977215ccdf782f997941d2b0ff9f817d66e327623383df5cabf43",
+        "old_sha256": "be150f0bcb7977215ccdf782f997941d2b0ff9f817d66e327623383df5cabf43"
+      },
+      "optimizer": {
+        "new_sha256": "02e546badefc7c7f97f0e4ae70b542114a3f6bdf331e66ce2dccac8f2578a5ce",
+        "old_sha256": "02e546badefc7c7f97f0e4ae70b542114a3f6bdf331e66ce2dccac8f2578a5ce"
+      },
+      "state": {
+        "new_sha256": "374d5082a8dc3a1c4702309fdf849a4e30462f0151bb6a2fb5087999a5c0a197",
+        "old_sha256": "374d5082a8dc3a1c4702309fdf849a4e30462f0151bb6a2fb5087999a5c0a197"
+      }
+    },
+    "fc-d64-k-ffn1-ac09385120": {
+      "backward": {
+        "new_sha256": "1317895fab4784df8156124faa650212d73a2944fe385e401b65efd72103a3c3",
+        "old_sha256": "1317895fab4784df8156124faa650212d73a2944fe385e401b65efd72103a3c3"
+      },
+      "forward": {
+        "new_sha256": "3e4faae608adf978242ee4d4e45cb69056a3907bab617fe8d8b4882f3d8a48f7",
+        "old_sha256": "3e4faae608adf978242ee4d4e45cb69056a3907bab617fe8d8b4882f3d8a48f7"
+      },
+      "optimizer": {
+        "new_sha256": "2e860588e67e05c57c75d70a1ff8949591b3e80b428c36e553a8e3b6d846ff79",
+        "old_sha256": "2e860588e67e05c57c75d70a1ff8949591b3e80b428c36e553a8e3b6d846ff79"
+      },
+      "state": {
+        "new_sha256": "cb6650253f57b54f97faa00e1cd01be518e6520b232e94c4b2570a38ef787523",
+        "old_sha256": "cb6650253f57b54f97faa00e1cd01be518e6520b232e94c4b2570a38ef787523"
+      }
+    },
+    "fc-d64-k-shared-6c8fbd0874": {
+      "backward": {
+        "new_sha256": "8c3718d32494e2ae4e211230ce22e0eefaa68c57d1b98a5aa1c99113d7b6af6d",
+        "old_sha256": "8c3718d32494e2ae4e211230ce22e0eefaa68c57d1b98a5aa1c99113d7b6af6d"
+      },
+      "forward": {
+        "new_sha256": "79bbc40e8ca86f2970104b3e5897d3d0d539ded82b448614ff7842af18199a88",
+        "old_sha256": "79bbc40e8ca86f2970104b3e5897d3d0d539ded82b448614ff7842af18199a88"
+      },
+      "optimizer": {
+        "new_sha256": "0adb18b0be5bbd5296f162e53b556c8ecbd53a3b5b61022f42465a04adbdec5a",
+        "old_sha256": "0adb18b0be5bbd5296f162e53b556c8ecbd53a3b5b61022f42465a04adbdec5a"
+      },
+      "state": {
+        "new_sha256": "6ce5eceaff5c41ab08917d7a92a2d4e2e51f17196b0c7e17eb72118b2c2ea589",
+        "old_sha256": "6ce5eceaff5c41ab08917d7a92a2d4e2e51f17196b0c7e17eb72118b2c2ea589"
+      }
+    },
+    "fc-d64-s-base-30a947a88a": {
+      "backward": {
+        "new_sha256": "7e9ba55972df7b5fa9d37ae3ddb9075e959991dc80fa7114f69ac64f416c9f16",
+        "old_sha256": "7e9ba55972df7b5fa9d37ae3ddb9075e959991dc80fa7114f69ac64f416c9f16"
+      },
+      "forward": {
+        "new_sha256": "2c4f0199047ef43d89b3f024e0d2a271d15ba77ae0e9cbe10557756b0dc1ead1",
+        "old_sha256": "2c4f0199047ef43d89b3f024e0d2a271d15ba77ae0e9cbe10557756b0dc1ead1"
+      },
+      "optimizer": {
+        "new_sha256": "75b14ba531a5f1b2527ec052e93c19e80f4b1be94f8e0b8beb7e79d2f9623173",
+        "old_sha256": "75b14ba531a5f1b2527ec052e93c19e80f4b1be94f8e0b8beb7e79d2f9623173"
+      },
+      "state": {
+        "new_sha256": "624ecc96da6955c1a9e9cf9bb37482cdea16f9ebe411aeeb31b22df7741cafc6",
+        "old_sha256": "624ecc96da6955c1a9e9cf9bb37482cdea16f9ebe411aeeb31b22df7741cafc6"
+      }
+    },
+    "fc-d64-s-depth3-960007ce16": {
+      "backward": {
+        "new_sha256": "17a539f327e1dbdb95fb44f460d324c7afc9e13a2f09111653f48395e3c24602",
+        "old_sha256": "17a539f327e1dbdb95fb44f460d324c7afc9e13a2f09111653f48395e3c24602"
+      },
+      "forward": {
+        "new_sha256": "86e3e60d258e18d5ca60f3470a34b64bf238c8c8bb27a9b08e0a6ddbe0071273",
+        "old_sha256": "86e3e60d258e18d5ca60f3470a34b64bf238c8c8bb27a9b08e0a6ddbe0071273"
+      },
+      "optimizer": {
+        "new_sha256": "1c5fb8adbc3d58909af37457768d17adc59b12ceaa34ae20677bfa6f82c07a9b",
+        "old_sha256": "1c5fb8adbc3d58909af37457768d17adc59b12ceaa34ae20677bfa6f82c07a9b"
+      },
+      "state": {
+        "new_sha256": "9d5a160312e258e2acfd8f798b9a2fa233bdcfde2fb5b0c39770f12b7d4d4f0f",
+        "old_sha256": "9d5a160312e258e2acfd8f798b9a2fa233bdcfde2fb5b0c39770f12b7d4d4f0f"
+      }
+    },
+    "fc-d64-s-ffn1-ab57ed5c39": {
+      "backward": {
+        "new_sha256": "819b05ee9de5329da1fc7c4ef356b961cc4180b7d43247f7de53573ec4e7f874",
+        "old_sha256": "819b05ee9de5329da1fc7c4ef356b961cc4180b7d43247f7de53573ec4e7f874"
+      },
+      "forward": {
+        "new_sha256": "0d30e2b7c4fad9deab336c25a185a2fd28298e4117d05a3e093b7391a33a991c",
+        "old_sha256": "0d30e2b7c4fad9deab336c25a185a2fd28298e4117d05a3e093b7391a33a991c"
+      },
+      "optimizer": {
+        "new_sha256": "dfc51c9b9860594287e7b141292d09254d10ddac86fa3c4b18119d017277539e",
+        "old_sha256": "dfc51c9b9860594287e7b141292d09254d10ddac86fa3c4b18119d017277539e"
+      },
+      "state": {
+        "new_sha256": "805d18e5bd05bf3334196f5a678af6ef645d9c416e791484f0732fae02372b77",
+        "old_sha256": "805d18e5bd05bf3334196f5a678af6ef645d9c416e791484f0732fae02372b77"
+      }
+    },
+    "fc-d64-s-shared-7239f57e95": {
+      "backward": {
+        "new_sha256": "ad5f394d128531d80cfb5a655918df823928dedd68059606809832c7f5cf50aa",
+        "old_sha256": "ad5f394d128531d80cfb5a655918df823928dedd68059606809832c7f5cf50aa"
+      },
+      "forward": {
+        "new_sha256": "d78bf9136aa405f42647fa7057b0c0e0b3dae5872c8234d2f5c631769adc70db",
+        "old_sha256": "d78bf9136aa405f42647fa7057b0c0e0b3dae5872c8234d2f5c631769adc70db"
+      },
+      "optimizer": {
+        "new_sha256": "d0b1a9fe0eb0795ad0a3a2dbeed168a1c8a3ab15849bcc9e453e608d20b373bd",
+        "old_sha256": "d0b1a9fe0eb0795ad0a3a2dbeed168a1c8a3ab15849bcc9e453e608d20b373bd"
+      },
+      "state": {
+        "new_sha256": "838e332b159270f8133b3c6dc3e9993b3a8c42e51d504726b736bde117d15ba2",
+        "old_sha256": "838e332b159270f8133b3c6dc3e9993b3a8c42e51d504726b736bde117d15ba2"
+      }
+    },
+    "lattice-d64-k-base-23c0a95fd0": {
+      "backward": {
+        "new_sha256": "8af517fbb6b9c2513124217270fc866cad81be57e64d6bb8d0e8f9670fb56e45",
+        "old_sha256": "8af517fbb6b9c2513124217270fc866cad81be57e64d6bb8d0e8f9670fb56e45"
+      },
+      "forward": {
+        "new_sha256": "90b559781d40e288580d36846d58374701157ce92a42d8d7a3b3a9d2b2dcc2d2",
+        "old_sha256": "90b559781d40e288580d36846d58374701157ce92a42d8d7a3b3a9d2b2dcc2d2"
+      },
+      "optimizer": {
+        "new_sha256": "578bbecbe7f8397ee7799d3c13d84ba0dc86ed8f40ba9bf16987c20a3872a8e1",
+        "old_sha256": "578bbecbe7f8397ee7799d3c13d84ba0dc86ed8f40ba9bf16987c20a3872a8e1"
+      },
+      "state": {
+        "new_sha256": "a33695b796ab1fa51583cd82d98f72ecaee2361aeedef2c864617b3a4bbd6c11",
+        "old_sha256": "a33695b796ab1fa51583cd82d98f72ecaee2361aeedef2c864617b3a4bbd6c11"
+      }
+    },
+    "lattice-d64-k-depth2-417579f46f": {
+      "backward": {
+        "new_sha256": "c6e57cdef377a7682ff9ba608ee24b81621d2af9a1fb450c83cfc4b7b9e5cb84",
+        "old_sha256": "c6e57cdef377a7682ff9ba608ee24b81621d2af9a1fb450c83cfc4b7b9e5cb84"
+      },
+      "forward": {
+        "new_sha256": "06395d43cb757d1d380b1564f51f5f130bd9590224e31b63d4f204ec3fe7103f",
+        "old_sha256": "06395d43cb757d1d380b1564f51f5f130bd9590224e31b63d4f204ec3fe7103f"
+      },
+      "optimizer": {
+        "new_sha256": "4a8fad727d7cbf2d2a6ee1025be62d594a1eaa3d365de36d22541a42cbaec4cb",
+        "old_sha256": "4a8fad727d7cbf2d2a6ee1025be62d594a1eaa3d365de36d22541a42cbaec4cb"
+      },
+      "state": {
+        "new_sha256": "ccb9599e7aa8e5b828a8ab51fc103d63fd7e988a2d20e2005b346e0e6cd2695c",
+        "old_sha256": "ccb9599e7aa8e5b828a8ab51fc103d63fd7e988a2d20e2005b346e0e6cd2695c"
+      }
+    },
+    "lattice-d64-k-ffn2-f4ae630b9b": {
+      "backward": {
+        "new_sha256": "5a78b5c18d5f6f8f4353c6a05ae8c4f09e81dcb89944066fd6c2dea92d588139",
+        "old_sha256": "5a78b5c18d5f6f8f4353c6a05ae8c4f09e81dcb89944066fd6c2dea92d588139"
+      },
+      "forward": {
+        "new_sha256": "60ea3a9eb6e73d65b120530d735128dda74c51223e10c816e9d0e5624b9fb128",
+        "old_sha256": "60ea3a9eb6e73d65b120530d735128dda74c51223e10c816e9d0e5624b9fb128"
+      },
+      "optimizer": {
+        "new_sha256": "2e0d7f7f754d92f2dfa22451a07a865f29f3cd8a2ce4eca76f6a59c6e3e79afd",
+        "old_sha256": "2e0d7f7f754d92f2dfa22451a07a865f29f3cd8a2ce4eca76f6a59c6e3e79afd"
+      },
+      "state": {
+        "new_sha256": "2e44650921d05a9506511dda74813d7a11e99a5f638c0f42766efe53282e6639",
+        "old_sha256": "2e44650921d05a9506511dda74813d7a11e99a5f638c0f42766efe53282e6639"
+      }
+    },
+    "lattice-d64-k-layershared-f07cadf26f": {
+      "backward": {
+        "new_sha256": "f2ea2a63ac27f72e6c5f264bb59cca2766cf3d213821522dd55bb94dce14d9f3",
+        "old_sha256": "f2ea2a63ac27f72e6c5f264bb59cca2766cf3d213821522dd55bb94dce14d9f3"
+      },
+      "forward": {
+        "new_sha256": "8ea29a021684c9e48598cb30324180f15149d70703b62b5b771c7fae5ba1fe40",
+        "old_sha256": "8ea29a021684c9e48598cb30324180f15149d70703b62b5b771c7fae5ba1fe40"
+      },
+      "optimizer": {
+        "new_sha256": "f359cbf7a08c9a1dd357fea90376fda3e9c56035d4c9e006df971505c75e285a",
+        "old_sha256": "f359cbf7a08c9a1dd357fea90376fda3e9c56035d4c9e006df971505c75e285a"
+      },
+      "state": {
+        "new_sha256": "6254a021492d10b78d6880ae453de9ee93b2af23180883ab2c51eaa82587fd81",
+        "old_sha256": "6254a021492d10b78d6880ae453de9ee93b2af23180883ab2c51eaa82587fd81"
+      }
+    },
+    "lattice-d64-k-memoryshared-f296b03e23": {
+      "backward": {
+        "new_sha256": "7ada595d956a21b0923c0af760050b3f3f14d2ef984ec4308719458d9c8d1cda",
+        "old_sha256": "7ada595d956a21b0923c0af760050b3f3f14d2ef984ec4308719458d9c8d1cda"
+      },
+      "forward": {
+        "new_sha256": "ba6cd93ca3eb39d1cd53d84b6ca6e38f59ce515bb0bd3794d0a5580eb83a5011",
+        "old_sha256": "ba6cd93ca3eb39d1cd53d84b6ca6e38f59ce515bb0bd3794d0a5580eb83a5011"
+      },
+      "optimizer": {
+        "new_sha256": "3da796358beb274de88665a265db51bb19d67abb3011b87da56b86050c30fd04",
+        "old_sha256": "3da796358beb274de88665a265db51bb19d67abb3011b87da56b86050c30fd04"
+      },
+      "state": {
+        "new_sha256": "4839fef99a89fc0c9021a949814bee9126e44b721ce773591b6eea192c7bd0e2",
+        "old_sha256": "4839fef99a89fc0c9021a949814bee9126e44b721ce773591b6eea192c7bd0e2"
+      }
+    },
+    "lattice-d64-k-nodes4-1e06d38bdb": {
+      "backward": {
+        "new_sha256": "6748d023f4fb673adbc3a96a5cfbb76301306dc5d739de70b2cf151b39436fe9",
+        "old_sha256": "6748d023f4fb673adbc3a96a5cfbb76301306dc5d739de70b2cf151b39436fe9"
+      },
+      "forward": {
+        "new_sha256": "3fd216d9bc15c606390f0ef2a4ab841d1a7945f266202a3d5d73169fb0c7fb12",
+        "old_sha256": "3fd216d9bc15c606390f0ef2a4ab841d1a7945f266202a3d5d73169fb0c7fb12"
+      },
+      "optimizer": {
+        "new_sha256": "97452139cbfd3b6bed904964af83670d776080f8929fea061e123c368b701d54",
+        "old_sha256": "97452139cbfd3b6bed904964af83670d776080f8929fea061e123c368b701d54"
+      },
+      "state": {
+        "new_sha256": "e6a2d8f03a9c2178703af603caa110f8c32cbf163b382e625a417aa35d9d780b",
+        "old_sha256": "e6a2d8f03a9c2178703af603caa110f8c32cbf163b382e625a417aa35d9d780b"
+      }
+    },
+    "lattice-d64-k-receive128-f163ef6985": {
+      "backward": {
+        "new_sha256": "a226538c13cf4176da2b055ad28b4c2a0e75a3c682873b127203a2060541cd5a",
+        "old_sha256": "a226538c13cf4176da2b055ad28b4c2a0e75a3c682873b127203a2060541cd5a"
+      },
+      "forward": {
+        "new_sha256": "35d09111100d88db9b304e816fd467decef860354d9400ae498570fd53c783f9",
+        "old_sha256": "35d09111100d88db9b304e816fd467decef860354d9400ae498570fd53c783f9"
+      },
+      "optimizer": {
+        "new_sha256": "503dee5ce585f24a55fa85e90592b6de216d336df3e1fae350b1a62964602522",
+        "old_sha256": "503dee5ce585f24a55fa85e90592b6de216d336df3e1fae350b1a62964602522"
+      },
+      "state": {
+        "new_sha256": "4ff0e87af3ea605ea37ce675c8bdc8a085398e4d2bf1c9bce11449a0c1d08b41",
+        "old_sha256": "4ff0e87af3ea605ea37ce675c8bdc8a085398e4d2bf1c9bce11449a0c1d08b41"
+      }
+    },
+    "lattice-d64-k-receive64-3c1639c9b9": {
+      "backward": {
+        "new_sha256": "b2d75c0f3bd9220fcef0e69456e92316b936ed70e43ecb8a512f5506a0a8cff8",
+        "old_sha256": "b2d75c0f3bd9220fcef0e69456e92316b936ed70e43ecb8a512f5506a0a8cff8"
+      },
+      "forward": {
+        "new_sha256": "175a62d95f7544bc0b6a6c0ecfa4963a2cfb3ceb8a8640447d0ad54ccb1132b3",
+        "old_sha256": "175a62d95f7544bc0b6a6c0ecfa4963a2cfb3ceb8a8640447d0ad54ccb1132b3"
+      },
+      "optimizer": {
+        "new_sha256": "95d97ae5fbd2d21006d111e2ff586622020fadaacc8c60a249d5844606d1a112",
+        "old_sha256": "95d97ae5fbd2d21006d111e2ff586622020fadaacc8c60a249d5844606d1a112"
+      },
+      "state": {
+        "new_sha256": "eebb87865cf81a7063d9bf885ad3595a841d6b53be7daa7ec23249ba2a4d68e0",
+        "old_sha256": "eebb87865cf81a7063d9bf885ad3595a841d6b53be7daa7ec23249ba2a4d68e0"
+      }
+    },
+    "lattice-d64-s-base-0895c1ce27": {
+      "backward": {
+        "new_sha256": "fe1a50d1c5b1519286d1d5d33e7a0f60a52e6ddbb367df23f6f9ea76880d560d",
+        "old_sha256": "fe1a50d1c5b1519286d1d5d33e7a0f60a52e6ddbb367df23f6f9ea76880d560d"
+      },
+      "forward": {
+        "new_sha256": "062d5eddba9efbb14798586b448541ff067aef2f170b39b7892e52044e526b33",
+        "old_sha256": "062d5eddba9efbb14798586b448541ff067aef2f170b39b7892e52044e526b33"
+      },
+      "optimizer": {
+        "new_sha256": "d5fd04ee40bae2fa6b4029cc2ca57056da7eab34b15a2cbf7b0360bce9cfa8e3",
+        "old_sha256": "d5fd04ee40bae2fa6b4029cc2ca57056da7eab34b15a2cbf7b0360bce9cfa8e3"
+      },
+      "state": {
+        "new_sha256": "611a0b6dd047970e1d2a1d7d4ff21fba19beda6c31f85ad3c8bdf0329792ed40",
+        "old_sha256": "611a0b6dd047970e1d2a1d7d4ff21fba19beda6c31f85ad3c8bdf0329792ed40"
+      }
+    },
+    "lattice-d64-s-depth2-5f26693f30": {
+      "backward": {
+        "new_sha256": "a28d2c77788fe4dce0a10bc89d6b7eeb02c791ab59ba1a3fceb96f263f97921d",
+        "old_sha256": "a28d2c77788fe4dce0a10bc89d6b7eeb02c791ab59ba1a3fceb96f263f97921d"
+      },
+      "forward": {
+        "new_sha256": "a33213ef87263f1d48761e929b6604da914e7274c359d1c4c6d86e6c3cf4c2a9",
+        "old_sha256": "a33213ef87263f1d48761e929b6604da914e7274c359d1c4c6d86e6c3cf4c2a9"
+      },
+      "optimizer": {
+        "new_sha256": "2f0ad73f035038ee1fa37c6a0afa2b0ea2ce2e10f498a1816efa58f99becf694",
+        "old_sha256": "2f0ad73f035038ee1fa37c6a0afa2b0ea2ce2e10f498a1816efa58f99becf694"
+      },
+      "state": {
+        "new_sha256": "87611990783ec2446c2305897efb2df8824ff2ab60262b1d26f9a5e38d8c06d2",
+        "old_sha256": "87611990783ec2446c2305897efb2df8824ff2ab60262b1d26f9a5e38d8c06d2"
+      }
+    },
+    "lattice-d64-s-ffn2-0e362d7071": {
+      "backward": {
+        "new_sha256": "4e9264298b27b3c1788809eeeb3fc8481665093f9dceb091619bdf6f9e9fc591",
+        "old_sha256": "4e9264298b27b3c1788809eeeb3fc8481665093f9dceb091619bdf6f9e9fc591"
+      },
+      "forward": {
+        "new_sha256": "86994c5252fbb921b289c273bd13afcfb1ecd53a401df263c5d30a353aea1610",
+        "old_sha256": "86994c5252fbb921b289c273bd13afcfb1ecd53a401df263c5d30a353aea1610"
+      },
+      "optimizer": {
+        "new_sha256": "8f81bb82d7566fd68dd1d76df7e3c5b6db0977b6bea4c34c99850edc5a60f85a",
+        "old_sha256": "8f81bb82d7566fd68dd1d76df7e3c5b6db0977b6bea4c34c99850edc5a60f85a"
+      },
+      "state": {
+        "new_sha256": "51bed03834dadc5ab9330be1ae612aa0f34268e06a834f64958c8bc7085f34e4",
+        "old_sha256": "51bed03834dadc5ab9330be1ae612aa0f34268e06a834f64958c8bc7085f34e4"
+      }
+    },
+    "lattice-d64-s-layershared-351ff0ef53": {
+      "backward": {
+        "new_sha256": "11e8872c409f56d831354dad58845277cbde7ed72f6faf61698669b36e04ed48",
+        "old_sha256": "11e8872c409f56d831354dad58845277cbde7ed72f6faf61698669b36e04ed48"
+      },
+      "forward": {
+        "new_sha256": "a04af9857c322f2dacfe36b8519422bb9a3be67efe16d0d8e735198f694b00b8",
+        "old_sha256": "a04af9857c322f2dacfe36b8519422bb9a3be67efe16d0d8e735198f694b00b8"
+      },
+      "optimizer": {
+        "new_sha256": "a92380f0ffa09941e9c85542679f362e37e35b0f97c50510fc853ce2a6e5b561",
+        "old_sha256": "a92380f0ffa09941e9c85542679f362e37e35b0f97c50510fc853ce2a6e5b561"
+      },
+      "state": {
+        "new_sha256": "034b68e8e793f35213d355d4848d44631fca7c177486a3e121bf2f2f26520c31",
+        "old_sha256": "034b68e8e793f35213d355d4848d44631fca7c177486a3e121bf2f2f26520c31"
+      }
+    },
+    "lattice-d64-s-memoryshared-16897885fd": {
+      "backward": {
+        "new_sha256": "a5602240700ab320b22a08bd5de7901c7b96c2c95c182835040ca540bb2e6e32",
+        "old_sha256": "a5602240700ab320b22a08bd5de7901c7b96c2c95c182835040ca540bb2e6e32"
+      },
+      "forward": {
+        "new_sha256": "100fe267532c7158be8ba6fc82c74782d430311a09849b83c29479ad07a0a718",
+        "old_sha256": "100fe267532c7158be8ba6fc82c74782d430311a09849b83c29479ad07a0a718"
+      },
+      "optimizer": {
+        "new_sha256": "8c2f4441e3e9bd23d0249bb22222c751a76c7f33a1c1db49be06bd759c979cc6",
+        "old_sha256": "8c2f4441e3e9bd23d0249bb22222c751a76c7f33a1c1db49be06bd759c979cc6"
+      },
+      "state": {
+        "new_sha256": "30854452060ebaf4bc150fefc9927fba56c4a7c37bde863d43ae37f5ebcacfc7",
+        "old_sha256": "30854452060ebaf4bc150fefc9927fba56c4a7c37bde863d43ae37f5ebcacfc7"
+      }
+    },
+    "lattice-d64-s-nodes4-3b597e8e65": {
+      "backward": {
+        "new_sha256": "b11261b663d44954741620dbf8040032cf5250c33241f5e008fabce913ac56c4",
+        "old_sha256": "b11261b663d44954741620dbf8040032cf5250c33241f5e008fabce913ac56c4"
+      },
+      "forward": {
+        "new_sha256": "3188eabbca34cba8df97c70e187a46542af00a58bc0a983c0f627c5453b05c6b",
+        "old_sha256": "3188eabbca34cba8df97c70e187a46542af00a58bc0a983c0f627c5453b05c6b"
+      },
+      "optimizer": {
+        "new_sha256": "610d880c299620b7882c2c7cb847b9c7c8c9e6df9dd0368e8e7c8edf350995e5",
+        "old_sha256": "610d880c299620b7882c2c7cb847b9c7c8c9e6df9dd0368e8e7c8edf350995e5"
+      },
+      "state": {
+        "new_sha256": "d603308a92c91e3186d990c4097abe0347bb6964afce582f9a76ed9f0f476d03",
+        "old_sha256": "d603308a92c91e3186d990c4097abe0347bb6964afce582f9a76ed9f0f476d03"
+      }
+    },
+    "lattice-d64-s-receive128-623981f84d": {
+      "backward": {
+        "new_sha256": "506903f947f6ed6bfb553e3462c3be5043933c22ac5668eccc9d6f1b6703db40",
+        "old_sha256": "506903f947f6ed6bfb553e3462c3be5043933c22ac5668eccc9d6f1b6703db40"
+      },
+      "forward": {
+        "new_sha256": "9cdcefc5b377e4f9fd84e097154a15390737e728bdfd213a6f16aeadc979f7e9",
+        "old_sha256": "9cdcefc5b377e4f9fd84e097154a15390737e728bdfd213a6f16aeadc979f7e9"
+      },
+      "optimizer": {
+        "new_sha256": "dd872116a227e8ea5deaf11d91f0ba39d7c3c798484f08b310446b3e02cc71ae",
+        "old_sha256": "dd872116a227e8ea5deaf11d91f0ba39d7c3c798484f08b310446b3e02cc71ae"
+      },
+      "state": {
+        "new_sha256": "36428448d1044aacc2c20dacf63cb2ecb7cb4ae0f4526772ef045fd739c0e98f",
+        "old_sha256": "36428448d1044aacc2c20dacf63cb2ecb7cb4ae0f4526772ef045fd739c0e98f"
+      }
+    },
+    "lattice-d64-s-receive64-8a0fbc01ad": {
+      "backward": {
+        "new_sha256": "13afc375d524333835a3a140c6dd914bdd82da0dfe8af6e612d4b6df1ff4a4d4",
+        "old_sha256": "13afc375d524333835a3a140c6dd914bdd82da0dfe8af6e612d4b6df1ff4a4d4"
+      },
+      "forward": {
+        "new_sha256": "f79c96ab47ad8b6d4f2145e48ed140fefafe52b4f0b534c928d5e9058ff30def",
+        "old_sha256": "f79c96ab47ad8b6d4f2145e48ed140fefafe52b4f0b534c928d5e9058ff30def"
+      },
+      "optimizer": {
+        "new_sha256": "361ca29dd89724e73aab94a906e192cb42dcb2256a3e7e252b9b18977ec5b2fd",
+        "old_sha256": "361ca29dd89724e73aab94a906e192cb42dcb2256a3e7e252b9b18977ec5b2fd"
+      },
+      "state": {
+        "new_sha256": "5437714ae234d99f492708fbd0746852e851c65c7c5b09b9bce6aeb42dd86472",
+        "old_sha256": "5437714ae234d99f492708fbd0746852e851c65c7c5b09b9bce6aeb42dd86472"
+      }
+    }
+  },
+  "old_source_identity": {
+    "data_manifest_sha256": "2f4617d73b5dad4f6a343707382714738e8012432fda85d9f7e36f44b26a4e1a",
+    "python_version": "3.12.13",
+    "runtime_packages": {
+      "numpy": "2.5.2",
+      "torch": "2.12.0+cpu",
+      "torch-npu": "2.12.0.post3"
+    },
+    "schema": "pilot-r3-source-v1",
+    "source_files": {
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/__init__.py": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/allocation.py": "004051c7178380b270e2cce020661bd144ed9afd78c98271d9e5c253beb9d65f",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/attention.py": "58602a6211632de9db1632c53cbcbf6b9890360ee4d0266d32bb536b1bec2214",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/checkpoint.py": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/config.py": "2b890c0ae9eac381aa3ab9726eb386339345f62dc7b3e27433ecd5a0b1c0299f",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/ffn_packing.py": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/grouped_linear.py": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/kv.py": "6ce42c759d8bfa9843c006d0bbda31ad1bc0602b0c9584718d73959bc11a3e3b",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/layout.py": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/model.py": "1911afe3b66b199eb7e066ea57c5900fead1e390ebb5894818d423284850255e",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/parameters.py": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/placement.py": "0f77def73da20f467756e5dc1f701f25942565f762e82be5d23218ecee39d05f",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/placement_ownership.py": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/precision.py": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/reception.py": "43f72f3f1a55263b8d1185a41f0bf2711b7e1179cd664710ced08e70563b45c4",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/region.py": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/region_batch.py": "514ee30c5077d416c02cec81380280eb45509f20922a0f812657b93d2d8b7e80",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/region_execution.py": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/region_placement.py": "fd082f035185d04af6bc3ba27b949a8f065ccdf62f8b32a1b442accbfa6f2b6d",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/scaled_arithmetic.py": "21b696170e73ae28a3238a4db7dd9b613d92a2b0eb88610df74a5d01a8006c62",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/ssd.py": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/ssd_memory.py": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/topology.py": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/topology_hb.py": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/weighted_mean.py": "6c993386c66f611c371c75e2e66a52dec7954c4fb9078819aab23f13d6c76d88",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/__init__.py": "8208b80d75d5de0a39089a54db7a24924819bb81a1ed6a61adaac931a2fddf95",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/audit3.py": "9e9d4b4e3daee75ce71e215400faac71783704eed40b328c5df3eff8cca878cb",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/catalog3.py": "5ae4145270d63aaba85bf3f3aa56224d9c642e7bd1b1e75df74100e6f8d5242b",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/data.py": "d327409f049891273c315c654870a6cbdda8b1162307cabe100225c11ddbcbdd",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/data3.py": "da91d2df3a59d840bdafe181721f579ce1a8d8a4203b5872a700a812e2587cbe",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/diagnose_shannon.py": "d81bf90d3d85762f355c71375f47145aceff4e06167b95749f738372fbf3bcea",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/gate3.py": "b0b69bf919c04629c8f38bec075753e9d6775eb74cc50e6ddd272bd705f05dcc",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/inspect3.py": "dacffdb2c7da0e030a67244c66ba31d38a0bb89b912e24afbc5710c4f4634859",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/io.py": "d846049973ea6c7a952353b8a4ed25e2d89e9a67741e3c16e3dd67d39e802170",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/models.py": "42ac16fa4353d47898dc0d40fbb4b689c50856f06007ccf43f887e65cc51becb",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/models3.py": "07f6c919215d1bc79fb433d8120c133e4ff5173b7ac192b018d64819498e9b71",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/plan.py": "680567ef8fed0835f62d890b9696120a1a6e3edb323f0b88437805171c2fc834",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/plan2.py": "a0452bf80628baf4cc6c02601200f2ea22b3b3218f611dfcdfaeb2f909f594b4",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/preflight3.py": "cd8841d99e58605322a80f5e898bf299fce129bacc8c8b42191398aabbbe10a5",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/prepare3.py": "19b9736bbd43e21e4faf8590ff8b4d5033630a35b4dcd9d41f68ec6076f26056",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/prepare_campaign3.py": "fcb5446da851e35b478988b4d325ff3b09bfcc41a0134e3c1635b710418b3bf7",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/report.py": "9b87332e2d4ca021b0adffb44e19d9eb5d477cf27eaf068042730f2ab20f2c00",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/report2.py": "5a5cb8eefe33f5fd92d6e9aaa89b833f631b778a73edb18bb48acc3c686848ce",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/report3.py": "5633f35833da5d62525535f9953d33dc1d6d98499bfe54d3de750b26fe554571",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/round3.py": "50c656b6106487d1d679b72861fc45a1cf0540fe3cf6fd49752d2115f8141458",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/scheduler.py": "dbd209fe22f252bc88aa13f27b616f0cb34bcaf468b03e85751edca6f2b9d7b7",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/scheduler3.py": "ba12bdd1cf439ac07881a6d540a39d7ebe17aab40f3ea41eb330123998a40fef",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/selection.py": "9607cb8ac5f29af0e43a7de92eb36e0a4a0801eac1e493da972aba1df4360787",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/trace_shannon.py": "15e08a2038b9d5270269a46e8cf4acc656868018a9e47cbac99854a9a1faa7ae",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/validate_shannon_capture.py": "d79a79f370babe4302fb7c2976d424425978047d32255d14b595cb6eeb2528ff",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/worker.py": "542b1f5b88389e902f2aedb19eb368321152f1fff012f66d553cfc0cccf349d8",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/worker3.py": "a5e9b27350521ef7bcd929f001add25679ed7e26482287c7937340cf30d4f3a8"
+    }
+  },
+  "plan": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-transfer-r01/plan.json",
+    "sha256": "b78931e8202d8e61efdbd3fb0c682ccc6fe94696e90151e68ded30cbddbe7809"
+  },
+  "remaining_descendants": [],
+  "reservation_formula": "2 sources * 3 updates * 128 loss tokens * sum(selected batch_size per model)",
+  "reserved_tokens": 36864,
+  "schema": "pilot-r3-quad-transfer-validation-v1",
+  "scope": "exact CPU witness for these saved batches, seeds and recipes; no NPU trajectory or learning equivalence claimed",
+  "started_unix": 1795139835.4084642,
+  "status": "passed",
+  "steps_per_model": 3,
+  "tested_paths": [
+    "forward",
+    "backward",
+    "optimizer",
+    "state"
+  ]
+}

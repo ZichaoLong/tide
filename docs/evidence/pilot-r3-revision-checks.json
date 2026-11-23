@@ -1,0 +1,73 @@
+{
+  "checks": [
+    {
+      "command": "pytest -q tests/test_pilot_catalog3.py tests/test_pilot_gate3.py tests/test_pilot_chain_receipt3.py tests/test_pilot_transfer3.py tests/test_pilot_report3.py tests/test_pilot_audit3.py tests/test_pilot_round3.py tests/test_pilot_prepare_campaign3.py tests/test_pilot_lifecycle3.py tests/test_pilot_shared_npu3.py tests/test_pilot_worker3.py",
+      "initial": "210 passed, 1 timing-assumption test failed; production behavior unchanged by subsequent correction",
+      "scope": "catalog/gate/chain/transfer/report/audit/round/prepare/lifecycle/adapter/worker"
+    },
+    {
+      "result": "14 passed",
+      "scope": "shared adapter corrected lease accounting test"
+    },
+    {
+      "result": "22 passed, including transferred-evidence cleanup and interrupted-retirement storage forecast",
+      "scope": "final round3 including CPU continuation, retirement and external evidence preservation"
+    },
+    {
+      "result": "124 passed on shared/default scheduler and adapter; final changed default/shared scheduler rechecked 111 passed, including cross-revision evaluation budget",
+      "scope": "shared/default scheduler and shared adapter fault regressions"
+    },
+    {
+      "result": "39 passed plus 2 final focused rechecks; delegated verification",
+      "scope": "quad probe and transfer validation"
+    }
+  ],
+  "frozen_prepared": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/prepared.json",
+    "sha256": "5f3bdbed87710a27c9a43cc8957d53aedbe9f17110e6ae6e434e0b8275abf54e"
+  },
+  "frozen_source_file_count": 62,
+  "schema": "pilot-r3-revision-check-review-v1",
+  "scope": "CPU and fake lease regressions; numerical NPU qualification is a separate bound review; final 24-model training equivalence still pending",
+  "source_files": {
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/__init__.py": "8208b80d75d5de0a39089a54db7a24924819bb81a1ed6a61adaac931a2fddf95",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/audit3.py": "b8171de3565ec56e73135fa38350b1827bd6204517929b10a620227c7c694d09",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/calibrate_shared3.py": "e871f5f850337759f26144df21adfe5db79f985e342a587217ca897ae782454f",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/catalog3.py": "db1804150b94b407bfe5f1854c2ae0c283eec71776bddc929b6f6dcb72c26bf6",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/chain_receipt3.py": "ba0849c70da456b0f124686ed5cd74bf977be6eccd1e47123864124466dc195d",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/data.py": "d327409f049891273c315c654870a6cbdda8b1162307cabe100225c11ddbcbdd",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/data3.py": "da91d2df3a59d840bdafe181721f579ce1a8d8a4203b5872a700a812e2587cbe",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/diagnose_shannon.py": "d81bf90d3d85762f355c71375f47145aceff4e06167b95749f738372fbf3bcea",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/diagnose_shannon3.py": "e43ebb2609ee874a495c8b5c2a2c63be4f7ce57721023f91160e13a671449fca",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/gate3.py": "89b2eaa716a068e9c19d62e830e93c181ad5a600eaba7dc722981fbf240deed1",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/inspect3.py": "fa7ffab30189b3e611568841cbe1cfab6d2f351f0816f7a4b1267c251312706b",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/io.py": "d846049973ea6c7a952353b8a4ed25e2d89e9a67741e3c16e3dd67d39e802170",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/lifecycle3.py": "7acb7497a8fe0b807c7f78a1f8a1bed11c23d8f5ff9b27d0359ddf2287af1333",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/models.py": "42ac16fa4353d47898dc0d40fbb4b689c50856f06007ccf43f887e65cc51becb",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/models3.py": "07f6c919215d1bc79fb433d8120c133e4ff5173b7ac192b018d64819498e9b71",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/plan.py": "680567ef8fed0835f62d890b9696120a1a6e3edb323f0b88437805171c2fc834",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/plan2.py": "a0452bf80628baf4cc6c02601200f2ea22b3b3218f611dfcdfaeb2f909f594b4",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/preflight3.py": "cd8841d99e58605322a80f5e898bf299fce129bacc8c8b42191398aabbbe10a5",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/prepare3.py": "19b9736bbd43e21e4faf8590ff8b4d5033630a35b4dcd9d41f68ec6076f26056",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/prepare_campaign3.py": "fcb5446da851e35b478988b4d325ff3b09bfcc41a0134e3c1635b710418b3bf7",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/prepare_revision3.py": "1c4d84d04b6949b7b2c418606bffd60e050a30cdf342243319900999be14d356",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/quad_transfer_probe3.py": "3758df7c482998535674d2077f4324e2d81c403b3815769bc56ad764cc1ea737",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/repair_probe3.py": "b7d81bd0fb9894645bdd7d2b71b5bf871d60d14b65ccb11b495f387edfbdcf87",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/report.py": "9b87332e2d4ca021b0adffb44e19d9eb5d477cf27eaf068042730f2ab20f2c00",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/report2.py": "5a5cb8eefe33f5fd92d6e9aaa89b833f631b778a73edb18bb48acc3c686848ce",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/report3.py": "644833fe0273d2f2944047adf9918563db191a782044f446db088d1c82f75b1e",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/round3.py": "c2cf76eec7138cbcb563d387e22a765ed150cf14a70e7f1b78d01d650bf3edbc",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/scheduler.py": "dbd209fe22f252bc88aa13f27b616f0cb34bcaf468b03e85751edca6f2b9d7b7",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/scheduler3.py": "7b93aadfcd0188241ba833c0a50fa9e752003db3f331b7a40c5d1199132e0ff8",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/scheduler_shared3.py": "d37d6465f6c74718538c4c613b8db46b065204d4042260171d82fef90e674f55",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/selection.py": "9607cb8ac5f29af0e43a7de92eb36e0a4a0801eac1e493da972aba1df4360787",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/shared_npu3.py": "52359afa18b2ff4fc61ac93a828cb9a013cbe8c5f819e37e70b04aabb2470881",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/trace_shannon.py": "15e08a2038b9d5270269a46e8cf4acc656868018a9e47cbac99854a9a1faa7ae",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/transfer3.py": "17f7c3acd6a74e7cb1a1694a71c5d36c3ef5d836f48f1ceb8ad3406063141fe7",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/validate_shannon_capture.py": "d79a79f370babe4302fb7c2976d424425978047d32255d14b595cb6eeb2528ff",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/worker.py": "542b1f5b88389e902f2aedb19eb368321152f1fff012f66d553cfc0cccf349d8",
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/worker3.py": "a5e9b27350521ef7bcd929f001add25679ed7e26482287c7937340cf30d4f3a8"
+  },
+  "status": "passed",
+  "updated_unix": 1795140123.1728208
+}

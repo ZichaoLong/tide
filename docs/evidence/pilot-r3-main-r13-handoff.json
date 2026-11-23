@@ -1,0 +1,1542 @@
+{
+  "budget_at_freeze": {
+    "budget_ledger": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/budget.json",
+    "deadline_unix": 1797698913.9318287,
+    "max_device_seconds": 25920000,
+    "observed_unix": 1795249785.9983227,
+    "remaining_device_seconds": 25434793.082107883,
+    "remaining_preparation_device_seconds": 152509.44256813452,
+    "remaining_preparation_processed_tokens": 46768576,
+    "remaining_wall_seconds": 2449127.933506012,
+    "started_unix": 1795106913.9318287
+  },
+  "controller_changes_compared_to_frozen_worker": [
+    "cutover_review3.py",
+    "followup_migration3.py",
+    "prepare_stage_a_migration3.py",
+    "scheduler3.py",
+    "scheduler_dynamic3.py",
+    "scheduler_shared3.py",
+    "shared_npu3.py",
+    "stage_a_continued3.py"
+  ],
+  "controller_source": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/source",
+  "cpu_threads_per_task": 4,
+  "driver_observation": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/hbm-r13-pZPKKdKb/driver-witness.json",
+    "sha256": "fba1fe80f507c485731022547a25ac331f51fca73def8b7644794ad2f7dce44b"
+  },
+  "experiment": {
+    "deferred_subjects": 74,
+    "dispositions": {
+      "carry_checkpoint": 11,
+      "not_started": 143,
+      "signal": 49
+    },
+    "first_wave": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/hbm-r13-pZPKKdKb/preview/first-wave.json",
+      "sha256": "28ecf0c4db381a225c2612cf63c08140c307d88713ed1076b04ffec4ce739e13"
+    },
+    "old_completed_by_segment": {
+      "campaign-r09": 845,
+      "campaign-r10": 335,
+      "campaign-r11": 104,
+      "campaign-r12": 145
+    },
+    "outstanding": 203,
+    "preserved_selections": 42,
+    "previously_completed": 1429,
+    "priority_model_registered_stages": {
+      "a1": 12,
+      "init": 3
+    },
+    "subjects": 270
+  },
+  "first_update_observation": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/hbm-r13-pZPKKdKb/first-training.json",
+    "sha256": "341c9381d79bc120be07d5552cc484c5f4647443763b8871cb2c6f184bcab7ec"
+  },
+  "foundation": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r12/foundation",
+  "foundation_commit": "75d2a8938f71e260ac928a2f558b109e025ec2a1",
+  "foundation_file_count": 26,
+  "identical_predecessor_worker_identity": true,
+  "inspection": "python .local/pilot-r3/inspect.py",
+  "live": {
+    "active_leases": {
+      "group-000005": 0,
+      "group-000006": 9,
+      "group-000007": 1,
+      "group-000012": 11,
+      "group-000013": 7,
+      "group-000014": 5,
+      "group-000018": 4,
+      "group-000020": 10
+    },
+    "counts": {
+      "completed": 13,
+      "pending": 177,
+      "running": 35
+    },
+    "cpu_workers": 0,
+    "npu_concurrency": 8,
+    "npu_workers": 34,
+    "observed_local": "2026-11-21T16:36:18+08:00",
+    "observed_unix": 1795250178.3856025,
+    "owned_driver_pids": {
+      "0": [
+        2095559,
+        2097630,
+        2100395,
+        2100734
+      ],
+      "1": [
+        2096671,
+        2098749,
+        2102251,
+        2102591,
+        2105895,
+        2106159,
+        2106460,
+        2106705
+      ],
+      "10": [
+        2112625
+      ],
+      "11": [
+        2101033,
+        2103095,
+        2106502
+      ],
+      "4": [
+        2108300
+      ],
+      "5": [
+        2102108,
+        2104414,
+        2107316,
+        2107878,
+        2110128,
+        2110428,
+        2110712,
+        2111167
+      ],
+      "7": [
+        2101588
+      ],
+      "9": [
+        2096240,
+        2098351,
+        2101735,
+        2102044,
+        2105108,
+        2105426,
+        2105679,
+        2105942
+      ]
+    },
+    "physical_cpu_cores": 160,
+    "registered": 225,
+    "scheduler_updated_unix": 1795250175.116832,
+    "selected": 42,
+    "stage_b_gate": "closed",
+    "status": "running",
+    "unit": {
+      "ActiveState": "active",
+      "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r13.service",
+      "ExecMainCode": "0",
+      "ExecMainStatus": "0",
+      "InvocationID": "891456e17407495db5e384a6b0b2ba6d",
+      "LoadState": "loaded",
+      "MainPID": "2092154",
+      "Result": "success",
+      "Slice": "background.slice",
+      "SubState": "running"
+    },
+    "witnesses": {
+      "multiscale_timed-d128-s-group5-37506fa4ee-init-2026112001": {
+        "card": 11,
+        "driver_external_count": 0,
+        "driver_pid_verified": false,
+        "driver_used_mib": 34369,
+        "external_contention_observed": false,
+        "group": "group-000002",
+        "group_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/groups/group-000002/group.json",
+        "group_status": "completed",
+        "last_step": {
+          "grad_norm": 0.7282869815826416,
+          "loss": 9.027463912963867,
+          "lr": 0.00015,
+          "objective": 9.027463912963867,
+          "sampled_diagnostics": true,
+          "seconds": 18.703665118664503,
+          "state_reset": false,
+          "step": 4,
+          "time_unix": 1795249958.4813488,
+          "tokens": 32768
+        },
+        "lease_released": 1795249966.480581,
+        "manifest": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/groups/group-000002/manifest.json",
+          "sha256": "9ddf43c94f97822b1a2c534146d966dbe5e8f7965b213751577732b69a594ce2"
+        },
+        "max_hbm_bytes": 55834574848,
+        "peak_hbm_bytes": 35732324352,
+        "peak_parallel_workers": 1,
+        "reservation": 50915704832,
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-init-2026112001/attempt-0/result.json",
+          "sha256": "8ae828444f625343357cb6d085f561b23cd178cfd9fa464432482c983c792eb1"
+        },
+        "seed": 2026112001,
+        "stage": "init",
+        "steps": 4,
+        "terminal_qualified": true,
+        "worker": {
+          "admission_command_sha256": "9ddf43c94f97822b1a2c534146d966dbe5e8f7965b213751577732b69a594ce2",
+          "admission_sequence": null,
+          "all_seen_processes": {
+            "2093908:2283604669": {
+              "pgrp": 2093908,
+              "pid": 2093908,
+              "ppid": 2092221,
+              "rss_bytes": 483328,
+              "start_ticks": 2283604669,
+              "state": "R"
+            }
+          },
+          "cleanup_verified": true,
+          "cleanup_verified_unix": 1795249966.2144897,
+          "cpu_affinity_observed": [
+            0,
+            2,
+            4,
+            6,
+            8,
+            10,
+            12,
+            14,
+            16,
+            18,
+            20,
+            22,
+            24,
+            26,
+            28,
+            30,
+            32,
+            34,
+            36,
+            38,
+            40,
+            42,
+            44,
+            46,
+            48,
+            50,
+            52,
+            54,
+            56,
+            58,
+            60,
+            62,
+            64,
+            66,
+            68,
+            70,
+            72,
+            74,
+            76,
+            78,
+            80,
+            82,
+            84,
+            86,
+            88,
+            90,
+            92,
+            94,
+            96,
+            98,
+            100,
+            102,
+            104,
+            106,
+            108,
+            110,
+            112,
+            114,
+            116,
+            118,
+            120,
+            122,
+            124,
+            126,
+            128,
+            130,
+            132,
+            134,
+            136,
+            138,
+            140,
+            142,
+            144,
+            146,
+            148,
+            150,
+            152,
+            154,
+            156,
+            158,
+            160,
+            162,
+            164,
+            166,
+            168,
+            170,
+            172,
+            174,
+            176,
+            178,
+            180,
+            182,
+            184,
+            186,
+            188,
+            190,
+            192,
+            194,
+            196,
+            198,
+            200,
+            202,
+            204,
+            206,
+            208,
+            210,
+            212,
+            214,
+            216,
+            218,
+            220,
+            222,
+            224,
+            226,
+            228,
+            230,
+            232,
+            234,
+            236,
+            238,
+            240,
+            242,
+            244,
+            246,
+            248,
+            250,
+            252,
+            254,
+            256,
+            258,
+            260,
+            262,
+            264,
+            266,
+            268,
+            270,
+            272,
+            274,
+            276,
+            278,
+            280,
+            282,
+            284,
+            286,
+            288,
+            290,
+            292,
+            294,
+            296,
+            298,
+            300,
+            302,
+            304,
+            306,
+            308,
+            310,
+            312,
+            314,
+            316,
+            318
+          ],
+          "cpu_affinity_requested": null,
+          "cpu_threads": 4,
+          "descendant_cleanup_verified": true,
+          "exit_status": "completed",
+          "failure_class": null,
+          "finished_unix": 1795249966.1773596,
+          "hbm_admission_samples": [
+            {
+              "baseline_used_bytes": 3023044608,
+              "external_occupants": [],
+              "hbm_above_admission_limit": false,
+              "health": "OK",
+              "observed_unix": 1795249874.0218925,
+              "physical_id": 11,
+              "process_ids": [],
+              "projected_bytes": 53938749440,
+              "total_bytes": 68719476736,
+              "used_bytes": 3023044608
+            },
+            {
+              "baseline_used_bytes": 3023044608,
+              "external_occupants": [],
+              "hbm_above_admission_limit": false,
+              "health": "OK",
+              "observed_unix": 1795249875.9835804,
+              "physical_id": 11,
+              "process_ids": [],
+              "projected_bytes": 53938749440,
+              "total_bytes": 68719476736,
+              "used_bytes": 3023044608
+            }
+          ],
+          "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-init-2026112001/attempt-0/stdout.log",
+          "logical_device": "npu:0",
+          "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-init-2026112001/attempt-0",
+          "physical_id": 11,
+          "pid": 2093908,
+          "process": {
+            "pgrp": 2093908,
+            "pid": 2093908,
+            "ppid": 2092221,
+            "rss_bytes": 483328,
+            "start_ticks": 2283604669,
+            "state": "R"
+          },
+          "remaining_descendants": [],
+          "result_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-init-2026112001/attempt-0/result.json",
+          "result_sha256": "8ae828444f625343357cb6d085f561b23cd178cfd9fa464432482c983c792eb1",
+          "result_status": "completed",
+          "return_code": 0,
+          "start_ticks": 2283604669,
+          "started_unix": 1795249875.988563,
+          "status": "completed",
+          "wall_seconds": 90.18883235007524,
+          "worker_spec_sha256": "529ebd86302bbf8f3064da5b74b90320457a7ba793915017f528c7249b290476"
+        },
+        "worker_log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-init-2026112001/attempt-0/steps.jsonl"
+      },
+      "multiscale_timed-d128-s-group5-37506fa4ee-init-2026112002": {
+        "card": 7,
+        "driver_external_count": 0,
+        "driver_pid_verified": false,
+        "driver_used_mib": 3763,
+        "external_contention_observed": false,
+        "group": "group-000003",
+        "group_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/groups/group-000003/group.json",
+        "group_status": "completed",
+        "last_step": {
+          "grad_norm": 0.7534388303756714,
+          "loss": 9.03310775756836,
+          "lr": 0.00015,
+          "objective": 9.03310775756836,
+          "sampled_diagnostics": true,
+          "seconds": 18.733463503420353,
+          "state_reset": false,
+          "step": 4,
+          "time_unix": 1795249964.7297308,
+          "tokens": 32768
+        },
+        "lease_released": 1795249970.802364,
+        "manifest": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/groups/group-000003/manifest.json",
+          "sha256": "996bf6523fcc1ac98c63626cd0ed70895c4191e2e997564a3155700f944c0ed4"
+        },
+        "max_hbm_bytes": 55834574848,
+        "peak_hbm_bytes": 35738615808,
+        "peak_parallel_workers": 1,
+        "reservation": 50915704832,
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-init-2026112002/attempt-0/result.json",
+          "sha256": "3b4cfe4f78919b1bcbecb995751657aaa81be22444d0c86350606709208ccb63"
+        },
+        "seed": 2026112002,
+        "stage": "init",
+        "steps": 4,
+        "terminal_qualified": true,
+        "worker": {
+          "admission_command_sha256": "996bf6523fcc1ac98c63626cd0ed70895c4191e2e997564a3155700f944c0ed4",
+          "admission_sequence": null,
+          "all_seen_processes": {
+            "2094276:2283605314": {
+              "pgrp": 2094276,
+              "pid": 2094276,
+              "ppid": 2092222,
+              "rss_bytes": 4096,
+              "start_ticks": 2283605314,
+              "state": "R"
+            }
+          },
+          "cleanup_verified": true,
+          "cleanup_verified_unix": 1795249970.5381954,
+          "cpu_affinity_observed": [
+            0,
+            2,
+            4,
+            6,
+            8,
+            10,
+            12,
+            14,
+            16,
+            18,
+            20,
+            22,
+            24,
+            26,
+            28,
+            30,
+            32,
+            34,
+            36,
+            38,
+            40,
+            42,
+            44,
+            46,
+            48,
+            50,
+            52,
+            54,
+            56,
+            58,
+            60,
+            62,
+            64,
+            66,
+            68,
+            70,
+            72,
+            74,
+            76,
+            78,
+            80,
+            82,
+            84,
+            86,
+            88,
+            90,
+            92,
+            94,
+            96,
+            98,
+            100,
+            102,
+            104,
+            106,
+            108,
+            110,
+            112,
+            114,
+            116,
+            118,
+            120,
+            122,
+            124,
+            126,
+            128,
+            130,
+            132,
+            134,
+            136,
+            138,
+            140,
+            142,
+            144,
+            146,
+            148,
+            150,
+            152,
+            154,
+            156,
+            158,
+            160,
+            162,
+            164,
+            166,
+            168,
+            170,
+            172,
+            174,
+            176,
+            178,
+            180,
+            182,
+            184,
+            186,
+            188,
+            190,
+            192,
+            194,
+            196,
+            198,
+            200,
+            202,
+            204,
+            206,
+            208,
+            210,
+            212,
+            214,
+            216,
+            218,
+            220,
+            222,
+            224,
+            226,
+            228,
+            230,
+            232,
+            234,
+            236,
+            238,
+            240,
+            242,
+            244,
+            246,
+            248,
+            250,
+            252,
+            254,
+            256,
+            258,
+            260,
+            262,
+            264,
+            266,
+            268,
+            270,
+            272,
+            274,
+            276,
+            278,
+            280,
+            282,
+            284,
+            286,
+            288,
+            290,
+            292,
+            294,
+            296,
+            298,
+            300,
+            302,
+            304,
+            306,
+            308,
+            310,
+            312,
+            314,
+            316,
+            318
+          ],
+          "cpu_affinity_requested": null,
+          "cpu_threads": 4,
+          "descendant_cleanup_verified": true,
+          "exit_status": "completed",
+          "failure_class": null,
+          "finished_unix": 1795249970.4962175,
+          "hbm_admission_samples": [
+            {
+              "baseline_used_bytes": 3030384640,
+              "external_occupants": [],
+              "hbm_above_admission_limit": false,
+              "health": "OK",
+              "observed_unix": 1795249880.445199,
+              "physical_id": 7,
+              "process_ids": [],
+              "projected_bytes": 53946089472,
+              "total_bytes": 68719476736,
+              "used_bytes": 3030384640
+            },
+            {
+              "baseline_used_bytes": 3030384640,
+              "external_occupants": [],
+              "hbm_above_admission_limit": false,
+              "health": "OK",
+              "observed_unix": 1795249882.4337635,
+              "physical_id": 7,
+              "process_ids": [],
+              "projected_bytes": 53946089472,
+              "total_bytes": 68719476736,
+              "used_bytes": 3030384640
+            }
+          ],
+          "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-init-2026112002/attempt-0/stdout.log",
+          "logical_device": "npu:0",
+          "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-init-2026112002/attempt-0",
+          "physical_id": 7,
+          "pid": 2094276,
+          "process": {
+            "pgrp": 2094276,
+            "pid": 2094276,
+            "ppid": 2092222,
+            "rss_bytes": 4096,
+            "start_ticks": 2283605314,
+            "state": "R"
+          },
+          "remaining_descendants": [],
+          "result_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-init-2026112002/attempt-0/result.json",
+          "result_sha256": "3b4cfe4f78919b1bcbecb995751657aaa81be22444d0c86350606709208ccb63",
+          "result_status": "completed",
+          "return_code": 0,
+          "start_ticks": 2283605314,
+          "started_unix": 1795249882.440652,
+          "status": "completed",
+          "wall_seconds": 88.05557671189308,
+          "worker_spec_sha256": "dd79f81a3e88dddaf42cb3303b071ce2fd007dcd16bc2b167255de7a95707013"
+        },
+        "worker_log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-init-2026112002/attempt-0/steps.jsonl"
+      },
+      "multiscale_timed-d128-s-group5-37506fa4ee-init-2026112003": {
+        "card": 5,
+        "driver_external_count": 0,
+        "driver_pid_verified": false,
+        "driver_used_mib": 12985,
+        "external_contention_observed": false,
+        "group": "group-000004",
+        "group_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/groups/group-000004/group.json",
+        "group_status": "completed",
+        "last_step": {
+          "grad_norm": 0.7631583213806152,
+          "loss": 9.022217750549316,
+          "lr": 0.00015,
+          "objective": 9.022217750549316,
+          "sampled_diagnostics": true,
+          "seconds": 18.765477992594242,
+          "state_reset": false,
+          "step": 4,
+          "time_unix": 1795249971.9408748,
+          "tokens": 32768
+        },
+        "lease_released": 1795249977.4964657,
+        "manifest": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/groups/group-000004/manifest.json",
+          "sha256": "f4803f9a603236791aebbbb5ba0e6b4b352d6c67d586e3e964b8b921389253f6"
+        },
+        "max_hbm_bytes": 55834574848,
+        "peak_hbm_bytes": 35738615808,
+        "peak_parallel_workers": 1,
+        "reservation": 50915704832,
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-init-2026112003/attempt-0/result.json",
+          "sha256": "9f4010e9afa4554bf8f716f054dd5ed401c4c063bb76714e71a338e2187609e1"
+        },
+        "seed": 2026112003,
+        "stage": "init",
+        "steps": 4,
+        "terminal_qualified": true,
+        "worker": {
+          "admission_command_sha256": "f4803f9a603236791aebbbb5ba0e6b4b352d6c67d586e3e964b8b921389253f6",
+          "admission_sequence": null,
+          "all_seen_processes": {
+            "2094765:2283606021": {
+              "pgrp": 2094765,
+              "pid": 2094765,
+              "ppid": 2092223,
+              "rss_bytes": 4096,
+              "start_ticks": 2283606021,
+              "state": "R"
+            }
+          },
+          "cleanup_verified": true,
+          "cleanup_verified_unix": 1795249977.200876,
+          "cpu_affinity_observed": [
+            0,
+            2,
+            4,
+            6,
+            8,
+            10,
+            12,
+            14,
+            16,
+            18,
+            20,
+            22,
+            24,
+            26,
+            28,
+            30,
+            32,
+            34,
+            36,
+            38,
+            40,
+            42,
+            44,
+            46,
+            48,
+            50,
+            52,
+            54,
+            56,
+            58,
+            60,
+            62,
+            64,
+            66,
+            68,
+            70,
+            72,
+            74,
+            76,
+            78,
+            80,
+            82,
+            84,
+            86,
+            88,
+            90,
+            92,
+            94,
+            96,
+            98,
+            100,
+            102,
+            104,
+            106,
+            108,
+            110,
+            112,
+            114,
+            116,
+            118,
+            120,
+            122,
+            124,
+            126,
+            128,
+            130,
+            132,
+            134,
+            136,
+            138,
+            140,
+            142,
+            144,
+            146,
+            148,
+            150,
+            152,
+            154,
+            156,
+            158,
+            160,
+            162,
+            164,
+            166,
+            168,
+            170,
+            172,
+            174,
+            176,
+            178,
+            180,
+            182,
+            184,
+            186,
+            188,
+            190,
+            192,
+            194,
+            196,
+            198,
+            200,
+            202,
+            204,
+            206,
+            208,
+            210,
+            212,
+            214,
+            216,
+            218,
+            220,
+            222,
+            224,
+            226,
+            228,
+            230,
+            232,
+            234,
+            236,
+            238,
+            240,
+            242,
+            244,
+            246,
+            248,
+            250,
+            252,
+            254,
+            256,
+            258,
+            260,
+            262,
+            264,
+            266,
+            268,
+            270,
+            272,
+            274,
+            276,
+            278,
+            280,
+            282,
+            284,
+            286,
+            288,
+            290,
+            292,
+            294,
+            296,
+            298,
+            300,
+            302,
+            304,
+            306,
+            308,
+            310,
+            312,
+            314,
+            316,
+            318
+          ],
+          "cpu_affinity_requested": null,
+          "cpu_threads": 4,
+          "descendant_cleanup_verified": true,
+          "exit_status": "completed",
+          "failure_class": null,
+          "finished_unix": 1795249977.1549785,
+          "hbm_admission_samples": [
+            {
+              "baseline_used_bytes": 3037724672,
+              "external_occupants": [],
+              "hbm_above_admission_limit": false,
+              "health": "OK",
+              "observed_unix": 1795249887.0620742,
+              "physical_id": 5,
+              "process_ids": [],
+              "projected_bytes": 53953429504,
+              "total_bytes": 68719476736,
+              "used_bytes": 3037724672
+            },
+            {
+              "baseline_used_bytes": 3037724672,
+              "external_occupants": [],
+              "hbm_above_admission_limit": false,
+              "health": "OK",
+              "observed_unix": 1795249889.5032845,
+              "physical_id": 5,
+              "process_ids": [],
+              "projected_bytes": 53953429504,
+              "total_bytes": 68719476736,
+              "used_bytes": 3037724672
+            }
+          ],
+          "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-init-2026112003/attempt-0/stdout.log",
+          "logical_device": "npu:0",
+          "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-init-2026112003/attempt-0",
+          "physical_id": 5,
+          "pid": 2094765,
+          "process": {
+            "pgrp": 2094765,
+            "pid": 2094765,
+            "ppid": 2092223,
+            "rss_bytes": 4096,
+            "start_ticks": 2283606021,
+            "state": "R"
+          },
+          "remaining_descendants": [],
+          "result_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-init-2026112003/attempt-0/result.json",
+          "result_sha256": "9f4010e9afa4554bf8f716f054dd5ed401c4c063bb76714e71a338e2187609e1",
+          "result_status": "completed",
+          "return_code": 0,
+          "start_ticks": 2283606021,
+          "started_unix": 1795249889.5082042,
+          "status": "completed",
+          "wall_seconds": 87.64678478240967,
+          "worker_spec_sha256": "404c843ca0fddcf5680d7b42ce4ec90f542959d6a9b490705271eaa1accd4526"
+        },
+        "worker_log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-init-2026112003/attempt-0/steps.jsonl"
+      }
+    }
+  },
+  "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/campaign.log",
+  "migration": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/stage-a-migration.json",
+    "sha256": "8ceb4860daf949d3e834b88934af63bd396c3b4d7b37e7bc2746732b42357b57"
+  },
+  "observed_lease_to_worker_gap": {
+    "active_leases": {
+      "group-000005": 0,
+      "group-000006": 9,
+      "group-000007": 1,
+      "group-000012": 11,
+      "group-000013": 7,
+      "group-000014": 5,
+      "group-000018": 4,
+      "group-000019": 10
+    },
+    "group": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/groups/group-000019/group.json",
+      "sha256": "62ac258e2ca627073d14114812530317384f04a3a6ed4794fb478c1b1b20077c"
+    },
+    "job_id": "r3-campaign-r13-group-000019",
+    "lease_acquired_unix": 1795250090.6231837,
+    "observed_local": "2026-11-21T16:35:00+08:00",
+    "observed_unix": 1795250100.601468,
+    "owned_driver_pids": {
+      "0": [
+        2095559,
+        2097630,
+        2100395,
+        2100734
+      ],
+      "1": [
+        2096671,
+        2098749,
+        2102251,
+        2102591,
+        2105895,
+        2106159,
+        2106460,
+        2106705
+      ],
+      "11": [
+        2101033,
+        2103095,
+        2106502
+      ],
+      "4": [
+        2108300
+      ],
+      "5": [
+        2102108,
+        2104414,
+        2107316,
+        2107878
+      ],
+      "7": [
+        2101588
+      ],
+      "9": [
+        2096240,
+        2098351,
+        2101735,
+        2102044,
+        2105108,
+        2105426,
+        2105679,
+        2105942
+      ]
+    },
+    "physical_id": 10,
+    "released_unix": 1795250143.930701,
+    "result": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_settle-d256-k-mixed9-0fad868c8b-preflight-2026112021-capacity-small/attempt-0/result.json",
+      "sha256": "579a89276f70938fa0695cd3fe5467884baf9873d7fe7c7a7262dbad979a015c"
+    },
+    "seconds_until_worker_start": 3.440861463546753,
+    "task_id": "multiscale_settle-d256-k-mixed9-0fad868c8b-preflight-2026112021-capacity-small",
+    "worker_finished_unix": 1795250143.6183825,
+    "worker_started_unix": 1795250104.0423295
+  },
+  "observed_local": "2026-11-21T16:36:18+08:00",
+  "plan": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/campaign-plan.json",
+    "sha256": "0015ec5d0c43b7103dd596a3406bb3365bfff8271b4fa30dbbd0b37a91321c74"
+  },
+  "predecessor_resource_wait": {
+    "baseline_bytes": 3023044608,
+    "counts": {
+      "completed": 144,
+      "pending": 146,
+      "running": 54
+    },
+    "device": {
+      "baseline_used_bytes": 3023044608,
+      "external_occupants": [],
+      "hbm_above_admission_limit": false,
+      "health": "OK",
+      "observed_unix": 1795249465.5330253,
+      "physical_id": 11,
+      "process_ids": [],
+      "total_bytes": 68719476736,
+      "used_bytes": 3023044608
+    },
+    "inflight": {
+      "('pending', None)": 4,
+      "('running', 'completed')": 1,
+      "('running', 'saving_checkpoint')": 2,
+      "('running', 'training')": 47
+    },
+    "leased_since": 1795243698.8455951,
+    "manifest": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r12/round/groups/group-000057/manifest.json",
+      "sha256": "b20574ed187059e9363def33778cbfeb0d24d0e210fc60110bc1fc2e6d8d44b3"
+    },
+    "model_id": "multiscale_timed-d128-s-group5-37506fa4ee",
+    "model_resources": {
+      "backend_selection": "CPU small-batch only when qualified pre-training measurement reaches declared NPU-rate ratio; each trajectory and selected formal recipe keep their backend",
+      "batches": [
+        2,
+        64
+      ],
+      "checkpoint_bytes": 70499177,
+      "checkpoint_bytes_by_batch": {
+        "2": 36593961,
+        "64": 70499177
+      },
+      "chosen_throughput_batch": 64,
+      "cpu_measurement": {
+        "result_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r08/frozen/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-preflight-2026112021-capacity-cpu/attempt-0/result.json",
+        "task_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r08/frozen/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-preflight-2026112021-capacity-cpu/task.json"
+      },
+      "cpu_tokens_per_second": 85.6969246421797,
+      "device_by_batch": {
+        "2": "npu:0",
+        "64": "npu:0"
+      },
+      "larger_capacity_failure": null,
+      "max_measured_batch": 64,
+      "measurements": [
+        {
+          "result_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r08/frozen/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-preflight-2026112021-capacity-small/attempt-0/result.json",
+          "task_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r08/frozen/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-preflight-2026112021-capacity-small/task.json"
+        },
+        {
+          "result_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r08/frozen/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-preflight-2026112021-capacity-large/attempt-0/result.json",
+          "task_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r08/frozen/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-preflight-2026112021-capacity-large/task.json"
+        }
+      ],
+      "npu_peak_bytes_by_batch": {
+        "2": 1155530752,
+        "64": 33585889280
+      },
+      "private_checkpoint_target_bytes": 104123384,
+      "rss_peak_bytes_by_batch": {
+        "2": 2351730688,
+        "64": 2401087488
+      },
+      "selection": "two batches bounded by actual HBM and projected private checkpoint storage; highest measured training throughput plus lower batch tuned; whole-round storage forecast remains mandatory",
+      "tokens_per_second": 435.4818261526801,
+      "tokens_per_second_by_batch": {
+        "2": 129.42757312010608,
+        "64": 435.4818261526801
+      }
+    },
+    "observed_unix": 1795249473.239172,
+    "physical_check": {
+      "health": "OK",
+      "pids": [],
+      "used_mib": 2883
+    },
+    "physical_id": 11,
+    "plan": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r12/campaign-plan.json",
+      "sha256": "ee164324b25345e86aa59d0440fa5bd9e1bff229bc962435c2463fe82e845aa5"
+    },
+    "projected_bytes": 53938749440,
+    "registered": 344,
+    "reservation_bytes": 50915704832,
+    "service": {
+      "ActiveState": "active",
+      "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r12.service",
+      "ExecMainCode": "0",
+      "ExecMainStatus": "0",
+      "InvocationID": "792192dabddc413e82f45efd1e4accb4",
+      "LoadState": "loaded",
+      "MainPID": "1693596",
+      "Result": "success",
+      "Slice": "background.slice",
+      "SubState": "running"
+    },
+    "stage": "before_controlled_scheduler_cutover",
+    "stop_command": [
+      "systemctl",
+      "--user",
+      "kill",
+      "--kill-who=main",
+      "--signal=SIGTERM",
+      "tide-pilot-r3-campaign-r12.service"
+    ],
+    "storage": {
+      "available_storage_bytes": 101460148224,
+      "filesystem_free_bytes": 1373076291584,
+      "observed_unix": 1795249473.252848,
+      "quota": {
+        "filesystem": "/dev/mapper/ascend_data-data",
+        "grace_epoch": 0,
+        "hard_bytes": 751619276800,
+        "soft_bytes": 322122547200,
+        "used_bytes": 220662398976
+      },
+      "scope": "input snapshot headroom only; campaign forecasts all resolved controls before release",
+      "snapshot_source_bytes": 0,
+      "storage_reserve_bytes": 51539607552
+    },
+    "task_id": "multiscale_timed-d128-s-group5-37506fa4ee-init-2026112001",
+    "worker": {
+      "admission_command_sha256": "b20574ed187059e9363def33778cbfeb0d24d0e210fc60110bc1fc2e6d8d44b3",
+      "admission_sequence": null,
+      "finished_unix": null,
+      "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r12/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-init-2026112001/attempt-0",
+      "pid": null,
+      "return_code": null,
+      "start_ticks": null,
+      "started_unix": null,
+      "status": "pending",
+      "waiting_reason": "hbm_reservations_full",
+      "worker_spec_sha256": "66a67a07e6c800c378496ba2ad2a79f44f7581cac62243f6124eca1543a37cf2"
+    }
+  },
+  "prepared": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/campaign-prepared.json",
+    "sha256": "4e75c9edc0b464eb3a56489903be0b745eae09f64495099e945a529dcf601937"
+  },
+  "previous_stop": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-r12-hbm-continuation.json",
+    "sha256": "182bf6f26a35395d2cd9623181e03e47a68035380505a1a8dc0c9f437d76d87d"
+  },
+  "prioritized_initialization": {
+    "multiscale_timed-d128-s-group5-37506fa4ee-init-2026112001": {
+      "card": 11,
+      "external_contention_observed": false,
+      "final_checkpoint_load": "exact",
+      "final_loss": 9.027463912963867,
+      "group": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/groups/group-000002/group.json",
+        "sha256": "1865f17f693550eb58b6a095d87fd17dcee397b3f488a2e64d23e88acfd551dc"
+      },
+      "health_eligible": true,
+      "journal": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-init-2026112001/attempt-0/steps.jsonl",
+        "sha256": "ee777a0c3b40891dfc3681edca9e4603d755b99f4d0e7562be578517ff985f6e"
+      },
+      "lease_released_unix": 1795249966.480581,
+      "manifest": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/groups/group-000002/manifest.json",
+        "sha256": "9ddf43c94f97822b1a2c534146d966dbe5e8f7965b213751577732b69a594ce2"
+      },
+      "peak_parallel_workers": 1,
+      "peak_whole_card_bytes": 35732324352,
+      "queue": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/groups/group-000002/queue.json",
+        "sha256": "fd0db7fe39f0cd22cf1d912c0c2d82ebd87808301d54582910e1a238f91ce1f0"
+      },
+      "reservation_bytes": 50915704832,
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-init-2026112001/attempt-0/result.json",
+        "sha256": "8ae828444f625343357cb6d085f561b23cd178cfd9fa464432482c983c792eb1"
+      },
+      "seed": 2026112001,
+      "steps": 4,
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-init-2026112001/task.json",
+        "sha256": "f1c03259e3c9bb2314ae4a2c5ea08ecda5d974b9f5be1bbc49e0d043788c0071"
+      },
+      "tokens": 32768,
+      "two_admission_samples": [
+        {
+          "baseline_used_bytes": 3023044608,
+          "external_occupants": [],
+          "hbm_above_admission_limit": false,
+          "health": "OK",
+          "observed_unix": 1795249874.0218925,
+          "physical_id": 11,
+          "process_ids": [],
+          "projected_bytes": 53938749440,
+          "total_bytes": 68719476736,
+          "used_bytes": 3023044608
+        },
+        {
+          "baseline_used_bytes": 3023044608,
+          "external_occupants": [],
+          "hbm_above_admission_limit": false,
+          "health": "OK",
+          "observed_unix": 1795249875.9835804,
+          "physical_id": 11,
+          "process_ids": [],
+          "projected_bytes": 53938749440,
+          "total_bytes": 68719476736,
+          "used_bytes": 3023044608
+        }
+      ],
+      "worker_pid": 2093908
+    },
+    "multiscale_timed-d128-s-group5-37506fa4ee-init-2026112002": {
+      "card": 7,
+      "external_contention_observed": false,
+      "final_checkpoint_load": "exact",
+      "final_loss": 9.03310775756836,
+      "group": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/groups/group-000003/group.json",
+        "sha256": "545497a50b31bbe54742932ebc97fa4f7f4375d18e7b6ea96eb2d1199e480097"
+      },
+      "health_eligible": true,
+      "journal": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-init-2026112002/attempt-0/steps.jsonl",
+        "sha256": "cd4062bc70f78c7408ef17e60d052b033bde8ba62ba38fa8be3474d0f78f3816"
+      },
+      "lease_released_unix": 1795249970.802364,
+      "manifest": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/groups/group-000003/manifest.json",
+        "sha256": "996bf6523fcc1ac98c63626cd0ed70895c4191e2e997564a3155700f944c0ed4"
+      },
+      "peak_parallel_workers": 1,
+      "peak_whole_card_bytes": 35738615808,
+      "queue": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/groups/group-000003/queue.json",
+        "sha256": "94f2909ac965088d73be6057ffb8a51a96c6798961526d1e0a7bab13b99ff27c"
+      },
+      "reservation_bytes": 50915704832,
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-init-2026112002/attempt-0/result.json",
+        "sha256": "3b4cfe4f78919b1bcbecb995751657aaa81be22444d0c86350606709208ccb63"
+      },
+      "seed": 2026112002,
+      "steps": 4,
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-init-2026112002/task.json",
+        "sha256": "35c9f3b45477c2aef3dd39aefd71b452112551260c740a45a9e72d4c54e3585a"
+      },
+      "tokens": 32768,
+      "two_admission_samples": [
+        {
+          "baseline_used_bytes": 3030384640,
+          "external_occupants": [],
+          "hbm_above_admission_limit": false,
+          "health": "OK",
+          "observed_unix": 1795249880.445199,
+          "physical_id": 7,
+          "process_ids": [],
+          "projected_bytes": 53946089472,
+          "total_bytes": 68719476736,
+          "used_bytes": 3030384640
+        },
+        {
+          "baseline_used_bytes": 3030384640,
+          "external_occupants": [],
+          "hbm_above_admission_limit": false,
+          "health": "OK",
+          "observed_unix": 1795249882.4337635,
+          "physical_id": 7,
+          "process_ids": [],
+          "projected_bytes": 53946089472,
+          "total_bytes": 68719476736,
+          "used_bytes": 3030384640
+        }
+      ],
+      "worker_pid": 2094276
+    },
+    "multiscale_timed-d128-s-group5-37506fa4ee-init-2026112003": {
+      "card": 5,
+      "external_contention_observed": false,
+      "final_checkpoint_load": "exact",
+      "final_loss": 9.022217750549316,
+      "group": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/groups/group-000004/group.json",
+        "sha256": "4abbe63d6e4b5e04b39d1d95f456f5acf3f306055817ba2e02e96b34e2e4602c"
+      },
+      "health_eligible": true,
+      "journal": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-init-2026112003/attempt-0/steps.jsonl",
+        "sha256": "474fd1addb041c17246dd870448bac29b0cb82199e6d0cda191a7172bd595da3"
+      },
+      "lease_released_unix": 1795249977.4964657,
+      "manifest": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/groups/group-000004/manifest.json",
+        "sha256": "f4803f9a603236791aebbbb5ba0e6b4b352d6c67d586e3e964b8b921389253f6"
+      },
+      "peak_parallel_workers": 1,
+      "peak_whole_card_bytes": 35738615808,
+      "queue": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/groups/group-000004/queue.json",
+        "sha256": "36ea9b40ee9942b77f0b4be16eecaeb2bf383663832931bcd4f11d404660785f"
+      },
+      "reservation_bytes": 50915704832,
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-init-2026112003/attempt-0/result.json",
+        "sha256": "9f4010e9afa4554bf8f716f054dd5ed401c4c063bb76714e71a338e2187609e1"
+      },
+      "seed": 2026112003,
+      "steps": 4,
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-s-group5-37506fa4ee-init-2026112003/task.json",
+        "sha256": "e5537597d3922601576fe7f7980d6fadb163ee1ceba416306a4fe2e5dc11d9fd"
+      },
+      "tokens": 32768,
+      "two_admission_samples": [
+        {
+          "baseline_used_bytes": 3037724672,
+          "external_occupants": [],
+          "hbm_above_admission_limit": false,
+          "health": "OK",
+          "observed_unix": 1795249887.0620742,
+          "physical_id": 5,
+          "process_ids": [],
+          "projected_bytes": 53953429504,
+          "total_bytes": 68719476736,
+          "used_bytes": 3037724672
+        },
+        {
+          "baseline_used_bytes": 3037724672,
+          "external_occupants": [],
+          "hbm_above_admission_limit": false,
+          "health": "OK",
+          "observed_unix": 1795249889.5032845,
+          "physical_id": 5,
+          "process_ids": [],
+          "projected_bytes": 53953429504,
+          "total_bytes": 68719476736,
+          "used_bytes": 3037724672
+        }
+      ],
+      "worker_pid": 2094765
+    }
+  },
+  "raw_terminal_audit": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-campaign-r12-terminal-audit.json",
+    "sha256": "8ba68aedcd8389e46e417b21531a05be6908807f07aea8aa75faf3f952e54e0a"
+  },
+  "regressions": {
+    "log": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/hbm-r13-pZPKKdKb/final-tests.log",
+      "sha256": "640263f4bf1e49752a48a6b6768ad5b8235b8b4c83153aedc97148f076fbe8d8"
+    },
+    "passed": 255
+  },
+  "release_reconciliation": {
+    "completed_worker_receipts": {
+      "exchange-d128-s-capacity-32268b8664-a2-2026112001-r1": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r12/round/tasks/exchange-d128-s-capacity-32268b8664-a2-2026112001-r1/attempt-0/result.json",
+        "sha256": "fc6387dc878414bfc58960eaf0ff4286556737f78c103b92397f604f882ee0b5"
+      },
+      "multiscale_timed-d128-k-mixed9-b193254132-a1-2026112002-r5": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r12/round/tasks/multiscale_timed-d128-k-mixed9-b193254132-a1-2026112002-r5/attempt-0/result.json",
+        "sha256": "356e3459ff9e2dda526980de8822a0821b33b35fd22af5fe47ef319599c29ecc"
+      }
+    },
+    "signal_results": {
+      "multiscale_timed-d128-k-mixed9-b193254132-a1-2026112001-r1": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r12/round/tasks/multiscale_timed-d128-k-mixed9-b193254132-a1-2026112001-r1/attempt-0/result.json",
+        "sha256": "591a248fcca01dbe23af5a6530400c054f4cd5b5b6353ef82704b1453db70eb8"
+      },
+      "multiscale_timed-d128-k-mixed9-b193254132-a1-2026112002-r0": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r12/round/tasks/multiscale_timed-d128-k-mixed9-b193254132-a1-2026112002-r0/attempt-0/result.json",
+        "sha256": "8de9281f4ce4d0774c8e59f9b2c3f05b114b778097d971da162d46290051d207"
+      },
+      "multiscale_timed-d128-k-mixed9-b193254132-a1-2026112002-r2": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r12/round/tasks/multiscale_timed-d128-k-mixed9-b193254132-a1-2026112002-r2/attempt-0/result.json",
+        "sha256": "12d96c2a96b48529a00ce45559a514e4df3b4581f541c3df70338901436be344"
+      },
+      "multiscale_timed-d128-s-singleton7-139de547de-a1-2026112001-r1": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r12/round/tasks/multiscale_timed-d128-s-singleton7-139de547de-a1-2026112001-r1/attempt-0/result.json",
+        "sha256": "202049c373b8d774c640fd60093865b1e81f5b00f174b96a385f7c4673804d27"
+      },
+      "multiscale_timed-d128-s-singleton7-139de547de-a1-2026112001-r2": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r12/round/tasks/multiscale_timed-d128-s-singleton7-139de547de-a1-2026112001-r2/attempt-0/result.json",
+        "sha256": "c777905d84dfa1550a623f9693802a13da9d47ac7439006af96214d5d6a844d4"
+      },
+      "multiscale_timed-d128-s-singleton7-139de547de-a1-2026112002-r1": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r12/round/tasks/multiscale_timed-d128-s-singleton7-139de547de-a1-2026112002-r1/attempt-0/result.json",
+        "sha256": "b322706dbcb81e2c0c04820675bca2351673ed76ff36111ce077bf102d10fb18"
+      },
+      "multiscale_timed-d128-s-singleton7-139de547de-a1-2026112002-r2": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r12/round/tasks/multiscale_timed-d128-s-singleton7-139de547de-a1-2026112002-r2/attempt-0/result.json",
+        "sha256": "c2cddf2a71ebcc6ca698906bd95e45dea3e87c431e6a15a775d49b0c00e3bfe7"
+      },
+      "multiscale_timed-d128-s-singleton7-139de547de-a1-2026112002-r5": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r12/round/tasks/multiscale_timed-d128-s-singleton7-139de547de-a1-2026112002-r5/attempt-0/result.json",
+        "sha256": "9374c6549f68471aa08b048032af1b2286d594550c86a9e5dd9a336cf0904dc7"
+      },
+      "multiscale_timed-d128-x-singleton7-8ac3511b6a-a1-2026112001-r1": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r12/round/tasks/multiscale_timed-d128-x-singleton7-8ac3511b6a-a1-2026112001-r1/attempt-0/result.json",
+        "sha256": "d3cd387d16b4e22cb177e6af23cbf2d78f15cc2884c6723da0f0daf6f7e1dba8"
+      }
+    },
+    "stale_owner_receipts": {
+      "group-000042": {
+        "charged_through_unix": 1795249575.5569022,
+        "device_locks": [
+          {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owned_by_this_run": false,
+            "owners": [],
+            "path": "/run/user/1003/ascend-device-locks/physical-4.lock",
+            "status": "unlocked"
+          }
+        ],
+        "device_seconds": 7553.321185588837,
+        "job_lock": {
+          "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+          "owners": [],
+          "path": "/run/user/1003/ascend-job-queue/jobs/r3-campaign-r12-group-000042.lock",
+          "status": "unlocked"
+        },
+        "physical_id": 4
+      }
+    }
+  },
+  "resource_limits": {
+    "budget_ledger": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/budget.json",
+    "deadline_unix": 1797698913.9318287,
+    "exclusive_max_hbm_bytes": 55834574848,
+    "max_cpu_task_threads": 160,
+    "max_cpu_workers": 40,
+    "max_inflight_checkpoint_bytes": 25769803776,
+    "max_npu_devices": 8,
+    "max_rss_bytes": 1000000000000,
+    "max_workers": null,
+    "npu_workers_per_device": 16,
+    "shared_max_hbm_bytes": 51539607552
+  },
+  "scheduler": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/scheduler.json",
+  "schema": "pilot-r3-main-r13-handoff-v1",
+  "shared_owner_sample": {
+    "admitted_ids": 8,
+    "group": "group-000006",
+    "manifest": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/groups/group-000006/manifest.json",
+      "sha256": "c31d767e3a36b589dcaeb9d956d04d9e3f4ba73f2d42f04fdedfc2f9a350057f"
+    },
+    "shared_limit": 51539607552
+  },
+  "stage_b_gate": "closed",
+  "stop": "systemctl --user stop tide-pilot-r3-campaign-r13.service",
+  "storage_before_submission": {
+    "available_storage_bytes": 100754874368,
+    "filesystem_free_bytes": 1372370677760,
+    "observed_unix": 1795249846.9725776,
+    "quota": {
+      "filesystem": "/dev/mapper/ascend_data-data",
+      "grace_epoch": 0,
+      "hard_bytes": 751619276800,
+      "soft_bytes": 322122547200,
+      "used_bytes": 221367672832
+    },
+    "scope": "input snapshot headroom only; campaign forecasts all resolved controls before release",
+    "snapshot_source_bytes": 0,
+    "storage_reserve_bytes": 51539607552
+  },
+  "submission": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/submission.json",
+    "sha256": "dc49bea53efff584ceacd6e7a8415a26185db41c0f1f76f7a50b5e9a1df36306"
+  },
+  "unit": "tide-pilot-r3-campaign-r13.service",
+  "worker_source": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r12/source",
+  "worker_source_digest": "55214c233a3d4e39a7831e0c0c4c3aec3861825cda678f30f96105d45cf5318a"
+}

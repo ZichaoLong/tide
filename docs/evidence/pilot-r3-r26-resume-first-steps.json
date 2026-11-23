@@ -1,0 +1,116 @@
+{
+  "expected_count": 4,
+  "launch": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r26-final/submission.json",
+    "sha256": "0034f4e09fbe58561586e161286850d23fd742aaa2f3cc80d24b254d47e83c7d"
+  },
+  "observed_local": "2026-11-23T11:14:13+08:00",
+  "plan": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/activity-r26/first-updates-plan.json",
+    "sha256": "74700a1a44a183df22adefcda11e21cf6840065ec16c4e6c9826101bf720876c"
+  },
+  "scheduler_blocking_reason": null,
+  "schema": "pilot-r3-confirmed-checkpoint-first-updates-v1",
+  "stage_b_gate": "closed",
+  "status": "verified",
+  "tasks": {
+    "exchange-d256-k-base-4f97098597-a3-2026112001-r1": {
+      "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r26-final/round/tasks/exchange-d256-k-base-4f97098597-a3-2026112001-r1/attempt-0",
+      "checkpoint_sha256": "d22d4fd296cac0c9c8df9b228abc9c3c8214953f8a1247ede9b2e1213b72ebb9",
+      "checkpoint_step": 7377,
+      "checkpoint_tokens": 1888512,
+      "first_update": {
+        "grad_norm": 2.2687020301818848,
+        "loss": 5.291518211364746,
+        "lr": 0.0002861110495414828,
+        "objective": 5.291518211364746,
+        "sampled_diagnostics": true,
+        "seconds": 3.3057422786951065,
+        "state_reset": false,
+        "step": 7378,
+        "time_unix": 1795403225.7679555,
+        "tokens": 1888768
+      },
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r26-final/source-migrations/exchange-d256-k-base-4f97098597-a3-2026112001-r1.json",
+        "sha256": "a73db8f15f273683e79d43298536a19e0a846e4b9ce993d8d3edc55b1ee9ed96"
+      },
+      "scheduler_status": "running",
+      "task": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r26-final/round/tasks/exchange-d256-k-base-4f97098597-a3-2026112001-r1/task.json"
+    },
+    "exchange-d256-k-shannon-417a5ef511-a2-2026112002-r1": {
+      "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r26-final/round/tasks/exchange-d256-k-shannon-417a5ef511-a2-2026112002-r1/attempt-0",
+      "checkpoint_sha256": "240d9784d4c23073e43ace62883cf57c99cd28b95a9339b3d22f0b3efc6fc71b",
+      "checkpoint_step": 1174,
+      "checkpoint_tokens": 300544,
+      "first_update": {
+        "grad_norm": 1.6451959609985352,
+        "loss": 6.0892558097839355,
+        "lr": 0.00029976473263241144,
+        "objective": 6.0892558097839355,
+        "sampled_diagnostics": true,
+        "seconds": 3.362019658088684,
+        "state_reset": false,
+        "step": 1175,
+        "time_unix": 1795403627.0262907,
+        "tokens": 300800
+      },
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r26-final/source-migrations/exchange-d256-k-shannon-417a5ef511-a2-2026112002-r1.json",
+        "sha256": "d67fad59687a56f68cd70db49eb268b3f846611a3cffaaf462215078a06ffa35"
+      },
+      "scheduler_status": "running",
+      "task": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r26-final/round/tasks/exchange-d256-k-shannon-417a5ef511-a2-2026112002-r1/task.json"
+    },
+    "multiscale_timed-d128-s-mixed9-542e33dbf6-a2-2026112001-r1": {
+      "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r26-final/round/tasks/multiscale_timed-d128-s-mixed9-542e33dbf6-a2-2026112001-r1/attempt-0",
+      "checkpoint_sha256": "cf57b8af05db00bdc12ddf10806209a3f71f03dedcf213074215591fcc24e6c5",
+      "checkpoint_step": 2688,
+      "checkpoint_tokens": 688128,
+      "first_update": {
+        "grad_norm": 1.7852424383163452,
+        "loss": 5.982362270355225,
+        "lr": 0.00029835389888971533,
+        "objective": 5.982362270355225,
+        "sampled_diagnostics": true,
+        "seconds": 6.636538531631231,
+        "state_reset": true,
+        "step": 2689,
+        "time_unix": 1795402087.6207259,
+        "tokens": 688384
+      },
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r26-final/source-migrations/multiscale_timed-d128-s-mixed9-542e33dbf6-a2-2026112001-r1.json",
+        "sha256": "62efc5e9ecd510b70d823cd5b1fd537bdd2e3b6d3c264091c7b678ba1e81b530"
+      },
+      "scheduler_status": "running",
+      "task": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r26-final/round/tasks/multiscale_timed-d128-s-mixed9-542e33dbf6-a2-2026112001-r1/task.json"
+    },
+    "multiscale_timed-d128-x-mixed9-ae4ffdec56-a2-2026112002-r2": {
+      "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r26-final/round/tasks/multiscale_timed-d128-x-mixed9-ae4ffdec56-a2-2026112002-r2/attempt-0",
+      "checkpoint_sha256": "7daa8abed40a132fdfd754f30287963acd3818cf5c19bcc41caa50a29460f7ca",
+      "checkpoint_step": 6002,
+      "checkpoint_tokens": 768256,
+      "first_update": {
+        "grad_norm": 1.2033330202102661,
+        "loss": 6.2396931648254395,
+        "lr": 0.000993016839160339,
+        "objective": 6.2396931648254395,
+        "sampled_diagnostics": true,
+        "seconds": 7.022696021944284,
+        "state_reset": false,
+        "step": 6003,
+        "time_unix": 1795402106.5308025,
+        "tokens": 768384
+      },
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r26-final/source-migrations/multiscale_timed-d128-x-mixed9-ae4ffdec56-a2-2026112002-r2.json",
+        "sha256": "1736646de343fdb52c22ddb5fd69eca26ffb2aaed98459f40b6cd0b9e7d364f0"
+      },
+      "scheduler_status": "running",
+      "task": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r26-final/round/tasks/multiscale_timed-d128-x-mixed9-ae4ffdec56-a2-2026112002-r2/task.json"
+    }
+  },
+  "unit": "tide-pilot-r3-campaign-r26-final.service",
+  "verified_count": 4
+}

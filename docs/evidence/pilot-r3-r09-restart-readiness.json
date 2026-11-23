@@ -1,0 +1,767 @@
+{
+  "current_stage_a": {
+    "cgroup": {
+      "members": [],
+      "path": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r09.service",
+      "released": true,
+      "status": "absent"
+    },
+    "live_processes": [],
+    "original_strict_findings": {
+      "mismatch": 13,
+      "missing": 1,
+      "unknown": 3
+    },
+    "original_strict_terminal_audit_status": "incomplete",
+    "recorded_counts": {
+      "completed": 845,
+      "failed": 29,
+      "pending": 35,
+      "stopped_budget": 47
+    },
+    "recorded_process_identities": 957,
+    "stage_b_gate": "closed",
+    "state": "a_blocked_needs_repair",
+    "systemd": {
+      "ActiveState": "failed",
+      "ControlGroup": "",
+      "ExecMainCode": "1",
+      "ExecMainStatus": "1",
+      "InvocationID": "0e63abcf35dd4890b512f57bd8d03c08",
+      "LoadState": "loaded",
+      "MainPID": "0",
+      "Result": "exit-code",
+      "Slice": "background.slice",
+      "SubState": "failed"
+    },
+    "unit": "tide-pilot-r3-campaign-r09.service",
+    "worker_foundation": ".local/pilot-r3/campaign-r08/frozen/foundation",
+    "worker_source": ".local/pilot-r3/campaign-r08/frozen/source"
+  },
+  "foundation": {
+    "accepted_runtime_digest": "cbf9c33157bd744e240fc4e662862cd147a5ba78861452838c053e8945d1e4f4",
+    "branch": "graph-execution-foundation",
+    "cpu_npu_fault_and_two_successor_adamw_floor_counts": [
+      23,
+      56,
+      111
+    ],
+    "fresh_process_resume": {
+      "cpu_bitwise": true,
+      "npu_within_original_tolerance": true
+    },
+    "implementation_commit": "885f7ef96be8cc31814e509c687017e6ff922d72",
+    "matched_runtime_python_files": 26,
+    "policy": "positive-floor-v1",
+    "published_head": "2906d544b8a51297a0c09b96f1cee998d94eb84c",
+    "repo": "ZichaoLong/tide"
+  },
+  "inputs": {
+    "campaign_plan": {
+      "path": ".local/pilot-r3/campaign-r09/campaign-plan.json",
+      "sha256": "257c6d58bf45529e2a262c10e63f97cc2e038ddb5e433a9a7f6837115ec9708b"
+    },
+    "checkpoint_decode_observations": {
+      "path": ".local/pilot-r3/r09-readiness-AjhAJn/checkpoint-checks.json",
+      "sha256": "1d341e1c92e2f12501e556f77a9881524bd6b94f13ae53d3829132e7e471a9d9"
+    },
+    "foundation_acceptance": {
+      "path": "docs/evidence/pilot-r3-r09-foundation-shannon-acceptance.json",
+      "sha256": "1918e493116a85d6cdb80275162f88cc223fb39ebf695e725be765600be80e5d"
+    },
+    "original_terminal_audit": {
+      "path": "docs/evidence/pilot-r3-campaign-r09-terminal-audit.json",
+      "sha256": "2758b25a3655b7a36b4a6888e70cfd35cb533f9dfcb751d26761c0e45ae13e5c"
+    },
+    "physical_group": {
+      "path": ".local/pilot-r3/campaign-r09/round/groups/group-000020/group.json",
+      "sha256": "2a58e53396790117702629b6c5b184c7b630e7a151cff6bb06fd5d58800ab2f8"
+    },
+    "same_contract_attempt_classification": {
+      "path": ".local/pilot-r3/r09-readiness-AjhAJn/unchanged-relay-classification.json",
+      "sha256": "0bc0115057c91d3abf6c1a3fb5645e9af58a0c9933da55f5067337c5a8144d5d"
+    },
+    "scheduler": {
+      "path": ".local/pilot-r3/campaign-r09/round/scheduler.json",
+      "sha256": "ada9d246fedb08b563d2f7fe5b4b7b42d2c853c3260750180c44d745dbc26ba6"
+    },
+    "selected": {
+      "path": ".local/pilot-r3/campaign-r09/round/selected.json",
+      "sha256": "f9f94b278481868ff19dc708629df50e8a00a0bf3e8627fc95409d32412328f3"
+    },
+    "worker_and_lease_observations": {
+      "path": ".local/pilot-r3/r09-readiness-AjhAJn/worker-and-lease-checks.json",
+      "sha256": "76d9bf9468f3a880650f0cbdc9e5bc34dbe76e2aed0ecd5793f6e3b640fd0322"
+    }
+  },
+  "next_launch": {
+    "continuations": "Bind old evidence and exact state, new source and policy, parent task and original evaluation exposure. Preserve old selection and charges under their observed identities.",
+    "existing_relay": "prepare_relay3 preserves training source and task bytes. Its original terminal-audit prerequisite also rejects this incomplete audit.",
+    "fresh_subjects": "Can be staged independently of checkpoint migration, with the released source and the explicit numerical policy.",
+    "prepared": false,
+    "stage": "A only",
+    "submitted": false
+  },
+  "observed_local": "2026-11-21T00:13:49+08:00",
+  "resources": {
+    "cpu_affinity_length": 160,
+    "deadline_unix": 1797698913.9318287,
+    "ledger_at_review": {
+      "path": ".local/pilot-r3/budget.json",
+      "sha256": "193e19ee1244dfd8fb47e1d33aa143961cef46c42c9ace2646fd5ef4b8c92fb6"
+    },
+    "max_rss_bytes": 1000000000000,
+    "physical_device_limit": 8,
+    "remaining_device_hours": 7107.654628768715,
+    "storage_at_review": {
+      "available_storage_bytes": 163506634752,
+      "filesystem_free_bytes": 1435051360256,
+      "observed_unix": 1795191229.6485114,
+      "quota": {
+        "filesystem": "/dev/mapper/ascend_data-data",
+        "grace_epoch": 0,
+        "hard_bytes": 751619276800,
+        "soft_bytes": 322122547200,
+        "used_bytes": 158615912448
+      },
+      "scope": "input snapshot headroom only; campaign forecasts all resolved controls before release",
+      "snapshot_source_bytes": 0,
+      "storage_reserve_bytes": 25769803776
+    },
+    "threads_per_cpu_task": 4
+  },
+  "schema": "pilot-r3-stage-a-restart-readiness-v1",
+  "shared_group_review": {
+    "admission_count": 27,
+    "group_id": "group-000020",
+    "lease": {
+      "conservative_charged_seconds": 3533.61936545372,
+      "group_and_queue_locks_currently_unowned": true,
+      "last_owner_seconds": 3422.7560853734612,
+      "owner_return_code": -9,
+      "physical_id": 5,
+      "recorded_acquire_unix": 1795177702.5094676,
+      "recorded_release_unix": null,
+      "scheduler_and_ledger_segment_seconds": 27631.435752604157,
+      "scheduler_verified_no_owner_or_descendants_unix": 1795181236.128833
+    },
+    "observed_locks": [
+      {
+        "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+        "owners": [],
+        "path": "/run/user/1003/ascend-device-locks/physical-5.lock",
+        "status": "unlocked"
+      },
+      {
+        "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+        "owners": [],
+        "path": "/run/user/1003/ascend-job-queue/jobs/r3-campaign-r09-group-000020.lock",
+        "status": "unlocked"
+      }
+    ],
+    "outcomes": [
+      {
+        "outcome": "old_worker_completion_verified",
+        "result": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/exchange-d128-s-narrowwide-5d192e0d6d-init-2026112001/attempt-0/result.json",
+          "sha256": "f53812440cd44795f29a94da8947ab9759590d0285d45ce71bb578bb42c2e896"
+        },
+        "target_tokens": 32768,
+        "task": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/exchange-d128-s-narrowwide-5d192e0d6d-init-2026112001/task.json",
+          "sha256": "a6d065dd2bdfb234ca1432f161a54ddc774de4b9a3b6bbdf65c0ff3f72cb73c9"
+        },
+        "task_id": "exchange-d128-s-narrowwide-5d192e0d6d-init-2026112001"
+      },
+      {
+        "bound_signal_results": 2,
+        "original_contract_checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r09/round/tasks/multiscale_timed-d128-k-group5-b74cd801f3-a1-2026112001-r0/attempt-0/checkpoints/step-000000823-ba2649354f.pt",
+          "sha256": "593a8676c391ce6774539d71365b2c1f1271adb6a9513604aa1f95591eb6e4e4",
+          "size_bytes": 66855769,
+          "state_sha256": "97ad8a7575a358814c29538976c623bfe509c6f12021d91577ff81faae066a5f",
+          "steps": 823,
+          "tokens": 210688
+        },
+        "outcome": "signal_result_with_checkpoint_but_missing_owner_receipt",
+        "result": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/multiscale_timed-d128-k-group5-b74cd801f3-a1-2026112001-r0/attempt-0/result.json",
+          "sha256": "c29c163e403d0f162bd156453d0b9c67ee8c1b614dadeaa585c97ee067e16d29"
+        },
+        "same_contract_incremental_evaluation_tokens": 32,
+        "task": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/multiscale_timed-d128-k-group5-b74cd801f3-a1-2026112001-r0/task.json",
+          "sha256": "9261d67c667fdeaecdfaeb8cb38ad4db4c04b966ba6848e93e1911ebf35588d1"
+        },
+        "task_id": "multiscale_timed-d128-k-group5-b74cd801f3-a1-2026112001-r0"
+      },
+      {
+        "bound_signal_results": 2,
+        "original_contract_checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r09/round/tasks/multiscale_timed-d128-k-group5-b74cd801f3-a1-2026112002-r1/attempt-0/checkpoints/step-000000816-cdc31fe85e.pt",
+          "sha256": "de4b5073d2d89e1ccdd736d4ddc51a45758a389cac35c40daeb82ff6218d8bb7",
+          "size_bytes": 66855705,
+          "state_sha256": "993bc2487cab70b52e268b3af594f78b06fdc43b8e704a0bdb2dab8377b6e558",
+          "steps": 816,
+          "tokens": 208896
+        },
+        "outcome": "signal_result_with_checkpoint_but_missing_owner_receipt",
+        "result": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/multiscale_timed-d128-k-group5-b74cd801f3-a1-2026112002-r1/attempt-0/result.json",
+          "sha256": "d2d2b0d3964b7e9144be32a4be33069f66b261063a8d860977c2c48bd63839cb"
+        },
+        "same_contract_incremental_evaluation_tokens": 32,
+        "task": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/multiscale_timed-d128-k-group5-b74cd801f3-a1-2026112002-r1/task.json",
+          "sha256": "50f41c402a7ba3310f787651f690635f7b7e285f3e243f2246e1ba099d8fe090"
+        },
+        "task_id": "multiscale_timed-d128-k-group5-b74cd801f3-a1-2026112002-r1"
+      },
+      {
+        "outcome": "old_worker_completion_verified",
+        "result": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/multiscale_settle-d128-k-singleton7-43b1716b2d-a1-2026112001-r1/attempt-0/result.json",
+          "sha256": "60c4bc47e3813c49656511b13f903d6ccfcb4ee039c98138f3525c5f2f19767c"
+        },
+        "target_tokens": 262144,
+        "task": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/multiscale_settle-d128-k-singleton7-43b1716b2d-a1-2026112001-r1/task.json",
+          "sha256": "a174f726ed41e2febdcc2a3dc90cea8ffd4fdded51dc78959ff2e64b95230304"
+        },
+        "task_id": "multiscale_settle-d128-k-singleton7-43b1716b2d-a1-2026112001-r1"
+      },
+      {
+        "outcome": "old_worker_completion_verified",
+        "result": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/multiscale_settle-d128-k-singleton7-43b1716b2d-a1-2026112002-r1/attempt-0/result.json",
+          "sha256": "0c5550497287766298fe718e56aeb267d7d2066f6c5fa23c8e4cc89fe1a09d9c"
+        },
+        "target_tokens": 262144,
+        "task": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/multiscale_settle-d128-k-singleton7-43b1716b2d-a1-2026112002-r1/task.json",
+          "sha256": "93ec822786901e1599b78222a649ef6f67749e61123827492d1a96e9f3189e36"
+        },
+        "task_id": "multiscale_settle-d128-k-singleton7-43b1716b2d-a1-2026112002-r1"
+      },
+      {
+        "outcome": "old_worker_completion_verified",
+        "result": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/multiscale_settle-d128-k-mixed9-e96a17a14d-a1-2026112001-r3/attempt-0/result.json",
+          "sha256": "cfd6d55d0cb4cfd2897f61c2328fcba3f9272be5028a6dbc6e440afeaced0f7f"
+        },
+        "target_tokens": 262144,
+        "task": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/multiscale_settle-d128-k-mixed9-e96a17a14d-a1-2026112001-r3/task.json",
+          "sha256": "645fcb564110269140d91714f11b775cc1f7f9285966f56011bc7db4521ff286"
+        },
+        "task_id": "multiscale_settle-d128-k-mixed9-e96a17a14d-a1-2026112001-r3"
+      },
+      {
+        "outcome": "old_worker_completion_verified",
+        "result": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/multiscale_settle-d128-k-mixed9-e96a17a14d-a1-2026112002-r3/attempt-0/result.json",
+          "sha256": "37d99ad89e5bb14ef1462f9e5bc2c46c8dbd356ac7a59674cb6cfe544ec4e3f2"
+        },
+        "target_tokens": 262144,
+        "task": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/multiscale_settle-d128-k-mixed9-e96a17a14d-a1-2026112002-r3/task.json",
+          "sha256": "77db77dce9ff211092fa29388604969684f5a1342bb93992f3f580d895fed154"
+        },
+        "task_id": "multiscale_settle-d128-k-mixed9-e96a17a14d-a1-2026112002-r3"
+      },
+      {
+        "outcome": "old_worker_completion_verified",
+        "result": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/multiscale_settle-d128-k-mixed9-e96a17a14d-a1-2026112001-r4/attempt-0/result.json",
+          "sha256": "304fba9d45421c475514d5e87b9a766aa2b655fcec108c78377520517d5476b2"
+        },
+        "target_tokens": 262144,
+        "task": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/multiscale_settle-d128-k-mixed9-e96a17a14d-a1-2026112001-r4/task.json",
+          "sha256": "8d75755cdfc5d57770eecc79947c0d08d8d570c28d972fefc88677005c62da0d"
+        },
+        "task_id": "multiscale_settle-d128-k-mixed9-e96a17a14d-a1-2026112001-r4"
+      },
+      {
+        "outcome": "old_worker_completion_verified",
+        "result": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/multiscale_settle-d128-k-mixed9-e96a17a14d-a1-2026112002-r4/attempt-0/result.json",
+          "sha256": "6ab9c817e734fe977ffe1eaad635a10bad9c7882b2ede3d7b355239d0a2ef087"
+        },
+        "target_tokens": 262144,
+        "task": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/multiscale_settle-d128-k-mixed9-e96a17a14d-a1-2026112002-r4/task.json",
+          "sha256": "181fa00adb52990389f6babcf7358326205047de3538f49c702358a593c4ef5c"
+        },
+        "task_id": "multiscale_settle-d128-k-mixed9-e96a17a14d-a1-2026112002-r4"
+      },
+      {
+        "outcome": "old_worker_completion_verified",
+        "result": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/lattice-d128-s-base-0a353237f5-a2-2026112002-r1/attempt-0/result.json",
+          "sha256": "06ad961b9a799ec2a5d3fd2c6935f39ff299ba99eeaaaade7582b830f6c5d24d"
+        },
+        "target_tokens": 1048576,
+        "task": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/lattice-d128-s-base-0a353237f5-a2-2026112002-r1/task.json",
+          "sha256": "999ef85a5a63d4f0164a07ee5296eb5c5171e8319543ea6d2a23bb93450bad9f"
+        },
+        "task_id": "lattice-d128-s-base-0a353237f5-a2-2026112002-r1"
+      },
+      {
+        "bound_signal_results": 2,
+        "original_contract_checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r09/round/tasks/lattice-d128-s-depth2-00b9531d37-a2-2026112001-r1/attempt-0/checkpoints/step-000002103-f80d51e4fc.pt",
+          "sha256": "c4fc17fa904bac6b4c2797351fbf029c1752325ae7d7a877f44b8205d1c21a60",
+          "size_bytes": 51205229,
+          "state_sha256": "56b99c4b05c2caf1f89545ba1e974d440e2f4a9d2b6ad7ce81f4c06b980c0572",
+          "steps": 2103,
+          "tokens": 538368
+        },
+        "outcome": "signal_result_with_checkpoint_but_missing_owner_receipt",
+        "result": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/lattice-d128-s-depth2-00b9531d37-a2-2026112001-r1/attempt-0/result.json",
+          "sha256": "5e1ddae61c7aa2b07a80748aeff2997fa2fcc4c9ad41f6bd532a04af74ad0430"
+        },
+        "same_contract_incremental_evaluation_tokens": 32,
+        "task": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/lattice-d128-s-depth2-00b9531d37-a2-2026112001-r1/task.json",
+          "sha256": "46ef40203f4fa7a9502e7cae11ae900ee4d038ed33b59bfa3fd3c7bbc1845c65"
+        },
+        "task_id": "lattice-d128-s-depth2-00b9531d37-a2-2026112001-r1"
+      },
+      {
+        "bound_signal_results": 1,
+        "original_contract_checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r09/round/tasks/lattice-d128-s-depth2-00b9531d37-a2-2026112002-r1/attempt-0/checkpoints/step-000002048-290bc790ba.pt",
+          "sha256": "69d3586ea8652bbfe98171b5d3555d8bd3eaab179e2b52ee6eea5e5db4d65489",
+          "size_bytes": 51205165,
+          "state_sha256": "ed68c69cc797ca70f2e34f063c0e38853b8677a59a6eba5efce3fa4c915bc03f",
+          "steps": 2048,
+          "tokens": 524288
+        },
+        "outcome": "signal_result_with_checkpoint_but_missing_owner_receipt",
+        "result": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/lattice-d128-s-depth2-00b9531d37-a2-2026112002-r1/attempt-0/result.json",
+          "sha256": "eab3a2bed15f1936f324b6103088d1cf3f29f02bb1520242a84a2fff89c7f381"
+        },
+        "same_contract_incremental_evaluation_tokens": 32,
+        "task": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/lattice-d128-s-depth2-00b9531d37-a2-2026112002-r1/task.json",
+          "sha256": "efa19a1c1755e44a591585e2755217c370a8c950c1383bccc7f837c87d6d63df"
+        },
+        "task_id": "lattice-d128-s-depth2-00b9531d37-a2-2026112002-r1"
+      },
+      {
+        "bound_signal_results": 1,
+        "original_contract_checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r09/round/tasks/lattice-d128-s-depth2-00b9531d37-a2-2026112001-r2/attempt-0/checkpoints/step-000002094-f6cff2b8fd.pt",
+          "sha256": "2a4bd73707ef3349bd3c2676e839539dd206e334114a1e3ecc5aa6dacf630322",
+          "size_bytes": 51205229,
+          "state_sha256": "64029627ae17dacf1ddb4eb2d11bf4e8a6b0166647ebd625a4280b377b7fb4ed",
+          "steps": 2094,
+          "tokens": 536064
+        },
+        "outcome": "signal_result_with_checkpoint_but_missing_owner_receipt",
+        "result": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/lattice-d128-s-depth2-00b9531d37-a2-2026112001-r2/attempt-0/result.json",
+          "sha256": "ea5d17b921dca115df5505f38b7b9c67460bf9bc541defed97042ad0ade3c80f"
+        },
+        "same_contract_incremental_evaluation_tokens": 32,
+        "task": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/lattice-d128-s-depth2-00b9531d37-a2-2026112001-r2/task.json",
+          "sha256": "e59750737b6e99375a63115bab6cdb0545bf360814622e8784e3e28bb3d3a316"
+        },
+        "task_id": "lattice-d128-s-depth2-00b9531d37-a2-2026112001-r2"
+      },
+      {
+        "bound_signal_results": 1,
+        "original_contract_checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r09/round/tasks/lattice-d128-s-depth2-00b9531d37-a2-2026112002-r2/attempt-0/checkpoints/step-000002044-c0df71036c.pt",
+          "sha256": "334dba950f6395d0b25ceef118bb2559013a9d6bd90f305ccabb0319ce1145ee",
+          "size_bytes": 51205165,
+          "state_sha256": "0bfe1907dbed4bb18605ff63eb09d6c5325f454974964aaf6a8e18b51ca4631f",
+          "steps": 2044,
+          "tokens": 523264
+        },
+        "outcome": "signal_result_with_checkpoint_but_missing_owner_receipt",
+        "result": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/lattice-d128-s-depth2-00b9531d37-a2-2026112002-r2/attempt-0/result.json",
+          "sha256": "722c71e4c156148ac04f0c702411f799f1d070d774b79765e1459ab680c4349c"
+        },
+        "same_contract_incremental_evaluation_tokens": 32,
+        "task": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/lattice-d128-s-depth2-00b9531d37-a2-2026112002-r2/task.json",
+          "sha256": "45829bd089139444d5e37d983ca2ae790f58d0874a8798e29baffb052ed82640"
+        },
+        "task_id": "lattice-d128-s-depth2-00b9531d37-a2-2026112002-r2"
+      },
+      {
+        "outcome": "old_worker_completion_verified",
+        "result": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/lattice-d128-s-nodes4-87a2e4a9d9-a2-2026112001-r1/attempt-0/result.json",
+          "sha256": "d98c37f4de4cc045bd366d9b8864a74807fab48eac248c2a7b5b26690427f9f2"
+        },
+        "target_tokens": 1048576,
+        "task": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/lattice-d128-s-nodes4-87a2e4a9d9-a2-2026112001-r1/task.json",
+          "sha256": "ba43f18e60edad90b58f2da666a65233a0b7f5a9099a842c78e85b38826e4d84"
+        },
+        "task_id": "lattice-d128-s-nodes4-87a2e4a9d9-a2-2026112001-r1"
+      },
+      {
+        "outcome": "old_worker_completion_verified",
+        "result": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/lattice-d128-s-nodes4-87a2e4a9d9-a2-2026112002-r1/attempt-0/result.json",
+          "sha256": "68d34aa0758172761144ff00ef6a22c1f010c014b5c1edea7b71f89643e36b3f"
+        },
+        "target_tokens": 1048576,
+        "task": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/lattice-d128-s-nodes4-87a2e4a9d9-a2-2026112002-r1/task.json",
+          "sha256": "ba61f762a310448cc0064b3493b558ece1aeebf6f343891f24e11a5f9ecb2e19"
+        },
+        "task_id": "lattice-d128-s-nodes4-87a2e4a9d9-a2-2026112002-r1"
+      },
+      {
+        "outcome": "old_worker_completion_verified",
+        "result": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/lattice-d128-s-nodes4-87a2e4a9d9-a2-2026112001-r2/attempt-0/result.json",
+          "sha256": "d4915204fc359f9f920e781569e177679f11c77f566e3652555e84366c94ecd5"
+        },
+        "target_tokens": 1048576,
+        "task": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/lattice-d128-s-nodes4-87a2e4a9d9-a2-2026112001-r2/task.json",
+          "sha256": "03da6161b375da0ba1df923fa68e887e0088ca3f14775af9c4e06aa4cc1219a3"
+        },
+        "task_id": "lattice-d128-s-nodes4-87a2e4a9d9-a2-2026112001-r2"
+      },
+      {
+        "bound_signal_results": 1,
+        "original_contract_checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r09/round/tasks/exchange-d128-k-narrowwide-a8b4f1078d-a2-2026112002-r2/attempt-0/checkpoints/step-000002071-d84a3b4b63.pt",
+          "sha256": "c333cc55ae8481fea6c1b7d9b6bc4b73033bda67add633a21d254f1dd5b0460b",
+          "size_bytes": 39540631,
+          "state_sha256": "9c603ed8239c5af78798d757814216053e8a498869be64c938593727f86e115c",
+          "steps": 2071,
+          "tokens": 530176
+        },
+        "outcome": "signal_result_with_checkpoint_but_missing_owner_receipt",
+        "result": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/exchange-d128-k-narrowwide-a8b4f1078d-a2-2026112002-r2/attempt-0/result.json",
+          "sha256": "f7e1e3e7c2bc1a93ebf0477ecbae783a658bd7c6c27a027a43edbdc69b6639a9"
+        },
+        "same_contract_incremental_evaluation_tokens": 32,
+        "task": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/exchange-d128-k-narrowwide-a8b4f1078d-a2-2026112002-r2/task.json",
+          "sha256": "0f5fc1f097acd181c7807f89ab55d9d9d614caff4c13fb3ef8d4662748636c43"
+        },
+        "task_id": "exchange-d128-k-narrowwide-a8b4f1078d-a2-2026112002-r2"
+      },
+      {
+        "bound_signal_results": 1,
+        "original_contract_checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r09/round/tasks/lattice-d128-k-nodes4-1f22ba3272-a3-2026112001-r2/attempt-0/checkpoints/step-000006549-73d742ae00.pt",
+          "sha256": "3fc1854fc795cddaf2e8969e0d13e665e9cd6c9fa1946f68877b1931ac493ea3",
+          "size_bytes": 46056499,
+          "state_sha256": "82372f6083a5628c2f47becb8896980ec3ea364a55610e5ce3128a3f48d4fe4d",
+          "steps": 6549,
+          "tokens": 1676544
+        },
+        "outcome": "signal_result_with_checkpoint_but_missing_owner_receipt",
+        "result": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/lattice-d128-k-nodes4-1f22ba3272-a3-2026112001-r2/attempt-0/result.json",
+          "sha256": "bab3cbeafc1c820e015cbb615477e132266bc15c28e5c4ba5eee8709eb143786"
+        },
+        "same_contract_incremental_evaluation_tokens": 32,
+        "task": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/lattice-d128-k-nodes4-1f22ba3272-a3-2026112001-r2/task.json",
+          "sha256": "8a51e23f3bece060cfe8a78ed6944c94d260f3c131f3a089549a1db43b3f9c8c"
+        },
+        "task_id": "lattice-d128-k-nodes4-1f22ba3272-a3-2026112001-r2"
+      },
+      {
+        "bound_signal_results": 2,
+        "original_contract_checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r09/round/tasks/fc-d128-s-depth3-fbc6080d7d-a3-2026112001-r2/attempt-0/checkpoints/step-000007130-680d97ed00.pt",
+          "sha256": "a6a18ced8992c220e4c58fa93f78a7b5277e6c32d76559fe9bbbf9325f0d2ecc",
+          "size_bytes": 27841749,
+          "state_sha256": "40748167b52b2595c08afeea2e037a81002a3131ac6130517b47a102102c16a7",
+          "steps": 7130,
+          "tokens": 1825280
+        },
+        "outcome": "signal_result_with_checkpoint_but_missing_owner_receipt",
+        "result": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/fc-d128-s-depth3-fbc6080d7d-a3-2026112001-r2/attempt-0/result.json",
+          "sha256": "f13b60d3679362b54c0addaaec4d937dcedc2d0384313eebf9e6bf09cc7fc629"
+        },
+        "same_contract_incremental_evaluation_tokens": 32,
+        "task": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/fc-d128-s-depth3-fbc6080d7d-a3-2026112001-r2/task.json",
+          "sha256": "4ebbfb148396dbbc4effc27e6e816800718d060f3e0e0fef4a3db05a1ea6c898"
+        },
+        "task_id": "fc-d128-s-depth3-fbc6080d7d-a3-2026112001-r2"
+      },
+      {
+        "outcome": "old_worker_completion_verified",
+        "result": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/exchange-d128-s-independent-9e3c5ca87d-a1-2026112001-r4/attempt-0/result.json",
+          "sha256": "c7f528087a2fe74a5dc5d03c6a4a7fce077a02bc8e3067063736e8d50c91fc52"
+        },
+        "target_tokens": 262144,
+        "task": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/exchange-d128-s-independent-9e3c5ca87d-a1-2026112001-r4/task.json",
+          "sha256": "8fdb33954b4b9d404817a8046b55093ec315fff49ddc3c18d09583b8ff8b6655"
+        },
+        "task_id": "exchange-d128-s-independent-9e3c5ca87d-a1-2026112001-r4"
+      },
+      {
+        "bound_signal_results": 1,
+        "original_contract_checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r09/round/tasks/multiscale_timed-d128-k-mixed9-b193254132-a1-2026112001-r0/attempt-0/checkpoints/step-000000085-405652c25e.pt",
+          "sha256": "6e099564c16ce30d55c27bf32d6fea441a16ce1de52b9776010784981d4b3b2d",
+          "size_bytes": 112229167,
+          "state_sha256": "79bc76437ffaf9770d5a8223942300380f5e1165c0cb86bbc57c5a6275e9658b",
+          "steps": 85,
+          "tokens": 10880
+        },
+        "outcome": "signal_result_with_checkpoint_but_missing_owner_receipt",
+        "result": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/multiscale_timed-d128-k-mixed9-b193254132-a1-2026112001-r0/attempt-0/result.json",
+          "sha256": "c3a7a336b661b710af925eae39ae1475824d831eeb5e066dae9729023269a85c"
+        },
+        "same_contract_incremental_evaluation_tokens": 32,
+        "task": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/multiscale_timed-d128-k-mixed9-b193254132-a1-2026112001-r0/task.json",
+          "sha256": "658c208764801ddf1efb6ef4d4b9ae6335081c1fc41426c306039be0a4f3109f"
+        },
+        "task_id": "multiscale_timed-d128-k-mixed9-b193254132-a1-2026112001-r0"
+      },
+      {
+        "bound_signal_results": 1,
+        "original_contract_checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r09/round/tasks/lattice-d128-s-receive64-cd47a49acb-a3-2026112001-r2/attempt-0/checkpoints/step-000005947-40389411d7.pt",
+          "sha256": "b68cef340dd853d178c135dec9a298c904e35bcfb264e895458fc948055d9ca2",
+          "size_bytes": 31286219,
+          "state_sha256": "571d38ac46cc81e7e1753b333776630282c6fdc052aa022589017a79278690fc",
+          "steps": 5947,
+          "tokens": 1522432
+        },
+        "outcome": "signal_result_with_checkpoint_but_missing_owner_receipt",
+        "result": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/lattice-d128-s-receive64-cd47a49acb-a3-2026112001-r2/attempt-0/result.json",
+          "sha256": "fbea5b06c8208be67d3a7715b6528d6956a37e2131a6da79297ed8cae3a55c8c"
+        },
+        "same_contract_incremental_evaluation_tokens": 32,
+        "task": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/lattice-d128-s-receive64-cd47a49acb-a3-2026112001-r2/task.json",
+          "sha256": "b133918ac015a822c43bfb1dc2404d43f26e80a9aec7292cfc4c762a226883b1"
+        },
+        "task_id": "lattice-d128-s-receive64-cd47a49acb-a3-2026112001-r2"
+      },
+      {
+        "outcome": "old_worker_completion_verified",
+        "result": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/exchange-d128-s-independent-9e3c5ca87d-a1-2026112001-r5/attempt-0/result.json",
+          "sha256": "68f55d1d434f78c27ddd89ac519f013868169128c619f5ea8d9d79e44ddf586f"
+        },
+        "target_tokens": 262144,
+        "task": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/exchange-d128-s-independent-9e3c5ca87d-a1-2026112001-r5/task.json",
+          "sha256": "c72e8834b52af50fb878a6e1baf451d1185d41744ab96993486ebc4e3d55d8e0"
+        },
+        "task_id": "exchange-d128-s-independent-9e3c5ca87d-a1-2026112001-r5"
+      },
+      {
+        "outcome": "old_worker_completion_verified",
+        "result": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/exchange-d128-s-pool-0f81d87b81-a1-2026112002-r3/attempt-0/result.json",
+          "sha256": "de806e5478618d5d8402f97a4bf10a221ebc8bcf35a49c159f31d5fa5b16b949"
+        },
+        "target_tokens": 262144,
+        "task": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/exchange-d128-s-pool-0f81d87b81-a1-2026112002-r3/task.json",
+          "sha256": "f44a2a09990e94ebe3c6df8329712b1892c1afa5978d6a5ca0a97f81badbcb28"
+        },
+        "task_id": "exchange-d128-s-pool-0f81d87b81-a1-2026112002-r3"
+      },
+      {
+        "bound_signal_results": 1,
+        "original_contract_checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r09/round/tasks/lattice-d128-s-receive64-cd47a49acb-a3-2026112002-r2/attempt-0/checkpoints/step-000005684-430781f783.pt",
+          "sha256": "8e242e8f721cc1bed09d4006c205063d2e24ba8f2595103d0298e71cd784aed5",
+          "size_bytes": 31286155,
+          "state_sha256": "18df4fb6e3a148fff0ac3e8a46c45c036d6e18e20259fd95e6be772f6f5acdb7",
+          "steps": 5684,
+          "tokens": 1455104
+        },
+        "outcome": "signal_result_with_checkpoint_but_missing_owner_receipt",
+        "result": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/lattice-d128-s-receive64-cd47a49acb-a3-2026112002-r2/attempt-0/result.json",
+          "sha256": "65ed353aa2002f6c00dbac371b47fd25d86d2754232f3d224664a35785623081"
+        },
+        "same_contract_incremental_evaluation_tokens": 32,
+        "task": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/lattice-d128-s-receive64-cd47a49acb-a3-2026112002-r2/task.json",
+          "sha256": "5954b2c0c5ea5a0fd4bee0b6cd74b3db91191ae326247f991269b7093f3fedc5"
+        },
+        "task_id": "lattice-d128-s-receive64-cd47a49acb-a3-2026112002-r2"
+      },
+      {
+        "outcome": "pending_without_observed_execution_or_result",
+        "task": {
+          "path": ".local/pilot-r3/campaign-r09/round/tasks/exchange-d128-s-pool-0f81d87b81-a1-2026112002-r5/task.json",
+          "sha256": "c30e822850483ac7ef97beb93d23cd3bf3e3bf48d3deeb827f5fcc9b6f0466c3"
+        },
+        "task_id": "exchange-d128-s-pool-0f81d87b81-a1-2026112002-r5"
+      }
+    ],
+    "physical_id": 5,
+    "scope": "Worker completions, signal results, checkpoints, current release and conservative debit. Exact release time and the missing owner receipts remain unknown."
+  },
+  "stage_a_scope": {
+    "exposed_subject_ids": [
+      "exchange-d128-k-base-4aac2dcb10",
+      "exchange-d128-k-capacity-74eba502b1",
+      "exchange-d128-k-independent-d3d8980f6a",
+      "exchange-d128-k-narrowwide-a8b4f1078d",
+      "exchange-d128-k-pool-25a642ea44",
+      "exchange-d128-k-shannon-b4f9572c1e",
+      "exchange-d128-s-base-0f1647288b",
+      "exchange-d128-s-capacity-32268b8664",
+      "exchange-d128-s-independent-9e3c5ca87d",
+      "exchange-d128-s-narrowwide-5d192e0d6d",
+      "exchange-d128-s-pool-0f81d87b81",
+      "exchange-d128-s-shannon-4274ad3518",
+      "exchange-d128-x-base-2ab17f45cd",
+      "exchange-d128-x-shannon-71abfc07a5",
+      "fc-d128-k-ffn1-e8be37f2b7",
+      "fc-d128-k-shared-f9498953c0",
+      "fc-d128-s-base-5c4809c97b",
+      "fc-d128-s-depth3-fbc6080d7d",
+      "fc-d128-s-ffn1-f45d256eab",
+      "fc-d128-s-shared-cbe5e2ff4e",
+      "lattice-d128-k-base-78dbac086a",
+      "lattice-d128-k-depth2-87732fbcda",
+      "lattice-d128-k-ffn2-848b8b0ddd",
+      "lattice-d128-k-layershared-91f7652530",
+      "lattice-d128-k-memoryshared-ce62b8f81b",
+      "lattice-d128-k-nodes4-1f22ba3272",
+      "lattice-d128-k-receive128-ee1edca248",
+      "lattice-d128-k-receive64-c05227ce86",
+      "lattice-d128-s-base-0a353237f5",
+      "lattice-d128-s-depth2-00b9531d37",
+      "lattice-d128-s-ffn2-5c6ff7f21c",
+      "lattice-d128-s-layershared-6312958b4e",
+      "lattice-d128-s-memoryshared-4a1c5168a4",
+      "lattice-d128-s-nodes4-87a2e4a9d9",
+      "lattice-d128-s-receive128-1ede806cba",
+      "lattice-d128-s-receive64-cd47a49acb",
+      "multiscale_settle-d128-k-group5-b152141dc5",
+      "multiscale_settle-d128-k-mixed9-e96a17a14d",
+      "multiscale_settle-d128-k-singleton7-43b1716b2d",
+      "multiscale_settle-d128-s-group5-e393757acf",
+      "multiscale_settle-d128-s-mixed9-5bc345edf5",
+      "multiscale_settle-d128-s-singleton7-ffd53c4df7",
+      "multiscale_timed-d128-k-group5-b74cd801f3",
+      "multiscale_timed-d128-k-mixed9-b193254132",
+      "multiscale_timed-d128-k-singleton7-eaab60796a",
+      "multiscale_timed-d128-s-group5-37506fa4ee",
+      "multiscale_timed-d128-s-mixed9-542e33dbf6",
+      "multiscale_timed-d128-s-singleton7-139de547de"
+    ],
+    "original_catalog": 344,
+    "previously_deferred": 74,
+    "prospective_recipe_check": {
+      "by_allocation": {
+        "pool": 8,
+        "quad": 226,
+        "shannon": 36
+      },
+      "canonical_prospective_subjects_sha256": "774529bc86f126044bc6cd8f6bef143b8acd6e9c6d0aa96637578765e51eed49",
+      "explicit_floor_subject_ids": [
+        "exchange-d128-k-shannon-b4f9572c1e",
+        "multiscale_settle-d128-k-singleton7-43b1716b2d",
+        "multiscale_timed-d128-k-singleton7-eaab60796a",
+        "exchange-d128-s-shannon-4274ad3518",
+        "multiscale_settle-d128-s-singleton7-ffd53c4df7",
+        "multiscale_timed-d128-s-singleton7-139de547de",
+        "exchange-d128-x-shannon-71abfc07a5",
+        "multiscale_settle-d128-x-singleton7-281f04cf8c",
+        "multiscale_timed-d128-x-singleton7-8ac3511b6a",
+        "exchange-d128-x_reverse-shannon-86ba13b249",
+        "multiscale_settle-d128-x_reverse-singleton7-655942fdd4",
+        "multiscale_timed-d128-x_reverse-singleton7-2f58b0a0f6",
+        "exchange-d256-k-shannon-417a5ef511",
+        "multiscale_settle-d256-k-singleton7-cad34be170",
+        "multiscale_timed-d256-k-singleton7-ffd4b110ac",
+        "exchange-d256-s-shannon-2b8b292dbc",
+        "multiscale_settle-d256-s-singleton7-49cd2e2448",
+        "multiscale_timed-d256-s-singleton7-d252547d80",
+        "exchange-d256-x-shannon-89d19dc30e",
+        "multiscale_settle-d256-x-singleton7-96194847fa",
+        "multiscale_timed-d256-x-singleton7-4a89c4ac13",
+        "exchange-d256-x_reverse-shannon-d9e3c0c28c",
+        "multiscale_settle-d256-x_reverse-singleton7-79bf479cff",
+        "multiscale_timed-d256-x_reverse-singleton7-7307401cb8",
+        "low-activity-exchange-shannon-n16-d128-k8-b9399a7e74",
+        "low-activity-exchange-shannon-n16-d128-k4-022e546538",
+        "low-activity-exchange-shannon-n16-d128-k2-620fe47109",
+        "low-activity-exchange-shannon-n16-d128-k1-fd73891083",
+        "low-activity-multiscale_settle-shannon-n16-d128-k8-4a9d8c5fb0",
+        "low-activity-multiscale_settle-shannon-n16-d128-k4-27abdd81d2",
+        "low-activity-multiscale_settle-shannon-n16-d128-k2-3d7b3a8c15",
+        "low-activity-multiscale_settle-shannon-n16-d128-k1-3864591e54",
+        "low-activity-multiscale_timed-shannon-n16-d128-k8-a5e305c7e8",
+        "low-activity-multiscale_timed-shannon-n16-d128-k4-f0cc52e3c1",
+        "low-activity-multiscale_timed-shannon-n16-d128-k2-e728e0c7cc",
+        "low-activity-multiscale_timed-shannon-n16-d128-k1-e6b11ef228"
+      ],
+      "method": "Constructed each proposed model via the frozen r08 pilotlab.models3.build_model on torch meta, verified its core policy, data and source identities.",
+      "scope": "Configuration and model construction only. The current launcher still names the original strict worker foundation."
+    },
+    "r09_subjects": 270,
+    "selected_by_allocation": {
+      "quad": 15,
+      "shannon": 1
+    },
+    "selected_old_recipes": 16,
+    "unstarted_subjects": 222
+  },
+  "status": "foundation_qualified_new_stage_a_launch_pending",
+  "worker_and_checkpoint_review": {
+    "a1_forced_stop": {
+      "old_observed_training_tokens": 9728,
+      "reason": "Original initial evaluation was not published.",
+      "replay_from_tokens": 0,
+      "task_id": "multiscale_timed-d128-k-mixed9-b193254132-a1-2026112002-r3"
+    },
+    "additional_old_worker_completions": 14,
+    "original_contract_decoded_checkpoints": 71,
+    "registered_tasks": 956,
+    "shannon_failure": {
+      "formal_checkpoint_test": "Verified full-state load and one migrated NPU update at step 1204. Failure-capture replay covers steps 1256 through 1258.",
+      "official_checkpoint": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r09/round/tasks/multiscale_settle-d128-k-singleton7-43b1716b2d-a2-2026112001-r2/attempt-0/checkpoints/step-000001203-eda4c7da06.pt",
+        "sha256": "35124c711e01558a5765c0e98d77b4b1de88a78d490374c06501d82db65d9fa2",
+        "size_bytes": 60087483,
+        "state_sha256": "2baca98994cea552b603159c28c5792b00903649e2ef0a9449c64b385afc4385",
+        "steps": 1203,
+        "tokens": 307968
+      },
+      "old_result": {
+        "path": ".local/pilot-r3/campaign-r09/round/tasks/multiscale_settle-d128-k-singleton7-43b1716b2d-a2-2026112001-r2/attempt-0/result.json",
+        "sha256": "a75f7c3a4d2b3aad0483ca4bad9a2c275d9b6fdeb29724f6a051365b7a645faf"
+      },
+      "task_id": "multiscale_settle-d128-k-singleton7-43b1716b2d-a2-2026112001-r2"
+    },
+    "signal_interruptions_with_checkpoint": {
+      "regular_old_relay_evidence": 57,
+      "supplemental_worker_evidence_missing_owner_receipt": 12
+    },
+    "strictly_bound_completed": 831,
+    "without_observed_worker_start": {
+      "pending_in_interrupted_group": 1,
+      "regular_old_relay_evidence": 39
+    }
+  }
+}

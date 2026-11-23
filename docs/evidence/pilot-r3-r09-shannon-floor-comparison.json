@@ -1,0 +1,541 @@
+{
+  "cpu_storage_only_negative_control": {
+    "example_cap_vjp": [
+      0.0,
+      -1.0000000150474662e+30
+    ],
+    "example_controls": [
+      1.401298464324817e-45,
+      1.0
+    ],
+    "example_score_vjp": [
+      0.0,
+      -0.0
+    ],
+    "floored_count": 23,
+    "rows": 23,
+    "strong_marked_upper_rows": 23,
+    "zero_score_vjp_rows": 23
+  },
+  "current": {
+    "all_frozen_python_match_local_worktree": 25,
+    "allocation": {
+      "path": ".local/pilot-r3/campaign-r08/frozen/foundation/src/tide/allocation.py",
+      "sha256": "a8e4346837e7db763d3b778126090c82719c8192679606b4b1b508e576a4e74e"
+    },
+    "failure_capture": {
+      "path": ".local/pilot-r3/campaign-r09/round/tasks/multiscale_settle-d128-k-singleton7-43b1716b2d-a2-2026112001-r2/attempt-0/failure.pt",
+      "sha256": "376cbcab8a82b59b312ea0c525cc046768028f6f7738da427b7859f05220726e"
+    },
+    "local_ahead_of_remote": 1,
+    "local_foundation_head": "049ecdcbc39c80297b37a99591906acbefa1bc13",
+    "modified_runtime_files_vs_remote": [
+      "src/tide/allocation.py",
+      "src/tide/attention.py",
+      "src/tide/config.py",
+      "src/tide/model.py"
+    ],
+    "remote_foundation_head": "b3a02979276fbd1ca448318ef05c7e3a4533c67b",
+    "remote_query": "git ls-remote --symref https://github.com/ZichaoLong/tide.git HEAD refs/heads/graph-execution-foundation",
+    "underflow_investigation": {
+      "path": "docs/evidence/pilot-r3-r09-shannon-underflow.json",
+      "sha256": "a537b63c0c39425b87f48117054167a8c782acc9a6e99db5e808c2f8a7919961"
+    },
+    "worker_source": ".local/pilot-r3/campaign-r08/frozen/source"
+  },
+  "execution": {
+    "baseline": "ascend/dev-workspace-9.2.0, CANN 9.2.0",
+    "card_lock_available_after_exit": true,
+    "cpu_threads_per_process": 4,
+    "development_queue_receipt": {
+      "elapsed_seconds": 17.650508787482977,
+      "job_id": "tide-r09-floor-fslfvhiK",
+      "job_lock_available_after_exit": true,
+      "logical_device": "npu:0",
+      "logical_devices": [
+        "npu:0"
+      ],
+      "manifest_removed_after_exit": true,
+      "npu_count": 1,
+      "physical_id": 4,
+      "physical_ids": [
+        4
+      ],
+      "priority": 0,
+      "project": "tide-learning-lab",
+      "return_code": 0,
+      "schema_version": 1,
+      "status": "completed",
+      "timestamp": "2026-11-20T14:05:39.589997+00:00"
+    },
+    "driver": {
+      "path": "scripts/probe_r09_shannon_floor.py",
+      "sha256": "a09ddbc772d2ce983d2a2182903f543612cc41b87729d34b70d534e2598aeed0"
+    },
+    "packages": {
+      "numpy": "2.5.2",
+      "torch": "2.12.0+cpu",
+      "torch-npu": "2.12.0.post3"
+    },
+    "python_venv": ".venv-pilot-r3",
+    "pythondontwritebytecode": "1",
+    "queue_receipt": {
+      "elapsed_seconds": 17.295860938727856,
+      "job_id": "tide-r09-floor-decimal-fslfvhik",
+      "job_lock_available_after_exit": true,
+      "logical_device": "npu:0",
+      "logical_devices": [
+        "npu:0"
+      ],
+      "manifest_removed_after_exit": true,
+      "npu_count": 1,
+      "physical_id": 4,
+      "physical_ids": [
+        4
+      ],
+      "priority": 0,
+      "project": "tide-learning-lab",
+      "return_code": 0,
+      "schema_version": 1,
+      "status": "completed",
+      "timestamp": "2026-11-20T14:07:47.732331+00:00"
+    },
+    "reproduce_cpu": "python scripts/probe_r09_shannon_floor.py --legacy-python \"$scratch/python\" --device cpu",
+    "reproduce_npu": "With a cooperative single-card lease, run python scripts/probe_r09_shannon_floor.py --legacy-python \"$scratch/python\" --device npu:0. Original physical card 4.",
+    "reproduce_sources": "git -C ../graph-execution-foundation archive 74e7bbd62341d2ccd382194a2c52ad4fea033665 python/tidegraph | tar -x -C \"$scratch\"",
+    "scope": "Read-only old Git objects and frozen worker sources. Model computation is an in-process diagnostic on the saved failure input.",
+    "torch_device_backend_autoload": "0"
+  },
+  "history": {
+    "acceptance": {
+      "path": "docs/evidence/positive-support-acceptance-v1.json",
+      "sha256": "88deb698f004176c67308c8bb4769ed39b6f70b50a128c0563cec84cd8891d49"
+    },
+    "checked_delivery_sources_sha256": {
+      "python/tidegraph/weighted/allocation_batch.py": "f8d39ece4bc9ece21e3ae52e7d29b4b73a1a73006f92bbd8c3593c8ef06e47e8",
+      "python/tidegraph/weighted/allocation_rows.py": "5195da6e9a69c8050cd20cbb0244379d46186b4b44feda2d73d0d4a7a2885ef3",
+      "python/tidegraph/weighted/entropy_allocation.py": "d5676a8d24f56c7dee3f452d4c04bcdd0fd7cd62ae76e0f56e724b708c840848",
+      "python/tidegraph/weighted/regularizers.py": "add2161dfd372c6b06f3e95fd9022a2185eab30d860289a00ce1b157baaceea3",
+      "python/tidegraph/weighted/support_policy.py": "a56eb1f599b28f6439ace481e2e014f979c88de1096aa5ab16c7a28628c03375"
+    },
+    "delivery": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+    "delivery_tree_python_tidegraph": "fbcf57d127a292039ce5f0362d363d5cba135e79",
+    "downstream_acceptance_commit": "dcf43909",
+    "hb16_inputs": {
+      "path": "docs/evidence/hb16-positive-support-v5.json",
+      "sha256": "3420cc104fb99d4a7622929ff508c85fdab404f4166e0a4bff3915688714d5bb"
+    },
+    "implementation": "2c11695ca66a5dcd028f7d777ec26b177add0378",
+    "installation_lock": {
+      "path": "dependencies/positive-floor-v1/foundation.lock.json",
+      "sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7"
+    },
+    "legacy_archive_is_ancestor_of_current_public_head": true,
+    "mathematics": "tide-core-5",
+    "other_normal_tiny_policy": {
+      "caller": "tide_lab/direct_semantic.py",
+      "downstream_introduction": "778f9e967f670af5242dd232dcd60de62adb5c40",
+      "scope": "Independent core-5 screening implementation; positive_exp in the Shannon response clamps log to log(finfo.tiny).",
+      "source": {
+        "path": "tide_lab/direct_semantic_ops.py",
+        "sha256": "4205336428856dd931d8c1908c435701f2947d296bfeaadae074a05e6484849d"
+      }
+    },
+    "removal_commit": "c0d5e07baf433bb706bc4be97cb8749507502719"
+  },
+  "method": {
+    "batch": "Only the unit-total rows with two unit caps, zero floors, a certified active upper total and a weak probability below the FP32 round-to-zero boundary use the closed form and old storage routine. The custom first-order derivative uses the unfloored log probabilities and both mathematically free scores. All other rows run frozen r09, in their original batch shape. Objective is the captured task objective, with no optimizer steps.",
+    "cpu_forward_only_negative_control": "On the 23 CPU score rows call frozen _Constrained.apply(scores, ones_mu, zeros_lower, ones_caps, unit_low_total, unit_high_total, shannon). Interpose _save_solution: pass c through legacy repair(c,1+scores.log_softmax(-1),upper,tau=1,L=1,U=1,reject), then call the original _save_solution with the stored c and its original shannon_faces. Use unchanged frozen backward with root 1e30 on each weak coordinate, 0 on strong. Count selected_upper on the strong columns, take autograd.grad for score and cap. No model or optimizer for this control.",
+    "legacy_full_allocator": "The original core-5 public allocate_batch ran the real score vectors, caps=[1,1], equal total bounds=1, temperature=1, regularizer=ent, ent_alpha=1, support_policy=positive-floor-v1 on each device.",
+    "limits": "Two-candidate, unit-total captured rows and one captured FP32 model batch. No general role-bounded solver, new training, optimizer trajectory, state comparison, same-policy resume, throughput or language-quality qualification.",
+    "row_reference": "Independent 120-digit Decimal two-candidate unit-total solution p=1/(1+exp(gap)); scores and the 1e30 cotangent use their exact stored FP32 inputs. Weak/strong score VJPs against a weak-output root g are +p*(1-p)*g and -p*(1-p)*g, and the active total VJP is p*g.",
+    "storage": "The unmodified legacy repair routine received the recorded r09 rounded controls, finite two-candidate log response and unit caps/total. Scores and controls are from the separately captured rows on each backend."
+  },
+  "question": "Does the historical positive-support floor address the final-FP32 loss on the real r09 constrained Shannon rows?",
+  "results": {
+    "cpu": {
+      "captured_batch": {
+        "all_grad_finite": true,
+        "all_logits_finite": true,
+        "finite_loss": true,
+        "gradient_tensor_count": 123,
+        "objective": 5.55780553817749,
+        "optimizer_steps": 0,
+        "repaired_calls": [
+          {
+            "call": 9,
+            "indices": [
+              [
+                0,
+                1
+              ],
+              [
+                0,
+                11
+              ],
+              [
+                0,
+                24
+              ],
+              [
+                0,
+                44
+              ],
+              [
+                0,
+                49
+              ],
+              [
+                0,
+                58
+              ],
+              [
+                0,
+                72
+              ],
+              [
+                0,
+                99
+              ],
+              [
+                0,
+                100
+              ],
+              [
+                0,
+                120
+              ],
+              [
+                0,
+                127
+              ],
+              [
+                1,
+                15
+              ],
+              [
+                1,
+                30
+              ],
+              [
+                1,
+                41
+              ],
+              [
+                1,
+                54
+              ],
+              [
+                1,
+                62
+              ],
+              [
+                1,
+                65
+              ],
+              [
+                1,
+                66
+              ],
+              [
+                1,
+                69
+              ],
+              [
+                1,
+                77
+              ],
+              [
+                1,
+                84
+              ],
+              [
+                1,
+                105
+              ],
+              [
+                1,
+                127
+              ]
+            ]
+          }
+        ],
+        "shannon_calls": 10
+      },
+      "device": "cpu",
+      "physical_id": null,
+      "row_comparison": {
+        "absolute_error_range": [
+          1.1376989821407919e-45,
+          1.4012892044224743e-45
+        ],
+        "all_stored_weak_equal_floor": true,
+        "all_underflow_refusal": "positive-floor-v1 mass perturbation exceeds relative budget",
+        "endpoint_controls_zero_cap_zero_total_all_caps": [
+          [
+            0.0,
+            0.5
+          ],
+          [
+            0.0,
+            0.0
+          ],
+          [
+            1.0,
+            1.0
+          ]
+        ],
+        "existing_subnormal_and_zero_cap_preserved": true,
+        "floor": 1.401298464324817e-45,
+        "floor_count": 23,
+        "floored_coordinates_match_witness": true,
+        "frozen_reception_singleton": {
+          "mass": 1.401298464324817e-45,
+          "mass_grad": 0.0,
+          "output": 0.25,
+          "value_grad": 1.0
+        },
+        "legacy_whole_allocator": {
+          "floor_count": 0,
+          "weak_range": [
+            5.96044138490015e-08,
+            5.96044138490015e-08
+          ],
+          "zero_score_gradient_rows": 23
+        },
+        "max_relative_error_vs_decimal": {
+          "strong_score": 3.8807506598595115e-06,
+          "total": 3.8807506598595115e-06,
+          "weak_score": 3.8807506598595115e-06
+        },
+        "representative": {
+          "binary_score_vjp": [
+            1.2151709361855564e-16,
+            -1.2151709361855564e-16
+          ],
+          "decimal_weak": 1.2151709138204073e-46,
+          "decimal_weak_score_vjp": 1.2151709321056506e-16,
+          "index": [
+            0,
+            1,
+            0
+          ],
+          "old_allocator_score_vjp": [
+            0.0,
+            -0.0
+          ],
+          "old_allocator_values": [
+            5.96044138490015e-08,
+            1.0
+          ],
+          "scores": [
+            -73.420654296875,
+            32.303375244140625
+          ],
+          "stored_to_decimal_ratio": 11.531698532177984,
+          "stored_weak": 1.401298464324817e-45
+        },
+        "root_on_weak_coordinate": 1.0000000150474662e+30,
+        "rows": 23,
+        "stored_to_decimal_weak_ratio_range": [
+          5.316013721705781,
+          151329.72384138132
+        ],
+        "unchanged_other_coordinates": true
+      }
+    },
+    "npu": {
+      "captured_batch": {
+        "all_grad_finite": true,
+        "all_logits_finite": true,
+        "finite_loss": true,
+        "gradient_tensor_count": 123,
+        "objective": 5.557805061340332,
+        "optimizer_steps": 0,
+        "repaired_calls": [
+          {
+            "call": 9,
+            "indices": [
+              [
+                0,
+                1
+              ],
+              [
+                0,
+                11
+              ],
+              [
+                0,
+                24
+              ],
+              [
+                0,
+                44
+              ],
+              [
+                0,
+                49
+              ],
+              [
+                0,
+                58
+              ],
+              [
+                0,
+                72
+              ],
+              [
+                0,
+                99
+              ],
+              [
+                0,
+                100
+              ],
+              [
+                0,
+                120
+              ],
+              [
+                0,
+                127
+              ],
+              [
+                1,
+                15
+              ],
+              [
+                1,
+                30
+              ],
+              [
+                1,
+                41
+              ],
+              [
+                1,
+                54
+              ],
+              [
+                1,
+                62
+              ],
+              [
+                1,
+                65
+              ],
+              [
+                1,
+                66
+              ],
+              [
+                1,
+                69
+              ],
+              [
+                1,
+                77
+              ],
+              [
+                1,
+                84
+              ],
+              [
+                1,
+                105
+              ],
+              [
+                1,
+                127
+              ]
+            ]
+          }
+        ],
+        "shannon_calls": 10
+      },
+      "device": "npu:0",
+      "physical_id": "4",
+      "row_comparison": {
+        "absolute_error_range": [
+          1.1376969710286721e-45,
+          1.4012892047050599e-45
+        ],
+        "all_stored_weak_equal_floor": true,
+        "all_underflow_refusal": "positive-floor-v1 mass perturbation exceeds relative budget",
+        "endpoint_controls_zero_cap_zero_total_all_caps": [
+          [
+            0.0,
+            0.4999999701976776
+          ],
+          [
+            0.0,
+            0.0
+          ],
+          [
+            1.0,
+            1.0
+          ]
+        ],
+        "existing_subnormal_and_zero_cap_preserved": true,
+        "floor": 1.401298464324817e-45,
+        "floor_count": 23,
+        "floored_coordinates_match_witness": true,
+        "frozen_reception_singleton": {
+          "mass": 1.401298464324817e-45,
+          "mass_grad": 0.0,
+          "output": 0.25,
+          "value_grad": 1.0
+        },
+        "legacy_whole_allocator": {
+          "floor_count": 0,
+          "weak_range": [
+            5.96044138490015e-08,
+            5.96044138490015e-08
+          ],
+          "zero_score_gradient_rows": 23
+        },
+        "max_relative_error_vs_decimal": {
+          "strong_score": 3.822863733853224e-06,
+          "total": 3.822863733853224e-06,
+          "weak_score": 3.822863733853224e-06
+        },
+        "representative": {
+          "binary_score_vjp": [
+            1.2151616717626958e-16,
+            -1.2151616717626958e-16
+          ],
+          "decimal_weak": 1.215161642837449e-46,
+          "decimal_weak_score_vjp": 1.2151616611225527e-16,
+          "index": [
+            0,
+            1,
+            0
+          ],
+          "old_allocator_score_vjp": [
+            0.0,
+            -0.0
+          ],
+          "old_allocator_values": [
+            5.96044138490015e-08,
+            1.0
+          ],
+          "scores": [
+            -73.42066192626953,
+            32.303375244140625
+          ],
+          "stored_to_decimal_ratio": 11.531786512391319,
+          "stored_weak": 1.401298464324817e-45
+        },
+        "root_on_weak_coordinate": 1.0000000150474662e+30,
+        "rows": 23,
+        "stored_to_decimal_weak_ratio_range": [
+          5.315973163894481,
+          151334.3421285204
+        ],
+        "unchanged_other_coordinates": true
+      }
+    }
+  },
+  "reviewed_unix": 1795183938.8681552,
+  "schema": "pilot-r3-r09-shannon-floor-comparison-v1"
+}

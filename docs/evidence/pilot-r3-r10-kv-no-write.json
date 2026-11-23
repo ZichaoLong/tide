@@ -1,0 +1,266 @@
+{
+  "commit": "2906d544b8a51297a0c09b96f1cee998d94eb84c",
+  "completed_steps": 1136,
+  "completed_tokens": 145408,
+  "dtype": "float32",
+  "failure": "mass-scaled attention exceeds the arithmetic range; no clipping is applied",
+  "failure_capture": {
+    "path": ".local/pilot-r3/campaign-r10/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a1-2026112001-r2/attempt-0/failure.pt",
+    "sha256": "deb4c7f8f5144f62a19646ea3ab7ae7f8dc1a97239697403bb4536cfe0aec3fb"
+  },
+  "failure_step": 1137,
+  "frozen_source": [
+    {
+      "path": ".local/pilot-r3/campaign-r10/foundation/src/tide/kv.py",
+      "sha256": "6ce42c759d8bfa9843c006d0bbda31ad1bc0602b0c9584718d73959bc11a3e3b"
+    },
+    {
+      "path": ".local/pilot-r3/campaign-r10/foundation/src/tide/attention.py",
+      "sha256": "c163d02d95c7e62d6cf9ed83638bfea79cdb354253bcebd7ca104681a954257c"
+    },
+    {
+      "path": ".local/pilot-r3/campaign-r10/source/pilotlab/worker3.py",
+      "sha256": "a5e9b27350521ef7bcd929f001add25679ed7e26482287c7937340cf30d4f3a8"
+    }
+  ],
+  "harness": {
+    "candidate": "In a temporary process replace only tide.kv.weighted_attention with a forwarding wrapper. For non-unit weighted KV reads, intersect the incoming key mask with (weights > 0)[:, :, None, None, :]. The generic attention operator is untouched. Load the original AdamW state and call worker3.train_update on the captured batch. A second variant requests tiled when original auto encountered a visible trainable zero prior to check backend sensitivity.",
+    "input": "Load the original capture on CPU. Use its task to initialize the device, build the model, load model parameters and private state, and feed the stored inputs/targets.",
+    "original": "Execute the original cross entropy objective and backward. At the failing _MassScaledAttention backward inspect the four returned gradients; copy operator inputs and the incoming gradient to the CPU for the FP64 calculation.",
+    "reference": "Direct dense FP64 on actual saved call inputs: weighted probability from logsumexp over positive visible priors. Compute the one-sided weight VJP at all time-visible keys, including zeros, retaining the mass amplitude term. Separately evaluate only written keys with ordinary FP64 autograd. The absolute discrepancy on the masked weight gradient was below 2e-18 on both input sets.",
+    "scope": "Isolated failure-capture experiment. The original capture has no private state on this batch. Later batches, official checkpoint replay and long-run quality are outside these measurements."
+  },
+  "npu_queue_receipts": {
+    "kv_mask": {
+      "elapsed_seconds": 19.52433978021145,
+      "job_id": "tide-r10-kvcheck-uRwaLBcS",
+      "logical_device": "npu:0",
+      "logical_devices": [
+        "npu:0"
+      ],
+      "npu_count": 1,
+      "physical_id": 1,
+      "physical_ids": [
+        1
+      ],
+      "priority": 0,
+      "project": "tide-learning-lab",
+      "return_code": 0,
+      "schema_version": 1,
+      "status": "completed",
+      "timestamp": "2026-11-21T04:00:02.471838+00:00"
+    },
+    "kv_mask_retained_tiled": {
+      "elapsed_seconds": 20.758754786103964,
+      "job_id": "tide-r10-kvtiled-uRwaLBcS",
+      "logical_device": "npu:0",
+      "logical_devices": [
+        "npu:0"
+      ],
+      "npu_count": 1,
+      "physical_id": 1,
+      "physical_ids": [
+        1
+      ],
+      "priority": 0,
+      "project": "tide-learning-lab",
+      "return_code": 0,
+      "schema_version": 1,
+      "status": "completed",
+      "timestamp": "2026-11-21T04:00:53.025304+00:00"
+    },
+    "original": {
+      "elapsed_seconds": 19.886354833841324,
+      "job_id": "tide-r10-vjp-uRwaLBcS",
+      "logical_device": "npu:0",
+      "logical_devices": [
+        "npu:0"
+      ],
+      "npu_count": 1,
+      "physical_id": 1,
+      "physical_ids": [
+        1
+      ],
+      "priority": 0,
+      "project": "tide-learning-lab",
+      "return_code": 0,
+      "schema_version": 1,
+      "status": "completed",
+      "timestamp": "2026-11-21T03:58:02.344415+00:00"
+    }
+  },
+  "observations": {
+    "cpu": {
+      "failing_tensor": "gradient with respect to broadcast key prior, after head/query reduction",
+      "floor_counts_in_batch": {
+        "refined_rows": 0,
+        "repaired_coordinates": 0,
+        "repaired_rows": 0
+      },
+      "fp32_forward_loss_before": 6.057744979858398,
+      "invalid_gradients": {
+        "dk": 0,
+        "dq": 0,
+        "dv": 0,
+        "dw": 2
+      },
+      "largest_abs_gradient_at_written_weight_fp64": 3.210670028903353e-05,
+      "mass_scaled": true,
+      "one_update_with_kv_write_mask": {
+        "finite": [
+          "parameter_gradients_after_clip",
+          "parameters_after_step",
+          "AdamW_state",
+          "returned_private_state"
+        ],
+        "gradient_norm_before_clip": 1.423534631729126,
+        "learning_rate": 0.0009999092971252936,
+        "loss": 6.057744979858398
+      },
+      "one_update_with_kv_write_mask_and_retained_tiled_for_prior_zero_auto_training": {
+        "finite": [
+          "parameter_gradients_after_clip",
+          "parameters_after_step",
+          "AdamW_state",
+          "returned_private_state"
+        ],
+        "gradient_norm_before_clip": 1.4235347509384155,
+        "loss": 6.057744979858398
+      },
+      "op_call_number": 49,
+      "op_origin": [
+        "model.py:319:forward",
+        "model.py:416:_run",
+        "model.py:299:_evaluate_region",
+        "kv.py:137:finish",
+        "kv.py:159:_finish_tile",
+        "attention.py:670:weighted_attention"
+      ],
+      "rows": [
+        {
+          "index": [
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "public_attention_right_derivative_fp64": -1.2086198443093037e+40,
+          "weight": 0.0
+        },
+        {
+          "index": [
+            1,
+            0,
+            0,
+            0,
+            1
+          ],
+          "public_attention_right_derivative_fp64": -1.2086198443093037e+40,
+          "weight": 0.0
+        }
+      ],
+      "unique_key_weights": [
+        0.0,
+        1.0
+      ],
+      "weak": false
+    },
+    "npu": {
+      "failing_tensor": "gradient with respect to broadcast key prior, after head/query reduction",
+      "floor_counts_in_batch": {
+        "refined_rows": 0,
+        "repaired_coordinates": 0,
+        "repaired_rows": 0
+      },
+      "fp32_forward_loss_before": 6.057744026184082,
+      "invalid_gradients": {
+        "dk": 0,
+        "dq": 0,
+        "dv": 0,
+        "dw": 2
+      },
+      "largest_abs_gradient_at_written_weight_fp64": 3.2106655372121725e-05,
+      "mass_scaled": true,
+      "one_update_with_kv_write_mask": {
+        "finite": [
+          "parameter_gradients_after_clip",
+          "parameters_after_step",
+          "AdamW_state",
+          "returned_private_state"
+        ],
+        "gradient_norm_before_clip": 1.423693299293518,
+        "learning_rate": 0.0009999092971252936,
+        "loss": 6.05774450302124
+      },
+      "one_update_with_kv_write_mask_and_retained_tiled_for_prior_zero_auto_training": {
+        "finite": [
+          "parameter_gradients_after_clip",
+          "parameters_after_step",
+          "AdamW_state",
+          "returned_private_state"
+        ],
+        "gradient_norm_before_clip": 1.423693299293518,
+        "loss": 6.05774450302124
+      },
+      "op_call_number": 49,
+      "op_origin": [
+        "model.py:319:forward",
+        "model.py:416:_run",
+        "model.py:299:_evaluate_region",
+        "kv.py:137:finish",
+        "kv.py:159:_finish_tile",
+        "attention.py:670:weighted_attention"
+      ],
+      "rows": [
+        {
+          "index": [
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "public_attention_right_derivative_fp64": -1.2086024537176875e+40,
+          "weight": 0.0
+        },
+        {
+          "index": [
+            1,
+            0,
+            0,
+            0,
+            1
+          ],
+          "public_attention_right_derivative_fp64": -1.2086024537176875e+40,
+          "weight": 0.0
+        }
+      ],
+      "unique_key_weights": [
+        0.0,
+        1.0
+      ],
+      "weak": false
+    }
+  },
+  "observed_at": "2026-11-21T12:01:50+08:00",
+  "official_checkpoint": {
+    "path": ".local/pilot-r3/campaign-r10/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a1-2026112001-r2/attempt-0/checkpoints/step-000001126-2ef7b622be.pt",
+    "sha256": "40c7d74085da9ef0c834ccda550b8320855d9ab3ac3e9a30cbbf5b67ff7de633",
+    "step": 1126
+  },
+  "original_result": {
+    "path": ".local/pilot-r3/campaign-r10/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a1-2026112001-r2/attempt-0/result.json",
+    "sha256": "1b67d25850bb61d1d116962c233f8e5fdd4fcbc5dd769c60cbfd9361e2ff8307"
+  },
+  "physical_npu_for_replay": 1,
+  "qualification_before_campaign": "Exercise extreme no-write logits, positive tiny weights, genuinely trainable zero priors in general attention, empty and mixed windows, and split/resumed KV state. Replay from the official checkpoint through the failure and subsequent batches on NPU.",
+  "recommended_change": "Use the KV no-write boundary in KVMemory._finish_tile. Preserve tiny positive writes and public attention right derivatives at explicitly supplied zero priors.",
+  "run": "r3-campaign-r10",
+  "schema": "pilot-r3-r10-kv-no-write-diagnostic-v1",
+  "task": {
+    "path": ".local/pilot-r3/campaign-r10/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a1-2026112001-r2/attempt-0/task.json",
+    "sha256": "28ac2dc893def5ffaa72d90d9333a41d1fe1cca98cc33953867cc9d889d94c49"
+  },
+  "task_id": "multiscale_timed-d128-k-singleton7-eaab60796a-a1-2026112001-r2"
+}

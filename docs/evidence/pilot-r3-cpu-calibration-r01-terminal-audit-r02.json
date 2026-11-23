@@ -1,0 +1,1202 @@
+{
+  "artifacts": {
+    "files": [
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b2-t1/task.json",
+        "sha256": "5f98d159ab5f78ef30a70626990bc5aaa127dfcdf9f81c7c533cefccf76e0dd3",
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b2-t1"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b2-t1/attempt-0/result.json",
+        "sha256": "d171d23ad32f1343eb4ac4bd71399b6386ed5a56e52100a9ce7cc4c43ad9fef7",
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b2-t1"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b2-t1/attempt-0/checkpoint.json",
+        "sha256": "15dd7b0962f1a0232efe94af57507ca2984bc02f814ac4f57c755d9657d70f76",
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b2-t1"
+      },
+      {
+        "expected_sha256": "68183d8125220db98745c33a3146130b71dbdf4525bbad3f4033a9b040e70a6c",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b2-t1/attempt-0/checkpoints/step-000000256-0811047e48.pt",
+        "sha256": "68183d8125220db98745c33a3146130b71dbdf4525bbad3f4033a9b040e70a6c",
+        "size_bytes": 9495085,
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b2-t1"
+      },
+      {
+        "expected_sha256": "555876a2e4e4443cdc4ebe46892964242f4dd07c8b2b60fdff27b2b202b74134",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b2-t1/attempt-0/checkpoints/step-000000001-f30f7011f0.pt",
+        "sha256": "555876a2e4e4443cdc4ebe46892964242f4dd07c8b2b60fdff27b2b202b74134",
+        "size_bytes": 9495085,
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b2-t1"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b2-t2/task.json",
+        "sha256": "bd37488fec3c4517459806941e222f61b8bbbe96bbf9d5fbfb27c626b5cff35e",
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b2-t2"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b2-t2/attempt-0/result.json",
+        "sha256": "d90833a0bcf868952212a675185a376cff1be439a38eee2f6c25da1845c97668",
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b2-t2"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b2-t2/attempt-0/checkpoint.json",
+        "sha256": "da037acf3ec0eb470959422d305877b23498a342feb513812c767de26b556d79",
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b2-t2"
+      },
+      {
+        "expected_sha256": "9070855a0178824ddfbd2d1fadb6a14b209b187cd762f6d96ce0e5470e3b0cb1",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b2-t2/attempt-0/checkpoints/step-000000256-cad16234fd.pt",
+        "sha256": "9070855a0178824ddfbd2d1fadb6a14b209b187cd762f6d96ce0e5470e3b0cb1",
+        "size_bytes": 9495085,
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b2-t2"
+      },
+      {
+        "expected_sha256": "26d223303ad622a1cacd86352a66b987d4eb7e397410044fae5544c19d5c9f6e",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b2-t2/attempt-0/checkpoints/step-000000001-7fccb6da5b.pt",
+        "sha256": "26d223303ad622a1cacd86352a66b987d4eb7e397410044fae5544c19d5c9f6e",
+        "size_bytes": 9495085,
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b2-t2"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b2-t4/task.json",
+        "sha256": "db6b115b8deb14dd0070ec20294cf7f62f7047c67708a28e18e071ddb0a38461",
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b2-t4"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b2-t4/attempt-0/result.json",
+        "sha256": "1a6f2de5a7f7a56b7ac3e1a29c722292e895ad786a6194c1e1431442dde1be53",
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b2-t4"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b2-t4/attempt-0/checkpoint.json",
+        "sha256": "435f18f1566b02ab4706d49f9955d7be5484f0aa719fa0f1f0f4e9a18cd4a45d",
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b2-t4"
+      },
+      {
+        "expected_sha256": "c9551bb8dd285c0ca8d91aec8b2cfea44e10b94fc84ab4e1966c8bfa4dd829d1",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b2-t4/attempt-0/checkpoints/step-000000256-db58f23d28.pt",
+        "sha256": "c9551bb8dd285c0ca8d91aec8b2cfea44e10b94fc84ab4e1966c8bfa4dd829d1",
+        "size_bytes": 9495085,
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b2-t4"
+      },
+      {
+        "expected_sha256": "c8934ac63bfdc20a35877829b8293b4daf6f6f94dbfddf085e36b4e53e0471fe",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b2-t4/attempt-0/checkpoints/step-000000001-5b2da9e7f6.pt",
+        "sha256": "c8934ac63bfdc20a35877829b8293b4daf6f6f94dbfddf085e36b4e53e0471fe",
+        "size_bytes": 9495085,
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b2-t4"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b2-t8/task.json",
+        "sha256": "5d6df914163abf181c3b97a9f4c1e3164f59180586544f73f0a229a9532c6ce1",
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b2-t8"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b2-t8/attempt-0/result.json",
+        "sha256": "7965319e43b87005e13ef429013735bb0d7722fa9900799f17b15447cc45a65b",
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b2-t8"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b2-t8/attempt-0/checkpoint.json",
+        "sha256": "fb7c4b0a3bcaac78abcea5401ecd3ea2d4d3224fc617e15cbd3b2656e1ca864c",
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b2-t8"
+      },
+      {
+        "expected_sha256": "d5f7206d73c90fc494a6d7cc2dec9ee3cd072a5fbc98827dc3c7bd8d72a2ac62",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b2-t8/attempt-0/checkpoints/step-000000256-04d371c494.pt",
+        "sha256": "d5f7206d73c90fc494a6d7cc2dec9ee3cd072a5fbc98827dc3c7bd8d72a2ac62",
+        "size_bytes": 9495085,
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b2-t8"
+      },
+      {
+        "expected_sha256": "97ab1959866efc98759b2855b20129511b7945f20ded39886aece6c439ce50f8",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b2-t8/attempt-0/checkpoints/step-000000001-15ca197880.pt",
+        "sha256": "97ab1959866efc98759b2855b20129511b7945f20ded39886aece6c439ce50f8",
+        "size_bytes": 9495085,
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b2-t8"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b32-t1/task.json",
+        "sha256": "f4cd67dffd012f5faf168bd24330aa226824a07042121179dd79538144f90787",
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b32-t1"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b32-t1/attempt-0/result.json",
+        "sha256": "6acfb5b9cbcf48d318d4fdece8e3735bf5d848e0e5a05ac038e294102321b20e",
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b32-t1"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b32-t1/attempt-0/checkpoint.json",
+        "sha256": "e8de07247fc127f2d1132be1110e2b09602f6b993c2ae1c9c83dbce6187dcc1a",
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b32-t1"
+      },
+      {
+        "expected_sha256": "71bb1c406cca46a4917d55193286f647da5b81c0f044b1662fee16509eb43f86",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b32-t1/attempt-0/checkpoints/step-000000016-3a659276c8.pt",
+        "sha256": "71bb1c406cca46a4917d55193286f647da5b81c0f044b1662fee16509eb43f86",
+        "size_bytes": 18654701,
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b32-t1"
+      },
+      {
+        "expected_sha256": "f5f902c49cc645085c7d0d2dcb8beac0a7a52497754b2b68b311e18b9263f7d1",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b32-t1/attempt-0/checkpoints/step-000000001-e21d3eb8f7.pt",
+        "sha256": "f5f902c49cc645085c7d0d2dcb8beac0a7a52497754b2b68b311e18b9263f7d1",
+        "size_bytes": 18654637,
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b32-t1"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b32-t2/task.json",
+        "sha256": "77383add64588557f5e78056ce01e866858a678a31184361691d040d1db302e1",
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b32-t2"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b32-t2/attempt-0/result.json",
+        "sha256": "ed08265074dba246c7c85cc73056b7aacd7afe5cbce4328e74ac4684e906ca73",
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b32-t2"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b32-t2/attempt-0/checkpoint.json",
+        "sha256": "907e4ffccb7cab18732588b6830440073f6c0a3c1141682615526531a2ece6c8",
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b32-t2"
+      },
+      {
+        "expected_sha256": "2299e2bac62a415fc98b77ed79cf68390c26f760e61e15ff533dc1cddabfd474",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b32-t2/attempt-0/checkpoints/step-000000016-d7d9954da3.pt",
+        "sha256": "2299e2bac62a415fc98b77ed79cf68390c26f760e61e15ff533dc1cddabfd474",
+        "size_bytes": 18654701,
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b32-t2"
+      },
+      {
+        "expected_sha256": "ab44c4fc1c150da64fb8279b3c3a1751c90152b8478ec682d656f80f7b42ba1d",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b32-t2/attempt-0/checkpoints/step-000000001-7add837a55.pt",
+        "sha256": "ab44c4fc1c150da64fb8279b3c3a1751c90152b8478ec682d656f80f7b42ba1d",
+        "size_bytes": 18654637,
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b32-t2"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b32-t4/task.json",
+        "sha256": "9a9e354ff3f3cd00dc57acc2cb2f973da3b51269dc6e2deb07ee25ebf78ad956",
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b32-t4"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b32-t4/attempt-0/result.json",
+        "sha256": "01a4bbf44851fe6cca41a9d98416e80b4f06b90cdfd12db242d0aa0bf89e3e1a",
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b32-t4"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b32-t4/attempt-0/checkpoint.json",
+        "sha256": "48c442c619b6ed516726b1897aac1d4d46b1173e9b04b7a1c6a6b1f860df9c42",
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b32-t4"
+      },
+      {
+        "expected_sha256": "2d1f2b08bd2859c652a4ee82fda0dec0b3f2daaa439e28ce2125ffcea1ff8af3",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b32-t4/attempt-0/checkpoints/step-000000016-d21f816a6e.pt",
+        "sha256": "2d1f2b08bd2859c652a4ee82fda0dec0b3f2daaa439e28ce2125ffcea1ff8af3",
+        "size_bytes": 18654701,
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b32-t4"
+      },
+      {
+        "expected_sha256": "22e1c82069501cfbd0f47944061c7d62c3c9f3278493f0dfc42485e30c919e56",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b32-t4/attempt-0/checkpoints/step-000000001-526090dd9c.pt",
+        "sha256": "22e1c82069501cfbd0f47944061c7d62c3c9f3278493f0dfc42485e30c919e56",
+        "size_bytes": 18654637,
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b32-t4"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b32-t8/task.json",
+        "sha256": "90a90414f2430af9cf88ab772f4b2172c05abbb0b013d8a027a92015624e2923",
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b32-t8"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b32-t8/attempt-0/result.json",
+        "sha256": "3afb67a999dd30c6f6f7429588c802be3f2d9d51d391abed3a027be1a6e368bf",
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b32-t8"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b32-t8/attempt-0/checkpoint.json",
+        "sha256": "c15e9bdae62285ed0051e4c1de1971139093cf97ef84d3425ff8f0f419cf50c9",
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b32-t8"
+      },
+      {
+        "expected_sha256": "359c6c9333d97aa104fa8d585fcfdffb772631bc0fd67e635a91de3d3fdaa29a",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b32-t8/attempt-0/checkpoints/step-000000016-14f056ba32.pt",
+        "sha256": "359c6c9333d97aa104fa8d585fcfdffb772631bc0fd67e635a91de3d3fdaa29a",
+        "size_bytes": 18654701,
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b32-t8"
+      },
+      {
+        "expected_sha256": "f7250ce64c068f37a95c4fc9dd9734982a10b4f72b4a93c94322f771712ef6d1",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-fc-b32-t8/attempt-0/checkpoints/step-000000001-bc172e629d.pt",
+        "sha256": "f7250ce64c068f37a95c4fc9dd9734982a10b4f72b4a93c94322f771712ef6d1",
+        "size_bytes": 18654637,
+        "status": "passed",
+        "task_id": "cpu-cal-fc-b32-t8"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b2-t1/task.json",
+        "sha256": "7f2aa33a0bc32275a8c715f5392bf9b7b6917f3c259d797acfa2db3f7894047c",
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b2-t1"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b2-t1/attempt-0/result.json",
+        "sha256": "0d60611d4fb26f99c36f3ed03945981c49aa904b296eec532b8a0848c99da64e",
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b2-t1"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b2-t1/attempt-0/checkpoint.json",
+        "sha256": "97ab30adba4de8d6ed0ce425c92b328fd60e289ed31e18d3214f6ad15fee6e7b",
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b2-t1"
+      },
+      {
+        "expected_sha256": "fbd6151a5bf048584afd61017cc083d6b9a10bbe6bc3e3c4018c2361dc9a8725",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b2-t1/attempt-0/checkpoints/step-000000256-d59038949e.pt",
+        "sha256": "fbd6151a5bf048584afd61017cc083d6b9a10bbe6bc3e3c4018c2361dc9a8725",
+        "size_bytes": 14855283,
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b2-t1"
+      },
+      {
+        "expected_sha256": "f7862811e6cce10678864e72dcf8172bdc89d08bce8f7ded81e8b3718aed9298",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b2-t1/attempt-0/checkpoints/step-000000001-ec47e32f64.pt",
+        "sha256": "f7862811e6cce10678864e72dcf8172bdc89d08bce8f7ded81e8b3718aed9298",
+        "size_bytes": 14855283,
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b2-t1"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b2-t2/task.json",
+        "sha256": "1099267bf8857698dd7d23562d6a635e3cb13885b69707159fdea4570c5da42b",
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b2-t2"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b2-t2/attempt-0/result.json",
+        "sha256": "b3d31ea983e93b157731b8b4b5d8e1a34c63473bf255f720e175c47e854e1452",
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b2-t2"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b2-t2/attempt-0/checkpoint.json",
+        "sha256": "2177f5becec83c12aa858397b8007702f162179af68c61aeccad097ec7a7c5e2",
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b2-t2"
+      },
+      {
+        "expected_sha256": "d0d5ba0050895aeba4e210e2bf661006185cc5021536ebd02cdc7904d50b8263",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b2-t2/attempt-0/checkpoints/step-000000256-e87e918982.pt",
+        "sha256": "d0d5ba0050895aeba4e210e2bf661006185cc5021536ebd02cdc7904d50b8263",
+        "size_bytes": 14855283,
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b2-t2"
+      },
+      {
+        "expected_sha256": "31e7541f48802baefaac4febbdd797e1ce7048dc71d8459fc57ed17f5c77f27c",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b2-t2/attempt-0/checkpoints/step-000000001-6843917a31.pt",
+        "sha256": "31e7541f48802baefaac4febbdd797e1ce7048dc71d8459fc57ed17f5c77f27c",
+        "size_bytes": 14855283,
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b2-t2"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b2-t4/task.json",
+        "sha256": "dbabb5f044cf4092299101e599dccc6113842598b207268d037ab823bbed53cb",
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b2-t4"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b2-t4/attempt-0/result.json",
+        "sha256": "971a5ea6e2204c918a3f40084d8ec545784f77fc215b8d63b75ad1b988047de8",
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b2-t4"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b2-t4/attempt-0/checkpoint.json",
+        "sha256": "d1f7553236ca82f1f205a153bb6f34fb3b0f72ce71997c93dbc5f4d91e509b68",
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b2-t4"
+      },
+      {
+        "expected_sha256": "12d7db92e957d471b2e71dcf8ec713b38954590217655fbec797996e30518ab4",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b2-t4/attempt-0/checkpoints/step-000000256-29cab5dbd9.pt",
+        "sha256": "12d7db92e957d471b2e71dcf8ec713b38954590217655fbec797996e30518ab4",
+        "size_bytes": 14855283,
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b2-t4"
+      },
+      {
+        "expected_sha256": "d2947e6fbc6d1e91f2edc95c7e9e6633d0fc8a3db8ebad0c54a95e743f6f4594",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b2-t4/attempt-0/checkpoints/step-000000001-88b87c0783.pt",
+        "sha256": "d2947e6fbc6d1e91f2edc95c7e9e6633d0fc8a3db8ebad0c54a95e743f6f4594",
+        "size_bytes": 14855283,
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b2-t4"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b2-t8/task.json",
+        "sha256": "7b2a26e486593f5cead286d13560fb17b71a876fb1fa313a051a99d77916c9bd",
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b2-t8"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b2-t8/attempt-0/result.json",
+        "sha256": "3ffdcbe87bb8408c7d64e942f4f78be2c1f418139a38e2eeb54e301b505643ce",
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b2-t8"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b2-t8/attempt-0/checkpoint.json",
+        "sha256": "d0319cd4a892eec62bb9d054583528bbdf4b1192a19ab979c5619d7f8c6aca3e",
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b2-t8"
+      },
+      {
+        "expected_sha256": "4692081479af3652310d21c282d873fee51ab953777b0e923ce52fe7c2e43c87",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b2-t8/attempt-0/checkpoints/step-000000256-d578958328.pt",
+        "sha256": "4692081479af3652310d21c282d873fee51ab953777b0e923ce52fe7c2e43c87",
+        "size_bytes": 14855283,
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b2-t8"
+      },
+      {
+        "expected_sha256": "3c8e551b1cf1c61ca3b4c656177b8fe2ce23fbc67441fdab3bb86ac83a00003d",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b2-t8/attempt-0/checkpoints/step-000000001-d51a1a27c6.pt",
+        "sha256": "3c8e551b1cf1c61ca3b4c656177b8fe2ce23fbc67441fdab3bb86ac83a00003d",
+        "size_bytes": 14855283,
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b2-t8"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b32-t1/task.json",
+        "sha256": "3b03fb3db95eb9865cc9fd3e2c6198d2a5d1a07c891a50aa92c152c9cd59fe99",
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b32-t1"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b32-t1/attempt-0/result.json",
+        "sha256": "d1ea4e5a323f830211812d819d6281ec719d633e6a8b1d33189300984215cacb",
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b32-t1"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b32-t1/attempt-0/checkpoint.json",
+        "sha256": "5d20082986193e751eb7ee29c53b66efffeb1f8a73d6b065625a735eb025a2ed",
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b32-t1"
+      },
+      {
+        "expected_sha256": "ba2a550a7b761bd43a77938af78f01f2ad135193c47c730a681ec93516b7bd36",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b32-t1/attempt-0/checkpoints/step-000000016-d5c641b3b1.pt",
+        "sha256": "ba2a550a7b761bd43a77938af78f01f2ad135193c47c730a681ec93516b7bd36",
+        "size_bytes": 53367987,
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b32-t1"
+      },
+      {
+        "expected_sha256": "553fb9dea7252bf8b45879c2d4f0332f43ba6af48176d2a0389d8c0bd68fbd74",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b32-t1/attempt-0/checkpoints/step-000000001-9fee3ac5d7.pt",
+        "sha256": "553fb9dea7252bf8b45879c2d4f0332f43ba6af48176d2a0389d8c0bd68fbd74",
+        "size_bytes": 53367923,
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b32-t1"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b32-t2/task.json",
+        "sha256": "2fa8f625493e8f513c232fea71e03cc3064617bb13a20c4e21a867f2d54cf51a",
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b32-t2"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b32-t2/attempt-0/result.json",
+        "sha256": "1dea72bd2e8f13493d247bdfd30549597112ee51ef46806b5acd5b7f0d00cfcf",
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b32-t2"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b32-t2/attempt-0/checkpoint.json",
+        "sha256": "6ef3152be5c3f4b03321d18e1edeb90333217ff8aea62fbbc58e1fc65850075c",
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b32-t2"
+      },
+      {
+        "expected_sha256": "c39689eaef1010368164722d10c4bea28260c1978549231f31c3a1bd8854ee62",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b32-t2/attempt-0/checkpoints/step-000000016-6c53606dfb.pt",
+        "sha256": "c39689eaef1010368164722d10c4bea28260c1978549231f31c3a1bd8854ee62",
+        "size_bytes": 53367987,
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b32-t2"
+      },
+      {
+        "expected_sha256": "da039d0ffd82e76574a410cf787a064cb7abebf82e7ecb2cd4213d51c7d4816e",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b32-t2/attempt-0/checkpoints/step-000000001-444694f7ff.pt",
+        "sha256": "da039d0ffd82e76574a410cf787a064cb7abebf82e7ecb2cd4213d51c7d4816e",
+        "size_bytes": 53367923,
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b32-t2"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b32-t4/task.json",
+        "sha256": "630d138febafe2af908a198a46d7b2483c80f540a1e5f6ce7c80559db59ad3a0",
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b32-t4"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b32-t4/attempt-0/result.json",
+        "sha256": "318156272b25af6162b8b6a3f08080279b14e2f7e886ef2860a4694d786d04f8",
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b32-t4"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b32-t4/attempt-0/checkpoint.json",
+        "sha256": "7b5ff6552ec0384b100addf993ba90e3de04452126d933ee1fdf69017c1d0970",
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b32-t4"
+      },
+      {
+        "expected_sha256": "c5453a4d3617d03f05d581f0c064d84c0ee4bb47ef44e5aacd40726294a08cef",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b32-t4/attempt-0/checkpoints/step-000000016-9fdab9dac3.pt",
+        "sha256": "c5453a4d3617d03f05d581f0c064d84c0ee4bb47ef44e5aacd40726294a08cef",
+        "size_bytes": 53367987,
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b32-t4"
+      },
+      {
+        "expected_sha256": "b5ef73584caf1012aa4df9268301a48813310ffbe202f8d1dda260fa008fad1a",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b32-t4/attempt-0/checkpoints/step-000000001-6f1135d578.pt",
+        "sha256": "b5ef73584caf1012aa4df9268301a48813310ffbe202f8d1dda260fa008fad1a",
+        "size_bytes": 53367923,
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b32-t4"
+      },
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b32-t8/task.json",
+        "sha256": "bcc673254c8296b4a643b85168dc24deb94f2c982ca270d7bbd3cc94fb2b8cb4",
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b32-t8"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b32-t8/attempt-0/result.json",
+        "sha256": "04f22c75a6125a0c256a9c3fa1428aa9d9d0d23797bd40a8b8d49c23325aaa39",
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b32-t8"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b32-t8/attempt-0/checkpoint.json",
+        "sha256": "8fa23cd25c1ee590b0b8c8079e6327f07ff207d3a8bc6e53c60e2bd582754e37",
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b32-t8"
+      },
+      {
+        "expected_sha256": "2bbc5a53ec582260f3321b50241cac503f52223ed7d556f8f6292a17210fc847",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b32-t8/attempt-0/checkpoints/step-000000016-af458bf2c9.pt",
+        "sha256": "2bbc5a53ec582260f3321b50241cac503f52223ed7d556f8f6292a17210fc847",
+        "size_bytes": 53367987,
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b32-t8"
+      },
+      {
+        "expected_sha256": "80f90c21140f9d7702a969856b2cb6a2d6452c20c26eefb35c9a7c8b61d47b4d",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/tasks/cpu-cal-exchange-b32-t8/attempt-0/checkpoints/step-000000001-f90923473d.pt",
+        "sha256": "80f90c21140f9d7702a969856b2cb6a2d6452c20c26eefb35c9a7c8b61d47b4d",
+        "size_bytes": 53367923,
+        "status": "passed",
+        "task_id": "cpu-cal-exchange-b32-t8"
+      }
+    ],
+    "retirement_manifest": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/checkpoint-retirement.json",
+      "status": "not_present"
+    },
+    "scope": "full SHA256/size against recorded generation/result identities; payload decoding and numerical replay are not performed"
+  },
+  "execution": {
+    "blocking_reason": null,
+    "counts": {
+      "completed": 16
+    },
+    "scheduler": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round/scheduler.json",
+      "sha256": "ac3f107050e1af7f8995afab511117cf2ca1784db725a8cd579cc0c9343bdd56",
+      "status": "passed"
+    },
+    "stage": "cpu-calibration",
+    "stage_b_gate": "closed",
+    "status": "completed"
+  },
+  "finding_counts": {},
+  "findings": [],
+  "finished_unix": 1795137889.1380222,
+  "inputs": {
+    "data_files": [
+      {
+        "expected_sha256": "2f4617d73b5dad4f6a343707382714738e8012432fda85d9f7e36f44b26a4e1a",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data/manifest.json",
+        "sha256": "2f4617d73b5dad4f6a343707382714738e8012432fda85d9f7e36f44b26a4e1a",
+        "size_bytes": 3505,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "122f912828ff701de8dd449b75a473fb03082a3ae0bb40dee50d5d90f5f23b1b",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/manifest.json",
+        "sha256": "122f912828ff701de8dd449b75a473fb03082a3ae0bb40dee50d5d90f5f23b1b",
+        "size_bytes": 4778,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "455f8baf28a3d0fe53517d83d96e14c6186122be85298b8811ddc693fb114936",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/tokenizer-training-document-ids.txt",
+        "sha256": "455f8baf28a3d0fe53517d83d96e14c6186122be85298b8811ddc693fb114936",
+        "size_bytes": 64935,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "830de1c70c9bbdcc3e778446f7c2f6f0fa4366874facbf4bcba2521f184ee7b7",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/tokenizer.json",
+        "sha256": "830de1c70c9bbdcc3e778446f7c2f6f0fa4366874facbf4bcba2521f184ee7b7",
+        "size_bytes": 550678,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "563dd9b280201439114c2a5069926a636fd0187ee24f2900731de10675553d22",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/train.documents.jsonl",
+        "sha256": "563dd9b280201439114c2a5069926a636fd0187ee24f2900731de10675553d22",
+        "size_bytes": 5500206,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "c6a3223cd23dc323ff83e80ecb556872e1a8313ee2afa4d27399e7b3bad71f3e",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/train.documents.npy",
+        "sha256": "c6a3223cd23dc323ff83e80ecb556872e1a8313ee2afa4d27399e7b3bad71f3e",
+        "size_bytes": 462016,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "4d71ceecd9c8ab317faa1e4a9f2a6cb546b62a9661571a9bc26063130199256f",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/train.tokens.bin",
+        "sha256": "4d71ceecd9c8ab317faa1e4a9f2a6cb546b62a9661571a9bc26063130199256f",
+        "size_bytes": 266448088,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "1f8b346d1d5b3c0187eb3b3d0be2c442a9b2c02eb65c022bfc8ede3067c1b366",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/validation.documents.jsonl",
+        "sha256": "1f8b346d1d5b3c0187eb3b3d0be2c442a9b2c02eb65c022bfc8ede3067c1b366",
+        "size_bytes": 107576,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "11910e02b71aee5e7812304cdc2c571d20ad46961f65fab783513553ad4322f0",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/validation.documents.npy",
+        "sha256": "11910e02b71aee5e7812304cdc2c571d20ad46961f65fab783513553ad4322f0",
+        "size_bytes": 9344,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "a79732e9bdb5b73697a21e484b03272b288e9a7915c271b33a4614919663fef5",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/validation.tokens.bin",
+        "sha256": "a79732e9bdb5b73697a21e484b03272b288e9a7915c271b33a4614919663fef5",
+        "size_bytes": 5451898,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d89e363ea004cf2a7ff10706281aba873443d1864217e20fcaa29fde9f8db24e",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data/selection.documents.npy",
+        "sha256": "d89e363ea004cf2a7ff10706281aba873443d1864217e20fcaa29fde9f8db24e",
+        "size_bytes": 4752,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "863e4d1d145e77d6efc5cb065c193ff6eb8de9f45240fdbc96c912fb48ad4a19",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data/selection.documents.jsonl",
+        "sha256": "863e4d1d145e77d6efc5cb065c193ff6eb8de9f45240fdbc96c912fb48ad4a19",
+        "size_bytes": 53908,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d13cadf05c613403380b3d270945e8e13a9dfe2194fdb244da810206b91a9d71",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data/confirmation.documents.npy",
+        "sha256": "d13cadf05c613403380b3d270945e8e13a9dfe2194fdb244da810206b91a9d71",
+        "size_bytes": 4720,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "a4e6072edd71a7805f338f8d12e2b84df95154f993e075b5f09c3d77154a26b6",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data/confirmation.documents.jsonl",
+        "sha256": "a4e6072edd71a7805f338f8d12e2b84df95154f993e075b5f09c3d77154a26b6",
+        "size_bytes": 53668,
+        "status": "passed"
+      }
+    ],
+    "scope": "full byte hashes; no data preparation, import of training code, or device initialization",
+    "source_files": [
+      {
+        "expected_sha256": "8208b80d75d5de0a39089a54db7a24924819bb81a1ed6a61adaac931a2fddf95",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/__init__.py",
+        "sha256": "8208b80d75d5de0a39089a54db7a24924819bb81a1ed6a61adaac931a2fddf95",
+        "size_bytes": 51,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "9e9d4b4e3daee75ce71e215400faac71783704eed40b328c5df3eff8cca878cb",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/audit3.py",
+        "sha256": "9e9d4b4e3daee75ce71e215400faac71783704eed40b328c5df3eff8cca878cb",
+        "size_bytes": 30548,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "5ae4145270d63aaba85bf3f3aa56224d9c642e7bd1b1e75df74100e6f8d5242b",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/catalog3.py",
+        "sha256": "5ae4145270d63aaba85bf3f3aa56224d9c642e7bd1b1e75df74100e6f8d5242b",
+        "size_bytes": 34728,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d327409f049891273c315c654870a6cbdda8b1162307cabe100225c11ddbcbdd",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/data.py",
+        "sha256": "d327409f049891273c315c654870a6cbdda8b1162307cabe100225c11ddbcbdd",
+        "size_bytes": 16851,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "da91d2df3a59d840bdafe181721f579ce1a8d8a4203b5872a700a812e2587cbe",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/data3.py",
+        "sha256": "da91d2df3a59d840bdafe181721f579ce1a8d8a4203b5872a700a812e2587cbe",
+        "size_bytes": 9913,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d81bf90d3d85762f355c71375f47145aceff4e06167b95749f738372fbf3bcea",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/diagnose_shannon.py",
+        "sha256": "d81bf90d3d85762f355c71375f47145aceff4e06167b95749f738372fbf3bcea",
+        "size_bytes": 7479,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "b0b69bf919c04629c8f38bec075753e9d6775eb74cc50e6ddd272bd705f05dcc",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/gate3.py",
+        "sha256": "b0b69bf919c04629c8f38bec075753e9d6775eb74cc50e6ddd272bd705f05dcc",
+        "size_bytes": 22744,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "dacffdb2c7da0e030a67244c66ba31d38a0bb89b912e24afbc5710c4f4634859",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/inspect3.py",
+        "sha256": "dacffdb2c7da0e030a67244c66ba31d38a0bb89b912e24afbc5710c4f4634859",
+        "size_bytes": 3693,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d846049973ea6c7a952353b8a4ed25e2d89e9a67741e3c16e3dd67d39e802170",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/io.py",
+        "sha256": "d846049973ea6c7a952353b8a4ed25e2d89e9a67741e3c16e3dd67d39e802170",
+        "size_bytes": 1296,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "42ac16fa4353d47898dc0d40fbb4b689c50856f06007ccf43f887e65cc51becb",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/models.py",
+        "sha256": "42ac16fa4353d47898dc0d40fbb4b689c50856f06007ccf43f887e65cc51becb",
+        "size_bytes": 11109,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "07f6c919215d1bc79fb433d8120c133e4ff5173b7ac192b018d64819498e9b71",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/models3.py",
+        "sha256": "07f6c919215d1bc79fb433d8120c133e4ff5173b7ac192b018d64819498e9b71",
+        "size_bytes": 25379,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "680567ef8fed0835f62d890b9696120a1a6e3edb323f0b88437805171c2fc834",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/plan.py",
+        "sha256": "680567ef8fed0835f62d890b9696120a1a6e3edb323f0b88437805171c2fc834",
+        "size_bytes": 7015,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "a0452bf80628baf4cc6c02601200f2ea22b3b3218f611dfcdfaeb2f909f594b4",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/plan2.py",
+        "sha256": "a0452bf80628baf4cc6c02601200f2ea22b3b3218f611dfcdfaeb2f909f594b4",
+        "size_bytes": 10629,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "cd8841d99e58605322a80f5e898bf299fce129bacc8c8b42191398aabbbe10a5",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/preflight3.py",
+        "sha256": "cd8841d99e58605322a80f5e898bf299fce129bacc8c8b42191398aabbbe10a5",
+        "size_bytes": 22793,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "19b9736bbd43e21e4faf8590ff8b4d5033630a35b4dcd9d41f68ec6076f26056",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/prepare3.py",
+        "sha256": "19b9736bbd43e21e4faf8590ff8b4d5033630a35b4dcd9d41f68ec6076f26056",
+        "size_bytes": 10415,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "fcb5446da851e35b478988b4d325ff3b09bfcc41a0134e3c1635b710418b3bf7",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/prepare_campaign3.py",
+        "sha256": "fcb5446da851e35b478988b4d325ff3b09bfcc41a0134e3c1635b710418b3bf7",
+        "size_bytes": 18709,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "9b87332e2d4ca021b0adffb44e19d9eb5d477cf27eaf068042730f2ab20f2c00",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/report.py",
+        "sha256": "9b87332e2d4ca021b0adffb44e19d9eb5d477cf27eaf068042730f2ab20f2c00",
+        "size_bytes": 38257,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "5a5cb8eefe33f5fd92d6e9aaa89b833f631b778a73edb18bb48acc3c686848ce",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/report2.py",
+        "sha256": "5a5cb8eefe33f5fd92d6e9aaa89b833f631b778a73edb18bb48acc3c686848ce",
+        "size_bytes": 53533,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "5633f35833da5d62525535f9953d33dc1d6d98499bfe54d3de750b26fe554571",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/report3.py",
+        "sha256": "5633f35833da5d62525535f9953d33dc1d6d98499bfe54d3de750b26fe554571",
+        "size_bytes": 29393,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "50c656b6106487d1d679b72861fc45a1cf0540fe3cf6fd49752d2115f8141458",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/round3.py",
+        "sha256": "50c656b6106487d1d679b72861fc45a1cf0540fe3cf6fd49752d2115f8141458",
+        "size_bytes": 35233,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "dbd209fe22f252bc88aa13f27b616f0cb34bcaf468b03e85751edca6f2b9d7b7",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/scheduler.py",
+        "sha256": "dbd209fe22f252bc88aa13f27b616f0cb34bcaf468b03e85751edca6f2b9d7b7",
+        "size_bytes": 64519,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "ba12bdd1cf439ac07881a6d540a39d7ebe17aab40f3ea41eb330123998a40fef",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/scheduler3.py",
+        "sha256": "ba12bdd1cf439ac07881a6d540a39d7ebe17aab40f3ea41eb330123998a40fef",
+        "size_bytes": 29789,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "9607cb8ac5f29af0e43a7de92eb36e0a4a0801eac1e493da972aba1df4360787",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/selection.py",
+        "sha256": "9607cb8ac5f29af0e43a7de92eb36e0a4a0801eac1e493da972aba1df4360787",
+        "size_bytes": 6475,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "15e08a2038b9d5270269a46e8cf4acc656868018a9e47cbac99854a9a1faa7ae",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/trace_shannon.py",
+        "sha256": "15e08a2038b9d5270269a46e8cf4acc656868018a9e47cbac99854a9a1faa7ae",
+        "size_bytes": 9881,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d79a79f370babe4302fb7c2976d424425978047d32255d14b595cb6eeb2528ff",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/validate_shannon_capture.py",
+        "sha256": "d79a79f370babe4302fb7c2976d424425978047d32255d14b595cb6eeb2528ff",
+        "size_bytes": 11094,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "542b1f5b88389e902f2aedb19eb368321152f1fff012f66d553cfc0cccf349d8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/worker.py",
+        "sha256": "542b1f5b88389e902f2aedb19eb368321152f1fff012f66d553cfc0cccf349d8",
+        "size_bytes": 46804,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "a5e9b27350521ef7bcd929f001add25679ed7e26482287c7937340cf30d4f3a8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/worker3.py",
+        "sha256": "a5e9b27350521ef7bcd929f001add25679ed7e26482287c7937340cf30d4f3a8",
+        "size_bytes": 42154,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/__init__.py",
+        "sha256": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195",
+        "size_bytes": 805,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "004051c7178380b270e2cce020661bd144ed9afd78c98271d9e5c253beb9d65f",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/allocation.py",
+        "sha256": "004051c7178380b270e2cce020661bd144ed9afd78c98271d9e5c253beb9d65f",
+        "size_bytes": 24861,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "58602a6211632de9db1632c53cbcbf6b9890360ee4d0266d32bb536b1bec2214",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/attention.py",
+        "sha256": "58602a6211632de9db1632c53cbcbf6b9890360ee4d0266d32bb536b1bec2214",
+        "size_bytes": 32394,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/checkpoint.py",
+        "sha256": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+        "size_bytes": 3864,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "2b890c0ae9eac381aa3ab9726eb386339345f62dc7b3e27433ecd5a0b1c0299f",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/config.py",
+        "sha256": "2b890c0ae9eac381aa3ab9726eb386339345f62dc7b3e27433ecd5a0b1c0299f",
+        "size_bytes": 9677,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/ffn_packing.py",
+        "sha256": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449",
+        "size_bytes": 3257,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/grouped_linear.py",
+        "sha256": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1",
+        "size_bytes": 6143,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "6ce42c759d8bfa9843c006d0bbda31ad1bc0602b0c9584718d73959bc11a3e3b",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/kv.py",
+        "sha256": "6ce42c759d8bfa9843c006d0bbda31ad1bc0602b0c9584718d73959bc11a3e3b",
+        "size_bytes": 9397,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/layout.py",
+        "sha256": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+        "size_bytes": 1392,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "1911afe3b66b199eb7e066ea57c5900fead1e390ebb5894818d423284850255e",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/model.py",
+        "sha256": "1911afe3b66b199eb7e066ea57c5900fead1e390ebb5894818d423284850255e",
+        "size_bytes": 26054,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/parameters.py",
+        "sha256": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc",
+        "size_bytes": 16680,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "0f77def73da20f467756e5dc1f701f25942565f762e82be5d23218ecee39d05f",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/placement.py",
+        "sha256": "0f77def73da20f467756e5dc1f701f25942565f762e82be5d23218ecee39d05f",
+        "size_bytes": 24247,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/placement_ownership.py",
+        "sha256": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+        "size_bytes": 7434,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/precision.py",
+        "sha256": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+        "size_bytes": 3825,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "43f72f3f1a55263b8d1185a41f0bf2711b7e1179cd664710ced08e70563b45c4",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/reception.py",
+        "sha256": "43f72f3f1a55263b8d1185a41f0bf2711b7e1179cd664710ced08e70563b45c4",
+        "size_bytes": 4893,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/region.py",
+        "sha256": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+        "size_bytes": 3805,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "514ee30c5077d416c02cec81380280eb45509f20922a0f812657b93d2d8b7e80",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/region_batch.py",
+        "sha256": "514ee30c5077d416c02cec81380280eb45509f20922a0f812657b93d2d8b7e80",
+        "size_bytes": 7509,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/region_execution.py",
+        "sha256": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950",
+        "size_bytes": 6144,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "fd082f035185d04af6bc3ba27b949a8f065ccdf62f8b32a1b442accbfa6f2b6d",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/region_placement.py",
+        "sha256": "fd082f035185d04af6bc3ba27b949a8f065ccdf62f8b32a1b442accbfa6f2b6d",
+        "size_bytes": 16586,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "21b696170e73ae28a3238a4db7dd9b613d92a2b0eb88610df74a5d01a8006c62",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/scaled_arithmetic.py",
+        "sha256": "21b696170e73ae28a3238a4db7dd9b613d92a2b0eb88610df74a5d01a8006c62",
+        "size_bytes": 4140,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/ssd.py",
+        "sha256": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+        "size_bytes": 12466,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/ssd_memory.py",
+        "sha256": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2",
+        "size_bytes": 10412,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/topology.py",
+        "sha256": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+        "size_bytes": 11283,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/topology_hb.py",
+        "sha256": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06",
+        "size_bytes": 6204,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "6c993386c66f611c371c75e2e66a52dec7954c4fb9078819aab23f13d6c76d88",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/weighted_mean.py",
+        "sha256": "6c993386c66f611c371c75e2e66a52dec7954c4fb9078819aab23f13d6c76d88",
+        "size_bytes": 8236,
+        "status": "passed"
+      }
+    ]
+  },
+  "interpretation": "passed means observed terminal release and recorded file integrity only; execution failure, numerical/discrete validity, recovery trajectory and learning remain separate conclusions",
+  "launch_binding": [
+    {
+      "expected_sha256": "d3bbe3ee0dd26fa66235260e9f905b32c57daa010a86e778f1d460c32e9feffa",
+      "path": ".local/pilot-r3/cpu-calibration-r01/prepared.json",
+      "sha256": "d3bbe3ee0dd26fa66235260e9f905b32c57daa010a86e778f1d460c32e9feffa",
+      "size_bytes": 21789,
+      "status": "passed"
+    },
+    {
+      "expected_sha256": "f1128689b76d9c077a5e51a4c5c312b9ae8ad7837febae43d5dad696407a8d67",
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/launch.sh",
+      "sha256": "f1128689b76d9c077a5e51a4c5c312b9ae8ad7837febae43d5dad696407a8d67",
+      "size_bytes": 702,
+      "status": "passed"
+    },
+    {
+      "expected_sha256": "bc113b1d23570d91795b9d6ac0a2c5e8bd7ef9af5e78784cd47f229ceb06f51d",
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/plan.json",
+      "sha256": "bc113b1d23570d91795b9d6ac0a2c5e8bd7ef9af5e78784cd47f229ceb06f51d",
+      "size_bytes": 200873,
+      "status": "passed"
+    }
+  ],
+  "lifecycle": {
+    "cgroup": {
+      "members": [],
+      "path": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-cpu-calibration-r01.service",
+      "released": true,
+      "status": "absent"
+    },
+    "processes": {
+      "cgroup_members_unobservable_in_process_snapshot": [],
+      "errors": [],
+      "gone_count": 17,
+      "live_processes": [],
+      "main_pid": 0,
+      "malformed_identities": [],
+      "recorded_identity_count": 17,
+      "released": true,
+      "reused_pids": [],
+      "status": "released",
+      "zombies": []
+    },
+    "queue": {
+      "attempts": [],
+      "released": true,
+      "runtime_directory": "/run/user/1003",
+      "status": "not_requested"
+    },
+    "status": "terminal",
+    "systemd": {
+      "expected_cgroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-cpu-calibration-r01.service",
+      "expected_cgroup_basis": "observed user slice + exact service unit name",
+      "properties": {
+        "ActiveState": "inactive",
+        "ControlGroup": "",
+        "ExecMainCode": "0",
+        "ExecMainStatus": "0",
+        "InvocationID": "",
+        "LoadState": "not-found",
+        "MainPID": "0",
+        "Result": "success",
+        "Slice": "",
+        "SubState": "dead"
+      },
+      "return_code": 0,
+      "status": "observed",
+      "unit": "tide-pilot-r3-cpu-calibration-r01.service"
+    }
+  },
+  "prepared": {
+    "path": ".local/pilot-r3/cpu-calibration-r01/prepared.json",
+    "sha256": "d3bbe3ee0dd26fa66235260e9f905b32c57daa010a86e778f1d460c32e9feffa",
+    "status": "passed"
+  },
+  "round": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/cpu-calibration-r01/round",
+  "schema": "pilot-r3-terminal-audit-v1",
+  "started_unix": 1795137887.9656186,
+  "status": "passed",
+  "unit": "tide-pilot-r3-cpu-calibration-r01.service"
+}

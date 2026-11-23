@@ -1,0 +1,223 @@
+{
+  "budget_remaining_at_review": {
+    "budget_ledger": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/budget.json",
+    "deadline_unix": 1797698913.9318287,
+    "max_device_seconds": 25920000,
+    "observed_unix": 1795234733.9823184,
+    "remaining_device_seconds": 25523911.548081707,
+    "remaining_preparation_device_seconds": 152967.1627931781,
+    "remaining_preparation_processed_tokens": 47196416,
+    "remaining_wall_seconds": 2464179.949510336,
+    "started_unix": 1795106913.9318287
+  },
+  "current_stage_a": {
+    "counts": {
+      "completed": 335,
+      "failed": 28,
+      "pending": 214,
+      "stopped_budget": 42
+    },
+    "lifecycle": {
+      "cgroup": true,
+      "processes": true,
+      "queue": true
+    },
+    "status": "a_blocked_needs_repair",
+    "unit": "tide-pilot-r3-campaign-r10.service"
+  },
+  "foundation": {
+    "published_head": "17c7d6755eea83c98fa984bc1a55230b9817eaa4",
+    "python_files_digest": "9b97d42f38073d8b7ca6befee01ad79939b27a3505ab0616e9edb96fca8d25fa"
+  },
+  "inputs": {
+    "campaign_plan": {
+      "path": ".local/pilot-r3/campaign-r10/campaign-plan.json",
+      "sha256": "68c15b0482ab3e8d683584e512f61fdb7c14c76712267f52746383b9c67c08d9"
+    },
+    "foundation_acceptance": {
+      "path": "docs/evidence/pilot-r3-r10-foundation-kv-acceptance.json",
+      "sha256": "23c2b2089e46016a4c188b2bf0c3cc5bce1a5ef5b88621c18401ccc68769fc17"
+    },
+    "scheduler": {
+      "path": ".local/pilot-r3/campaign-r10/round/scheduler.json",
+      "sha256": "a1929b6cb3524d7d93d707bac6efde1753f515317771f2b9c9dd5e8652fb6aad"
+    },
+    "selected": {
+      "path": ".local/pilot-r3/campaign-r10/round/selected.json",
+      "sha256": "cf3c4d1b15e4fa82739f4c332b5dfe28182c296aaee819471aac75a9ddf6d6b9"
+    },
+    "terminal_audit": {
+      "path": "docs/evidence/pilot-r3-campaign-r10-terminal-audit.json",
+      "sha256": "8d0f328a5b64b33a1d3011dc7d0a71702ae20be5cd903401e458932e6dd6174c"
+    }
+  },
+  "observed_local": "2026-11-21T12:18:53+08:00",
+  "schema": "pilot-r3-stage-a-followup-review-v1",
+  "stage_a_scope": {
+    "already_selected": 26,
+    "exposed_subject_ids": [
+      "exchange-d128-k-base-4aac2dcb10",
+      "exchange-d128-k-capacity-74eba502b1",
+      "exchange-d128-k-independent-d3d8980f6a",
+      "exchange-d128-k-narrowwide-a8b4f1078d",
+      "exchange-d128-k-pool-25a642ea44",
+      "exchange-d128-k-shannon-b4f9572c1e",
+      "exchange-d128-s-base-0f1647288b",
+      "exchange-d128-s-capacity-32268b8664",
+      "exchange-d128-s-independent-9e3c5ca87d",
+      "exchange-d128-s-narrowwide-5d192e0d6d",
+      "exchange-d128-s-pool-0f81d87b81",
+      "exchange-d128-s-shannon-4274ad3518",
+      "exchange-d128-x-base-2ab17f45cd",
+      "exchange-d128-x-capacity-faa7acc649",
+      "exchange-d128-x-independent-1edb3a093d",
+      "exchange-d128-x-narrowwide-f2f75f7e7f",
+      "exchange-d128-x-pool-5c0c9ad46d",
+      "exchange-d128-x-shannon-71abfc07a5",
+      "exchange-d128-x_reverse-base-817dc5b466",
+      "exchange-d128-x_reverse-capacity-e1bd082588",
+      "exchange-d128-x_reverse-independent-9faca6385c",
+      "exchange-d128-x_reverse-narrowwide-a276d01a16",
+      "exchange-d128-x_reverse-pool-26a8635043",
+      "exchange-d128-x_reverse-shannon-86ba13b249",
+      "fc-d128-k-ffn1-e8be37f2b7",
+      "fc-d128-k-shared-f9498953c0",
+      "fc-d128-s-base-5c4809c97b",
+      "fc-d128-s-depth3-fbc6080d7d",
+      "fc-d128-s-ffn1-f45d256eab",
+      "fc-d128-s-shared-cbe5e2ff4e",
+      "fc-d256-k-base-0e3021c331",
+      "fc-d256-k-depth3-2f03e71304",
+      "fc-d256-k-ffn1-2b14f30d4a",
+      "fc-d256-k-shared-b862e34fe3",
+      "fc-d256-s-base-7e5a1b3415",
+      "fc-d256-s-depth3-91e5cfbe4e",
+      "fc-d256-s-ffn1-ca290fd261",
+      "fc-d256-s-shared-6af703487d",
+      "lattice-d128-k-base-78dbac086a",
+      "lattice-d128-k-depth2-87732fbcda",
+      "lattice-d128-k-ffn2-848b8b0ddd",
+      "lattice-d128-k-layershared-91f7652530",
+      "lattice-d128-k-memoryshared-ce62b8f81b",
+      "lattice-d128-k-nodes4-1f22ba3272",
+      "lattice-d128-k-receive128-ee1edca248",
+      "lattice-d128-k-receive64-c05227ce86",
+      "lattice-d128-s-base-0a353237f5",
+      "lattice-d128-s-depth2-00b9531d37",
+      "lattice-d128-s-ffn2-5c6ff7f21c",
+      "lattice-d128-s-layershared-6312958b4e",
+      "lattice-d128-s-memoryshared-4a1c5168a4",
+      "lattice-d128-s-nodes4-87a2e4a9d9",
+      "lattice-d128-s-receive128-1ede806cba",
+      "lattice-d128-s-receive64-cd47a49acb",
+      "lattice-d256-k-base-416b5585a2",
+      "lattice-d256-k-depth2-c24a34d6ed",
+      "lattice-d256-k-ffn2-e4a5b07a08",
+      "lattice-d256-k-layershared-1bb62cd81d",
+      "lattice-d256-k-memoryshared-719a561efa",
+      "lattice-d256-k-nodes4-910f84829b",
+      "lattice-d256-k-receive128-959d85255b",
+      "lattice-d256-k-receive64-c3e271805b",
+      "lattice-d256-s-base-7f0fca324e",
+      "lattice-d256-s-depth2-8bfed52ede",
+      "lattice-d256-s-ffn2-5372474eb5",
+      "lattice-d256-s-nodes4-3f686fda6a",
+      "multiscale_settle-d128-k-group5-b152141dc5",
+      "multiscale_settle-d128-k-mixed9-e96a17a14d",
+      "multiscale_settle-d128-k-singleton7-43b1716b2d",
+      "multiscale_settle-d128-s-group5-e393757acf",
+      "multiscale_settle-d128-s-mixed9-5bc345edf5",
+      "multiscale_settle-d128-s-singleton7-ffd53c4df7",
+      "multiscale_settle-d128-x-group5-4380cdb1f8",
+      "multiscale_settle-d128-x-mixed9-70e3fa0199",
+      "multiscale_settle-d128-x-singleton7-281f04cf8c",
+      "multiscale_settle-d128-x_reverse-group5-5850ce5a6d",
+      "multiscale_settle-d128-x_reverse-mixed9-35343ff0aa",
+      "multiscale_settle-d128-x_reverse-singleton7-655942fdd4",
+      "multiscale_timed-d128-k-group5-b74cd801f3",
+      "multiscale_timed-d128-k-mixed9-b193254132",
+      "multiscale_timed-d128-k-singleton7-eaab60796a",
+      "multiscale_timed-d128-s-group5-37506fa4ee",
+      "multiscale_timed-d128-s-mixed9-542e33dbf6",
+      "multiscale_timed-d128-s-singleton7-139de547de",
+      "multiscale_timed-d128-x-group5-4b26d12571",
+      "multiscale_timed-d128-x-mixed9-ae4ffdec56",
+      "multiscale_timed-d128-x-singleton7-8ac3511b6a",
+      "multiscale_timed-d128-x_reverse-group5-f83e81e4af",
+      "multiscale_timed-d128-x_reverse-mixed9-99820c3100",
+      "multiscale_timed-d128-x_reverse-singleton7-2f58b0a0f6"
+    ],
+    "prospective_recipe_check": {
+      "canonical_prospective_subjects_sha256": "774529bc86f126044bc6cd8f6bef143b8acd6e9c6d0aa96637578765e51eed49"
+    },
+    "subject_count": 270
+  },
+  "stage_b_gate": "closed",
+  "worker_and_checkpoint_review": {
+    "fault_task_id": "multiscale_timed-d128-k-singleton7-eaab60796a-a1-2026112001-r2",
+    "official_checkpoint": {
+      "path": ".local/pilot-r3/campaign-r10/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a1-2026112001-r2/attempt-0/checkpoints/step-000001126-2ef7b622be.pt",
+      "sha256": "40c7d74085da9ef0c834ccda550b8320855d9ab3ac3e9a30cbbf5b67ff7de633",
+      "step": 1126
+    },
+    "terminal_audit_findings": [
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r10/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a1-2026112001-r5/attempt-0/result.json",
+        "reason": "shared_worker_result_binding_mismatch",
+        "sha256": "e6359503989201bb6a7b33c253450ded6efb835141cce4ac56cf91759a3b903d",
+        "status": "mismatch",
+        "task_id": "multiscale_timed-d128-k-singleton7-eaab60796a-a1-2026112001-r5"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r10/round/tasks/multiscale_timed-d128-k-mixed9-b193254132-a1-2026112001-r3/attempt-0/result.json",
+        "reason": "shared_worker_result_binding_mismatch",
+        "sha256": "ffdae74af38570184f7e60ad599ee83d74035240118745f91e018fdb1d2c455f",
+        "status": "mismatch",
+        "task_id": "multiscale_timed-d128-k-mixed9-b193254132-a1-2026112001-r3"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r10/round/tasks/exchange-d128-s-capacity-32268b8664-a2-2026112001-r1/attempt-0/result.json",
+        "reason": "shared_worker_result_binding_mismatch",
+        "sha256": "0cd8fee49fc73c17432d4a867618e06181da0ded9336664d3b9cca52e5b02402",
+        "status": "mismatch",
+        "task_id": "exchange-d128-s-capacity-32268b8664-a2-2026112001-r1"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r10/round/tasks/exchange-d128-k-capacity-74eba502b1-a3-2026112001-r2/attempt-0/result.json",
+        "reason": "shared_worker_result_binding_mismatch",
+        "sha256": "9d50018b5c7ddaf2b86ab5103b3cacbd1ab1fdb048a8b143cc546e34e98ae5ed",
+        "status": "mismatch",
+        "task_id": "exchange-d128-k-capacity-74eba502b1-a3-2026112001-r2"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r10/round/tasks/multiscale_timed-d128-x-group5-4b26d12571-a1-2026112002-r0/attempt-0/result.json",
+        "reason": "shared_worker_result_binding_mismatch",
+        "sha256": "8afee318b4da108654702f1ea3af42733f87d7ad81f9ad81ad3d07b55c4ac4e9",
+        "status": "mismatch",
+        "task_id": "multiscale_timed-d128-x-group5-4b26d12571-a1-2026112002-r0"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r10/round/tasks/multiscale_timed-d128-x-group5-4b26d12571-a1-2026112001-r1/attempt-0/result.json",
+        "reason": "shared_worker_result_binding_mismatch",
+        "sha256": "e5e6631d5823cf8f880f3269a8b1f8d05df599923871b66e9f74adda3ad12793",
+        "status": "mismatch",
+        "task_id": "multiscale_timed-d128-x-group5-4b26d12571-a1-2026112001-r1"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r10/round/tasks/multiscale_timed-d128-x-group5-4b26d12571-a1-2026112001-r2/attempt-0/result.json",
+        "reason": "shared_worker_result_binding_mismatch",
+        "sha256": "e9d449e034aab5ce034f100dfec5b07224b1c970e5f59fff19bc355462889f71",
+        "status": "mismatch",
+        "task_id": "multiscale_timed-d128-x-group5-4b26d12571-a1-2026112001-r2"
+      }
+    ],
+    "unclosed_handling": "Keep placeholder results, journals and latest checkpoint bytes at source. Continue from the latest checkpoint if stage-start evidence is bound. Otherwise resume the original rung entrance and reserve its full evaluation budget."
+  }
+}

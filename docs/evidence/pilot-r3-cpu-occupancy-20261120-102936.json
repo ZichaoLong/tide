@@ -1,0 +1,141 @@
+{
+  "actual_worker_counts_end": {
+    "cpu": 7,
+    "npu": 11
+  },
+  "actual_worker_counts_start": {
+    "cpu": 10,
+    "npu": 11
+  },
+  "configured_threads_end": {
+    "cpu": 28,
+    "npu": 44
+  },
+  "cpu_workers_core_equivalent": 20.862142462424444,
+  "logical_cpus": 320,
+  "machine_busy_core_equivalent": 57.82221944438422,
+  "npu_workers_host_core_equivalent": 12.946855820554752,
+  "observed_unix": 1795141776.6019838,
+  "project_surviving_processes_core_equivalent": 36.817185595230846,
+  "round": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/round",
+  "schema": "pilot-r3-cpu-occupancy-observation-v1",
+  "scope": "read-only /proc CPU-time deltas; configured compute threads are not exclusive occupied cores; tasks exiting inside window are excluded from surviving-process totals; global busy includes other projects",
+  "service": "tide-pilot-r3-campaign-r04.service",
+  "state_end": {
+    "blocking_reason": null,
+    "counts": {
+      "completed": 123,
+      "running": 21
+    },
+    "stage": "a1",
+    "status": "running"
+  },
+  "state_start": {
+    "blocking_reason": null,
+    "counts": {
+      "completed": 121,
+      "running": 23
+    },
+    "stage": "a1",
+    "status": "running"
+  },
+  "task_records_end": {
+    "cpu:completed": 42,
+    "cpu:running": 8,
+    "npu:0:completed": 81,
+    "npu:0:running": 13
+  },
+  "window_seconds": 20.085185438394547,
+  "worker_samples": {
+    "exchange-d64-k-narrowwide-fdc0f72367-a1-2026112001-r1": {
+      "backend": "cpu",
+      "configured_threads": 4,
+      "cpu_core_equivalent": 3.0226258147434204
+    },
+    "exchange-d64-k-narrowwide-fdc0f72367-a1-2026112001-r2": {
+      "backend": "cpu",
+      "configured_threads": 4,
+      "cpu_core_equivalent": 3.045030387575483
+    },
+    "exchange-d64-k-narrowwide-fdc0f72367-a1-2026112002-r2": {
+      "backend": "cpu",
+      "configured_threads": 4,
+      "cpu_core_equivalent": 3.065941322218742
+    },
+    "multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112001-r1": {
+      "backend": "cpu",
+      "configured_threads": 4,
+      "cpu_core_equivalent": 2.933505402811437
+    },
+    "multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112001-r2": {
+      "backend": "cpu",
+      "configured_threads": 4,
+      "cpu_core_equivalent": 2.922054176697271
+    },
+    "multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112002-r1": {
+      "backend": "cpu",
+      "configured_threads": 4,
+      "cpu_core_equivalent": 2.9240456942823436
+    },
+    "multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112002-r2": {
+      "backend": "cpu",
+      "configured_threads": 4,
+      "cpu_core_equivalent": 2.9489396640957466
+    },
+    "multiscale_timed-d64-k-group5-716f8264e2-a1-2026112001-r0": {
+      "backend": "npu",
+      "configured_threads": 4,
+      "cpu_core_equivalent": 1.156075958134446
+    },
+    "multiscale_timed-d64-k-group5-716f8264e2-a1-2026112001-r1": {
+      "backend": "npu",
+      "configured_threads": 4,
+      "cpu_core_equivalent": 1.094836792393474
+    },
+    "multiscale_timed-d64-k-group5-716f8264e2-a1-2026112001-r2": {
+      "backend": "npu",
+      "configured_threads": 4,
+      "cpu_core_equivalent": 1.1267010737546301
+    },
+    "multiscale_timed-d64-k-group5-716f8264e2-a1-2026112001-r3": {
+      "backend": "npu",
+      "configured_threads": 4,
+      "cpu_core_equivalent": 1.2546560785955228
+    },
+    "multiscale_timed-d64-k-group5-716f8264e2-a1-2026112001-r4": {
+      "backend": "npu",
+      "configured_threads": 4,
+      "cpu_core_equivalent": 1.2422090936888213
+    },
+    "multiscale_timed-d64-k-group5-716f8264e2-a1-2026112001-r5": {
+      "backend": "npu",
+      "configured_threads": 4,
+      "cpu_core_equivalent": 1.2730776162574413
+    },
+    "multiscale_timed-d64-k-group5-716f8264e2-a1-2026112002-r0": {
+      "backend": "npu",
+      "configured_threads": 4,
+      "cpu_core_equivalent": 1.054508561295761
+    },
+    "multiscale_timed-d64-k-group5-716f8264e2-a1-2026112002-r1": {
+      "backend": "npu",
+      "configured_threads": 4,
+      "cpu_core_equivalent": 1.1023049833374952
+    },
+    "multiscale_timed-d64-k-group5-716f8264e2-a1-2026112002-r2": {
+      "backend": "npu",
+      "configured_threads": 4,
+      "cpu_core_equivalent": 1.0818919280905044
+    },
+    "multiscale_timed-d64-k-group5-716f8264e2-a1-2026112002-r3": {
+      "backend": "npu",
+      "configured_threads": 4,
+      "cpu_core_equivalent": 1.2591369931619354
+    },
+    "multiscale_timed-d64-k-group5-716f8264e2-a1-2026112002-r4": {
+      "backend": "npu",
+      "configured_threads": 4,
+      "cpu_core_equivalent": 1.301456741844721
+    }
+  }
+}

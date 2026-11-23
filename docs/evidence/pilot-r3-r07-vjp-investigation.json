@@ -1,0 +1,639 @@
+{
+  "artifact_references": {
+    "attention-capture-result.json": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/diagnostic-r07-vjp-r01/attention-capture-result.json",
+      "sha256": "372f2a7a473905f1e9d2d7d1c7801d979a458a89c41c9214a73027c7aac99a2d"
+    },
+    "capture-result.json": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/diagnostic-r07-vjp-r01/capture-result.json",
+      "sha256": "27b0d417689c23b668f89c8e3716f47cad1cfa131fe4a1664fa8355b2a058486"
+    },
+    "capture.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/diagnostic-r07-vjp-r01/capture.py",
+      "sha256": "0ec1b71bcf54e16a21cb2d94d584bdb7c1130cab9b250e7fdd2330d6ac1013ad"
+    },
+    "capture_attention.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/diagnostic-r07-vjp-r01/capture_attention.py",
+      "sha256": "9224b57d3bebbe844c22f5de8a4c312999debfd02588e221a42ad9c9a14b141f"
+    },
+    "failing-attention.pt": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/diagnostic-r07-vjp-r01/failing-attention.pt",
+      "sha256": "9ace0106ee8510747907354844176d51502a1ee79aa4eeaa8c2235ad05992664"
+    },
+    "failing-membership.pt": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/diagnostic-r07-vjp-r01/failing-membership.pt",
+      "sha256": "1ac04278aa55e10994b16c9d327021a860064cc263e49e305417fcc2414629c9"
+    },
+    "failing-vjp.pt": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/diagnostic-r07-vjp-r01/failing-vjp.pt",
+      "sha256": "187e3e360a0b39d5d353b489dffd8d2d97f8f910a58e83a10129a58b41c19c44"
+    },
+    "first-nan-node.pt": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/diagnostic-r07-vjp-r01/first-nan-node.pt",
+      "sha256": "b5a1560ee0b47b1dc78adaa429e372733c619bc7f8d10edaf14360053fdec37e"
+    },
+    "first-nonfinite-node.pt": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/diagnostic-r07-vjp-r01/first-nonfinite-node.pt",
+      "sha256": "efa4774330677ea2d073d80a313b91fbd9336d69c694f7b15406d7f5ac10645f"
+    },
+    "full-model-result.json": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/diagnostic-r07-vjp-r01/full-model-result.json",
+      "sha256": "9916b464aa54e9c174d831ae2b1878d3c32ce8bd08f105e0106134fa23f07ccb"
+    },
+    "full_model_checks.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/diagnostic-r07-vjp-r01/full_model_checks.py",
+      "sha256": "62d4eba162f576a1c542864ecfb59990c05a87fa9520c3b6ac7ce95219a31073"
+    },
+    "mask-auto-diagnostic-update.pt": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/diagnostic-r07-vjp-r01/mask-auto-diagnostic-update.pt",
+      "sha256": "70805967ce9f96798adc0ec5488de4e5f1264cf6e692239d3c645dbb21398a63"
+    },
+    "mask-reception-tiled-diagnostic-update.pt": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/diagnostic-r07-vjp-r01/mask-reception-tiled-diagnostic-update.pt",
+      "sha256": "38cfbc3b3d78ae60744b6334a055918a47c6389c742318ddec54f0d4f4310a9b"
+    },
+    "math-checks-result.json": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/diagnostic-r07-vjp-r01/math-checks-result.json",
+      "sha256": "54ece5a44a4586887402cbbe976c4909ef511b457be418593b883e564ad85c9e"
+    },
+    "math_checks.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/diagnostic-r07-vjp-r01/math_checks.py",
+      "sha256": "8305e08767cc3abd65f0210d00153f7a6e7f2f06ea08f3eff49469ad37d29ad8"
+    },
+    "membership-result.json": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/diagnostic-r07-vjp-r01/membership-result.json",
+      "sha256": "08ddf5a7ab7b2d9d76a2d0a1b914abd9db2f9a58898d8d8953d0222456efdaf5"
+    },
+    "plan.json": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/diagnostic-r07-vjp-r01/plan.json",
+      "sha256": "d659d8aee7fccdba626b8057cdacae04beb3ad052135f71b429a353721f6e688"
+    },
+    "topology-survey.json": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/diagnostic-r07-vjp-r01/topology-survey.json",
+      "sha256": "1f3f3e8087fd92cb96b79005160423ab43c21e47d284a982806b6217e07dde37"
+    },
+    "trace-nan-result.json": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/diagnostic-r07-vjp-r01/trace-nan-result.json",
+      "sha256": "d4c2ebf5dc5ee78270a9b8c2c47b2e029d1e4fe0bfc14dcf7b6a94b43006cbc3"
+    },
+    "trace-result.json": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/diagnostic-r07-vjp-r01/trace-result.json",
+      "sha256": "1376155d28c8485ef1e1ea3faa0840adb7f8030356aa0ae1572bd9961288dd3a"
+    },
+    "trace.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/diagnostic-r07-vjp-r01/trace.py",
+      "sha256": "f83b5448d36672b239b30f6791cf840a8ae33738de9b7761676fd3935ee27284"
+    },
+    "trace_membership.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/diagnostic-r07-vjp-r01/trace_membership.py",
+      "sha256": "8fcaab95f15a6bcbe70ef1b93c7b1a75a937277f376810defd4293c7fa6afbde"
+    },
+    "trace_nan.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/diagnostic-r07-vjp-r01/trace_nan.py",
+      "sha256": "4823b802611276dcf2593ca23924d4e11d18c1227b79d3fac853501b84a9a12f"
+    }
+  },
+  "campaign_restarted": false,
+  "checks": {
+    "actual_attention_vs_independent_fp64": {
+      "forward_masked_bitwise_equal": true,
+      "fp32_max": 3.4028234663852886e+38,
+      "independent_fp64_dw_at_bad_positions": [
+        -4.160312848976774e+38,
+        -4.160312848976774e+38
+      ],
+      "masked_actual_max_abs_vjps": [
+        1.3083532394375652e-05,
+        1.680166315054521e-05,
+        3.5310098610352725e-05,
+        0.1849830597639084
+      ],
+      "masked_all_vjps_finite": true,
+      "masked_forward_reference_max_abs_error": 9.373675277502339e-06,
+      "masked_fp64_reference_vjp_allclose": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "masked_fp64_vjp_max_abs_errors": [
+        9.461153973240519e-12,
+        7.45980820315178e-11,
+        3.2624803160634494e-11,
+        6.889459579217938e-08
+      ],
+      "masked_padding_dw_exact_zero": true,
+      "qkv_gradients_masked_bitwise_equal": [
+        true,
+        true,
+        true
+      ],
+      "ratio_to_fp32_max": [
+        1.222606135779398,
+        1.222606135779398
+      ],
+      "real_mass_gradients_bitwise_equal": true,
+      "unmasked_bad_dw_indices": [
+        [
+          0,
+          1,
+          48,
+          0,
+          0,
+          5
+        ],
+        [
+          0,
+          1,
+          48,
+          0,
+          0,
+          6
+        ]
+      ]
+    },
+    "full_model_existing_option": {
+      "atol": 1e-05,
+      "finished_unix": 1795161254.4306097,
+      "forward_comparisons": {
+        "original-auto vs mask-auto": {
+          "bitwise_equal": false,
+          "failed_elements": 0,
+          "max_abs_difference": 5.7220458984375e-06,
+          "within_original_tolerance": true
+        },
+        "original-reception-tiled vs mask-reception-tiled": {
+          "bitwise_equal": true,
+          "failed_elements": 0,
+          "max_abs_difference": 0.0,
+          "within_original_tolerance": true
+        }
+      },
+      "rtol": 0.0001,
+      "schema": "pilot-r3-offline-mask-candidate-v1",
+      "scope": "scratch diagnostic configuration only; exact frozen implementation reused; no campaign edit or restart",
+      "started_unix": 1795161249.3267055,
+      "variants": {
+        "mask-auto": {
+          "all_gradients_finite": true,
+          "all_parameters_finite": true,
+          "all_private_state_finite": true,
+          "grad_norm": 1.2299275398254395,
+          "health_finite": true,
+          "loss": 5.369584083557129,
+          "lr": 0.0009540095783247893,
+          "mask_padding": true,
+          "model_changed": true,
+          "model_key_unchanged": true,
+          "reception_backend": "auto",
+          "status": "optimizer_update_completed",
+          "updated_model_sha256": "db6b6fda1b494db51b25923d1075e7291eb8b2eda895d6e50f0f3f907a71892a",
+          "updated_optimizer_sha256": "adf9b41a9400aa024bf19aa52bde8a96a561694e28957511337b064d383f8be7"
+        },
+        "mask-reception-tiled": {
+          "all_gradients_finite": true,
+          "all_parameters_finite": true,
+          "all_private_state_finite": true,
+          "grad_norm": 1.2299275398254395,
+          "health_finite": true,
+          "loss": 5.369583606719971,
+          "lr": 0.0009540095783247893,
+          "mask_padding": true,
+          "model_changed": true,
+          "model_key_unchanged": true,
+          "reception_backend": "tiled",
+          "status": "optimizer_update_completed",
+          "updated_model_sha256": "173a717ca7a82c5902ababac6e86be4d3db31e1d7769d981af25b2df971f59e0",
+          "updated_optimizer_sha256": "f0d960e6114169143784e0365028ba962b0bd6904155a971c199049e29ff5699"
+        },
+        "original-auto": {
+          "loss": 5.369584560394287,
+          "mask_padding": false,
+          "model_changed": false,
+          "model_key_unchanged": true,
+          "reception_backend": "auto",
+          "status": "forward_only"
+        },
+        "original-reception-tiled": {
+          "error": "allocation VJP exceeds the requested dtype range",
+          "mask_padding": false,
+          "model_changed": false,
+          "model_key_unchanged": true,
+          "reception_backend": "tiled",
+          "status": "failed"
+        }
+      }
+    },
+    "minimal_counterexample": {
+      "structurally_masked": {
+        "expected_gradient": 0.0,
+        "gradient_finite": true,
+        "output": 1.0,
+        "strength_gradient": 0.0
+      },
+      "unmasked": {
+        "expected_gradient": 0.0,
+        "gradient_finite": false,
+        "output": 1.0,
+        "strength_gradient": "nan"
+      }
+    },
+    "original_payload_replay": {
+      "error": "allocation VJP exceeds the requested dtype range",
+      "model_unchanged": true,
+      "optimizer_unchanged": true,
+      "saved_tensors_finite": {
+        "inputs": {
+          "nonfinite_tensors": 0,
+          "numel": 256,
+          "tensor_count": 1
+        },
+        "model": {
+          "nonfinite_tensors": 0,
+          "numel": 1641794,
+          "tensor_count": 136
+        },
+        "optimizer": {
+          "nonfinite_tensors": 0,
+          "numel": 3281613,
+          "tensor_count": 351
+        },
+        "private_state": {
+          "nonfinite_tensors": 0,
+          "numel": 1083904,
+          "tensor_count": 95
+        },
+        "targets": {
+          "nonfinite_tensors": 0,
+          "numel": 256,
+          "tensor_count": 1
+        }
+      }
+    },
+    "real_zero_vs_absent_edge": {
+      "absent_edge_derivative": 0.0,
+      "all_zero_output": 0.0,
+      "all_zero_vjp_max": 0.0,
+      "real_zero_edge_right_derivative": 2.0
+    },
+    "static_exposure": {
+      "by_family": {
+        "exchange": 72,
+        "low-activity-exchange-base-n16": 4,
+        "low-activity-exchange-hub_fixed-n16": 4,
+        "low-activity-exchange-independent-n16": 4,
+        "low-activity-exchange-kv64-n16": 4,
+        "low-activity-exchange-memory_k-n16": 4,
+        "low-activity-exchange-memory_s-n16": 4,
+        "low-activity-exchange-memory_x_reverse-n16": 4,
+        "low-activity-exchange-shannon-n16": 4,
+        "low-activity-multiscale_settle-base-n16": 4,
+        "low-activity-multiscale_settle-checkerboard-n16": 4,
+        "low-activity-multiscale_settle-memory_k-n16": 4,
+        "low-activity-multiscale_settle-memory_s-n16": 4,
+        "low-activity-multiscale_settle-mixed-n16": 4,
+        "low-activity-multiscale_settle-shannon-n16": 4,
+        "low-activity-multiscale_settle-singleton-n16": 4,
+        "low-activity-multiscale_timed-base-n16": 4,
+        "low-activity-multiscale_timed-checkerboard-n16": 4,
+        "low-activity-multiscale_timed-memory_k-n16": 4,
+        "low-activity-multiscale_timed-memory_s-n16": 4,
+        "low-activity-multiscale_timed-mixed-n16": 4,
+        "low-activity-multiscale_timed-shannon-n16": 4,
+        "low-activity-multiscale_timed-singleton-n16": 4,
+        "multiscale_settle": 36,
+        "multiscale_timed": 36
+      },
+      "configured_reception_mask_padding": {
+        "false": 344
+      },
+      "models_with_structural_padding": 232,
+      "padded_region_instances": 1364,
+      "schema": "pilot-r3-padding-exposure-survey-v1",
+      "scope": "static topology only; presence of padding is exposure, not evidence each candidate fails",
+      "subjects": 344
+    }
+  },
+  "diagnostic_directory": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/diagnostic-r07-vjp-r01",
+  "diagnostic_training_scope": "two isolated successful one-update candidates; original failure replays and independent local derivatives; no campaign results or budget state modified",
+  "environment": {
+    "backend_autoload": "0",
+    "device": "cpu",
+    "python": "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python",
+    "threads": 4,
+    "torch": "2.12.0+cpu"
+  },
+  "environment_modified": false,
+  "failure": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_settle-d64-k-singleton7-121b8d2af3-a3-2026112001-r2/attempt-0/failure.pt",
+    "sha256": "47aa26937d8a2f9d6b8c632730ba878d42c7a0ded76d66d28bf7a9ecf5b7d4b8"
+  },
+  "failure_task_id": "multiscale_settle-d64-k-singleton7-121b8d2af3-a3-2026112001-r2",
+  "frozen_input_modified": false,
+  "implementation_modified": false,
+  "inputs_unchanged": {
+    "failure_sha256_unchanged": true,
+    "frozen_controller_files": 69,
+    "frozen_worker_files": 62,
+    "production_working_tree_checks": [
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/__init__.py",
+        "sha256": "8208b80d75d5de0a39089a54db7a24924819bb81a1ed6a61adaac931a2fddf95",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/audit3.py",
+        "sha256": "f33186397927edc4cd0944a306ed6d5b85c937cf1277c090385aa28de5a44578",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/calibrate_shared3.py",
+        "sha256": "e871f5f850337759f26144df21adfe5db79f985e342a587217ca897ae782454f",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/catalog3.py",
+        "sha256": "db1804150b94b407bfe5f1854c2ae0c283eec71776bddc929b6f6dcb72c26bf6",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/chain_receipt3.py",
+        "sha256": "ba0849c70da456b0f124686ed5cd74bf977be6eccd1e47123864124466dc195d",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/continuation3.py",
+        "sha256": "88d1d5353ad3efd6a25d7c6a7029a77ca3e5cec1532cf567d89bc942246c7e1d",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/data.py",
+        "sha256": "d327409f049891273c315c654870a6cbdda8b1162307cabe100225c11ddbcbdd",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/data3.py",
+        "sha256": "da91d2df3a59d840bdafe181721f579ce1a8d8a4203b5872a700a812e2587cbe",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/diagnose_shannon.py",
+        "sha256": "d81bf90d3d85762f355c71375f47145aceff4e06167b95749f738372fbf3bcea",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/diagnose_shannon3.py",
+        "sha256": "e43ebb2609ee874a495c8b5c2a2c63be4f7ce57721023f91160e13a671449fca",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/gate3.py",
+        "sha256": "cbdd5ba06637a9dffbc5d7f277c7bab80909ebfc1e98dea1d47db7d81847dba9",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/inspect3.py",
+        "sha256": "aac824be10380b870a3de26890c0a94b9a3d7294f10bebbd763f2524dc737119",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/io.py",
+        "sha256": "d846049973ea6c7a952353b8a4ed25e2d89e9a67741e3c16e3dd67d39e802170",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/lifecycle3.py",
+        "sha256": "7acb7497a8fe0b807c7f78a1f8a1bed11c23d8f5ff9b27d0359ddf2287af1333",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/models.py",
+        "sha256": "42ac16fa4353d47898dc0d40fbb4b689c50856f06007ccf43f887e65cc51becb",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/models3.py",
+        "sha256": "07f6c919215d1bc79fb433d8120c133e4ff5173b7ac192b018d64819498e9b71",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/plan.py",
+        "sha256": "680567ef8fed0835f62d890b9696120a1a6e3edb323f0b88437805171c2fc834",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/plan2.py",
+        "sha256": "a0452bf80628baf4cc6c02601200f2ea22b3b3218f611dfcdfaeb2f909f594b4",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/preflight3.py",
+        "sha256": "cd8841d99e58605322a80f5e898bf299fce129bacc8c8b42191398aabbbe10a5",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/prepare3.py",
+        "sha256": "19b9736bbd43e21e4faf8590ff8b4d5033630a35b4dcd9d41f68ec6076f26056",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/prepare_campaign3.py",
+        "sha256": "fcb5446da851e35b478988b4d325ff3b09bfcc41a0134e3c1635b710418b3bf7",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/prepare_relay3.py",
+        "sha256": "c8006756956b217026bc985bcd234905f67285e4d587c49b6df2972ef8a45150",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/prepare_resume3.py",
+        "sha256": "f45906f8aac6b1d73084275cf22dd3806ef890e9e8fd26a3fa731135f59c163e",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/prepare_revision3.py",
+        "sha256": "17a76a5e6753457392249a69664a4193050d432549dbf38fab9d46a128a87ca6",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/quad_transfer_probe3.py",
+        "sha256": "3758df7c482998535674d2077f4324e2d81c403b3815769bc56ad764cc1ea737",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/repair_probe3.py",
+        "sha256": "b7d81bd0fb9894645bdd7d2b71b5bf871d60d14b65ccb11b495f387edfbdcf87",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/report.py",
+        "sha256": "9b87332e2d4ca021b0adffb44e19d9eb5d477cf27eaf068042730f2ab20f2c00",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/report2.py",
+        "sha256": "5a5cb8eefe33f5fd92d6e9aaa89b833f631b778a73edb18bb48acc3c686848ce",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/report3.py",
+        "sha256": "86f3780a3dd6bfd7b0d3be563359f5839fefc40501f4106b551ff8f3f7dc1bbe",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/resume3.py",
+        "sha256": "4130a8f61143cb891f7b4c2b416697c5542e4005a28db125cbc3eb9c1b507c92",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/resume_adapter3.py",
+        "sha256": "15102051674cfe53a517a09af917c505e3dcd505dd2433b14328d951a52e5bb7",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/round3.py",
+        "sha256": "084e50bedc753a14b901111c2e024377c1bfdfceffbf1e89e3df70d981f5c282",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/scheduler.py",
+        "sha256": "dbd209fe22f252bc88aa13f27b616f0cb34bcaf468b03e85751edca6f2b9d7b7",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/scheduler3.py",
+        "sha256": "8c5edc012a7bea52566de11f47cae44d35b6f6e1df50c05aae49dc459b627d91",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/scheduler_dynamic3.py",
+        "sha256": "3d8e257124aba3d9eaed650b354016ff47991d0b85c45330b7fb2aec239a6008",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/scheduler_shared3.py",
+        "sha256": "709eb9040ae58678ba9a03e518f8a568dada7847c224e16e484f83ddd863b9da",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/selection.py",
+        "sha256": "9607cb8ac5f29af0e43a7de92eb36e0a4a0801eac1e493da972aba1df4360787",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/shared_npu3.py",
+        "sha256": "858706e4e840993ad21a01e977cfdd1252d488dbd1dfa5878fadea38a115994d",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/sharing_policy3.py",
+        "sha256": "45eee0e710f774583290d1a643cb45233a595c4bfd49b14ab73204a494eaccd3",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/trace_shannon.py",
+        "sha256": "15e08a2038b9d5270269a46e8cf4acc656868018a9e47cbac99854a9a1faa7ae",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/transfer3.py",
+        "sha256": "17f7c3acd6a74e7cb1a1694a71c5d36c3ef5d836f48f1ceb8ad3406063141fe7",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/validate_shannon_capture.py",
+        "sha256": "d79a79f370babe4302fb7c2976d424425978047d32255d14b595cb6eeb2528ff",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/worker.py",
+        "sha256": "542b1f5b88389e902f2aedb19eb368321152f1fff012f66d553cfc0cccf349d8",
+        "unchanged_from_r07": true
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/worker3.py",
+        "sha256": "a5e9b27350521ef7bcd929f001add25679ed7e26482287c7937340cf30d4f3a8",
+        "unchanged_from_r07": true
+      }
+    ]
+  },
+  "limitations": [
+    "CPU FP32 and independent CPU FP64 only; NPU qualification not performed",
+    "single-update evidence does not establish long-run trajectory equivalence",
+    "auto mask admission changes native/tiled selection and has a finite observed rounding difference",
+    "failure.pt is diagnostic-only and remains nonresumable; any actual continuation must start from an audited healthy checkpoint and bind new execution/config identity",
+    "existing genuine zero-mass edges retain right derivatives; this does not remove every possible genuine dtype-range failure"
+  ],
+  "observed_beijing": "2026-11-20T15:57:00.719092+08:00",
+  "observed_unix": 1795161420.7190921,
+  "recommended_repair": {
+    "followup_checks": [
+      "CPU/NPU full affected backend qualification",
+      "grouped/placed/recomputed reception layout tests",
+      "initialization/optimizer/checkpoint continuation under revised identity",
+      "review old comparability and retained healthy checkpoints before a new frozen relay"
+    ],
+    "optional_diagnostic_hardening": "finite check at ordinary tiled attention backward to report the first offending operator; never clip/zero/suppress real gradients",
+    "preserve": [
+      "real zero-prior right derivatives",
+      "structural support",
+      "original numerical thresholds",
+      "old failures and costs"
+    ],
+    "primary": "enforce static topology membership for structurally absent padding in every reception execution path; existing reception_mask_padding=True validates the direction"
+  },
+  "root_cause": {
+    "chain": [
+      "two structurally absent padded slots enter attention without membership mask",
+      "their hypothetical right derivatives exceed FP32 range",
+      "unmasked tiled attention emits -Inf for the absent prior roots",
+      "_incoming strength*valid backward computes -Inf*0 = NaN",
+      "allocation guard receives NaN and stops"
+    ],
+    "first_nan_node": "MulBackward0",
+    "first_nonfinite_node": "_TiledAttentionBackward",
+    "fp32_max": 3.4028234663852886e+38,
+    "incoming_counts": [
+      5,
+      7
+    ],
+    "independent_fp64_absent_slot_derivatives": [
+      -4.160312848976774e+38,
+      -4.160312848976774e+38
+    ],
+    "kind": "structurally_absent_reception_slots_treated_as_real_zero_prior_roots",
+    "nan_source_line": "frozen foundation/src/tide/model.py:197",
+    "owners": [
+      12,
+      13
+    ],
+    "region": 8,
+    "structural_mask": [
+      [
+        true,
+        true,
+        true,
+        true,
+        true,
+        false,
+        false
+      ],
+      [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    ],
+    "supplied_mask": null,
+    "terminal_guard": "frozen foundation/src/tide/allocation.py:462 -> _finite_vjp",
+    "true_existing_edge_derivatives_not_implicated": true
+  },
+  "schema": "pilot-r3-r07-vjp-investigation-v1",
+  "service_observation": "MainPID=0\nActiveState=failed\nSubState=failed\n",
+  "status": "root_cause_reproduced_candidate_tested_no_implementation_changes"
+}

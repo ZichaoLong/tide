@@ -1,0 +1,160 @@
+{
+  "actual_npu_concurrency": 2,
+  "all_frozen_sources_match": true,
+  "authorization": "approved finite 216-subject A/B plan; submit-and-handoff",
+  "budget": {
+    "deadline_unix": 1797698913.9318287,
+    "device_seconds": 542.1543719768524,
+    "max_device_seconds": 25920000,
+    "preparation_max_device_seconds": 172800,
+    "preparation_max_processed_tokens": 67108864,
+    "preparation_token_reservations": {
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/preparation-r01/round": {
+        "accounting_scope": "successful optimizer/evaluation exposure; uncertain attempts retain full reservation",
+        "created_unix": 1795106923.8603728,
+        "observed_completed_loss_tokens": 0,
+        "plan_sha256": "e9e2269d786427a9ffdf11e04de0b91abae7d3263aef2c96337c77f9eb9f4f97",
+        "reserved_tokens": 432896,
+        "status": "blocked",
+        "updated_unix": 1795106924.3016646
+      },
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/preparation-r02/round": {
+        "accounting_scope": "successful optimizer/evaluation exposure; uncertain attempts retain full reservation",
+        "created_unix": 1795107023.0187902,
+        "observed_completed_loss_tokens": 215552,
+        "plan_sha256": "a074fd3074c823b2e66261a2c012bdfd4b397c45771c1eed51ff7ca41e708189",
+        "reserved_tokens": 432896,
+        "status": "passed",
+        "updated_unix": 1795107323.738617
+      }
+    },
+    "schema": "pilot-r3-budget-v1",
+    "segments": {
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round": {
+        "device_seconds": 106.6326003074646,
+        "preparation": false,
+        "preparation_device_seconds": 82.3543872833252,
+        "preparation_reserved_tokens": 237824,
+        "status": "running",
+        "updated_unix": 1795108176.7267573
+      },
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/preparation-r01/round": {
+        "device_seconds": 0.0,
+        "preparation": true,
+        "preparation_device_seconds": 0.0,
+        "preparation_reserved_tokens": 7296,
+        "status": "a_blocked_needs_repair",
+        "updated_unix": 1795106924.297451
+      },
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/preparation-r02/round": {
+        "device_seconds": 435.5217716693878,
+        "preparation": true,
+        "preparation_device_seconds": 435.5217716693878,
+        "preparation_reserved_tokens": 216448,
+        "status": "completed",
+        "updated_unix": 1795107323.7311208
+      }
+    },
+    "started_unix": 1795106913.9318287
+  },
+  "controller_identity": {
+    "pgrp": 3980535,
+    "pid": 3980535,
+    "ppid": 2907797,
+    "rss_bytes": 26488832,
+    "start_ticks": 2269424541,
+    "state": "R"
+  },
+  "counts": {
+    "completed": 8,
+    "running": 12
+  },
+  "data_verified": true,
+  "input_plan_sha256": "f6c9bdd9cf4782a83b88027cd835af0595ff60bed2cae87e35615346219d0264",
+  "latest_state": {
+    "actual_npu_concurrency": 8,
+    "blocking_reason": null,
+    "counts": {
+      "completed": 21,
+      "pending": 31,
+      "running": 16
+    },
+    "observed_a1_updates": [
+      {
+        "id": "fc-d64-k-base-6a381e00da-a1-2026112001-r0",
+        "queue_status": "running",
+        "steps": 547,
+        "tokens": 140032
+      },
+      {
+        "id": "fc-d64-k-base-6a381e00da-a1-2026112002-r0",
+        "queue_status": "running",
+        "steps": 463,
+        "tokens": 118528
+      },
+      {
+        "id": "fc-d64-k-base-6a381e00da-a1-2026112001-r1",
+        "queue_status": "running",
+        "steps": 405,
+        "tokens": 103680
+      },
+      {
+        "id": "fc-d64-k-base-6a381e00da-a1-2026112002-r1",
+        "queue_status": "running",
+        "steps": 322,
+        "tokens": 82432
+      }
+    ],
+    "observed_unix": 1795108314.0519562,
+    "peak_actual_npu_concurrency": 9,
+    "stage": "a1",
+    "stage_b_gate": "closed",
+    "status": "running",
+    "updated_unix": 1795108313.8203313
+  },
+  "live_recorded_process_cgroups": {
+    "3980535:2269424541": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r01.service\n",
+    "3984505:2269432313": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r01.service\n",
+    "3984506:2269432314": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r01.service\n",
+    "3984507:2269432314": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r01.service\n",
+    "3984508:2269432315": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r01.service\n",
+    "3984509:2269432315": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r01.service\n",
+    "3984510:2269432316": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r01.service\n",
+    "3984511:2269432317": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r01.service\n",
+    "3984512:2269432318": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r01.service\n",
+    "3984513:2269432318": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r01.service\n",
+    "3984526:2269432320": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r01.service\n",
+    "3984539:2269432320": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r01.service\n",
+    "3984551:2269432321": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r01.service\n"
+  },
+  "live_recorded_process_commands": {
+    "3980535:2269424541": "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python -u -m pilotlab.round3 --plan /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/campaign-plan.json --output /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round ",
+    "3984505:2269432313": "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python /mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py --job-id r3-campaign-r01-fc-d64-k-base-6a381e00da-init-2026112001-0 --project tide-learning-lab-r3 --priority 0 --npu-count 1 --max-wait-seconds 2590761 --state-file /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-base-6a381e00da-init-2026112001/attempt-0/queue.json -- /mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python -u -m pilotlab.worker3 --task /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-base-6a381e00da-init-2026112001/task.json --output /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-base-6a381e00da-init-2026112001/attempt-0 --data /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data --device npu:0 --deadline-unix 1797698913.9318287 ",
+    "3984506:2269432314": "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python /mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py --job-id r3-campaign-r01-fc-d64-k-base-6a381e00da-init-2026112002-0 --project tide-learning-lab-r3 --priority 0 --npu-count 1 --max-wait-seconds 2590761 --state-file /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-base-6a381e00da-init-2026112002/attempt-0/queue.json -- /mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python -u -m pilotlab.worker3 --task /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-base-6a381e00da-init-2026112002/task.json --output /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-base-6a381e00da-init-2026112002/attempt-0 --data /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data --device npu:0 --deadline-unix 1797698913.9318287 ",
+    "3984507:2269432314": "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python /mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py --job-id r3-campaign-r01-fc-d64-k-base-6a381e00da-init-2026112003-0 --project tide-learning-lab-r3 --priority 0 --npu-count 1 --max-wait-seconds 2590761 --state-file /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-base-6a381e00da-init-2026112003/attempt-0/queue.json -- /mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python -u -m pilotlab.worker3 --task /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-base-6a381e00da-init-2026112003/task.json --output /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-base-6a381e00da-init-2026112003/attempt-0 --data /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data --device npu:0 --deadline-unix 1797698913.9318287 ",
+    "3984508:2269432315": "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python /mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py --job-id r3-campaign-r01-fc-d64-k-depth3-82a8ff2b30-init-2026112001-0 --project tide-learning-lab-r3 --priority 0 --npu-count 1 --max-wait-seconds 2590761 --state-file /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-depth3-82a8ff2b30-init-2026112001/attempt-0/queue.json -- /mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python -u -m pilotlab.worker3 --task /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-depth3-82a8ff2b30-init-2026112001/task.json --output /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-depth3-82a8ff2b30-init-2026112001/attempt-0 --data /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data --device npu:0 --deadline-unix 1797698913.9318287 ",
+    "3984509:2269432315": "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python /mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py --job-id r3-campaign-r01-fc-d64-k-depth3-82a8ff2b30-init-2026112002-0 --project tide-learning-lab-r3 --priority 0 --npu-count 1 --max-wait-seconds 2590761 --state-file /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-depth3-82a8ff2b30-init-2026112002/attempt-0/queue.json -- /mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python -u -m pilotlab.worker3 --task /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-depth3-82a8ff2b30-init-2026112002/task.json --output /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-depth3-82a8ff2b30-init-2026112002/attempt-0 --data /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data --device npu:0 --deadline-unix 1797698913.9318287 ",
+    "3984510:2269432316": "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python /mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py --job-id r3-campaign-r01-fc-d64-k-depth3-82a8ff2b30-init-2026112003-0 --project tide-learning-lab-r3 --priority 0 --npu-count 1 --max-wait-seconds 2590761 --state-file /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-depth3-82a8ff2b30-init-2026112003/attempt-0/queue.json -- /mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python -u -m pilotlab.worker3 --task /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-depth3-82a8ff2b30-init-2026112003/task.json --output /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-depth3-82a8ff2b30-init-2026112003/attempt-0 --data /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data --device npu:0 --deadline-unix 1797698913.9318287 ",
+    "3984511:2269432317": "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python /mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py --job-id r3-campaign-r01-fc-d64-k-shared-6c8fbd0874-init-2026112001-0 --project tide-learning-lab-r3 --priority 0 --npu-count 1 --max-wait-seconds 2590761 --state-file /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-shared-6c8fbd0874-init-2026112001/attempt-0/queue.json -- /mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python -u -m pilotlab.worker3 --task /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-shared-6c8fbd0874-init-2026112001/task.json --output /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-shared-6c8fbd0874-init-2026112001/attempt-0 --data /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data --device npu:0 --deadline-unix 1797698913.9318287 ",
+    "3984512:2269432318": "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python /mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py --job-id r3-campaign-r01-fc-d64-k-shared-6c8fbd0874-init-2026112002-0 --project tide-learning-lab-r3 --priority 0 --npu-count 1 --max-wait-seconds 2590761 --state-file /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-shared-6c8fbd0874-init-2026112002/attempt-0/queue.json -- /mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python -u -m pilotlab.worker3 --task /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-shared-6c8fbd0874-init-2026112002/task.json --output /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-shared-6c8fbd0874-init-2026112002/attempt-0 --data /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data --device npu:0 --deadline-unix 1797698913.9318287 ",
+    "3984513:2269432318": "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python /mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py --job-id r3-campaign-r01-fc-d64-k-shared-6c8fbd0874-init-2026112003-0 --project tide-learning-lab-r3 --priority 0 --npu-count 1 --max-wait-seconds 2590761 --state-file /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-shared-6c8fbd0874-init-2026112003/attempt-0/queue.json -- /mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python -u -m pilotlab.worker3 --task /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-shared-6c8fbd0874-init-2026112003/task.json --output /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-shared-6c8fbd0874-init-2026112003/attempt-0 --data /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data --device npu:0 --deadline-unix 1797698913.9318287 ",
+    "3984526:2269432320": "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python /mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py --job-id r3-campaign-r01-fc-d64-k-ffn1-ac09385120-init-2026112001-0 --project tide-learning-lab-r3 --priority 0 --npu-count 1 --max-wait-seconds 2590761 --state-file /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-ffn1-ac09385120-init-2026112001/attempt-0/queue.json -- /mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python -u -m pilotlab.worker3 --task /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-ffn1-ac09385120-init-2026112001/task.json --output /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-ffn1-ac09385120-init-2026112001/attempt-0 --data /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data --device npu:0 --deadline-unix 1797698913.9318287 ",
+    "3984539:2269432320": "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python /mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py --job-id r3-campaign-r01-fc-d64-k-ffn1-ac09385120-init-2026112002-0 --project tide-learning-lab-r3 --priority 0 --npu-count 1 --max-wait-seconds 2590761 --state-file /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-ffn1-ac09385120-init-2026112002/attempt-0/queue.json -- /mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python -u -m pilotlab.worker3 --task /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-ffn1-ac09385120-init-2026112002/task.json --output /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-ffn1-ac09385120-init-2026112002/attempt-0 --data /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data --device npu:0 --deadline-unix 1797698913.9318287 ",
+    "3984551:2269432321": "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python /mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py --job-id r3-campaign-r01-fc-d64-k-ffn1-ac09385120-init-2026112003-0 --project tide-learning-lab-r3 --priority 0 --npu-count 1 --max-wait-seconds 2590761 --state-file /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-ffn1-ac09385120-init-2026112003/attempt-0/queue.json -- /mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python -u -m pilotlab.worker3 --task /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-ffn1-ac09385120-init-2026112003/task.json --output /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-ffn1-ac09385120-init-2026112003/attempt-0 --data /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data --device npu:0 --deadline-unix 1797698913.9318287 "
+  },
+  "observed_unix": 1795108178.5494037,
+  "qualification": "28 finite preflight tasks passed; strict numerical replay not tested; original failures preserved",
+  "scheduler_status": "running",
+  "schema": "pilot-r3-main-handoff-v1",
+  "service": {
+    "ActiveState": "active",
+    "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r01.service",
+    "ExecMainStatus": "0",
+    "MainPID": "3980535",
+    "Slice": "background.slice",
+    "SubState": "running"
+  },
+  "source_file_count": 52,
+  "stage": "init",
+  "stage_b_gate": "closed"
+}

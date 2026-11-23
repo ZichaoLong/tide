@@ -1,0 +1,1671 @@
+{
+  "artifacts": {
+    "files": [
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/round/tasks/padding-repair-numeric-and-replay/task.json",
+        "sha256": "0fb952061b069adffb260272508a70a93a3023548bf3f70697d66e4c440a99c4",
+        "status": "passed",
+        "task_id": "padding-repair-numeric-and-replay"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/round/tasks/padding-repair-numeric-and-replay/attempt-0/result.json",
+        "sha256": "907efd4105c51daa38c0a0a001ff5f9a240f2093717e39f9f4972684ec5371b2",
+        "status": "passed",
+        "task_id": "padding-repair-numeric-and-replay"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/round/tasks/padding-repair-numeric-and-replay/attempt-0/checkpoint.json",
+        "sha256": "99b12e01df2639f8e3ac2736bed6e5b2eff21deb1bfab8214daf05d4400d22da",
+        "status": "passed",
+        "task_id": "padding-repair-numeric-and-replay"
+      },
+      {
+        "expected_sha256": "07ea6821e85358f790d7675098908cd7c49ee8be3ef621ae0fa7ae6e2cd30b5b",
+        "kind": "checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/round/tasks/padding-repair-numeric-and-replay/attempt-0/checkpoints/diagnostic-prefix.pt",
+        "sha256": "07ea6821e85358f790d7675098908cd7c49ee8be3ef621ae0fa7ae6e2cd30b5b",
+        "size_bytes": 24287471,
+        "status": "passed",
+        "task_id": "padding-repair-numeric-and-replay"
+      }
+    ],
+    "retirement_manifest": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/round/checkpoint-retirement.json",
+      "status": "not_present"
+    },
+    "scope": "full SHA256/size against recorded generation/result identities; payload decoding and numerical replay are not performed"
+  },
+  "execution": {
+    "blocking_reason": null,
+    "counts": {
+      "completed": 1
+    },
+    "scheduler": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/round/scheduler.json",
+      "sha256": "3411636933dcb793d8b54c2ad7be7296593107a936a109cce9f08e1ee23a5d5a",
+      "status": "passed"
+    },
+    "stage": "shannon-repair-preflight",
+    "stage_b_gate": "closed",
+    "status": "completed"
+  },
+  "finding_counts": {
+    "unknown": 2
+  },
+  "findings": [
+    {
+      "expected_sha256": null,
+      "path": ".local/pilot-r3/padding-repair-r01/prepared.json",
+      "reason": "expected_digest_not_recorded",
+      "sha256": "fcd4100fda43a9078b904e8a549e0c7e1f42c29d641b97375ba3ada5995b0dfd",
+      "size_bytes": 38589,
+      "status": "unknown"
+    },
+    {
+      "expected_sha256": null,
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data/manifest.json",
+      "reason": "expected_digest_not_recorded",
+      "sha256": "2f4617d73b5dad4f6a343707382714738e8012432fda85d9f7e36f44b26a4e1a",
+      "size_bytes": 3505,
+      "status": "unknown"
+    }
+  ],
+  "finished_unix": 1795162638.7404656,
+  "inputs": {
+    "data_files": [
+      {
+        "expected_sha256": null,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data/manifest.json",
+        "reason": "expected_digest_not_recorded",
+        "sha256": "2f4617d73b5dad4f6a343707382714738e8012432fda85d9f7e36f44b26a4e1a",
+        "size_bytes": 3505,
+        "status": "unknown"
+      },
+      {
+        "expected_sha256": "122f912828ff701de8dd449b75a473fb03082a3ae0bb40dee50d5d90f5f23b1b",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/manifest.json",
+        "sha256": "122f912828ff701de8dd449b75a473fb03082a3ae0bb40dee50d5d90f5f23b1b",
+        "size_bytes": 4778,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "455f8baf28a3d0fe53517d83d96e14c6186122be85298b8811ddc693fb114936",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/tokenizer-training-document-ids.txt",
+        "sha256": "455f8baf28a3d0fe53517d83d96e14c6186122be85298b8811ddc693fb114936",
+        "size_bytes": 64935,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "830de1c70c9bbdcc3e778446f7c2f6f0fa4366874facbf4bcba2521f184ee7b7",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/tokenizer.json",
+        "sha256": "830de1c70c9bbdcc3e778446f7c2f6f0fa4366874facbf4bcba2521f184ee7b7",
+        "size_bytes": 550678,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "563dd9b280201439114c2a5069926a636fd0187ee24f2900731de10675553d22",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/train.documents.jsonl",
+        "sha256": "563dd9b280201439114c2a5069926a636fd0187ee24f2900731de10675553d22",
+        "size_bytes": 5500206,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "c6a3223cd23dc323ff83e80ecb556872e1a8313ee2afa4d27399e7b3bad71f3e",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/train.documents.npy",
+        "sha256": "c6a3223cd23dc323ff83e80ecb556872e1a8313ee2afa4d27399e7b3bad71f3e",
+        "size_bytes": 462016,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "4d71ceecd9c8ab317faa1e4a9f2a6cb546b62a9661571a9bc26063130199256f",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/train.tokens.bin",
+        "sha256": "4d71ceecd9c8ab317faa1e4a9f2a6cb546b62a9661571a9bc26063130199256f",
+        "size_bytes": 266448088,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "1f8b346d1d5b3c0187eb3b3d0be2c442a9b2c02eb65c022bfc8ede3067c1b366",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/validation.documents.jsonl",
+        "sha256": "1f8b346d1d5b3c0187eb3b3d0be2c442a9b2c02eb65c022bfc8ede3067c1b366",
+        "size_bytes": 107576,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "11910e02b71aee5e7812304cdc2c571d20ad46961f65fab783513553ad4322f0",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/validation.documents.npy",
+        "sha256": "11910e02b71aee5e7812304cdc2c571d20ad46961f65fab783513553ad4322f0",
+        "size_bytes": 9344,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "a79732e9bdb5b73697a21e484b03272b288e9a7915c271b33a4614919663fef5",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/validation.tokens.bin",
+        "sha256": "a79732e9bdb5b73697a21e484b03272b288e9a7915c271b33a4614919663fef5",
+        "size_bytes": 5451898,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d89e363ea004cf2a7ff10706281aba873443d1864217e20fcaa29fde9f8db24e",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data/selection.documents.npy",
+        "sha256": "d89e363ea004cf2a7ff10706281aba873443d1864217e20fcaa29fde9f8db24e",
+        "size_bytes": 4752,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "863e4d1d145e77d6efc5cb065c193ff6eb8de9f45240fdbc96c912fb48ad4a19",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data/selection.documents.jsonl",
+        "sha256": "863e4d1d145e77d6efc5cb065c193ff6eb8de9f45240fdbc96c912fb48ad4a19",
+        "size_bytes": 53908,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d13cadf05c613403380b3d270945e8e13a9dfe2194fdb244da810206b91a9d71",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data/confirmation.documents.npy",
+        "sha256": "d13cadf05c613403380b3d270945e8e13a9dfe2194fdb244da810206b91a9d71",
+        "size_bytes": 4720,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "a4e6072edd71a7805f338f8d12e2b84df95154f993e075b5f09c3d77154a26b6",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data/confirmation.documents.jsonl",
+        "sha256": "a4e6072edd71a7805f338f8d12e2b84df95154f993e075b5f09c3d77154a26b6",
+        "size_bytes": 53668,
+        "status": "passed"
+      }
+    ],
+    "scope": "full byte hashes; no data preparation, import of training code, or device initialization",
+    "source_files": [
+      {
+        "expected_sha256": "6666659bc8010f40cd36bb99ae8f3258240a3edd4e9d142ace43bf309e022b1a",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/padding_probe.py",
+        "sha256": "6666659bc8010f40cd36bb99ae8f3258240a3edd4e9d142ace43bf309e022b1a",
+        "size_bytes": 3805,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "8208b80d75d5de0a39089a54db7a24924819bb81a1ed6a61adaac931a2fddf95",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/__init__.py",
+        "sha256": "8208b80d75d5de0a39089a54db7a24924819bb81a1ed6a61adaac931a2fddf95",
+        "size_bytes": 51,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "f33186397927edc4cd0944a306ed6d5b85c937cf1277c090385aa28de5a44578",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/audit3.py",
+        "sha256": "f33186397927edc4cd0944a306ed6d5b85c937cf1277c090385aa28de5a44578",
+        "size_bytes": 56197,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "e871f5f850337759f26144df21adfe5db79f985e342a587217ca897ae782454f",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/calibrate_shared3.py",
+        "sha256": "e871f5f850337759f26144df21adfe5db79f985e342a587217ca897ae782454f",
+        "size_bytes": 3769,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "db1804150b94b407bfe5f1854c2ae0c283eec71776bddc929b6f6dcb72c26bf6",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/catalog3.py",
+        "sha256": "db1804150b94b407bfe5f1854c2ae0c283eec71776bddc929b6f6dcb72c26bf6",
+        "size_bytes": 45958,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "ba0849c70da456b0f124686ed5cd74bf977be6eccd1e47123864124466dc195d",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/chain_receipt3.py",
+        "sha256": "ba0849c70da456b0f124686ed5cd74bf977be6eccd1e47123864124466dc195d",
+        "size_bytes": 12082,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "88d1d5353ad3efd6a25d7c6a7029a77ca3e5cec1532cf567d89bc942246c7e1d",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/continuation3.py",
+        "sha256": "88d1d5353ad3efd6a25d7c6a7029a77ca3e5cec1532cf567d89bc942246c7e1d",
+        "size_bytes": 5740,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d327409f049891273c315c654870a6cbdda8b1162307cabe100225c11ddbcbdd",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/data.py",
+        "sha256": "d327409f049891273c315c654870a6cbdda8b1162307cabe100225c11ddbcbdd",
+        "size_bytes": 16851,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "da91d2df3a59d840bdafe181721f579ce1a8d8a4203b5872a700a812e2587cbe",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/data3.py",
+        "sha256": "da91d2df3a59d840bdafe181721f579ce1a8d8a4203b5872a700a812e2587cbe",
+        "size_bytes": 9913,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d81bf90d3d85762f355c71375f47145aceff4e06167b95749f738372fbf3bcea",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/diagnose_shannon.py",
+        "sha256": "d81bf90d3d85762f355c71375f47145aceff4e06167b95749f738372fbf3bcea",
+        "size_bytes": 7479,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "e43ebb2609ee874a495c8b5c2a2c63be4f7ce57721023f91160e13a671449fca",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/diagnose_shannon3.py",
+        "sha256": "e43ebb2609ee874a495c8b5c2a2c63be4f7ce57721023f91160e13a671449fca",
+        "size_bytes": 12267,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "cbdd5ba06637a9dffbc5d7f277c7bab80909ebfc1e98dea1d47db7d81847dba9",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/gate3.py",
+        "sha256": "cbdd5ba06637a9dffbc5d7f277c7bab80909ebfc1e98dea1d47db7d81847dba9",
+        "size_bytes": 29948,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "aac824be10380b870a3de26890c0a94b9a3d7294f10bebbd763f2524dc737119",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/inspect3.py",
+        "sha256": "aac824be10380b870a3de26890c0a94b9a3d7294f10bebbd763f2524dc737119",
+        "size_bytes": 5610,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d846049973ea6c7a952353b8a4ed25e2d89e9a67741e3c16e3dd67d39e802170",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/io.py",
+        "sha256": "d846049973ea6c7a952353b8a4ed25e2d89e9a67741e3c16e3dd67d39e802170",
+        "size_bytes": 1296,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "7acb7497a8fe0b807c7f78a1f8a1bed11c23d8f5ff9b27d0359ddf2287af1333",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/lifecycle3.py",
+        "sha256": "7acb7497a8fe0b807c7f78a1f8a1bed11c23d8f5ff9b27d0359ddf2287af1333",
+        "size_bytes": 1718,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "42ac16fa4353d47898dc0d40fbb4b689c50856f06007ccf43f887e65cc51becb",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/models.py",
+        "sha256": "42ac16fa4353d47898dc0d40fbb4b689c50856f06007ccf43f887e65cc51becb",
+        "size_bytes": 11109,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "07f6c919215d1bc79fb433d8120c133e4ff5173b7ac192b018d64819498e9b71",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/models3.py",
+        "sha256": "07f6c919215d1bc79fb433d8120c133e4ff5173b7ac192b018d64819498e9b71",
+        "size_bytes": 25379,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "680567ef8fed0835f62d890b9696120a1a6e3edb323f0b88437805171c2fc834",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/plan.py",
+        "sha256": "680567ef8fed0835f62d890b9696120a1a6e3edb323f0b88437805171c2fc834",
+        "size_bytes": 7015,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "a0452bf80628baf4cc6c02601200f2ea22b3b3218f611dfcdfaeb2f909f594b4",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/plan2.py",
+        "sha256": "a0452bf80628baf4cc6c02601200f2ea22b3b3218f611dfcdfaeb2f909f594b4",
+        "size_bytes": 10629,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "cd8841d99e58605322a80f5e898bf299fce129bacc8c8b42191398aabbbe10a5",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/preflight3.py",
+        "sha256": "cd8841d99e58605322a80f5e898bf299fce129bacc8c8b42191398aabbbe10a5",
+        "size_bytes": 22793,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "19b9736bbd43e21e4faf8590ff8b4d5033630a35b4dcd9d41f68ec6076f26056",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/prepare3.py",
+        "sha256": "19b9736bbd43e21e4faf8590ff8b4d5033630a35b4dcd9d41f68ec6076f26056",
+        "size_bytes": 10415,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "fcb5446da851e35b478988b4d325ff3b09bfcc41a0134e3c1635b710418b3bf7",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/prepare_campaign3.py",
+        "sha256": "fcb5446da851e35b478988b4d325ff3b09bfcc41a0134e3c1635b710418b3bf7",
+        "size_bytes": 18709,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "c8006756956b217026bc985bcd234905f67285e4d587c49b6df2972ef8a45150",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/prepare_relay3.py",
+        "sha256": "c8006756956b217026bc985bcd234905f67285e4d587c49b6df2972ef8a45150",
+        "size_bytes": 27652,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "f45906f8aac6b1d73084275cf22dd3806ef890e9e8fd26a3fa731135f59c163e",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/prepare_resume3.py",
+        "sha256": "f45906f8aac6b1d73084275cf22dd3806ef890e9e8fd26a3fa731135f59c163e",
+        "size_bytes": 14470,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "17a76a5e6753457392249a69664a4193050d432549dbf38fab9d46a128a87ca6",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/prepare_revision3.py",
+        "sha256": "17a76a5e6753457392249a69664a4193050d432549dbf38fab9d46a128a87ca6",
+        "size_bytes": 12839,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "3758df7c482998535674d2077f4324e2d81c403b3815769bc56ad764cc1ea737",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/quad_transfer_probe3.py",
+        "sha256": "3758df7c482998535674d2077f4324e2d81c403b3815769bc56ad764cc1ea737",
+        "size_bytes": 30759,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "b7d81bd0fb9894645bdd7d2b71b5bf871d60d14b65ccb11b495f387edfbdcf87",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/repair_probe3.py",
+        "sha256": "b7d81bd0fb9894645bdd7d2b71b5bf871d60d14b65ccb11b495f387edfbdcf87",
+        "size_bytes": 21944,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "9b87332e2d4ca021b0adffb44e19d9eb5d477cf27eaf068042730f2ab20f2c00",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/report.py",
+        "sha256": "9b87332e2d4ca021b0adffb44e19d9eb5d477cf27eaf068042730f2ab20f2c00",
+        "size_bytes": 38257,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "5a5cb8eefe33f5fd92d6e9aaa89b833f631b778a73edb18bb48acc3c686848ce",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/report2.py",
+        "sha256": "5a5cb8eefe33f5fd92d6e9aaa89b833f631b778a73edb18bb48acc3c686848ce",
+        "size_bytes": 53533,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "86f3780a3dd6bfd7b0d3be563359f5839fefc40501f4106b551ff8f3f7dc1bbe",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/report3.py",
+        "sha256": "86f3780a3dd6bfd7b0d3be563359f5839fefc40501f4106b551ff8f3f7dc1bbe",
+        "size_bytes": 52645,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "4130a8f61143cb891f7b4c2b416697c5542e4005a28db125cbc3eb9c1b507c92",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/resume3.py",
+        "sha256": "4130a8f61143cb891f7b4c2b416697c5542e4005a28db125cbc3eb9c1b507c92",
+        "size_bytes": 7071,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "15102051674cfe53a517a09af917c505e3dcd505dd2433b14328d951a52e5bb7",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/resume_adapter3.py",
+        "sha256": "15102051674cfe53a517a09af917c505e3dcd505dd2433b14328d951a52e5bb7",
+        "size_bytes": 21991,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "084e50bedc753a14b901111c2e024377c1bfdfceffbf1e89e3df70d981f5c282",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/round3.py",
+        "sha256": "084e50bedc753a14b901111c2e024377c1bfdfceffbf1e89e3df70d981f5c282",
+        "size_bytes": 49502,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "dbd209fe22f252bc88aa13f27b616f0cb34bcaf468b03e85751edca6f2b9d7b7",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/scheduler.py",
+        "sha256": "dbd209fe22f252bc88aa13f27b616f0cb34bcaf468b03e85751edca6f2b9d7b7",
+        "size_bytes": 64519,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "8c5edc012a7bea52566de11f47cae44d35b6f6e1df50c05aae49dc459b627d91",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/scheduler3.py",
+        "sha256": "8c5edc012a7bea52566de11f47cae44d35b6f6e1df50c05aae49dc459b627d91",
+        "size_bytes": 39549,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "3d8e257124aba3d9eaed650b354016ff47991d0b85c45330b7fb2aec239a6008",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/scheduler_dynamic3.py",
+        "sha256": "3d8e257124aba3d9eaed650b354016ff47991d0b85c45330b7fb2aec239a6008",
+        "size_bytes": 26122,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "709eb9040ae58678ba9a03e518f8a568dada7847c224e16e484f83ddd863b9da",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/scheduler_shared3.py",
+        "sha256": "709eb9040ae58678ba9a03e518f8a568dada7847c224e16e484f83ddd863b9da",
+        "size_bytes": 39552,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "9607cb8ac5f29af0e43a7de92eb36e0a4a0801eac1e493da972aba1df4360787",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/selection.py",
+        "sha256": "9607cb8ac5f29af0e43a7de92eb36e0a4a0801eac1e493da972aba1df4360787",
+        "size_bytes": 6475,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "858706e4e840993ad21a01e977cfdd1252d488dbd1dfa5878fadea38a115994d",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/shared_npu3.py",
+        "sha256": "858706e4e840993ad21a01e977cfdd1252d488dbd1dfa5878fadea38a115994d",
+        "size_bytes": 60130,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "45eee0e710f774583290d1a643cb45233a595c4bfd49b14ab73204a494eaccd3",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/sharing_policy3.py",
+        "sha256": "45eee0e710f774583290d1a643cb45233a595c4bfd49b14ab73204a494eaccd3",
+        "size_bytes": 9409,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "15e08a2038b9d5270269a46e8cf4acc656868018a9e47cbac99854a9a1faa7ae",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/trace_shannon.py",
+        "sha256": "15e08a2038b9d5270269a46e8cf4acc656868018a9e47cbac99854a9a1faa7ae",
+        "size_bytes": 9881,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "17f7c3acd6a74e7cb1a1694a71c5d36c3ef5d836f48f1ceb8ad3406063141fe7",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/transfer3.py",
+        "sha256": "17f7c3acd6a74e7cb1a1694a71c5d36c3ef5d836f48f1ceb8ad3406063141fe7",
+        "size_bytes": 21483,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d79a79f370babe4302fb7c2976d424425978047d32255d14b595cb6eeb2528ff",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/validate_shannon_capture.py",
+        "sha256": "d79a79f370babe4302fb7c2976d424425978047d32255d14b595cb6eeb2528ff",
+        "size_bytes": 11094,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "542b1f5b88389e902f2aedb19eb368321152f1fff012f66d553cfc0cccf349d8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/worker.py",
+        "sha256": "542b1f5b88389e902f2aedb19eb368321152f1fff012f66d553cfc0cccf349d8",
+        "size_bytes": 46804,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "a5e9b27350521ef7bcd929f001add25679ed7e26482287c7937340cf30d4f3a8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/source/pilotlab/worker3.py",
+        "sha256": "a5e9b27350521ef7bcd929f001add25679ed7e26482287c7937340cf30d4f3a8",
+        "size_bytes": 42154,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "e88de18a025ac0d238dd177aaa23d964c8a95da965ae7925acc6eaa0f248d621",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/attention_sites.py",
+        "sha256": "e88de18a025ac0d238dd177aaa23d964c8a95da965ae7925acc6eaa0f248d621",
+        "size_bytes": 15392,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "197cd644a3dc245ec22241b895b4394f650267ad1a51f7db01bb4d598332d0d0",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/baselines.py",
+        "sha256": "197cd644a3dc245ec22241b895b4394f650267ad1a51f7db01bb4d598332d0d0",
+        "size_bytes": 15667,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "a5a25845f634140e8015e54f220466133ba688b315c9ea893dc6968d8b7e4cef",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/cache_metadata.py",
+        "sha256": "a5a25845f634140e8015e54f220466133ba688b315c9ea893dc6968d8b7e4cef",
+        "size_bytes": 21235,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "a19ad5aebe6c576eacc030a0055aa54cb7ec78609cd49288f5e85537527475f2",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/capacity.py",
+        "sha256": "a19ad5aebe6c576eacc030a0055aa54cb7ec78609cd49288f5e85537527475f2",
+        "size_bytes": 15013,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "e4f10dd5dff632994f0e4fe4c247a7a8c6d27ac3fff2a80c86cc99e9cb94228d",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/continuous.py",
+        "sha256": "e4f10dd5dff632994f0e4fe4c247a7a8c6d27ac3fff2a80c86cc99e9cb94228d",
+        "size_bytes": 31933,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d910fd254263bf930d255b906c05f2623a4beb58b6f63c40c10dfffeede86e3c",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/cost_report.py",
+        "sha256": "d910fd254263bf930d255b906c05f2623a4beb58b6f63c40c10dfffeede86e3c",
+        "size_bytes": 11488,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "332636b5a7c6e4a1af7a836f2f576f4449b5f59d6ef8222a7de8146b5a986c91",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/costs.py",
+        "sha256": "332636b5a7c6e4a1af7a836f2f576f4449b5f59d6ef8222a7de8146b5a986c91",
+        "size_bytes": 25862,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "389065b7b15051a6672ca6412cfbdf1b58363c616e260dbe3b8e5a15fbcb9842",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/detailed_stages.py",
+        "sha256": "389065b7b15051a6672ca6412cfbdf1b58363c616e260dbe3b8e5a15fbcb9842",
+        "size_bytes": 12894,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "cd542ef9df687d6c0f06c1261d616c88391a4f2b65a12a40303dae3f31487baf",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/execution_candidates.py",
+        "sha256": "cd542ef9df687d6c0f06c1261d616c88391a4f2b65a12a40303dae3f31487baf",
+        "size_bytes": 18264,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "1d70935149e7a45a3086c07e1d529825758c66e5e40ce6930c3ce7b2d4773f5e",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/execution_suite.py",
+        "sha256": "1d70935149e7a45a3086c07e1d529825758c66e5e40ce6930c3ce7b2d4773f5e",
+        "size_bytes": 5704,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "64aa008d20a88a4b7a116a1707e0a998a5cb329b7b422292ae0daaafa997544e",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/hotspots.py",
+        "sha256": "64aa008d20a88a4b7a116a1707e0a998a5cb329b7b422292ae0daaafa997544e",
+        "size_bytes": 6436,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "188914e9df9a350dd0c978fb240eee73d89dd0a4d82469dfd2f7724b1a4a0957",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/inference.py",
+        "sha256": "188914e9df9a350dd0c978fb240eee73d89dd0a4d82469dfd2f7724b1a4a0957",
+        "size_bytes": 34153,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "904da5835f5e76e90cb1db176e117b346f014d954ae3499a90e1871a75a39728",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/inference_breakdown.py",
+        "sha256": "904da5835f5e76e90cb1db176e117b346f014d954ae3499a90e1871a75a39728",
+        "size_bytes": 23584,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "fa9bef84b4b2ddd8fee92cbdefddac1f976451ff2f3d92cb7d847b9c765f091f",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/matching.py",
+        "sha256": "fa9bef84b4b2ddd8fee92cbdefddac1f976451ff2f3d92cb7d847b9c765f091f",
+        "size_bytes": 4485,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "e4aa380e30335b5b75a1c10fc9eddb5f82ddbfca8e4b8692b5e6f79ed2df23c0",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/memory_candidate_suite.py",
+        "sha256": "e4aa380e30335b5b75a1c10fc9eddb5f82ddbfca8e4b8692b5e6f79ed2df23c0",
+        "size_bytes": 24154,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "b923f685dac00af961164e1243ac2f067d2437f1bc2191bc40ae89af10636216",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/memory_decode_costs.py",
+        "sha256": "b923f685dac00af961164e1243ac2f067d2437f1bc2191bc40ae89af10636216",
+        "size_bytes": 14678,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "6b331080fc8ed50f27a92679ae3eba15664b2f7a39111a86613f96e91c55bc11",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/memory_ledger.py",
+        "sha256": "6b331080fc8ed50f27a92679ae3eba15664b2f7a39111a86613f96e91c55bc11",
+        "size_bytes": 19816,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "6976b9161d747c2da61d6e3da4803bbe70b5b42f090fdebe92abdb02b57e4d9d",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/parameter_gathers.py",
+        "sha256": "6976b9161d747c2da61d6e3da4803bbe70b5b42f090fdebe92abdb02b57e4d9d",
+        "size_bytes": 1965,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "43a7287fa2c3658bf52daa4236896f6ee49735f7a0a05af1d11d3d3698271163",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/profile.py",
+        "sha256": "43a7287fa2c3658bf52daa4236896f6ee49735f7a0a05af1d11d3d3698271163",
+        "size_bytes": 10634,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "e114ac522f07668f3021089a5928b066605387dfe35d15129cb27c74b165d043",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/programme.py",
+        "sha256": "e114ac522f07668f3021089a5928b066605387dfe35d15129cb27c74b165d043",
+        "size_bytes": 15921,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "63d802d8c9ee1377f03350c95d7cfc9f3a78ae89cfb47a3e6a717b3541dec819",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/projections.py",
+        "sha256": "63d802d8c9ee1377f03350c95d7cfc9f3a78ae89cfb47a3e6a717b3541dec819",
+        "size_bytes": 7368,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "2b34bac304088cd2d2421983a20528e5480195314a152ee390882bcd3640f048",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/reception.py",
+        "sha256": "2b34bac304088cd2d2421983a20528e5480195314a152ee390882bcd3640f048",
+        "size_bytes": 14774,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "12b7df489cf2422edbd3d0cda00665babcfbfb6be6691c147ab4e967eb621677",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/references.py",
+        "sha256": "12b7df489cf2422edbd3d0cda00665babcfbfb6be6691c147ab4e967eb621677",
+        "size_bytes": 1220,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d7f3f12d1e21bd3f3ab0ece54d597c493810508bf9bc791c2e6d9e49c3c62562",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/restore.py",
+        "sha256": "d7f3f12d1e21bd3f3ab0ece54d597c493810508bf9bc791c2e6d9e49c3c62562",
+        "size_bytes": 17348,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "bba6b0dd425bad493c37c8b792766e4dda42d7bcee7ad2a889ef6bb0ae8b5777",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/run.py",
+        "sha256": "bba6b0dd425bad493c37c8b792766e4dda42d7bcee7ad2a889ef6bb0ae8b5777",
+        "size_bytes": 22204,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "8095287d705c22212912eca51d3b077a759d807ad9c942b4498c751903cfb11c",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/search.py",
+        "sha256": "8095287d705c22212912eca51d3b077a759d807ad9c942b4498c751903cfb11c",
+        "size_bytes": 20144,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "74ccb1918240e84910efaf4c03de2d75667da6c904394c5ca6130633d1271b86",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/search_report.py",
+        "sha256": "74ccb1918240e84910efaf4c03de2d75667da6c904394c5ca6130633d1271b86",
+        "size_bytes": 6785,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "924a37c9bdf85c790a5edaec8dd5dc10004dd47348784431e438d723f7ec2949",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/ssd_scan_candidates.py",
+        "sha256": "924a37c9bdf85c790a5edaec8dd5dc10004dd47348784431e438d723f7ec2949",
+        "size_bytes": 12744,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "a70443942e950a0d76d7fdc8f499cb0f46f5a5543dc2a36de60523ae9697f65c",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/stages.py",
+        "sha256": "a70443942e950a0d76d7fdc8f499cb0f46f5a5543dc2a36de60523ae9697f65c",
+        "size_bytes": 10736,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "5275eefe5a369423c0ddc03d101606ee3d3f30196186954077b3b28075ecbdda",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/statistics.py",
+        "sha256": "5275eefe5a369423c0ddc03d101606ee3d3f30196186954077b3b28075ecbdda",
+        "size_bytes": 25224,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "7a0739aa197c350f36e74a442d517a2b5199ccd51745f7c7637b78b316487838",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/streaming_audit.py",
+        "sha256": "7a0739aa197c350f36e74a442d517a2b5199ccd51745f7c7637b78b316487838",
+        "size_bytes": 9054,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "47ad09538b08ad59208ee7ca5fabf4e8664c914f2a9135315ec0a00c1b0efd8d",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/training_breakdown.py",
+        "sha256": "47ad09538b08ad59208ee7ca5fabf4e8664c914f2a9135315ec0a00c1b0efd8d",
+        "size_bytes": 16634,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "ece8019a842ab2792bf2e2f4c00ef346eb9148d8158857783ccbafe0104745f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/transformer_depth.py",
+        "sha256": "ece8019a842ab2792bf2e2f4c00ef346eb9148d8158857783ccbafe0104745f8",
+        "size_bytes": 9400,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "97cceef8cf4e9752eb4f8f4719d9a981e2ce97227c804d68b92958ff0d2c5055",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/transformer_placement.py",
+        "sha256": "97cceef8cf4e9752eb4f8f4719d9a981e2ce97227c804d68b92958ff0d2c5055",
+        "size_bytes": 6519,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "0c698021c7dc4c318fdf8c491007035ea6dfea56f3c1427e4381dde37b2bcfc4",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/variants.py",
+        "sha256": "0c698021c7dc4c318fdf8c491007035ea6dfea56f3c1427e4381dde37b2bcfc4",
+        "size_bytes": 12236,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d899b06a16ad205ce8100e60e3feff5e47a9c7ba288fae94c266a731fae44f0b",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/benchmarks/workloads.py",
+        "sha256": "d899b06a16ad205ce8100e60e3feff5e47a9c7ba288fae94c266a731fae44f0b",
+        "size_bytes": 2755,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/src/tide/__init__.py",
+        "sha256": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195",
+        "size_bytes": 805,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "a8e4346837e7db763d3b778126090c82719c8192679606b4b1b508e576a4e74e",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/src/tide/allocation.py",
+        "sha256": "a8e4346837e7db763d3b778126090c82719c8192679606b4b1b508e576a4e74e",
+        "size_bytes": 33534,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "58602a6211632de9db1632c53cbcbf6b9890360ee4d0266d32bb536b1bec2214",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/src/tide/attention.py",
+        "sha256": "58602a6211632de9db1632c53cbcbf6b9890360ee4d0266d32bb536b1bec2214",
+        "size_bytes": 32394,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/src/tide/checkpoint.py",
+        "sha256": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+        "size_bytes": 3864,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "01e4be6898e1d5a156ff29c2739509c30b65b372ff65c39584b3b4f1a72d520a",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/src/tide/config.py",
+        "sha256": "01e4be6898e1d5a156ff29c2739509c30b65b372ff65c39584b3b4f1a72d520a",
+        "size_bytes": 9832,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/src/tide/ffn_packing.py",
+        "sha256": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449",
+        "size_bytes": 3257,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/src/tide/grouped_linear.py",
+        "sha256": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1",
+        "size_bytes": 6143,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "6ce42c759d8bfa9843c006d0bbda31ad1bc0602b0c9584718d73959bc11a3e3b",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/src/tide/kv.py",
+        "sha256": "6ce42c759d8bfa9843c006d0bbda31ad1bc0602b0c9584718d73959bc11a3e3b",
+        "size_bytes": 9397,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/src/tide/layout.py",
+        "sha256": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+        "size_bytes": 1392,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "6e38b6d6e0382688cc8b7e01de8f87adff35e8777cbd9d41a87dd705c44e936d",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/src/tide/model.py",
+        "sha256": "6e38b6d6e0382688cc8b7e01de8f87adff35e8777cbd9d41a87dd705c44e936d",
+        "size_bytes": 26288,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/src/tide/parameters.py",
+        "sha256": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc",
+        "size_bytes": 16680,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "0f77def73da20f467756e5dc1f701f25942565f762e82be5d23218ecee39d05f",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/src/tide/placement.py",
+        "sha256": "0f77def73da20f467756e5dc1f701f25942565f762e82be5d23218ecee39d05f",
+        "size_bytes": 24247,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/src/tide/placement_ownership.py",
+        "sha256": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+        "size_bytes": 7434,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/src/tide/precision.py",
+        "sha256": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+        "size_bytes": 3825,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "43f72f3f1a55263b8d1185a41f0bf2711b7e1179cd664710ced08e70563b45c4",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/src/tide/reception.py",
+        "sha256": "43f72f3f1a55263b8d1185a41f0bf2711b7e1179cd664710ced08e70563b45c4",
+        "size_bytes": 4893,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/src/tide/region.py",
+        "sha256": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+        "size_bytes": 3805,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "514ee30c5077d416c02cec81380280eb45509f20922a0f812657b93d2d8b7e80",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/src/tide/region_batch.py",
+        "sha256": "514ee30c5077d416c02cec81380280eb45509f20922a0f812657b93d2d8b7e80",
+        "size_bytes": 7509,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/src/tide/region_execution.py",
+        "sha256": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950",
+        "size_bytes": 6144,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "fd082f035185d04af6bc3ba27b949a8f065ccdf62f8b32a1b442accbfa6f2b6d",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/src/tide/region_placement.py",
+        "sha256": "fd082f035185d04af6bc3ba27b949a8f065ccdf62f8b32a1b442accbfa6f2b6d",
+        "size_bytes": 16586,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "21b696170e73ae28a3238a4db7dd9b613d92a2b0eb88610df74a5d01a8006c62",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/src/tide/scaled_arithmetic.py",
+        "sha256": "21b696170e73ae28a3238a4db7dd9b613d92a2b0eb88610df74a5d01a8006c62",
+        "size_bytes": 4140,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/src/tide/ssd.py",
+        "sha256": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+        "size_bytes": 12466,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/src/tide/ssd_memory.py",
+        "sha256": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2",
+        "size_bytes": 10412,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/src/tide/topology.py",
+        "sha256": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+        "size_bytes": 11283,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/src/tide/topology_hb.py",
+        "sha256": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06",
+        "size_bytes": 6204,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "6c993386c66f611c371c75e2e66a52dec7954c4fb9078819aab23f13d6c76d88",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/src/tide/weighted_mean.py",
+        "sha256": "6c993386c66f611c371c75e2e66a52dec7954c4fb9078819aab23f13d6c76d88",
+        "size_bytes": 8236,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "3ae8541b51d4091302ce7605dd56e006256370a128fa2cde7bf27decc9380cce",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/conftest.py",
+        "sha256": "3ae8541b51d4091302ce7605dd56e006256370a128fa2cde7bf27decc9380cce",
+        "size_bytes": 568,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "084c8736ee5cb16045037d3be41501fa1b5c8c0ba95eb73d5548de91c1a55eab",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/device_attention.py",
+        "sha256": "084c8736ee5cb16045037d3be41501fa1b5c8c0ba95eb73d5548de91c1a55eab",
+        "size_bytes": 10588,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "e784ebfc17479a9802d805060363999e6177c4951838cc6ac8a50f40a26d5426",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/oracle_fc.py",
+        "sha256": "e784ebfc17479a9802d805060363999e6177c4951838cc6ac8a50f40a26d5426",
+        "size_bytes": 10265,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "b5f5aa2414e820db80fa946d8b6ee5be75950811d94746c5cb1f8e44e301a981",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/oracle_timed.py",
+        "sha256": "b5f5aa2414e820db80fa946d8b6ee5be75950811d94746c5cb1f8e44e301a981",
+        "size_bytes": 11229,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "98d3c9d72369c3deefc4f6c008ce4919f02f503be6fe2fec64d1a8400ebef9a6",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_allocation.py",
+        "sha256": "98d3c9d72369c3deefc4f6c008ce4919f02f503be6fe2fec64d1a8400ebef9a6",
+        "size_bytes": 20847,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "7f746c02dbb8d2a3f5fa0191f132971f251494877624cd5ab5e6036b6432bd16",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_allocation_face.py",
+        "sha256": "7f746c02dbb8d2a3f5fa0191f132971f251494877624cd5ab5e6036b6432bd16",
+        "size_bytes": 5905,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "6c6b7ef5fe8af9b2c56ac0192c76931bf1d1932d4c692da49db036c9df250671",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_allocation_face_witness.py",
+        "sha256": "6c6b7ef5fe8af9b2c56ac0192c76931bf1d1932d4c692da49db036c9df250671",
+        "size_bytes": 1000,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "95430f27b637a7fcf106e85927e005dccf04b660218e0b448565f165ecc56d1b",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_allocation_range.py",
+        "sha256": "95430f27b637a7fcf106e85927e005dccf04b660218e0b448565f165ecc56d1b",
+        "size_bytes": 9785,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d5618fd4dbbaff63ae71b48b3f1c8ec9d63b3b5e26baba15e9cb80b51f54d70f",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_attention.py",
+        "sha256": "d5618fd4dbbaff63ae71b48b3f1c8ec9d63b3b5e26baba15e9cb80b51f54d70f",
+        "size_bytes": 11210,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "ad7db8c4d75e9e307cfed5a29369d99d9cced35b1762be4eeeaf72a0abe3a12c",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_attention_mode_diagnosis.py",
+        "sha256": "ad7db8c4d75e9e307cfed5a29369d99d9cced35b1762be4eeeaf72a0abe3a12c",
+        "size_bytes": 7358,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "f3eb6b0cb041a3350ce9ca1b5b8621ad1e7449ea7d4736c8084e15b3b8c7c3f7",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_attention_sites.py",
+        "sha256": "f3eb6b0cb041a3350ce9ca1b5b8621ad1e7449ea7d4736c8084e15b3b8c7c3f7",
+        "size_bytes": 1881,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "e552c4fbba3bdd8b6b31975178bc38df439a0d9ba204d54725cc17a9ce19dfc4",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_baselines.py",
+        "sha256": "e552c4fbba3bdd8b6b31975178bc38df439a0d9ba204d54725cc17a9ce19dfc4",
+        "size_bytes": 13539,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "6ba58740f8a13fc083dc412689ccbdbc8af5e30fcbf9c3b1c4b254357ee7028b",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_benchmark_contract.py",
+        "sha256": "6ba58740f8a13fc083dc412689ccbdbc8af5e30fcbf9c3b1c4b254357ee7028b",
+        "size_bytes": 6589,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "229f4c45deaea329e07f3d059e4aebc1efa9c78596569cc33ace88fb6a9cfaf4",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_binary_parts.py",
+        "sha256": "229f4c45deaea329e07f3d059e4aebc1efa9c78596569cc33ace88fb6a9cfaf4",
+        "size_bytes": 2722,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "8f807d5b61e11296ee2e6a6d110eecfb0f18ce542dc5f16aae29187d8c5f0eec",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_capacity_placement.py",
+        "sha256": "8f807d5b61e11296ee2e6a6d110eecfb0f18ce542dc5f16aae29187d8c5f0eec",
+        "size_bytes": 6118,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "f7214b400d6de8ad8f3c61ae877936334d9bf7c14c59c935b1cdc02f11650c6e",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_capacity_train.py",
+        "sha256": "f7214b400d6de8ad8f3c61ae877936334d9bf7c14c59c935b1cdc02f11650c6e",
+        "size_bytes": 7528,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "9a09b7ad94ae329460d0d1f5406433eade7106a7293b2ca98d028155e8e9c7ca",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_checkpoint_update.py",
+        "sha256": "9a09b7ad94ae329460d0d1f5406433eade7106a7293b2ca98d028155e8e9c7ca",
+        "size_bytes": 6690,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "1e163236f30765ca5fd0951a4e775b303cdf5bd3879a51ded4f5192bdef88f5b",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_continuation.py",
+        "sha256": "1e163236f30765ca5fd0951a4e775b303cdf5bd3879a51ded4f5192bdef88f5b",
+        "size_bytes": 15009,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "7415807b9b1ba4710e3729991d0387f7157f53cfb5f42a41e3d2f3ab6cc77180",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_costs.py",
+        "sha256": "7415807b9b1ba4710e3729991d0387f7157f53cfb5f42a41e3d2f3ab6cc77180",
+        "size_bytes": 7382,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "ad1b05b479f43528efb2090da79aa240b5967dc13cae04642e4beafc2480ff08",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_detailed_stages.py",
+        "sha256": "ad1b05b479f43528efb2090da79aa240b5967dc13cae04642e4beafc2480ff08",
+        "size_bytes": 10194,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "2d444c55d8bb4cdce3e584b521a8655ff61da691e55d4fdcb8144aea2fa3028b",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_execution_candidate_costs.py",
+        "sha256": "2d444c55d8bb4cdce3e584b521a8655ff61da691e55d4fdcb8144aea2fa3028b",
+        "size_bytes": 5488,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "0f35aa0953c93c9ab07b5be35910c3df3090cc3535578cc0905875b7ad99e65c",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_execution_candidate_qualification.py",
+        "sha256": "0f35aa0953c93c9ab07b5be35910c3df3090cc3535578cc0905875b7ad99e65c",
+        "size_bytes": 7939,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "6af708cdd77c1b309967b32d8bf7a09fbff2f14af5a63a1111f3235ea0d2a3f9",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_execution_observers.py",
+        "sha256": "6af708cdd77c1b309967b32d8bf7a09fbff2f14af5a63a1111f3235ea0d2a3f9",
+        "size_bytes": 2121,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "2b891620edbcc9ffa892599972b25345bf1bfe2235dd0182fb7f6a857829becf",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_fc_reference.py",
+        "sha256": "2b891620edbcc9ffa892599972b25345bf1bfe2235dd0182fb7f6a857829becf",
+        "size_bytes": 5729,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "5ebd47eeb94cb4ad1553fe3252e558ee2fcea2147ea49e1eafce10ddecb4297f",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_ffn_execution_accounting.py",
+        "sha256": "5ebd47eeb94cb4ad1553fe3252e558ee2fcea2147ea49e1eafce10ddecb4297f",
+        "size_bytes": 2156,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "33ecef57fdd7204455960c881ef781459be897610b8c0419cd25703d6a4bacd2",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_ffn_packing.py",
+        "sha256": "33ecef57fdd7204455960c881ef781459be897610b8c0419cd25703d6a4bacd2",
+        "size_bytes": 20467,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "9f53c6660ee4bea33b2517fbd893d7d01a913f731fa95e86ba776a4990609605",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_ffn_training_diagnosis.py",
+        "sha256": "9f53c6660ee4bea33b2517fbd893d7d01a913f731fa95e86ba776a4990609605",
+        "size_bytes": 4362,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "342162a7591bfe7daf2dbb961aab339049ded900ef66bd5c33ff2ab994609e58",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_grouped_weights.py",
+        "sha256": "342162a7591bfe7daf2dbb961aab339049ded900ef66bd5c33ff2ab994609e58",
+        "size_bytes": 9495,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "82b7d8d21d21edbb0c5548e47916597976ebdebd1f523bd71d3f9ce6e2fb792b",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_hotspots.py",
+        "sha256": "82b7d8d21d21edbb0c5548e47916597976ebdebd1f523bd71d3f9ce6e2fb792b",
+        "size_bytes": 1076,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "0b345d7bfda020138bbb032b5d4faae1bbfaae8fa44af9ee60285e8f33cd8fb1",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_inference_benchmark.py",
+        "sha256": "0b345d7bfda020138bbb032b5d4faae1bbfaae8fa44af9ee60285e8f33cd8fb1",
+        "size_bytes": 16764,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "56b318c9932efb8b56bc62c46dd930cf3ce135739380c9123d217389a875c0e3",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_inference_breakdown.py",
+        "sha256": "56b318c9932efb8b56bc62c46dd930cf3ce135739380c9123d217389a875c0e3",
+        "size_bytes": 9559,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "f839a9f2ecd06b08d19a2147ddd6f1390f142fd42b2548caab843162c540d79e",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_inference_cache.py",
+        "sha256": "f839a9f2ecd06b08d19a2147ddd6f1390f142fd42b2548caab843162c540d79e",
+        "size_bytes": 8507,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d54723bc8a0ebe8dea7b2834f7a916764fb5cd667f9990671e87b17d4ac85d59",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_installed_validation.py",
+        "sha256": "d54723bc8a0ebe8dea7b2834f7a916764fb5cd667f9990671e87b17d4ac85d59",
+        "size_bytes": 3051,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "c929a9682af1c2d45f3a3f8e879c36d981eba6386e243f316b43c9259bb8c7d5",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_job.py",
+        "sha256": "c929a9682af1c2d45f3a3f8e879c36d981eba6386e243f316b43c9259bb8c7d5",
+        "size_bytes": 6409,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "72d53660ff759fbee393ee0a563b7053220cdac15e115289fdb5141285c17f13",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_kv_compaction.py",
+        "sha256": "72d53660ff759fbee393ee0a563b7053220cdac15e115289fdb5141285c17f13",
+        "size_bytes": 1181,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "8a7babd530fc7a5b12fcd801c3f6337bb127d081c1dd8e22d4041de029bdf739",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_kv_memory.py",
+        "sha256": "8a7babd530fc7a5b12fcd801c3f6337bb127d081c1dd8e22d4041de029bdf739",
+        "size_bytes": 17951,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "15ed503c807b4d81c24b423ec24e8b3e90e06b53c6070b6399d4f8a3c190465b",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_mass_scaled_attention.py",
+        "sha256": "15ed503c807b4d81c24b423ec24e8b3e90e06b53c6070b6399d4f8a3c190465b",
+        "size_bytes": 16655,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "0b573ae5cf91efb1b2e17d582feff11524d598f95f249aacc5e22a4a62c4cdae",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_materialize_record.py",
+        "sha256": "0b573ae5cf91efb1b2e17d582feff11524d598f95f249aacc5e22a4a62c4cdae",
+        "size_bytes": 3508,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "c877017ce479baff4a20aaf294a31cee1b47518659886c9d3eaca71852b0df54",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_memory_accounting.py",
+        "sha256": "c877017ce479baff4a20aaf294a31cee1b47518659886c9d3eaca71852b0df54",
+        "size_bytes": 8361,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "660a426fc0ba8d2f9708659cdaf4570b458098029dd97f0cf54dbeec9f046906",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_memory_candidate_suite.py",
+        "sha256": "660a426fc0ba8d2f9708659cdaf4570b458098029dd97f0cf54dbeec9f046906",
+        "size_bytes": 5957,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "5fffca37a786e0012a850286226e445788af76830d8ed736e5b9d9be3ab6b483",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_memory_candidates.py",
+        "sha256": "5fffca37a786e0012a850286226e445788af76830d8ed736e5b9d9be3ab6b483",
+        "size_bytes": 7282,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "fd3ef69fb5201f9a0d2556ff8d9f1917774bdef7939e8cef370f23b3eed4b4bb",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_memory_decode_costs.py",
+        "sha256": "fd3ef69fb5201f9a0d2556ff8d9f1917774bdef7939e8cef370f23b3eed4b4bb",
+        "size_bytes": 3546,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "f7789f96a850b932960df0d9c27eac01fc853dc040b1e0bd4148170721d74bdf",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_memory_ledger.py",
+        "sha256": "f7789f96a850b932960df0d9c27eac01fc853dc040b1e0bd4148170721d74bdf",
+        "size_bytes": 6326,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "e535d373e05cfd11d1a47541c9463dab7ef0c293150f69916506cd2458c64c6e",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_memory_sharing.py",
+        "sha256": "e535d373e05cfd11d1a47541c9463dab7ef0c293150f69916506cd2458c64c6e",
+        "size_bytes": 16013,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "3d148d05fef362024876ac6d44c302add8987c934bd1222d86f5ed6d4bb0f7e8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_models.py",
+        "sha256": "3d148d05fef362024876ac6d44c302add8987c934bd1222d86f5ed6d4bb0f7e8",
+        "size_bytes": 6308,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "e648bf4ac5e32f870852badb98e41d4d4915520901cfcd5c12071acc4d2fc717",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_native_region.py",
+        "sha256": "e648bf4ac5e32f870852badb98e41d4d4915520901cfcd5c12071acc4d2fc717",
+        "size_bytes": 5128,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "bf490254a128c168e5e84faae2544466c4def85cdac0b35d8c3539228df4467e",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_numerical_reachability.py",
+        "sha256": "bf490254a128c168e5e84faae2544466c4def85cdac0b35d8c3539228df4467e",
+        "size_bytes": 960,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "f7ba8b6fed6cb8ae819624a402766d9d9c08aa834de0ac912f6dd2505be369f9",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_optional_bindings.py",
+        "sha256": "f7ba8b6fed6cb8ae819624a402766d9d9c08aa834de0ac912f6dd2505be369f9",
+        "size_bytes": 12469,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "339dcc004a3ed5fce0e644a9e810dee9b0707293c50f65aeb50bbaa52b01f53e",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_ordinary_attention_range.py",
+        "sha256": "339dcc004a3ed5fce0e644a9e810dee9b0707293c50f65aeb50bbaa52b01f53e",
+        "size_bytes": 6615,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "c0bd159ab795c72797f0b46a2ec6df5618d4d5f83dec380553b9e94e884538f3",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_parameter_batching.py",
+        "sha256": "c0bd159ab795c72797f0b46a2ec6df5618d4d5f83dec380553b9e94e884538f3",
+        "size_bytes": 8505,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "c0d48797a9cfeacc8e2ef5c157b6b7c08857aa1ef95f9e997ec793463dea2b40",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_parameter_binding.py",
+        "sha256": "c0d48797a9cfeacc8e2ef5c157b6b7c08857aa1ef95f9e997ec793463dea2b40",
+        "size_bytes": 8725,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "5b415c7c06779101f66c2973baccc9dd350b2016f37a19eb7ef6a67b0e0f34ed",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_parameter_views.py",
+        "sha256": "5b415c7c06779101f66c2973baccc9dd350b2016f37a19eb7ef6a67b0e0f34ed",
+        "size_bytes": 11753,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "87734c8c1fd4515c7167d9e1b5d9d93f88f25a009100fd6ef689f7fbc75d41b0",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_placed_region_batch.py",
+        "sha256": "87734c8c1fd4515c7167d9e1b5d9d93f88f25a009100fd6ef689f7fbc75d41b0",
+        "size_bytes": 6421,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "a025c4b1d2517bf05bb7e9824a52202da112db3d7b75c2ece432b4e7e93d4e92",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_placement.py",
+        "sha256": "a025c4b1d2517bf05bb7e9824a52202da112db3d7b75c2ece432b4e7e93d4e92",
+        "size_bytes": 10707,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "74fbf5d2c991c9b5cb5f27089bd770c9c6f291bac961f4249b1a488bf237e6df",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_positive_chain_driver.py",
+        "sha256": "74fbf5d2c991c9b5cb5f27089bd770c9c6f291bac961f4249b1a488bf237e6df",
+        "size_bytes": 1394,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "1e90362023d53814c380c505085508860fefe42cf9ed7a486aca6b95da196499",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_precision.py",
+        "sha256": "1e90362023d53814c380c505085508860fefe42cf9ed7a486aca6b95da196499",
+        "size_bytes": 9103,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "bc7dac160d90e1cf35252b17a565f7a67221b02d036e986e4d3e54f121bb18e0",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_programme.py",
+        "sha256": "bc7dac160d90e1cf35252b17a565f7a67221b02d036e986e4d3e54f121bb18e0",
+        "size_bytes": 3259,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "3e0da32dd1b73ac00b89f75a5a355941e7a28dbc4282d214f66772b552062f8b",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_projection_candidates.py",
+        "sha256": "3e0da32dd1b73ac00b89f75a5a355941e7a28dbc4282d214f66772b552062f8b",
+        "size_bytes": 2565,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "b9e90b4057b8887f83dd731752a00582f428e61f160affc289c31e405e782412",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_reception.py",
+        "sha256": "b9e90b4057b8887f83dd731752a00582f428e61f160affc289c31e405e782412",
+        "size_bytes": 12025,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "7797b177f9690f7492d40b41540cffbb41d3de722339077fac30f8d476a21092",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_reception_benchmark.py",
+        "sha256": "7797b177f9690f7492d40b41540cffbb41d3de722339077fac30f8d476a21092",
+        "size_bytes": 2476,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "ee62fda2bf0d2451579b5b750998a565b3f44f1252a35d36037f2bed5c9f5c21",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_reception_execution.py",
+        "sha256": "ee62fda2bf0d2451579b5b750998a565b3f44f1252a35d36037f2bed5c9f5c21",
+        "size_bytes": 9757,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "00eea517ab5a93bb51f867fe064320a1c90d90a3a3d1ffef7a1846a20ff82723",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_reception_padding.py",
+        "sha256": "00eea517ab5a93bb51f867fe064320a1c90d90a3a3d1ffef7a1846a20ff82723",
+        "size_bytes": 4988,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "13ffa09681b90ae8a7443a40ea75b7eda5b2aba8fd6bd49b4a7eda42c1c1e57f",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_region_batch.py",
+        "sha256": "13ffa09681b90ae8a7443a40ea75b7eda5b2aba8fd6bd49b4a7eda42c1c1e57f",
+        "size_bytes": 5367,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "00d2f6c956b9936ca2c57a16acaef02aad71a58bbedefd1f04f1418a0330d1a6",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_region_capacity.py",
+        "sha256": "00d2f6c956b9936ca2c57a16acaef02aad71a58bbedefd1f04f1418a0330d1a6",
+        "size_bytes": 4903,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "587fba24652b2a3b703b2ae7d191b915f3a0299a6fcefb2363a0f21613c4f5c1",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_region_concurrency.py",
+        "sha256": "587fba24652b2a3b703b2ae7d191b915f3a0299a6fcefb2363a0f21613c4f5c1",
+        "size_bytes": 11476,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "a5b1a3c9ad343bd3f834a3fae61e4ca9a2f6137502f3e2dad54ca573c0ddbf9f",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_region_placement.py",
+        "sha256": "a5b1a3c9ad343bd3f834a3fae61e4ca9a2f6137502f3e2dad54ca573c0ddbf9f",
+        "size_bytes": 14205,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "5666766edd37ec6b7b181838af0ad64a9e0991e5dae04bc2438c7cfe9a8cbde3",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_region_recompute.py",
+        "sha256": "5666766edd37ec6b7b181838af0ad64a9e0991e5dae04bc2438c7cfe9a8cbde3",
+        "size_bytes": 3735,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "c5d197edfb59ccf35156c8399745ffde17ac93650d7b35d47bfe11968ac701de",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_resident_probe.py",
+        "sha256": "c5d197edfb59ccf35156c8399745ffde17ac93650d7b35d47bfe11968ac701de",
+        "size_bytes": 4179,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "ffb7734f97c92b1bb2dfe05f6151ff4b6cafd0cfcef42227d2ed597bc342f177",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_restore_benchmark.py",
+        "sha256": "ffb7734f97c92b1bb2dfe05f6151ff4b6cafd0cfcef42227d2ed597bc342f177",
+        "size_bytes": 4184,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "70178cd9a013b6ad2b4356126a99b3739ffb9ee52dbbff0485e8e0321b9673ab",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_restore_diagnosis.py",
+        "sha256": "70178cd9a013b6ad2b4356126a99b3739ffb9ee52dbbff0485e8e0321b9673ab",
+        "size_bytes": 1505,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "f2c033bc2c5f4f4ec060770f0182ee2c0a71ac889df839f470f3b1fe61061fe0",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_routing_diagnosis.py",
+        "sha256": "f2c033bc2c5f4f4ec060770f0182ee2c0a71ac889df839f470f3b1fe61061fe0",
+        "size_bytes": 11576,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "a70dbd8f8d793beae6d20f23db698ec82c5659ca95ea5faebf013c69ce8dbe51",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_saved_training_diagnosis.py",
+        "sha256": "a70dbd8f8d793beae6d20f23db698ec82c5659ca95ea5faebf013c69ce8dbe51",
+        "size_bytes": 9824,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "4b1d8bf4f07499e6759af611ec0865d0a463bdf36f4a6504436058bf73ee2d3a",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_saved_training_update_replay.py",
+        "sha256": "4b1d8bf4f07499e6759af611ec0865d0a463bdf36f4a6504436058bf73ee2d3a",
+        "size_bytes": 6153,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "4a79766c745872d13e402446fc2e09becbb8a98e39118c75260c5f7a899946a9",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_search.py",
+        "sha256": "4a79766c745872d13e402446fc2e09becbb8a98e39118c75260c5f7a899946a9",
+        "size_bytes": 6813,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "9cd110b575618ed176f07a5908308a92746695f5b46e0dadab334674313b2346",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_shannon_active_set.py",
+        "sha256": "9cd110b575618ed176f07a5908308a92746695f5b46e0dadab334674313b2346",
+        "size_bytes": 6649,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "7431f5998bfb5468f2c3532e24f3c48893619b69e14de9a7a09de1d5be74935f",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_shannon_cap.py",
+        "sha256": "7431f5998bfb5468f2c3532e24f3c48893619b69e14de9a7a09de1d5be74935f",
+        "size_bytes": 9814,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "e80f9231898116d6dfc3be12af66b83b0c5ef4f644ea81e97990f75355addb47",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_shared_admission.py",
+        "sha256": "e80f9231898116d6dfc3be12af66b83b0c5ef4f644ea81e97990f75355addb47",
+        "size_bytes": 12638,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "e4475241d943dd0f9ef0c764cf3c1be255a48ec40c6f4063e08a024ada56894a",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_ssd.py",
+        "sha256": "e4475241d943dd0f9ef0c764cf3c1be255a48ec40c6f4063e08a024ada56894a",
+        "size_bytes": 12739,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "60ab90709579c85cf5534fd7c065d5d221d747515e7b1d1fe0477889a4657760",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_ssd_memory.py",
+        "sha256": "60ab90709579c85cf5534fd7c065d5d221d747515e7b1d1fe0477889a4657760",
+        "size_bytes": 15938,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "626357684588ede9503bca7fe1a3e1cafcefb2d59fdb589850a8f2bf841f7b16",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_stable_reception.py",
+        "sha256": "626357684588ede9503bca7fe1a3e1cafcefb2d59fdb589850a8f2bf841f7b16",
+        "size_bytes": 17830,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "355dbc489414d6215a41945265eb97e2d7f65a63358feba824a9839b77882216",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_support_catalog.py",
+        "sha256": "355dbc489414d6215a41945265eb97e2d7f65a63358feba824a9839b77882216",
+        "size_bytes": 1451,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "f1df9bb2f84684d1ffec770903d0905a7c4cf7fd12f38023f4b8c370f2012316",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_timed_reference.py",
+        "sha256": "f1df9bb2f84684d1ffec770903d0905a7c4cf7fd12f38023f4b8c370f2012316",
+        "size_bytes": 8328,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "66080949dd989e360a2a52ddf34a8e343e901541910284af5ba00ed8ae0359e6",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_topology.py",
+        "sha256": "66080949dd989e360a2a52ddf34a8e343e901541910284af5ba00ed8ae0359e6",
+        "size_bytes": 13179,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "2d228ba85583452748dc3d20413078a4a7517562e45922b96a88a9f33aa4d092",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_train_example.py",
+        "sha256": "2d228ba85583452748dc3d20413078a4a7517562e45922b96a88a9f33aa4d092",
+        "size_bytes": 13898,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "ffb90c3120304fede8fc3ada1b4bc068196b685f729f98d94828c44e948038fc",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_training_breakdown.py",
+        "sha256": "ffb90c3120304fede8fc3ada1b4bc068196b685f729f98d94828c44e948038fc",
+        "size_bytes": 2623,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "61ddd7b5f9a1fe7397142f85951f9881767a0f40a32cca30af1161bd44a844e7",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_training_optimizations.py",
+        "sha256": "61ddd7b5f9a1fe7397142f85951f9881767a0f40a32cca30af1161bd44a844e7",
+        "size_bytes": 8639,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "adeeb2429ed06454913aae97d5d87459a1dd78a7d1555c07ac2084dc650db195",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_training_paths.py",
+        "sha256": "adeeb2429ed06454913aae97d5d87459a1dd78a7d1555c07ac2084dc650db195",
+        "size_bytes": 17145,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "1304e844099c99b3d35daae365bf0b87e7f1f68f9d5ec23830ceb8fc62196166",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_training_routing_diagnosis.py",
+        "sha256": "1304e844099c99b3d35daae365bf0b87e7f1f68f9d5ec23830ceb8fc62196166",
+        "size_bytes": 1560,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "19a2dcd85db041b86f101e10f892107bc6d5d22187332b213fe7c8c05c409876",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_transformer_depth.py",
+        "sha256": "19a2dcd85db041b86f101e10f892107bc6d5d22187332b213fe7c8c05c409876",
+        "size_bytes": 2337,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "c85782e73575946412338cf096ac31308b78628c55221c4fc384687891883f23",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/foundation/tests/test_variants.py",
+        "sha256": "c85782e73575946412338cf096ac31308b78628c55221c4fc384687891883f23",
+        "size_bytes": 3821,
+        "status": "passed"
+      }
+    ]
+  },
+  "interpretation": "passed means observed terminal release and recorded file integrity only; execution failure, numerical/discrete validity, recovery trajectory and learning remain separate conclusions",
+  "launch_binding": [
+    {
+      "expected_sha256": null,
+      "path": ".local/pilot-r3/padding-repair-r01/prepared.json",
+      "reason": "expected_digest_not_recorded",
+      "sha256": "fcd4100fda43a9078b904e8a549e0c7e1f42c29d641b97375ba3ada5995b0dfd",
+      "size_bytes": 38589,
+      "status": "unknown"
+    }
+  ],
+  "lifecycle": {
+    "cgroup": {
+      "members": [],
+      "path": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-padding-repair-r01.service",
+      "released": true,
+      "status": "absent"
+    },
+    "processes": {
+      "cgroup_members_unobservable_in_process_snapshot": [],
+      "errors": [],
+      "gone_count": 3,
+      "live_processes": [],
+      "main_pid": 0,
+      "malformed_identities": [],
+      "recorded_identity_count": 3,
+      "released": true,
+      "reused_pids": [],
+      "status": "released",
+      "zombies": []
+    },
+    "queue": {
+      "attempts": [
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/round/tasks/padding-repair-numeric-and-replay/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-1.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "r3-padding-repair-r01-padding-repair-numeric-and-replay-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-padding-repair-r01-padding-repair-numeric-and-replay-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/r3-padding-repair-r01-padding-repair-numeric-and-replay-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/round/tasks/padding-repair-numeric-and-replay/attempt-0/queue.json",
+            "sha256": "ba802c5cbbb3deadef5486dd78342e7bfcc7a8d7d2ecab204061e529e3100f6e",
+            "status": "passed"
+          },
+          "recorded_status": "completed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "padding-repair-numeric-and-replay"
+        }
+      ],
+      "released": true,
+      "runtime_directory": "/run/user/1003",
+      "status": "released"
+    },
+    "status": "terminal",
+    "systemd": {
+      "expected_cgroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-padding-repair-r01.service",
+      "expected_cgroup_basis": "observed user slice + exact service unit name",
+      "properties": {
+        "ActiveState": "inactive",
+        "ControlGroup": "",
+        "ExecMainCode": "0",
+        "ExecMainStatus": "0",
+        "InvocationID": "",
+        "LoadState": "not-found",
+        "MainPID": "0",
+        "Result": "success",
+        "Slice": "",
+        "SubState": "dead"
+      },
+      "return_code": 0,
+      "status": "observed",
+      "unit": "tide-pilot-r3-padding-repair-r01.service"
+    }
+  },
+  "physical_accounting": {
+    "checks": [],
+    "status": "not_applicable"
+  },
+  "prepared": {
+    "path": ".local/pilot-r3/padding-repair-r01/prepared.json",
+    "sha256": "fcd4100fda43a9078b904e8a549e0c7e1f42c29d641b97375ba3ada5995b0dfd",
+    "status": "passed"
+  },
+  "round": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/padding-repair-r01/round",
+  "schema": "pilot-r3-terminal-audit-v1",
+  "selected_references": {
+    "checks": [],
+    "external_reference_count": 0
+  },
+  "shared_groups": {
+    "checks": [],
+    "groups": {},
+    "scheduler_live": false
+  },
+  "started_unix": 1795162638.3084774,
+  "status": "incomplete",
+  "unit": "tide-pilot-r3-padding-repair-r01.service"
+}

@@ -1,0 +1,931 @@
+{
+  "causal_chain": {
+    "face_check_record": {
+      "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/face-and-contract-checks.json",
+      "sha256": "949a9c1e97fa025f662eb24c93b0e216607cfb64b5100eb26b4416254b9eff67"
+    },
+    "first_observed_nonfinite": "Ordinary Reception tiled attention returns +Inf on real zero priors at keys 0 and 3. Each independent right derivative is above the true FP32 range. Allocation subsequently receives +Inf, and reports it at its VJP check.",
+    "fp64_operator_reference": {
+      "cpu-trace-attention-7.pt": {
+        "all_root_values": [
+          3.110202733600228e+39,
+          -5.015076198867027e-08,
+          1.9443243303694873e-07,
+          3.110202733600228e+39,
+          -1.603944233060685e-06,
+          1.4596625620123916e-06
+        ],
+        "capture_sha256": "2d3e270aa07b342594bef22f1be0e99b828f34ddd34e380ffe036b790d4724e7",
+        "entries": [
+          {
+            "all_weights": [
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              1.0,
+              1.0
+            ],
+            "finite_query_cotangent_max": 1.1902963024112978e-06,
+            "fp32_limit": 3.4028234663852886e+38,
+            "head": 1,
+            "head_query_center": 2.441046481570666e-06,
+            "key": 0,
+            "largest_term": 3.1097924045670025e+39,
+            "legal_key_mask": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "log_z": -100.13450365057768,
+            "logit_minus_log_z": 103.8584583245027,
+            "logits": [
+              3.7239546739250247,
+              -100.13522685484877,
+              -112.17053617541933,
+              3.7239546739250247,
+              -107.37518530568259,
+              -115.5946008130697
+            ],
+            "native_result": "inf",
+            "query": 5,
+            "root_sum_fp64": 3.110202733600228e+39,
+            "structural": true,
+            "w": 0.0
+          },
+          {
+            "all_weights": [
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              1.0,
+              1.0
+            ],
+            "finite_query_cotangent_max": 1.1902963024112978e-06,
+            "fp32_limit": 3.4028234663852886e+38,
+            "head": 1,
+            "head_query_center": 2.441046481570666e-06,
+            "key": 3,
+            "largest_term": 3.1097924045670025e+39,
+            "legal_key_mask": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "log_z": -100.13450365057768,
+            "logit_minus_log_z": 103.8584583245027,
+            "logits": [
+              3.7239546739250247,
+              -100.13522685484877,
+              -112.17053617541933,
+              3.7239546739250247,
+              -107.37518530568259,
+              -115.5946008130697
+            ],
+            "native_result": "inf",
+            "query": 5,
+            "root_sum_fp64": 3.110202733600228e+39,
+            "structural": true,
+            "w": 0.0
+          }
+        ],
+        "region": {
+          "members": [
+            14
+          ],
+          "region": 9
+        },
+        "row": [
+          0,
+          1,
+          32
+        ]
+      },
+      "npu-trace-attention-7.pt": {
+        "all_root_values": [
+          3.1102049355725483e+39,
+          -5.015089749676377e-08,
+          1.9443179480077806e-07,
+          3.1102049355725483e+39,
+          -1.6039409552301135e-06,
+          1.4596600579261005e-06
+        ],
+        "capture_sha256": "7a32603bf64e14deeea5586e5a9cfc4ad8b4eb0a1aed1b59755b79d5607028a2",
+        "entries": [
+          {
+            "all_weights": [
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              1.0,
+              1.0
+            ],
+            "finite_query_cotangent_max": 1.190296643471811e-06,
+            "fp32_limit": 3.4028234663852886e+38,
+            "head": 1,
+            "head_query_center": 2.44104315494254e-06,
+            "key": 0,
+            "largest_term": 3.109794603108207e+39,
+            "legal_key_mask": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "log_z": -100.13450652953354,
+            "logit_minus_log_z": 103.85846039426471,
+            "logits": [
+              3.7239538647311727,
+              -100.13522973985347,
+              -112.17055489350521,
+              3.7239538647311727,
+              -107.37517962980316,
+              -115.59457254271088
+            ],
+            "native_result": "inf",
+            "query": 5,
+            "root_sum_fp64": 3.1102049355725483e+39,
+            "structural": true,
+            "w": 0.0
+          },
+          {
+            "all_weights": [
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              1.0,
+              1.0
+            ],
+            "finite_query_cotangent_max": 1.190296643471811e-06,
+            "fp32_limit": 3.4028234663852886e+38,
+            "head": 1,
+            "head_query_center": 2.44104315494254e-06,
+            "key": 3,
+            "largest_term": 3.109794603108207e+39,
+            "legal_key_mask": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "log_z": -100.13450652953354,
+            "logit_minus_log_z": 103.85846039426471,
+            "logits": [
+              3.7239538647311727,
+              -100.13522973985347,
+              -112.17055489350521,
+              3.7239538647311727,
+              -107.37517962980316,
+              -115.59457254271088
+            ],
+            "native_result": "inf",
+            "query": 5,
+            "root_sum_fp64": 3.1102049355725483e+39,
+            "structural": true,
+            "w": 0.0
+          }
+        ],
+        "region": {
+          "members": [
+            14
+          ],
+          "region": 9
+        },
+        "row": [
+          0,
+          1,
+          32
+        ]
+      }
+    },
+    "fp64_reference_record": {
+      "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/operator-reference.json",
+      "sha256": "257c8a6c0ff1cf180325a9239325d557176797601a8a2433e81765324b278818"
+    },
+    "producer_and_zero_prior_controls": {
+      "independent_prior_0.0": {
+        "d_output_d_first_prior": 2.0,
+        "first_prior": 0.0
+      },
+      "independent_prior_1e-30": {
+        "d_output_d_first_prior": 2.0,
+        "first_prior": 1e-30
+      },
+      "independently_trainable_lower_at_zero": {
+        "d_control0_d_lower": [
+          1.0,
+          0.0
+        ],
+        "output": 0.0
+      },
+      "node_3": {
+        "both_signs_all_coordinates_outputs": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "coordinate_perturbation_size": 1e-05,
+        "received_derivatives": [
+          0.0,
+          0.0
+        ],
+        "score_derivatives": [
+          0.0,
+          0.0
+        ]
+      },
+      "node_6": {
+        "both_signs_all_coordinates_outputs": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "coordinate_perturbation_size": 1e-05,
+        "received_derivatives": [
+          0.0,
+          0.0
+        ],
+        "score_derivatives": [
+          0.0,
+          0.0
+        ]
+      },
+      "zero_received_with_movable_upper": {
+        "d_control0_d_received": [
+          2.0,
+          0.0
+        ],
+        "output": 0.0
+      }
+    },
+    "producer_edges": {
+      "0": {
+        "destination_node": 14,
+        "excluded": true,
+        "fixed": false,
+        "high_total_active": false,
+        "low_total_active": false,
+        "lower": 0.0,
+        "lower_face": true,
+        "member": 0,
+        "mu": 1.0,
+        "output": 0.0,
+        "region_row": {
+          "budget": 1,
+          "partition": "group",
+          "profile": "quad",
+          "received": [
+            1.0,
+            2.0
+          ],
+          "roles": [
+            false,
+            false
+          ],
+          "score": [
+            -1.1826717853546143,
+            5.340340614318848
+          ]
+        },
+        "role": "D",
+        "score": -1.1826717853546143,
+        "slot": 0,
+        "source_node": 3,
+        "source_region": 2,
+        "upper": 1.0,
+        "upper_face": false,
+        "w": 1.0,
+        "weight": 0.0
+      },
+      "3": {
+        "destination_node": 14,
+        "excluded": true,
+        "fixed": false,
+        "high_total_active": false,
+        "low_total_active": false,
+        "lower": 0.0,
+        "lower_face": true,
+        "member": 0,
+        "mu": 1.0,
+        "output": 0.0,
+        "region_row": {
+          "budget": 1,
+          "partition": "group",
+          "profile": "quad",
+          "received": [
+            1.0,
+            2.0
+          ],
+          "roles": [
+            false,
+            false
+          ],
+          "score": [
+            -0.27393054962158203,
+            5.41212272644043
+          ]
+        },
+        "role": "D",
+        "score": -0.27393054962158203,
+        "slot": 3,
+        "source_node": 6,
+        "source_region": 4,
+        "upper": 1.0,
+        "upper_face": false,
+        "w": 1.0,
+        "weight": 0.0
+      }
+    },
+    "producer_jacobian": "Both ordinary D-node outputs are on the locally constant lower face at zero, with positive upper bound. Their derivatives with respect to the actual scores and received amounts are all zero.",
+    "receiver": {
+      "batch_index": 1,
+      "indices": "zero-based",
+      "largest_term_head": 1,
+      "largest_term_query": 5,
+      "node": 14,
+      "region": 9,
+      "sequence_index": 32
+    },
+    "reference_method": "Direct CPU binary64 normalized weighted-attention derivative using captured FP32 Q/K/V and output cotangents. Sum contributions over heads and queries for each compact prior."
+  },
+  "checkpoint_replay": {
+    "exact_load_both": true,
+    "fault_batch_identical_in_both": true,
+    "last_update": {
+      "grad_norm": 1.1605229377746582,
+      "loss": 5.3239336013793945,
+      "objective": 5.3239336013793945,
+      "step": 8020,
+      "tokens": 2053120
+    },
+    "model_optimizer_private_state_finite": true,
+    "now_finite_fault_step": {
+      "grad_norm": 1.22581148147583,
+      "loss": 5.954363822937012,
+      "objective": 5.954363822937012,
+      "step": 8016,
+      "tokens": 2052096
+    },
+    "official_step": 7986,
+    "prototype_contiguous_updates": [
+      7987,
+      8020
+    ],
+    "prototype_report": {
+      "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/npu-checkpoint-replay.json",
+      "sha256": "bdfeb38f56860cf365c6472e7e3a0b17314fed60986bc0e182ee003c3d20ecad"
+    },
+    "prototype_update_count": 34,
+    "prototype_vs_independent_unmodified_replay": {
+      "first": 7987,
+      "last": 8015,
+      "matched_steps": 29,
+      "max_abs": {
+        "grad_norm": 1.1801719665527344e-05,
+        "loss": 2.384185791015625e-06
+      }
+    },
+    "prototype_vs_original_formal_journal": {
+      "first": 7987,
+      "last": 8015,
+      "matched_steps": 29,
+      "max_abs": {
+        "grad_norm": 0.0013136863708496094,
+        "loss": 3.9577484130859375e-05
+      }
+    },
+    "unmodified_raised_at": 8016,
+    "unmodified_report": {
+      "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/npu-unmodified-checkpoint-replay.json",
+      "sha256": "dd47c39a4cd06dd73212abca461bd9f27b9ed372529e4c487975941a0e931106"
+    },
+    "unmodified_vs_original_formal_journal": {
+      "first": 7987,
+      "last": 8015,
+      "matched_steps": 29,
+      "max_abs": {
+        "grad_norm": 0.0013211965560913086,
+        "loss": 3.8623809814453125e-05
+      }
+    },
+    "worker_deterministic": false
+  },
+  "decision": {
+    "production_followup": "Regression coverage for ordinary fixed lower faces, independently trainable zero priors, movable lower/upper bounds, weak positive weights and supported batched/timed and continuation routes. Recheck the failure capture, the post-fault checkpoint successor, and the dispatch cost on the pinned production implementation.",
+    "recommended_implementation": "Carry proof of a locally constant zero ordinary allocation output through the relevant routes in the upstream foundation. Restrict only its compact key-prior derivative in Reception. Retain the general zero-prior right derivative, trainable bounds, positive mass and explicit range errors for required derivatives.",
+    "status": "Diagnostic prototype verified on the captured step and bounded formal-checkpoint replay. The formal campaign remains blocked on 17c7d675."
+  },
+  "diagnostic_programs": {
+    "check_step.py": {
+      "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/check_step.py",
+      "sha256": "4e681b17c1831ec687260402ab80476fd35068652ace3b26c7c4891b235c21b7"
+    },
+    "diagnose.py": {
+      "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/diagnose.py",
+      "sha256": "cd694b1e7b9a8078cf3cc01964d87562dbca42b50f79c4de815a0bce2d768a4d"
+    },
+    "original_trajectory.py": {
+      "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/original_trajectory.py",
+      "sha256": "7ad019afeb7690f37cde2760a18301d700d7bb2f49f0727f8bcf2161376e95c0"
+    },
+    "reference.py": {
+      "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/reference.py",
+      "sha256": "d9beafca3eb33a845bc9bd12a90b4cee69db7dfca211eb01f4ebe78ea5922754"
+    },
+    "run.sh": {
+      "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/run.sh",
+      "sha256": "bfb582f0b962e97ded622aa982c5f69756eab14dee91148a94398113533badbb"
+    },
+    "scope.py": {
+      "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/scope.py",
+      "sha256": "e4da719b4fbcdf0dbbfe4eeace531568bddf364c5dc00d1464fcf5bf37718a2a"
+    },
+    "trace_attention.py": {
+      "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/trace_attention.py",
+      "sha256": "c449b76a78337184d72e5c16fc1c68c47a19700cf8432f542f5f58d84b004ca4"
+    },
+    "verify_faces.py": {
+      "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/verify_faces.py",
+      "sha256": "4299362c4269a9bd1c02447c149cf2631d2577ca08c412d50cb926ef1a95786e"
+    }
+  },
+  "formal_checkpoint": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r11/round/tasks/exchange-d128-k-narrowwide-a8b4f1078d-a3-2026112001-r2/attempt-0/checkpoints/step-000007986-7d8ea50d03.pt",
+    "sha256": "80c0e3b0283bffefd3b26f0905751ab2c6779480ba415ce9014006151ead4604",
+    "size_bytes": 39541143,
+    "state_sha256": "709434eb128fb8c44b1e9cd3b3d0408a11a247a50f8951016c3298d9209651cc",
+    "steps": 7986,
+    "tokens": 2044416
+  },
+  "foundation_commit": "17c7d6755eea83c98fa984bc1a55230b9817eaa4",
+  "frozen_source_hashes_verified": 77,
+  "observed_local": "2026-11-21T13:47:44+08:00",
+  "original_failure_capture": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r11/round/tasks/exchange-d128-k-narrowwide-a8b4f1078d-a3-2026112001-r2/attempt-0/failure.pt",
+    "sha256": "4cae5131db77ce0333e5b1cf795885a3eabf578fbadfc9304417a8fd05636f50"
+  },
+  "prototype": {
+    "checkpoint_state": "No change to model, optimizer or recurrent-state structures in this diagnostic.",
+    "independent_step_control": "Same original graph, captured inputs, parameters, private state and optimizer. Divide the loss by 16 for backward, then multiply parameter gradients by 16 before clipping and AdamW. This is a conditioning control for this input.",
+    "scope": "Isolated unbatched Settle/quad reception on the frozen failure path. Forward and backend dispatch are unchanged. The producer face proof follows the two actual topology edges to the key-prior backward. Finite-positive and unproved zero priors keep the original VJP.",
+    "single_step": {
+      "cpu": {
+        "comparison": {
+          "model_after_step": {
+            "atol": 1e-05,
+            "exact": true,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 109,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 0.0,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "optimizer_after_step": {
+            "atol": 1e-05,
+            "exact": true,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 372,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 0.0,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "parameter_gradients_before_clip": {
+            "atol": 1e-05,
+            "exact": true,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 90,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 0.0,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "private_state": {
+            "atol": 1e-05,
+            "exact": true,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 56,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 0.0,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "grad_norm_before_clip": 1.2257448434829712,
+        "logits_bitwise_equal": true,
+        "loss": 5.954333305358887,
+        "parameter_gradients": 90,
+        "scaled_control_raw_state": {
+          "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/cpu-scaled16.pt",
+          "sha256": "68bd4f45c2006c4d13bdcb2fc3a1fa3cfe1ce6f2f309b445e3fbe52dc3fb1c2e"
+        },
+        "unchanged_graph_scaled_control_report": {
+          "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/cpu-scaled16.json",
+          "sha256": "75a8c9daee5984bcda27a2b25833ae363b7220cb7765a13be0730fdc21ae5697"
+        },
+        "unscaled_prototype_report": {
+          "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/cpu-proof.json",
+          "sha256": "17633c8e507343e11eade062c5c4363a15093b3e9a8ac709cf558804110729c8"
+        }
+      },
+      "npu": {
+        "comparison": {
+          "model_after_step": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 109,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 7.450580596923828e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "optimizer_after_step": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 372,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 2.3283064365386963e-10,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "parameter_gradients_before_clip": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 90,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 1.862645149230957e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "private_state": {
+            "atol": 1e-05,
+            "exact": true,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 56,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 0.0,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "grad_norm_before_clip": 1.2258639335632324,
+        "logits_bitwise_equal": true,
+        "loss": 5.954333305358887,
+        "parameter_gradients": 90,
+        "scaled_control_raw_state": {
+          "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/npu-scaled16.pt",
+          "sha256": "4d4f9891b9071471de2715dc365cfde451ab1c82ffb6d989a647a2a662d48b9a"
+        },
+        "unchanged_graph_scaled_control_report": {
+          "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/npu-scaled16.json",
+          "sha256": "e0a3ce704f28becc0dd9aaec27e17c84d9878d068c216ee02300ad280da922ce"
+        },
+        "unscaled_prototype_report": {
+          "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/npu-proof.json",
+          "sha256": "19feaedd87e258009ad906d1f608f011c337eafb3b5be5aae33142d69de1febb"
+        }
+      }
+    }
+  },
+  "reproduction": {
+    "cpu": {
+      "allocator_tensors": {
+        "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/cpu-baseline-op.pt",
+        "sha256": "5873e77992bc5830f57dee47fc7a8dad0f4bf79f40bb05d5f3552b0a964f9d97"
+      },
+      "attention_tensors": {
+        "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/cpu-trace-attention-7.pt",
+        "sha256": "2d3e270aa07b342594bef22f1be0e99b828f34ddd34e380ffe036b790d4724e7"
+      },
+      "baseline_file": {
+        "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/cpu-baseline.json",
+        "sha256": "041ccbbfa157eae4e8342d1998958c5e5f7ae6b99c9d76e2305276c9fc3dd74a"
+      },
+      "incoming_attention_grad": {
+        "bad": [],
+        "dtype": "torch.float32",
+        "infs": 0,
+        "max_abs": 5.73127954339725e-06,
+        "nans": 0,
+        "shape": [
+          1,
+          2,
+          128,
+          4,
+          6,
+          32
+        ]
+      },
+      "loss": 5.954333305358887,
+      "nonfinite_incoming_at_allocation": {
+        "incoming": {
+          "bad": [
+            [
+              1,
+              32,
+              0
+            ]
+          ],
+          "dtype": "torch.float32",
+          "infs": 1,
+          "max_abs": 1.487420620513063e+30,
+          "nans": 0,
+          "shape": [
+            2,
+            128,
+            2
+          ]
+        },
+        "kind": "quad",
+        "op": 2
+      },
+      "output_logits": {
+        "bad": [],
+        "dtype": "torch.float32",
+        "infs": 0,
+        "max_abs": 13.01954460144043,
+        "nans": 0,
+        "shape": [
+          2,
+          128,
+          8192
+        ]
+      },
+      "receiver_region_node": {
+        "members": [
+          14
+        ],
+        "region": 9
+      },
+      "reception_trace": {
+        "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/cpu-trace-calls.json",
+        "sha256": "5d578f6f158022d9d0c1f33a62dd4099c170e07f0ae0810fdceab9fee4778a12"
+      },
+      "returned_prior_grad": {
+        "bad": [
+          [
+            0,
+            1,
+            32,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            32,
+            0,
+            0,
+            3
+          ]
+        ],
+        "dtype": "torch.float32",
+        "infs": 2,
+        "max_abs": 1.487420620513063e+30,
+        "nans": 0,
+        "shape": [
+          1,
+          2,
+          128,
+          1,
+          1,
+          6
+        ]
+      },
+      "tiled_call": 7
+    },
+    "npu": {
+      "allocator_tensors": {
+        "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/npu-baseline-op.pt",
+        "sha256": "41c1bc5e2915092103e52d66385cc2b6f048bc6ca325549ff01bac5ba83e9a58"
+      },
+      "attention_tensors": {
+        "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/npu-trace-attention-7.pt",
+        "sha256": "7a32603bf64e14deeea5586e5a9cfc4ad8b4eb0a1aed1b59755b79d5607028a2"
+      },
+      "baseline_file": {
+        "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/npu-baseline.json",
+        "sha256": "21010123c2e85fc8b98a52f7227ba4d7093d2154c79d865e836cad573e3a64ad"
+      },
+      "incoming_attention_grad": {
+        "bad": [],
+        "dtype": "torch.float32",
+        "infs": 0,
+        "max_abs": 5.731311830459163e-06,
+        "nans": 0,
+        "shape": [
+          1,
+          2,
+          128,
+          4,
+          6,
+          32
+        ]
+      },
+      "loss": 5.954333305358887,
+      "nonfinite_incoming_at_allocation": {
+        "incoming": {
+          "bad": [
+            [
+              1,
+              32,
+              0
+            ]
+          ],
+          "dtype": "torch.float32",
+          "infs": 1,
+          "max_abs": 1.487433314234169e+30,
+          "nans": 0,
+          "shape": [
+            2,
+            128,
+            2
+          ]
+        },
+        "kind": "quad",
+        "op": 2
+      },
+      "output_logits": {
+        "bad": [],
+        "dtype": "torch.float32",
+        "infs": 0,
+        "max_abs": 13.019542694091797,
+        "nans": 0,
+        "shape": [
+          2,
+          128,
+          8192
+        ]
+      },
+      "receiver_region_node": {
+        "members": [
+          14
+        ],
+        "region": 9
+      },
+      "reception_trace": {
+        "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/npu-trace-calls.json",
+        "sha256": "146ec776441e6661bd42d92c3633080f3becd2ea698046758766868561b899f1"
+      },
+      "returned_prior_grad": {
+        "bad": [
+          [
+            0,
+            1,
+            32,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            32,
+            0,
+            0,
+            3
+          ]
+        ],
+        "dtype": "torch.float32",
+        "infs": 2,
+        "max_abs": 1.487433314234169e+30,
+        "nans": 0,
+        "shape": [
+          1,
+          2,
+          128,
+          1,
+          1,
+          6
+        ]
+      },
+      "tiled_call": 7
+    }
+  },
+  "run": "r3-campaign-r11",
+  "runtime": {
+    "backends": [
+      "cpu",
+      "npu:0"
+    ],
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONPATH": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r11/source:/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r11/foundation/src",
+      "TORCH_DEVICE_BACKEND_AUTOLOAD": "0",
+      "module": "ascend/dev-workspace-9.2.0"
+    },
+    "npu_physical_id": 4,
+    "npu_queue_receipts": [
+      {
+        "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/queue-candidate.json",
+        "sha256": "7f01d54cd7ddd68c7d70998d81a50dd73b8e27b88e4a6f59626c2edea8aa73b4"
+      },
+      {
+        "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/queue-control.json",
+        "sha256": "0bc7e5bc1c890dccc3e5c28a35681eb3fe72045a23b88b6692aefefe077ff65a"
+      },
+      {
+        "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/queue-initial.json",
+        "sha256": "d72a0d00735e512dc1f6b21034e3718565cb48f8ee5786bd87bb457e97a570b7"
+      },
+      {
+        "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/queue-replay.json",
+        "sha256": "cde04ba8082f1962852aef324f3701a5ef9d40061679c711dcab5f00b92dd9a4"
+      },
+      {
+        "path": ".local/pilot-r3/quad-r11-vjp-qC0r2h/queue-trace.json",
+        "sha256": "b9a3c3802f4ebc1dbdef74e06c99f3e30a457d5ef0dd6c7ccd68b270d4b2d9b5"
+      }
+    ],
+    "python": "3.12.13",
+    "runtime_packages": {
+      "numpy": "2.5.2",
+      "torch": "2.12.0+cpu",
+      "torch-npu": "2.12.0.post3"
+    }
+  },
+  "schema": "pilot-r3-exchange-quad-reception-vjp-diagnosis-v1",
+  "stage": {
+    "failed_update": 8016,
+    "finished_steps": 8015,
+    "model_config": {
+      "aggregation": "incoming_wide",
+      "allocation": "quad",
+      "ffn_width": 128,
+      "kv_width": 64,
+      "memory": "K",
+      "region_batch_size": 1
+    },
+    "original_error": "allocation VJP exceeds the requested dtype range",
+    "parameters": {
+      "batch_size": 2,
+      "lr": 0.001,
+      "precision": "fp32",
+      "recipe_id": "r2",
+      "seed": 2026112001,
+      "sequence_length": 128
+    },
+    "phase": "a3"
+  },
+  "task": {
+    "path": ".local/pilot-r3/campaign-r11/round/tasks/exchange-d128-k-narrowwide-a8b4f1078d-a3-2026112001-r2/attempt-0/task.json",
+    "sha256": "3716fbe89695a2996dbb3a78ea1672e7d6f7cf04c540984b70132e2bca28227b"
+  },
+  "task_id": "exchange-d128-k-narrowwide-a8b4f1078d-a3-2026112001-r2",
+  "worker_result": {
+    "path": ".local/pilot-r3/campaign-r11/round/tasks/exchange-d128-k-narrowwide-a8b4f1078d-a3-2026112001-r2/attempt-0/result.json",
+    "sha256": "44890d29e5857fc5f2e44ddb5cc3aefe66ff463a5912d2e0fb03283302c05634"
+  }
+}

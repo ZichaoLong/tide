@@ -1,0 +1,650 @@
+{
+  "accounting": {
+    "device_seconds": 14.511191487312317,
+    "diagnostic_completed_cpu_update_tokens": 2304,
+    "npu_optimizer_steps": 0,
+    "preparation": true,
+    "preparation_device_seconds": 14.511191487312317,
+    "preparation_reserved_tokens": 2560,
+    "queue_receipt": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-total-diagnostic/npu-queue.json",
+      "sha256": "e52e64e097d9db32682db884dcf4e0d3477ff1af4163af7d83c7544c1f4a9e78"
+    },
+    "scope": "one NPU operator probe, wall time from queue entry through exit; CPU-only checkpoint replays, including one forward that reproduced the original exception",
+    "status": "completed"
+  },
+  "cpu_step": {
+    "digests": {
+      "gradients_after_clipping": "35749aed1f7cc47af3d56d21ae88144c22baf904616c584de39422a11f8feec0",
+      "logits": "6e04f04aca61217fcd0584a43b248de99e1f92a0e8511ae345f14643a1fe3675",
+      "model": "668b3a923acc12664a0acc42f834d3b39117c45027fda33f60bdb3bcef980b3b",
+      "optimizer": "02798698abb50420f13a1d937e4ad652abc15b961d3ac059271aea9f43187b20",
+      "private_state": "a05100907b29bb0181d9a553676988303496e21642a6ba48286c00184a3ea269"
+    },
+    "grad_norm_before_clipping": 1.170858383178711,
+    "loss": 6.279026985168457,
+    "prototype_vs_exact_row_reference_digests_equal": true,
+    "rows_refined": 1
+  },
+  "diagnostic_artifacts": {
+    "env.sh": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-total-diagnostic/env.sh",
+      "sha256": "b9e7fea7fffb5e7b20949f2df741b61c0a7347c4ac30bcf1bea326430b4cd724"
+    },
+    "isolated_step.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-total-diagnostic/isolated_step.py",
+      "sha256": "35c164fb5cdb60d23acb71a53a54961b429915f0abd7dfe35d5f8f73f0c95007"
+    },
+    "neighbors.json": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-total-diagnostic/neighbors.json",
+      "sha256": "3c37ede4d10cc50ed8ef3b6cf5f275138920516fc33b29ef5b01abdbe88060a4"
+    },
+    "neighbors.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-total-diagnostic/neighbors.py",
+      "sha256": "74dd5e4055a058cc2dd86c89532b183e55a630c6722ef2933b4021fac2fe415f"
+    },
+    "npu-operator.json": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-total-diagnostic/npu-operator.json",
+      "sha256": "96d02ebe942c230c8fb276ce7cf8634dfe3ef6cf8924b289a6b037c9cef7edc4"
+    },
+    "npu-queue.json": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-total-diagnostic/npu-queue.json",
+      "sha256": "e52e64e097d9db32682db884dcf4e0d3477ff1af4163af7d83c7544c1f4a9e78"
+    },
+    "npu_operator.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-total-diagnostic/npu_operator.py",
+      "sha256": "4e249ad5d1a6345b9b989bff3b8046d6391d71110ceaa718118f41482d125e97"
+    },
+    "observed.json": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-total-diagnostic/observed.json",
+      "sha256": "f72b08396a0d95015a03bc3ee0800439ee7c7bb2a32f8c1ccc18d685cd583246"
+    },
+    "operator.json": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-total-diagnostic/operator.json",
+      "sha256": "70d746b7136f0b00e06bf50de6c1cee715268d275a957710d6be342243f48e51"
+    },
+    "prefix.json": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-total-diagnostic/prefix.json",
+      "sha256": "d1ff43bb3ba9c61889045dcfb46763c7a2ecf13c4b2556ebe169ea1eaea8f2f4"
+    },
+    "prefix.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-total-diagnostic/prefix.py",
+      "sha256": "2faf85a0618df793b02e309ed53efb9438fd5fa3de5ce0f2d9430aa72195f210"
+    },
+    "prototype.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-total-diagnostic/prototype.py",
+      "sha256": "26b5f97cd9062040becca0234f3e1b88434b955f395422b2e82c6ee3aa23153e"
+    },
+    "replay.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-total-diagnostic/replay.py",
+      "sha256": "604645c5d3ac6f0f95dcb0638d5d0935e41ac36cb6b67f61f18c19ed979474a1"
+    },
+    "review.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-total-diagnostic/review.py",
+      "sha256": "6554ab859b90bc59f13eb53a90ce053171361f0896fb584d7d7ef5e9fbbd29d0"
+    },
+    "run-npu.sh": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-total-diagnostic/run-npu.sh",
+      "sha256": "f74766dd5bdcbc876809df9433f45c48f117db0b417c5d05bb6ae22c6952bb5d"
+    },
+    "step-native.json": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-total-diagnostic/step-native.json",
+      "sha256": "6156564c3084c6882fb0b6970498a11b76e77169a8999627b95884448fb37fd3"
+    },
+    "step-rational.json": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-total-diagnostic/step-rational.json",
+      "sha256": "9e006ba9c3bcd1891090b4c19694d8c73cd31bd9385e02fa549ae7acdd47d491"
+    },
+    "test_candidate.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-total-diagnostic/test_candidate.py",
+      "sha256": "fdfca74676df4f3225881fb492c4ecbb770a9ad0ce8d39748a7baefe36b0326b"
+    }
+  },
+  "diagnostic_candidate": "Check the signed sum residual including a compensated tail when the solution has no interior. On a disputed fixed-total quad row peg provably saturated bounds and reconstruct remaining mass on the remaining coordinates in a local score origin. Keep the ordinary solver and zero-at-true-bound convention.",
+  "files": {
+    "allocator_input": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-total-diagnostic/failed-allocation.pt",
+      "sha256": "6e053b0067a498dde6c165c67464d09d4d93b5909a7e1f1dc20609b4f1925c14"
+    },
+    "capture": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112001-r5/attempt-0/failure.pt",
+      "sha256": "fec1d1105a1852396c5e1830b59fb20fe3859f8e12c5706e15801eb813bdf793"
+    },
+    "checkpoint": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112001-r5/attempt-0/checkpoints/step-000000920-c8044c5cf2.pt",
+      "sha256": "bb1d7b0a10e62d47f6735539cb445621ca401a46c010ec4647c22fea21e5c1e1",
+      "size_bytes": 404226231,
+      "state_sha256": "c3f868a5bc44237fac6166fa96a16f8d9c0f434aa183672572201fec4e17f497",
+      "steps": 920,
+      "tokens": 235520
+    },
+    "official_result": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112001-r5/attempt-0/result.json",
+      "sha256": "c01420d772fc4bc74d7d739e2bf414ca0962795ada2f1109b5c80b40c468c260"
+    },
+    "scheduler": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/scheduler.json",
+      "sha256": "f1e190f38e611d2b9eee0a4548cb4a0a6ed0e9ee98460b21ba2710cf3a80258c"
+    },
+    "selected": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/selected.json",
+      "sha256": "b27f9ab0b91eaf445e79fbbbbd94d89fd8f53813d39bdd856e00c4ab02c8e2f9"
+    }
+  },
+  "independent_oracle": "Exact rational constrained quadratic for the actual two-candidate rows; independently computed feasible stationary faces on the three-node control. Small operator gradient also checked against CPU FP64 and the analytic derivative.",
+  "mechanism": {
+    "adjacent_positive_case": {
+      "fp32_candidate": {
+        "constant_zero": [
+          false,
+          false
+        ],
+        "control": [
+          0.9999990463256836,
+          9.5367431640625e-07
+        ],
+        "received_vjp": [
+          -2.0,
+          0.0
+        ]
+      },
+      "fp64": {
+        "constant_zero": [
+          false,
+          false
+        ],
+        "control": [
+          0.9999990463256836,
+          9.5367431640625e-07
+        ],
+        "received_vjp": [
+          -2.0,
+          0.0
+        ]
+      },
+      "name": "small",
+      "old_fp32": {
+        "constant_zero": [
+          false,
+          true
+        ],
+        "control": [
+          0.9999990463256836,
+          0.0
+        ],
+        "received_vjp": [
+          0.0,
+          0.0
+        ]
+      },
+      "oracle": [
+        0.9999990463256836,
+        9.5367431640625e-07
+      ]
+    },
+    "exact_positive_remainder": 5.7220458984375e-06,
+    "exact_zero_control": {
+      "fp32_candidate": {
+        "constant_zero": [
+          false,
+          true
+        ],
+        "control": [
+          1.0,
+          0.0
+        ],
+        "received_vjp": [
+          0.0,
+          0.0
+        ]
+      },
+      "fp64": {
+        "constant_zero": [
+          false,
+          true
+        ],
+        "control": [
+          1.0,
+          0.0
+        ],
+        "received_vjp": [
+          0.0,
+          0.0
+        ]
+      },
+      "name": "exact_zero",
+      "old_fp32": {
+        "constant_zero": [
+          false,
+          true
+        ],
+        "control": [
+          1.0,
+          0.0
+        ],
+        "received_vjp": [
+          0.0,
+          0.0
+        ]
+      },
+      "oracle": [
+        1.0,
+        0.0
+      ]
+    },
+    "multiplier_brackets": [
+      {
+        "iterations": 40,
+        "left": -240.17800903320312,
+        "left_response": [
+          0.9999942779541016,
+          1.52587890625e-05
+        ],
+        "right": -240.17799377441406,
+        "right_response": [
+          0.9999942779541016,
+          0.0
+        ],
+        "spacing": 1.52587890625e-05
+      },
+      {
+        "iterations": 80,
+        "left": -240.17800903320312,
+        "left_response": [
+          0.9999942779541016,
+          1.52587890625e-05
+        ],
+        "right": -240.17799377441406,
+        "right_response": [
+          0.9999942779541016,
+          0.0
+        ],
+        "spacing": 1.52587890625e-05
+      }
+    ],
+    "problem": "FP32 quad multiplier rounds onto the weak node lower breakpoint; the fast path loses the fraction and the bisection sees an empty interior",
+    "row_formula": "With total 1 and the high-score coordinate strictly capped, c0=upper0 and c1=1-upper0.",
+    "slab": {
+      "calls_refined": 1,
+      "max_abs_vs_rounded_oracle": 0.0,
+      "rows_refined": 1,
+      "shape": [
+        2,
+        1280,
+        2
+      ],
+      "support_mismatches": 0,
+      "total_rows": 2560,
+      "uncertified_flat_fast_rows": 0,
+      "value_mismatches": 0
+    },
+    "three_nodes": {
+      "baseline": "allocation multiplier did not meet the total constraint",
+      "oracle": [
+        0.5,
+        0.49999427795410156,
+        5.7220458984375e-06
+      ],
+      "proposed": [
+        0.5,
+        0.49999427795410156,
+        5.7220458984375e-06
+      ],
+      "scores": [
+        35.0,
+        20.0,
+        -205.1953582763672
+      ],
+      "target": 1.0,
+      "upper": [
+        0.5,
+        0.49999427795410156,
+        1.0
+      ]
+    }
+  },
+  "npu": {
+    "logical_device": "npu:0",
+    "operator_rows": [
+      {
+        "diagnostic": {
+          "constant_zero": [
+            false,
+            false
+          ],
+          "control": [
+            0.9999942779541016,
+            5.7220458984375e-06
+          ],
+          "received_vjp": [
+            -2.0,
+            0.0
+          ]
+        },
+        "name": "real",
+        "original": {
+          "error": "allocation multiplier did not meet the total constraint"
+        },
+        "original_matches_cpu": true
+      },
+      {
+        "diagnostic": {
+          "constant_zero": [
+            false,
+            false
+          ],
+          "control": [
+            0.9999990463256836,
+            9.5367431640625e-07
+          ],
+          "received_vjp": [
+            -2.0,
+            0.0
+          ]
+        },
+        "name": "small",
+        "original": {
+          "constant_zero": [
+            false,
+            true
+          ],
+          "control": [
+            0.9999990463256836,
+            0.0
+          ],
+          "received_vjp": [
+            0.0,
+            0.0
+          ]
+        },
+        "original_matches_cpu": true
+      },
+      {
+        "diagnostic": {
+          "constant_zero": [
+            false,
+            true
+          ],
+          "control": [
+            1.0,
+            0.0
+          ],
+          "received_vjp": [
+            0.0,
+            0.0
+          ]
+        },
+        "name": "exact_zero",
+        "original": {
+          "constant_zero": [
+            false,
+            true
+          ],
+          "control": [
+            1.0,
+            0.0
+          ],
+          "received_vjp": [
+            0.0,
+            0.0
+          ]
+        },
+        "original_matches_cpu": true
+      }
+    ],
+    "optimizer_steps": 0,
+    "physical_ids": "9",
+    "slab_bitwise_output_equal_to_cpu": true,
+    "slab_max_abs": 0.0,
+    "slab_same_positive_support": true,
+    "slab_shape": [
+      2,
+      1280,
+      2
+    ],
+    "slab_solver": {
+      "calls_refined": 1,
+      "rows_refined": 1,
+      "uncertified_flat_fast_rows": 0
+    }
+  },
+  "observed": {
+    "cases": [
+      {
+        "c": [
+          0.9999942779541016,
+          0.0
+        ],
+        "center": [
+          34.98263168334961
+        ],
+        "fallback": [
+          true
+        ],
+        "high_active": [
+          false
+        ],
+        "high_total": [
+          1.0
+        ],
+        "index": [
+          0,
+          732
+        ],
+        "low_active": [
+          true
+        ],
+        "low_total": [
+          1.0
+        ],
+        "lower": [
+          0.0,
+          0.0
+        ],
+        "mu": [
+          0.9999942779541016,
+          1.0
+        ],
+        "output_sum": [
+          0.9999942779541016
+        ],
+        "residual": [
+          -5.7220458984375e-06
+        ],
+        "s0": [
+          0.9999942779541016
+        ],
+        "scores": [
+          34.98263168334961,
+          -205.1953582763672
+        ],
+        "shifted": [
+          0.0,
+          -240.17799377441406
+        ],
+        "sorted_allocation": [
+          0.9999942779541016,
+          0.0
+        ],
+        "sum_lower": [
+          0.0
+        ],
+        "sum_upper": [
+          1.9999942779541016
+        ],
+        "target": [
+          1.0
+        ],
+        "tolerance": [
+          3.814697265625e-06
+        ],
+        "upper": [
+          0.9999942779541016,
+          1.0
+        ],
+        "valid": [
+          false
+        ],
+        "w": [
+          0.4999971389770508,
+          0.5000028610229492
+        ]
+      }
+    ],
+    "checkpoint": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112001-r5/attempt-0/checkpoints/step-000000920-c8044c5cf2.pt",
+      "sha256": "bb1d7b0a10e62d47f6735539cb445621ca401a46c010ec4647c22fea21e5c1e1",
+      "size_bytes": 404226231,
+      "state_sha256": "c3f868a5bc44237fac6166fa96a16f8d9c0f434aa183672572201fec4e17f497",
+      "steps": 920,
+      "tokens": 235520
+    },
+    "checkpoint_restore_exact": true,
+    "device": "cpu",
+    "dtype": "torch.float32",
+    "error": "allocation multiplier did not meet the total constraint",
+    "failure_capture": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112001-r5/attempt-0/failure.pt",
+      "sha256": "fec1d1105a1852396c5e1830b59fb20fe3859f8e12c5706e15801eb813bdf793"
+    },
+    "fallback_count": 1,
+    "input": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-total-diagnostic/failed-allocation.pt",
+      "sha256": "6e053b0067a498dde6c165c67464d09d4d93b5909a7e1f1dc20609b4f1925c14"
+    },
+    "layer": 4,
+    "members": [
+      18,
+      19
+    ],
+    "missed": 1,
+    "model_and_private_state_match": true,
+    "next_input_and_target_match": true,
+    "region": 7,
+    "result": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112001-r5/attempt-0/result.json",
+      "sha256": "c01420d772fc4bc74d7d739e2bf414ca0962795ada2f1109b5c80b40c468c260"
+    },
+    "roles": [
+      false,
+      false
+    ],
+    "shape": [
+      2,
+      1280,
+      2
+    ],
+    "solved_count": 562,
+    "step": 921,
+    "strides": [
+      1280,
+      1,
+      2560
+    ],
+    "task": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112001-r5/task.json",
+      "sha256": "1f2af0b73299d23322a56587fd679d69cf4be19f2fe94f996806883b2b44bc62"
+    }
+  },
+  "official_status": {
+    "blocking_reason": "Blocked: a1: shared_group_not_completed:worker_process_failed:multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112001-r5:1",
+    "counts": {
+      "completed": 133,
+      "failed": 18,
+      "pending": 161,
+      "stopped_budget": 25
+    },
+    "schema": "pilot-r3-scheduler-v1",
+    "stage_b_gate": "closed",
+    "status": "a_blocked_needs_repair",
+    "updated_unix": 1795380051.1296594
+  },
+  "prefix_replay": {
+    "accepted_flat_mismatch": [],
+    "final": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112001-r5/attempt-0/checkpoints/step-000000920-c8044c5cf2.pt",
+      "sha256": "bb1d7b0a10e62d47f6735539cb445621ca401a46c010ec4647c22fea21e5c1e1",
+      "size_bytes": 404226231,
+      "state_sha256": "c3f868a5bc44237fac6166fa96a16f8d9c0f434aa183672572201fec4e17f497",
+      "steps": 920,
+      "tokens": 235520
+    },
+    "final_digest_equal": true,
+    "interior_total_rows": 72967,
+    "observed_state_sha256": "c3f868a5bc44237fac6166fa96a16f8d9c0f434aa183672572201fec4e17f497",
+    "previous": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112001-r5/attempt-0/checkpoints/step-000000913-88c78bcae0.pt",
+      "sha256": "2243939a3710bc538936a045f8daee4bc52429803f1a3ec9b031160506095fac",
+      "size_bytes": 404226167,
+      "state_sha256": "57fb03562d92a0914863a8db4958b6ecb0a8dcec26a60b40976884d9b9ea3cb5",
+      "steps": 913,
+      "tokens": 233728
+    },
+    "quad_calls": 112,
+    "updates": [
+      {
+        "grad_norm": 1.103547215461731,
+        "grad_norm_matches": true,
+        "loss": 6.264223575592041,
+        "loss_matches": true,
+        "step": 914
+      },
+      {
+        "grad_norm": 1.12015700340271,
+        "grad_norm_matches": true,
+        "loss": 6.451004505157471,
+        "loss_matches": true,
+        "step": 915
+      },
+      {
+        "grad_norm": 1.1722928285598755,
+        "grad_norm_matches": true,
+        "loss": 6.150839805603027,
+        "loss_matches": true,
+        "step": 916
+      },
+      {
+        "grad_norm": 1.2428169250488281,
+        "grad_norm_matches": true,
+        "loss": 6.224910259246826,
+        "loss_matches": true,
+        "step": 917
+      },
+      {
+        "grad_norm": 1.2849698066711426,
+        "grad_norm_matches": true,
+        "loss": 6.364219665527344,
+        "loss_matches": true,
+        "step": 918
+      },
+      {
+        "grad_norm": 2.103013515472412,
+        "grad_norm_matches": true,
+        "loss": 6.371885299682617,
+        "loss_matches": true,
+        "step": 919
+      },
+      {
+        "grad_norm": 1.2731422185897827,
+        "grad_norm_matches": true,
+        "loss": 6.396393775939941,
+        "loss_matches": true,
+        "step": 920
+      }
+    ]
+  },
+  "reviewed_local": "2026-11-23T08:32:04+08:00",
+  "schema": "pilot-r3-quad-total-constraint-diagnosis-v1",
+  "scope": "The original campaign stays stopped. Numerical experiments run only in diagnostic processes. The seven-update lookback checks flat faces with a nonzero signed residual on interior total constraints. Full NPU model training, a post-repair checkpoint round trip, other configurations and the older trajectory remain outside the demonstrated scope.",
+  "selected_count": 90,
+  "source": {
+    "allocation_sha256": "af35b432f4da0d253cfc44220a3aac1d4ecedb6a4f6c07060dcefd3cd8f171eb",
+    "frozen_commit": "68cf6d40e18eacebcd7292c244819f7406cc4ef5",
+    "identical_foundation_python_files": 27,
+    "local_foundation_head": "f1269b6757f1152826ae99a450763bc9ebb7b587",
+    "python_inventory_digest": "330b48ecffd66d5a4d6ce75ac9f61b7e0a623751027117122a4bc04f1065c9c7"
+  },
+  "status": "localized_and_candidate_tested_offline",
+  "subject_count": 270,
+  "task_id": "multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112001-r5"
+}

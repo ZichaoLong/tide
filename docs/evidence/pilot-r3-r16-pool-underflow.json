@@ -1,0 +1,160 @@
+{
+  "batch_shape": [
+    2,
+    128
+  ],
+  "campaign": {
+    "blocking_reason": "a2: shared_group_not_completed:worker_process_failed:exchange-d128-x_reverse-pool-26a8635043-a2-2026112002-r2:1",
+    "stage_b_gate": "closed",
+    "status": "a_blocked_needs_repair"
+  },
+  "capture": ".local/pilot-r3/campaign-r16/round/tasks/exchange-d128-x_reverse-pool-26a8635043-a2-2026112002-r2/attempt-0/failure.pt",
+  "capture_sha256": "73857f759eed5cfc08af7bc59f958c686ca2c8d9f47a53d620781a7203d23806",
+  "completed_steps": 3774,
+  "completed_tokens": 966144,
+  "cpu_threads": 4,
+  "device": "cpu",
+  "error": "pool underflow would erase a positive sender",
+  "failed_step": 3775,
+  "forward": {
+    "allocation_shape_batch_position_node": [
+      2,
+      128,
+      2
+    ],
+    "finite_scores_and_priors": true,
+    "ieee_binary32_half_min_subnormal": 7.006492321624085e-46,
+    "ieee_binary32_min_subnormal": 1.401298464324817e-45,
+    "positive_coordinates_rounded_to_zero": 1,
+    "positive_subnormal_outputs_in_this_call": 0,
+    "region_rows": 256,
+    "rows": [
+      {
+        "actual_fp32": [
+          0.0,
+          1.0
+        ],
+        "batch_index": 1,
+        "edge_weights": [
+          [
+            1.0
+          ],
+          [
+            1.0
+          ]
+        ],
+        "erased_node_ids": [
+          0
+        ],
+        "erased_reference_over_half_spacing": [
+          0.09603306818986727
+        ],
+        "fp64_reference": [
+          6.728549548943073e-47,
+          1.0
+        ],
+        "fp64_rounded_to_fp32": [
+          0.0,
+          1.0
+        ],
+        "ingress_values_equal": true,
+        "input_token_id": 3289,
+        "layer_index": 0,
+        "logical_time": 1666,
+        "memories": [
+          "S",
+          "S"
+        ],
+        "memory_write_weights": [
+          1.0,
+          1.0
+        ],
+        "node_ids": [
+          0,
+          1
+        ],
+        "non_external_incoming_edges": [
+          [],
+          []
+        ],
+        "pool_amount": 1.0,
+        "pool_log_weights_after_shift": [
+          -106.31513977050781,
+          0.0
+        ],
+        "pool_priors": [
+          1.0,
+          1.0
+        ],
+        "pool_probability_binary_exponent": [
+          -155,
+          -1
+        ],
+        "pool_probability_fraction": [
+          3.073061943054199,
+          2.0
+        ],
+        "position_in_sequence": 77,
+        "received": [
+          1.0,
+          1.0
+        ],
+        "region_id": 0,
+        "rms_difference_of_received_content": 0.6054290130937461,
+        "roles": [
+          "D",
+          "D"
+        ],
+        "score_components": {
+          "attention_direct": [
+            -2.0830399990081787,
+            17.020198822021484
+          ],
+          "ffn": [
+            -78.39159393310547,
+            11.529637336730957
+          ],
+          "final": [
+            -80.67035675048828,
+            25.64478302001953
+          ],
+          "node_description": [
+            -0.1807275414466858,
+            -2.890048027038574
+          ],
+          "shared_ffn_bias": [
+            -0.015002484433352947,
+            -0.015002484433352947
+          ]
+        },
+        "score_gap": 106.31513977050781,
+        "state_position_plus_offset": 333
+      }
+    ],
+    "rows_losing_support": 1,
+    "score_decomposition_matches_original_fp32_all_rows": true,
+    "smallest_positive_output_in_this_call": 0.05070289224386215,
+    "support_loss_mask_agrees_with_fp64_cast_for_entire_call": true,
+    "two_equal_priors_unit_pool_gap_at_half_min_subnormal": 103.97207708399179
+  },
+  "last_completed_update": {
+    "grad_norm": 1.06082284450531,
+    "loss": 5.603591442108154,
+    "lr": 0.0009885533755516498,
+    "objective": 5.603591442108154,
+    "sampled_diagnostics": false,
+    "seconds": 1.074246522039175,
+    "state_reset": false,
+    "step": 3774,
+    "time_unix": 1795274087.596881,
+    "tokens": 966144
+  },
+  "precision": "fp32",
+  "private_state_position": 256,
+  "schema": "pilot-r3-r16-pool-underflow-replay-v1",
+  "script": ".local/pilot-r3/diagnostic-r16-pool/replay.py",
+  "script_sha256": "852bd45f584bd747cfc9536f2b0b68c49394607e9a57a58b7d48ac876b5e7de1",
+  "task_id": "exchange-d128-x_reverse-pool-26a8635043-a2-2026112002-r2",
+  "torch_version": "2.12.0+cpu",
+  "verified_frozen_source_files": 78
+}

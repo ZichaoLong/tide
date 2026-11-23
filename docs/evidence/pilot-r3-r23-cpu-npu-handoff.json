@@ -1,0 +1,172 @@
+{
+  "accounting": {
+    "diagnosis": {
+      "charged_device_seconds": 17.983544573187828,
+      "completed_optimizer_tokens": 0,
+      "forward_backward_tokens": 512,
+      "physical_ids": [
+        9
+      ],
+      "reserved_tokens": 512
+    },
+    "probe": {
+      "charged_device_seconds": 18.47037673741579,
+      "completed_optimizer_tokens": 512,
+      "forward_backward_tokens": 512,
+      "physical_ids": [
+        9
+      ],
+      "reserved_tokens": 512
+    }
+  },
+  "automatic_running_task_migration": false,
+  "checkpoint": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r22/round/tasks/multiscale_settle-d256-k-mixed9-0fad868c8b-a3-2026112001-r1/attempt-0/checkpoints/step-000005962-028f7453f7.pt",
+    "sha256": "ca59241fd3bc81b9c2190c542457c509329fa0c83c36e9d8c7f3e8ff41253ee9",
+    "size_bytes": 196031021,
+    "state_sha256": "45f1c8475797346dede4d3a993e94076b82226b687c16574f82e7ca5760714ac",
+    "steps": 5962,
+    "tokens": 1526272
+  },
+  "checkpoint_step": 5962,
+  "cpu": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/backfill-r23-release/probe/cpu.json",
+    "sha256": "a88f29b2a76a04921005e3d2ac71cbef60838df9e5f6fbade1e6f84d5922fe2e"
+  },
+  "destination_rng_advanced": false,
+  "destination_rng_seed": 2026112001,
+  "diagnosis": "The native CPU FP32 global norm underestimates the independently summed FP64 norm of its own pre-clipping gradients on this batch.",
+  "durable_input": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/backfill-r23-release/probe-input.pt",
+    "sha256": "ca59241fd3bc81b9c2190c542457c509329fa0c83c36e9d8c7f3e8ff41253ee9"
+  },
+  "fp64_norm_abs_difference": 3.320052277544505e-08,
+  "fp64_norm_on_preclip_gradients": {
+    "cpu": 1.7177505668045252,
+    "npu": 1.717750600005048
+  },
+  "gradient_norm_probe": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/backfill-r23-release/measure_norm.py",
+    "sha256": "184bc7f5a58e959570a5f2fa85a1838382a8c5bc87a3d6cf1fde3fbcb2e33728"
+  },
+  "metrics": {
+    "cpu": {
+      "grad_norm": 1.7174341678619385,
+      "loss": 5.372614860534668,
+      "lr": 0.0002910256885622991,
+      "objective": 5.372614860534668
+    },
+    "npu": {
+      "grad_norm": 1.7177505493164062,
+      "loss": 5.372615814208984,
+      "lr": 0.0002910256885622991,
+      "objective": 5.372615814208984
+    }
+  },
+  "metrics_within_tolerance": {
+    "grad_norm": false,
+    "loss": true,
+    "lr": true,
+    "objective": true
+  },
+  "native_gradient_norm_abs_difference": 0.00031638145446777344,
+  "native_minus_fp64_in_same_probe": {
+    "cpu": -0.0003165181518762772,
+    "npu": -5.0688641728413586e-08
+  },
+  "npu": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/backfill-r23-release/probe/npu.json",
+    "sha256": "ce2819d769d7ddf29e04d7efb30826e9cb7bfe28613b06d27b6d3c7c59cc5d94"
+  },
+  "observed_unix": 1795353578.518734,
+  "portable_fields_exact": {
+    "model": true,
+    "optimizer": true,
+    "private_state": true,
+    "rng": true,
+    "steps": true,
+    "stream": true,
+    "tokens": true
+  },
+  "raw_gradient_norm": {
+    "cpu": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/backfill-r23-release/diagnosis/cpu-grad-norm.json",
+      "sha256": "4a75643a90a96df49db6b1f08d957e052d81b72fe0bbafdd42f4c345642c047b"
+    },
+    "npu": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/backfill-r23-release/diagnosis/npu-grad-norm.json",
+      "sha256": "ea1d1e364c3a3be537a82f26206d4603062e90fbb5b5c1a78bc993e9f51bc2e4"
+    }
+  },
+  "same_next_input_and_host_rng": true,
+  "schema": "pilot-r3-cpu-npu-handoff-probe-v1",
+  "source_script": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/backfill-r23-release/probe.py",
+    "sha256": "cbe16a01a0a7bbe42a9d0cf6cc9a30015814d070027b5c8f8a13ea10b125acbc"
+  },
+  "status": "cross_backend_step_outside_tolerance",
+  "step": 5963,
+  "task": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r22/round/tasks/multiscale_settle-d256-k-mixed9-0fad868c8b-a3-2026112001-r1/task.json",
+    "sha256": "07580d68ca57fc5bd9ced9304dab4714b9f22745fb4001130cdb4304d332c2a3"
+  },
+  "tokens": 1526528,
+  "tolerance": {
+    "atol": 1e-05,
+    "rtol": 0.0001
+  },
+  "updated_state_comparisons": {
+    "gradients": {
+      "atol": 1e-05,
+      "exact": false,
+      "failed_field_count": 0,
+      "failed_fields": [],
+      "fields": 185,
+      "finite": true,
+      "integer_equal": true,
+      "max_abs": 7.2158873081207275e-06,
+      "rtol": 0.0001,
+      "structure_equal": true,
+      "within_tolerance": true
+    },
+    "model": {
+      "atol": 1e-05,
+      "exact": false,
+      "failed_field_count": 0,
+      "failed_fields": [],
+      "fields": 205,
+      "finite": true,
+      "integer_equal": true,
+      "max_abs": 5.21540641784668e-07,
+      "rtol": 0.0001,
+      "structure_equal": true,
+      "within_tolerance": true
+    },
+    "optimizer": {
+      "atol": 1e-05,
+      "exact": false,
+      "failed_field_count": 0,
+      "failed_fields": [],
+      "fields": 752,
+      "finite": true,
+      "integer_equal": true,
+      "max_abs": 7.217749953269958e-07,
+      "rtol": 0.0001,
+      "structure_equal": true,
+      "within_tolerance": true
+    },
+    "private_state": {
+      "atol": 1e-05,
+      "exact": false,
+      "failed_field_count": 0,
+      "failed_fields": [],
+      "fields": 81,
+      "finite": true,
+      "integer_equal": true,
+      "max_abs": 9.5367431640625e-06,
+      "rtol": 0.0001,
+      "structure_equal": true,
+      "within_tolerance": true
+    }
+  }
+}

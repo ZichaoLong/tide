@@ -1,0 +1,190 @@
+{
+  "audit_findings": [
+    {
+      "expected": 107.57543439045548,
+      "kind": "physical_accounting",
+      "observed": 107.652747631073,
+      "reason": "scheduler group debit:group-000114",
+      "status": "mismatch"
+    }
+  ],
+  "blocker": {
+    "batch_size": 2,
+    "cpu_threads": 4,
+    "device": "cpu",
+    "diagnosis_scope": "backward finite-VJP check raised; exact saved-state load passed; true derivative overflow versus implementation arithmetic instability not yet established; no numerical replay performed",
+    "error": "allocation VJP exceeds the requested dtype range",
+    "failure_capture": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_settle-d64-k-singleton7-121b8d2af3-a3-2026112001-r2/attempt-0/failure.pt",
+      "sha256": "47aa26937d8a2f9d6b8c632730ba878d42c7a0ded76d66d28bf7a9ecf5b7d4b8"
+    },
+    "last_checkpoint": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_settle-d64-k-singleton7-121b8d2af3-a3-2026112001-r2/attempt-0/checkpoints/step-000007273-cea01564a5.pt",
+      "sha256": "c50f243efa593d48cb2cca4277a16dc904e5b26dd5345a8a702ee43ce951c579",
+      "size_bytes": 24264625,
+      "state_sha256": "eeac7ce36735639550a2c97fab25388244c7ebf44a22a71662b00d6ebc7c2609",
+      "steps": 7273,
+      "tokens": 1861888
+    },
+    "lr": 0.001,
+    "recovery": {
+      "checkpoint_load": {
+        "scope": "actual device owners, RNG and data stream",
+        "state_sha256": "7bb2c192458af7990169a271c70344db584e6beae3304e56ab76cb774544a8b5",
+        "status": "exact"
+      },
+      "numeric_trajectory": {
+        "atol": 1e-05,
+        "rtol": 0.0001,
+        "status": "not_tested"
+      }
+    },
+    "result": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_settle-d64-k-singleton7-121b8d2af3-a3-2026112001-r2/attempt-0/result.json",
+      "sha256": "b7120994da8083c8c112611c9fcbd1b81abdda573578dadf42fe9ad22df9a9d5"
+    },
+    "seed": 2026112001,
+    "source_location": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/allocation.py:462",
+    "task": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_settle-d64-k-singleton7-121b8d2af3-a3-2026112001-r2/task.json",
+      "sha256": "44f6de667febb3944a73179a8d8901bcec3ba8dfbfde08e57cacf0e0181fd199"
+    },
+    "task_id": "multiscale_settle-d64-k-singleton7-121b8d2af3-a3-2026112001-r2",
+    "training": {
+      "from_steps": 4096,
+      "from_tokens": 1048576,
+      "seconds": 3310.171774804592,
+      "segment_steps": 3257,
+      "segment_tokens": 833792,
+      "steps": 7353,
+      "target_tokens": 2097152,
+      "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+      "tokens": 1882368,
+      "tokens_per_second": 251.88783444606008
+    }
+  },
+  "budget": {
+    "deadline_unix": 1797698913.9318287,
+    "device_hours": 73.86072342421446,
+    "device_seconds": 265898.60432717204,
+    "max_device_hours": 7200.0,
+    "segment_device_hours": 15.716582329318754
+  },
+  "conservative_excess_seconds_observed": 0.07731324061751366,
+  "counts": {
+    "completed": 771,
+    "failed": 30,
+    "pending": 38,
+    "stopped_budget": 50
+  },
+  "data_files": 14,
+  "formal_completed": 0,
+  "frozen_source_files": 131,
+  "hard_stop_incomplete_results": [
+    {
+      "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_settle-d64-s-mixed9-9bee809995-a2-2026112002-r2/attempt-0",
+      "group": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/groups/group-000044",
+      "original_result_status": "running",
+      "reason": "worker_exit_-9",
+      "recovery_qualification": "not_reviewed; published result is incomplete",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_settle-d64-s-mixed9-9bee809995-a2-2026112002-r2/attempt-0/result.json",
+        "sha256": "0875b453e9c30f604f51a987906cd08dc6a972756b44e9a0d9f398a5b5ba6fbe"
+      },
+      "task_id": "multiscale_settle-d64-s-mixed9-9bee809995-a2-2026112002-r2"
+    },
+    {
+      "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_timed-d64-x-group5-60bcff17bd-a2-2026112001-r5/attempt-0",
+      "group": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/groups/group-000044",
+      "original_result_status": "running",
+      "reason": "worker_exit_-9",
+      "recovery_qualification": "not_reviewed; published result is incomplete",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_timed-d64-x-group5-60bcff17bd-a2-2026112001-r5/attempt-0/result.json",
+        "sha256": "2fe5c9b0930eb93bb7ae6d091bdc6af9c98ba37d4cd5ff4653de6e397f3e6627"
+      },
+      "task_id": "multiscale_timed-d64-x-group5-60bcff17bd-a2-2026112001-r5"
+    }
+  ],
+  "input_hash_verification": "passed",
+  "interpretation": "execution blocked by numerical check; all processes/leases released; numerical recovery/learning remain separate; failure evidence and original thresholds unchanged",
+  "lifecycle": {
+    "cgroup": {
+      "members": [],
+      "path": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r07.service",
+      "released": true,
+      "status": "absent"
+    },
+    "processes": {
+      "cgroup_members_unobservable_in_process_snapshot": [],
+      "errors": [],
+      "gone_count": 2130,
+      "live_processes": [],
+      "main_pid": 0,
+      "malformed_identities": [],
+      "recorded_identity_count": 2130,
+      "released": true,
+      "reused_pids": [],
+      "status": "released",
+      "zombies": []
+    },
+    "status": "terminal"
+  },
+  "new_completed_tasks": 487,
+  "observed_beijing": "2026-11-20T15:43:04.010027+08:00",
+  "observed_unix": 1795160584.0100272,
+  "peak_concurrency": {
+    "peak_actual_npu_concurrency": 8,
+    "peak_cpu_worker_concurrency": 40,
+    "peak_npu_worker_concurrency": 53
+  },
+  "queue_released": true,
+  "scheduler": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/scheduler.json",
+    "sha256": "4a12add220230b9509735d74bd4aab91b6d36bedbb33b070ea8dac02aca3db49"
+  },
+  "schema": "pilot-r3-r07-blocker-review-v1",
+  "selected_models": 42,
+  "stage_b_gate": "closed",
+  "status": "read_only_diagnosis_no_restart",
+  "stop_outcomes": [
+    {
+      "count": 50,
+      "scheduler_status": "stopped_budget",
+      "worker_status": "budget_exhausted",
+      "worker_stop_reason": "signal"
+    },
+    {
+      "count": 2,
+      "scheduler_status": "failed",
+      "worker_status": "running",
+      "worker_stop_reason": null
+    },
+    {
+      "count": 1,
+      "scheduler_status": "failed",
+      "worker_status": "failed",
+      "worker_stop_reason": "ArithmeticError"
+    },
+    {
+      "count": 27,
+      "scheduler_status": "failed",
+      "worker_status": "budget_exhausted",
+      "worker_stop_reason": "signal"
+    }
+  ],
+  "systemd": {
+    "ActiveState": "failed",
+    "ExecMainExitTimestamp": "Fri 2026-11-20 15:00:48 CST",
+    "ExecMainStatus": "1",
+    "MainPID": "0",
+    "Result": "exit-code",
+    "SubState": "failed"
+  },
+  "terminal_audit": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-campaign-r07-terminal-audit.json",
+    "sha256": "13249963728b01dc2a8ed162dedd5ff21e344eaca8425510f6becd35c7ddb485"
+  },
+  "terminal_audit_status": "incomplete",
+  "unit": "tide-pilot-r3-campaign-r07.service"
+}

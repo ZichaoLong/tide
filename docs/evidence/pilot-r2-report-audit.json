@@ -1,0 +1,794 @@
+{
+  "all_review_checks_pass": true,
+  "checks": {
+    "all_candidates_share_inputs_within_seed": true,
+    "all_causality_probe_comparisons_pass": true,
+    "all_failed_recovery_payloads_retained": true,
+    "all_recorded_recovery_discrete_checks_exact": true,
+    "all_recorded_recovery_structure_and_integer_checks_exact": true,
+    "all_recorded_recovery_values_finite": true,
+    "completed_configurations_match": true,
+    "completed_runtime_and_checkpoint_source_match": true,
+    "cpu_thread_comparison_common_inputs_exact": true,
+    "eighteen_equal_exposure_screens": true,
+    "exchange_continuations_not_launched": true,
+    "execution_counts": true,
+    "four_real_continuations_verified": true,
+    "mixed_phase_peak_and_interval_union_match_report": true,
+    "no_record_read_errors": true,
+    "original_thresholds_preserved": true,
+    "same_model_seed_rng_matches_across_lr": true,
+    "shannon_preflight_failure_preserved": true,
+    "strict_recovery_counts": true,
+    "terminal_report_ready": true
+  },
+  "continuations": [
+    {
+      "additional_tokens": 393216,
+      "all_step_numbers_exact": true,
+      "all_update_lr_0_0003": true,
+      "from_step": 257,
+      "id": "continue-fc-s20261119",
+      "inheritance": {
+        "application_state_digest_validated_by_worker": true,
+        "budget_overrides": [
+          "max_steps"
+        ],
+        "checkpoint_identity_validated_by_worker": true,
+        "contract_validated_by_worker": true,
+        "first_input_reused_private_history": true,
+        "global_end_equals_start_plus_segment": true,
+        "global_start_matches_parent_checkpoint": true,
+        "parent_checkpoint_step": 257,
+        "parent_id": "screen-fc-lr0.0003-s20261119",
+        "parent_seed_matches": true,
+        "recipe_inherited": true,
+        "recorded_checkpoint_hashes_consistent": true,
+        "resolution_parent_matches_selection": true,
+        "resolved_parent_matches_selection": true,
+        "selected_parent_strict_eight_step": true,
+        "source_identity_matches": true
+      },
+      "parent": "screen-fc-lr0.0003-s20261119",
+      "selection_recomputed_exact": true,
+      "strict_eight_step_recovery": true,
+      "to_step": 1025,
+      "validation_final": 6.286951124668121,
+      "validation_initial": 7.007468789815903
+    },
+    {
+      "additional_tokens": 393216,
+      "all_step_numbers_exact": true,
+      "all_update_lr_0_0003": true,
+      "from_step": 257,
+      "id": "continue-fc-s20261120",
+      "inheritance": {
+        "application_state_digest_validated_by_worker": true,
+        "budget_overrides": [
+          "max_steps"
+        ],
+        "checkpoint_identity_validated_by_worker": true,
+        "contract_validated_by_worker": true,
+        "first_input_reused_private_history": true,
+        "global_end_equals_start_plus_segment": true,
+        "global_start_matches_parent_checkpoint": true,
+        "parent_checkpoint_step": 257,
+        "parent_id": "screen-fc-lr0.0003-s20261120",
+        "parent_seed_matches": true,
+        "recipe_inherited": true,
+        "recorded_checkpoint_hashes_consistent": true,
+        "resolution_parent_matches_selection": true,
+        "resolved_parent_matches_selection": true,
+        "selected_parent_strict_eight_step": true,
+        "source_identity_matches": true
+      },
+      "parent": "screen-fc-lr0.0003-s20261120",
+      "selection_recomputed_exact": true,
+      "strict_eight_step_recovery": true,
+      "to_step": 1025,
+      "validation_final": 6.283610314130783,
+      "validation_initial": 6.973254531621933
+    },
+    {
+      "additional_tokens": 393216,
+      "all_step_numbers_exact": true,
+      "all_update_lr_0_0003": true,
+      "from_step": 257,
+      "id": "continue-tf-s20261119",
+      "inheritance": {
+        "application_state_digest_validated_by_worker": true,
+        "budget_overrides": [
+          "max_steps"
+        ],
+        "checkpoint_identity_validated_by_worker": true,
+        "contract_validated_by_worker": true,
+        "first_input_reused_private_history": true,
+        "global_end_equals_start_plus_segment": true,
+        "global_start_matches_parent_checkpoint": true,
+        "parent_checkpoint_step": 257,
+        "parent_id": "screen-tf-lr0.0003-s20261119",
+        "parent_seed_matches": true,
+        "recipe_inherited": true,
+        "recorded_checkpoint_hashes_consistent": true,
+        "resolution_parent_matches_selection": true,
+        "resolved_parent_matches_selection": true,
+        "selected_parent_strict_eight_step": true,
+        "source_identity_matches": true
+      },
+      "parent": "screen-tf-lr0.0003-s20261119",
+      "selection_recomputed_exact": true,
+      "strict_eight_step_recovery": true,
+      "to_step": 1025,
+      "validation_final": 6.010280877351761,
+      "validation_initial": 6.729389011859894
+    },
+    {
+      "additional_tokens": 393216,
+      "all_step_numbers_exact": true,
+      "all_update_lr_0_0003": true,
+      "from_step": 257,
+      "id": "continue-tf-s20261120",
+      "inheritance": {
+        "application_state_digest_validated_by_worker": true,
+        "budget_overrides": [
+          "max_steps"
+        ],
+        "checkpoint_identity_validated_by_worker": true,
+        "contract_validated_by_worker": true,
+        "first_input_reused_private_history": true,
+        "global_end_equals_start_plus_segment": true,
+        "global_start_matches_parent_checkpoint": true,
+        "parent_checkpoint_step": 257,
+        "parent_id": "screen-tf-lr0.0003-s20261120",
+        "parent_seed_matches": true,
+        "recipe_inherited": true,
+        "recorded_checkpoint_hashes_consistent": true,
+        "resolution_parent_matches_selection": true,
+        "resolved_parent_matches_selection": true,
+        "selected_parent_strict_eight_step": true,
+        "source_identity_matches": true
+      },
+      "parent": "screen-tf-lr0.0003-s20261120",
+      "selection_recomputed_exact": true,
+      "strict_eight_step_recovery": true,
+      "to_step": 1025,
+      "validation_final": 6.012554466724396,
+      "validation_initial": 6.713175863027573
+    }
+  ],
+  "cpu_thread_common_prefix_review": [
+    {
+      "common_input_and_rng_exact": true,
+      "common_steps": 65,
+      "measurement_warmup_steps": 3,
+      "model": "exchange-x",
+      "observations": [
+        {
+          "common_prefix_tokens_per_second": 367.320845640616,
+          "full_training_tokens_per_second": 367.320845640616,
+          "threads": 4
+        },
+        {
+          "common_prefix_tokens_per_second": 450.1815569649773,
+          "full_training_tokens_per_second": 450.7046792348499,
+          "threads": 16
+        },
+        {
+          "common_prefix_tokens_per_second": 394.1317958684611,
+          "full_training_tokens_per_second": 394.4489337303476,
+          "threads": 40
+        }
+      ]
+    },
+    {
+      "common_input_and_rng_exact": true,
+      "common_steps": 1391,
+      "measurement_warmup_steps": 3,
+      "model": "transformer",
+      "observations": [
+        {
+          "common_prefix_tokens_per_second": 8129.963328479034,
+          "full_training_tokens_per_second": 8129.963328479035,
+          "threads": 4
+        },
+        {
+          "common_prefix_tokens_per_second": 13632.315537923734,
+          "full_training_tokens_per_second": 13698.625768534617,
+          "threads": 16
+        },
+        {
+          "common_prefix_tokens_per_second": 14057.602622728753,
+          "full_training_tokens_per_second": 13700.948004096072,
+          "threads": 40
+        }
+      ]
+    }
+  ],
+  "observed_unix": 1795097475.2191856,
+  "qualification_note": "These checks verify evidence integrity and faithful reporting; the seven round recovery failures and Shannon preflight failure remain failures. No numerical gate is waived.",
+  "recovery_scope_counts": {
+    "1 steps / within_tolerance": 46,
+    "8 steps / comparison_failed": 7,
+    "8 steps / within_tolerance": 17
+  },
+  "report_identity": {
+    "bytes": 2389243,
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-round2-20261119.json",
+    "sha256": "f301679521718c171d1e0a9aed606a72d00eccee73f2161e52797fe6f22cd2db"
+  },
+  "retained_recovery_failures": [
+    {
+      "all_expected_payloads_present": true,
+      "failed_categories": [
+        "logits",
+        "private_state"
+      ],
+      "failed_global_steps": [
+        261,
+        262,
+        265
+      ],
+      "id": "screen-fc-lr0.001-s20261119",
+      "maximum_absolute_difference_by_category": {
+        "gradients": 1.6391277313232422e-06,
+        "logits": 6.175041198730469e-05,
+        "model": 3.0621886253356934e-06,
+        "optimizer": 1.6391277313232422e-07,
+        "private_state": 0.00012069940567016602
+      },
+      "mismatch_payloads": [
+        {
+          "bytes": 202072133,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.001-s20261119/fresh-process/mismatch-0003.pt"
+        },
+        {
+          "bytes": 221143109,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.001-s20261119/fresh-process/mismatch-0004.pt"
+        },
+        {
+          "bytes": 202072133,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.001-s20261119/fresh-process/mismatch-0007.pt"
+        }
+      ],
+      "reference_payloads": [
+        {
+          "bytes": 221142981,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.001-s20261119/reference-updates/0000.pt"
+        },
+        {
+          "bytes": 221142981,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.001-s20261119/reference-updates/0001.pt"
+        },
+        {
+          "bytes": 221142981,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.001-s20261119/reference-updates/0002.pt"
+        },
+        {
+          "bytes": 202072005,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.001-s20261119/reference-updates/0003.pt"
+        },
+        {
+          "bytes": 221142981,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.001-s20261119/reference-updates/0004.pt"
+        },
+        {
+          "bytes": 221142981,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.001-s20261119/reference-updates/0005.pt"
+        },
+        {
+          "bytes": 221142981,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.001-s20261119/reference-updates/0006.pt"
+        },
+        {
+          "bytes": 202072005,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.001-s20261119/reference-updates/0007.pt"
+        }
+      ]
+    },
+    {
+      "all_expected_payloads_present": true,
+      "failed_categories": [
+        "logits",
+        "model",
+        "private_state"
+      ],
+      "failed_global_steps": [
+        261,
+        262,
+        263,
+        264,
+        265
+      ],
+      "id": "screen-fc-lr0.001-s20261120",
+      "maximum_absolute_difference_by_category": {
+        "gradients": 1.9669532775878906e-06,
+        "logits": 3.3855438232421875e-05,
+        "model": 1.8201768398284912e-05,
+        "optimizer": 1.955777406692505e-07,
+        "private_state": 5.602836608886719e-05
+      },
+      "mismatch_payloads": [
+        {
+          "bytes": 202072133,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.001-s20261120/fresh-process/mismatch-0003.pt"
+        },
+        {
+          "bytes": 221143109,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.001-s20261120/fresh-process/mismatch-0004.pt"
+        },
+        {
+          "bytes": 221143109,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.001-s20261120/fresh-process/mismatch-0005.pt"
+        },
+        {
+          "bytes": 221143109,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.001-s20261120/fresh-process/mismatch-0006.pt"
+        },
+        {
+          "bytes": 202072133,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.001-s20261120/fresh-process/mismatch-0007.pt"
+        }
+      ],
+      "reference_payloads": [
+        {
+          "bytes": 221142981,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.001-s20261120/reference-updates/0000.pt"
+        },
+        {
+          "bytes": 221142981,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.001-s20261120/reference-updates/0001.pt"
+        },
+        {
+          "bytes": 221142981,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.001-s20261120/reference-updates/0002.pt"
+        },
+        {
+          "bytes": 202072005,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.001-s20261120/reference-updates/0003.pt"
+        },
+        {
+          "bytes": 221142981,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.001-s20261120/reference-updates/0004.pt"
+        },
+        {
+          "bytes": 221142981,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.001-s20261120/reference-updates/0005.pt"
+        },
+        {
+          "bytes": 221142981,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.001-s20261120/reference-updates/0006.pt"
+        },
+        {
+          "bytes": 202072005,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-fc-lr0.001-s20261120/reference-updates/0007.pt"
+        }
+      ]
+    },
+    {
+      "all_expected_payloads_present": true,
+      "failed_categories": [
+        "private_state"
+      ],
+      "failed_global_steps": [
+        264,
+        265
+      ],
+      "id": "screen-x-lr0.0001-s20261120",
+      "maximum_absolute_difference_by_category": {
+        "gradients": 1.2991949915885925e-07,
+        "logits": 9.5367431640625e-07,
+        "model": 2.384185791015625e-07,
+        "optimizer": 1.2922100722789764e-08,
+        "private_state": 6.103515625e-05
+      },
+      "mismatch_payloads": [
+        {
+          "bytes": 109430244,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0001-s20261120/fresh-process/mismatch-0006.pt"
+        },
+        {
+          "bytes": 90162660,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0001-s20261120/fresh-process/mismatch-0007.pt"
+        }
+      ],
+      "reference_payloads": [
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0001-s20261120/reference-updates/0000.pt"
+        },
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0001-s20261120/reference-updates/0001.pt"
+        },
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0001-s20261120/reference-updates/0002.pt"
+        },
+        {
+          "bytes": 90162532,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0001-s20261120/reference-updates/0003.pt"
+        },
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0001-s20261120/reference-updates/0004.pt"
+        },
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0001-s20261120/reference-updates/0005.pt"
+        },
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0001-s20261120/reference-updates/0006.pt"
+        },
+        {
+          "bytes": 90162532,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0001-s20261120/reference-updates/0007.pt"
+        }
+      ]
+    },
+    {
+      "all_expected_payloads_present": true,
+      "failed_categories": [
+        "model",
+        "private_state"
+      ],
+      "failed_global_steps": [
+        261,
+        262,
+        263,
+        264,
+        265
+      ],
+      "id": "screen-x-lr0.0003-s20261119",
+      "maximum_absolute_difference_by_category": {
+        "gradients": 4.6938657760620117e-07,
+        "logits": 4.5299530029296875e-06,
+        "model": 2.4810433387756348e-05,
+        "optimizer": 4.7031790018081665e-08,
+        "private_state": 0.00013363361358642578
+      },
+      "mismatch_payloads": [
+        {
+          "bytes": 90162660,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0003-s20261119/fresh-process/mismatch-0003.pt"
+        },
+        {
+          "bytes": 109430244,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0003-s20261119/fresh-process/mismatch-0004.pt"
+        },
+        {
+          "bytes": 109430244,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0003-s20261119/fresh-process/mismatch-0005.pt"
+        },
+        {
+          "bytes": 109430244,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0003-s20261119/fresh-process/mismatch-0006.pt"
+        },
+        {
+          "bytes": 90162660,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0003-s20261119/fresh-process/mismatch-0007.pt"
+        }
+      ],
+      "reference_payloads": [
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0003-s20261119/reference-updates/0000.pt"
+        },
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0003-s20261119/reference-updates/0001.pt"
+        },
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0003-s20261119/reference-updates/0002.pt"
+        },
+        {
+          "bytes": 90162532,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0003-s20261119/reference-updates/0003.pt"
+        },
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0003-s20261119/reference-updates/0004.pt"
+        },
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0003-s20261119/reference-updates/0005.pt"
+        },
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0003-s20261119/reference-updates/0006.pt"
+        },
+        {
+          "bytes": 90162532,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0003-s20261119/reference-updates/0007.pt"
+        }
+      ]
+    },
+    {
+      "all_expected_payloads_present": true,
+      "failed_categories": [
+        "model",
+        "private_state"
+      ],
+      "failed_global_steps": [
+        260,
+        261,
+        262,
+        263,
+        264,
+        265
+      ],
+      "id": "screen-x-lr0.0003-s20261120",
+      "maximum_absolute_difference_by_category": {
+        "gradients": 1.780688762664795e-06,
+        "logits": 4.76837158203125e-06,
+        "model": 1.6033649444580078e-05,
+        "optimizer": 1.7811544239521027e-07,
+        "private_state": 0.00017905235290527344
+      },
+      "mismatch_payloads": [
+        {
+          "bytes": 109430244,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0003-s20261120/fresh-process/mismatch-0002.pt"
+        },
+        {
+          "bytes": 90162660,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0003-s20261120/fresh-process/mismatch-0003.pt"
+        },
+        {
+          "bytes": 109430244,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0003-s20261120/fresh-process/mismatch-0004.pt"
+        },
+        {
+          "bytes": 109430244,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0003-s20261120/fresh-process/mismatch-0005.pt"
+        },
+        {
+          "bytes": 109430244,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0003-s20261120/fresh-process/mismatch-0006.pt"
+        },
+        {
+          "bytes": 90162660,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0003-s20261120/fresh-process/mismatch-0007.pt"
+        }
+      ],
+      "reference_payloads": [
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0003-s20261120/reference-updates/0000.pt"
+        },
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0003-s20261120/reference-updates/0001.pt"
+        },
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0003-s20261120/reference-updates/0002.pt"
+        },
+        {
+          "bytes": 90162532,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0003-s20261120/reference-updates/0003.pt"
+        },
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0003-s20261120/reference-updates/0004.pt"
+        },
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0003-s20261120/reference-updates/0005.pt"
+        },
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0003-s20261120/reference-updates/0006.pt"
+        },
+        {
+          "bytes": 90162532,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.0003-s20261120/reference-updates/0007.pt"
+        }
+      ]
+    },
+    {
+      "all_expected_payloads_present": true,
+      "failed_categories": [
+        "model",
+        "private_state"
+      ],
+      "failed_global_steps": [
+        260,
+        261,
+        262,
+        263,
+        264,
+        265
+      ],
+      "id": "screen-x-lr0.001-s20261119",
+      "maximum_absolute_difference_by_category": {
+        "gradients": 1.9073486328125e-06,
+        "logits": 2.0742416381835938e-05,
+        "model": 0.00012397952377796173,
+        "optimizer": 1.9045546650886536e-07,
+        "private_state": 0.00019824504852294922
+      },
+      "mismatch_payloads": [
+        {
+          "bytes": 109430244,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261119/fresh-process/mismatch-0002.pt"
+        },
+        {
+          "bytes": 90162660,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261119/fresh-process/mismatch-0003.pt"
+        },
+        {
+          "bytes": 109430244,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261119/fresh-process/mismatch-0004.pt"
+        },
+        {
+          "bytes": 109430244,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261119/fresh-process/mismatch-0005.pt"
+        },
+        {
+          "bytes": 109430244,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261119/fresh-process/mismatch-0006.pt"
+        },
+        {
+          "bytes": 90162660,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261119/fresh-process/mismatch-0007.pt"
+        }
+      ],
+      "reference_payloads": [
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261119/reference-updates/0000.pt"
+        },
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261119/reference-updates/0001.pt"
+        },
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261119/reference-updates/0002.pt"
+        },
+        {
+          "bytes": 90162532,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261119/reference-updates/0003.pt"
+        },
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261119/reference-updates/0004.pt"
+        },
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261119/reference-updates/0005.pt"
+        },
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261119/reference-updates/0006.pt"
+        },
+        {
+          "bytes": 90162532,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261119/reference-updates/0007.pt"
+        }
+      ]
+    },
+    {
+      "all_expected_payloads_present": true,
+      "failed_categories": [
+        "gradients",
+        "logits",
+        "model",
+        "optimizer",
+        "private_state"
+      ],
+      "failed_global_steps": [
+        260,
+        261,
+        262,
+        263,
+        264,
+        265
+      ],
+      "id": "screen-x-lr0.001-s20261120",
+      "maximum_absolute_difference_by_category": {
+        "gradients": 0.0003002563025802374,
+        "logits": 0.0005154609680175781,
+        "model": 8.529424667358398e-05,
+        "optimizer": 3.0025665182620287e-05,
+        "private_state": 0.010753631591796875
+      },
+      "mismatch_payloads": [
+        {
+          "bytes": 109430244,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261120/fresh-process/mismatch-0002.pt"
+        },
+        {
+          "bytes": 90162660,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261120/fresh-process/mismatch-0003.pt"
+        },
+        {
+          "bytes": 109430244,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261120/fresh-process/mismatch-0004.pt"
+        },
+        {
+          "bytes": 109430244,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261120/fresh-process/mismatch-0005.pt"
+        },
+        {
+          "bytes": 109430244,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261120/fresh-process/mismatch-0006.pt"
+        },
+        {
+          "bytes": 90162660,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261120/fresh-process/mismatch-0007.pt"
+        }
+      ],
+      "reference_payloads": [
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261120/reference-updates/0000.pt"
+        },
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261120/reference-updates/0001.pt"
+        },
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261120/reference-updates/0002.pt"
+        },
+        {
+          "bytes": 90162532,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261120/reference-updates/0003.pt"
+        },
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261120/reference-updates/0004.pt"
+        },
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261120/reference-updates/0005.pt"
+        },
+        {
+          "bytes": 109430180,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261120/reference-updates/0006.pt"
+        },
+        {
+          "bytes": 90162532,
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/round/tasks/screen-x-lr0.001-s20261120/reference-updates/0007.pt"
+        }
+      ]
+    }
+  ],
+  "schema": "pilot-r2-report-audit-v1",
+  "shannon_preflight_identity": {
+    "bytes": 36534,
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r2-preflight-triage.json",
+    "sha256": "c7983bc60911eb29e3f6525ef5c9f1ff4aeadde96e6cbdc336913d24c2b080d8"
+  },
+  "timing_scope_clarification": {
+    "inspect_elapsed_limitation": "inspect.py computes current_time - started_unix even after terminal state; use scheduler.updated_unix - started_unix for finished round duration.",
+    "per_step_tokens_per_second": "After removing the first three measured updates, includes RNG-before and input fingerprints, data transfer, forward/backward/clipping/AdamW and end synchronization. Excludes RNG-after fingerprint, JSON/log writes and checkpoint saves.",
+    "round_seconds": 3296.9199872016907,
+    "training_interval_reconstruction": "[time_unix - seconds, time_unix); record time is captured after RNG-after fingerprint, so interval placement has recording overhead offset.",
+    "training_total_seconds": "Main training loop wall, including within-loop checkpoint and logging gaps; not identical to sum of per-step seconds."
+  },
+  "training_concurrency_review": [
+    {
+      "at_least_one_training_task_seconds": 303.96717405319214,
+      "full_load_training_union_fraction": 0.48171119545699176,
+      "full_load_wall_fraction": 0.41069175464127256,
+      "nine_npu_four_cpu_seconds": 146.42439079284668,
+      "peak_training_tasks": 13,
+      "phase": "mixed-concurrent-a",
+      "phase_wall_seconds": 356.5311188697815
+    },
+    {
+      "at_least_one_training_task_seconds": 304.78217005729675,
+      "full_load_training_union_fraction": 0.4844597130091403,
+      "full_load_wall_fraction": 0.4113539196959886,
+      "nine_npu_four_cpu_seconds": 147.654682636261,
+      "peak_training_tasks": 13,
+      "phase": "mixed-concurrent-b",
+      "phase_wall_seconds": 358.94803857803345
+    }
+  ],
+  "updated_unix": 1795097518.9571817
+}

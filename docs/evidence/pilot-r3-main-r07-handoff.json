@@ -1,0 +1,2956 @@
+{
+  "actual_physical_cards": 8,
+  "budget_ledger": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/budget.json",
+  "cgroup_process_count": 115,
+  "cgroup_rss_bytes": 79677693952,
+  "frozen_controller_file_count": 69,
+  "frozen_source_verification": "passed",
+  "global_device_hours_at_observation": 58.74677016863392,
+  "import_summary": {
+    "additional_evaluation_by_model": {
+      "exchange-d64-k-base-8e5f1d5288": 64,
+      "exchange-d64-k-capacity-04e50b64a9": 64,
+      "exchange-d64-k-independent-9af84f69cb": 0,
+      "exchange-d64-k-narrowwide-fdc0f72367": 64,
+      "exchange-d64-k-pool-d1990a0160": 64,
+      "exchange-d64-k-shannon-615836a776": 64,
+      "exchange-d64-s-base-f9310d4300": 192,
+      "exchange-d64-s-capacity-71f21161e3": 196864,
+      "exchange-d64-s-independent-9bdefe8e73": 229760,
+      "exchange-d64-s-narrowwide-b198eda51d": 393600,
+      "exchange-d64-s-pool-822470137c": 98496,
+      "exchange-d64-s-shannon-e8ace058ca": 192,
+      "multiscale_settle-d64-k-group5-4eb83f52ae": 64,
+      "multiscale_settle-d64-k-mixed9-42e89ddc50": 352,
+      "multiscale_settle-d64-k-singleton7-121b8d2af3": 14656,
+      "multiscale_settle-d64-s-group5-6e6cec4898": 32,
+      "multiscale_settle-d64-s-singleton7-bf731dfdae": 1632,
+      "multiscale_timed-d64-k-group5-716f8264e2": 64,
+      "multiscale_timed-d64-k-mixed9-cc3af6a0e9": 96,
+      "multiscale_timed-d64-k-singleton7-1863b5a223": 64,
+      "multiscale_timed-d64-s-group5-241b4441c5": 1632
+    },
+    "additional_evaluation_reserved_tokens": 938016,
+    "completed": 284,
+    "not_started": 44,
+    "resume": 63,
+    "retry": 2
+  },
+  "inspection_command": "python .local/pilot-r3/inspect.py",
+  "interpretation": "execution resumed and original blocker independently passed; not full A, B, strict trajectory equivalence or learning qualification",
+  "live_npu_owners": [
+    {
+      "admission_commands": 6,
+      "dynamic_admission": true,
+      "group_id": "group-000041",
+      "physical_id": 11,
+      "pid": 2127346
+    },
+    {
+      "admission_commands": 6,
+      "dynamic_admission": true,
+      "group_id": "group-000042",
+      "physical_id": 7,
+      "pid": 2127401
+    },
+    {
+      "admission_commands": 5,
+      "dynamic_admission": true,
+      "group_id": "group-000043",
+      "physical_id": 5,
+      "pid": 2127441
+    },
+    {
+      "admission_commands": 5,
+      "dynamic_admission": true,
+      "group_id": "group-000044",
+      "physical_id": 10,
+      "pid": 2127472
+    },
+    {
+      "admission_commands": 5,
+      "dynamic_admission": true,
+      "group_id": "group-000045",
+      "physical_id": 0,
+      "pid": 2127542
+    },
+    {
+      "admission_commands": 7,
+      "dynamic_admission": true,
+      "group_id": "group-000046",
+      "physical_id": 4,
+      "pid": 2127566
+    },
+    {
+      "admission_commands": 7,
+      "dynamic_admission": true,
+      "group_id": "group-000047",
+      "physical_id": 14,
+      "pid": 2127596
+    },
+    {
+      "admission_commands": 0,
+      "dynamic_admission": false,
+      "group_id": "group-000055",
+      "physical_id": 1,
+      "pid": 2137985
+    }
+  ],
+  "live_worker_counts": {
+    "cpu": 40,
+    "npu": 24
+  },
+  "live_workers": [
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2126833,
+      "rss_bytes": 711852032,
+      "start_ticks": 2273575439,
+      "task_id": "multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112001-r0"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2126835,
+      "rss_bytes": 621072384,
+      "start_ticks": 2273575448,
+      "task_id": "multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112002-r0"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2126838,
+      "rss_bytes": 700502016,
+      "start_ticks": 2273575459,
+      "task_id": "multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112001-r1"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2126842,
+      "rss_bytes": 666664960,
+      "start_ticks": 2273575470,
+      "task_id": "multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112002-r1"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2126846,
+      "rss_bytes": 725065728,
+      "start_ticks": 2273575480,
+      "task_id": "multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112001-r2"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2126863,
+      "rss_bytes": 738447360,
+      "start_ticks": 2273575491,
+      "task_id": "multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112002-r2"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2126865,
+      "rss_bytes": 676995072,
+      "start_ticks": 2273575501,
+      "task_id": "multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112001-r0"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2126868,
+      "rss_bytes": 719413248,
+      "start_ticks": 2273575512,
+      "task_id": "multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112002-r0"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2126955,
+      "rss_bytes": 547721216,
+      "start_ticks": 2273575523,
+      "task_id": "multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112001-r1"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2126963,
+      "rss_bytes": 709468160,
+      "start_ticks": 2273575534,
+      "task_id": "multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112002-r1"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2126967,
+      "rss_bytes": 750657536,
+      "start_ticks": 2273575546,
+      "task_id": "multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112001-r2"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2126969,
+      "rss_bytes": 498597888,
+      "start_ticks": 2273575557,
+      "task_id": "multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112002-r2"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2127107,
+      "rss_bytes": 563695616,
+      "start_ticks": 2273575709,
+      "task_id": "exchange-d64-s-pool-822470137c-a1-2026112001-r1"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2127118,
+      "rss_bytes": 564187136,
+      "start_ticks": 2273575718,
+      "task_id": "exchange-d64-s-pool-822470137c-a1-2026112002-r1"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2127129,
+      "rss_bytes": 555094016,
+      "start_ticks": 2273575727,
+      "task_id": "exchange-d64-s-pool-822470137c-a1-2026112001-r2"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2127163,
+      "rss_bytes": 533352448,
+      "start_ticks": 2273575737,
+      "task_id": "exchange-d64-s-pool-822470137c-a1-2026112002-r2"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2127190,
+      "rss_bytes": 611602432,
+      "start_ticks": 2273575747,
+      "task_id": "exchange-d64-s-capacity-71f21161e3-a1-2026112001-r0"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2127226,
+      "rss_bytes": 569331712,
+      "start_ticks": 2273575757,
+      "task_id": "exchange-d64-s-capacity-71f21161e3-a1-2026112002-r0"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2127229,
+      "rss_bytes": 608808960,
+      "start_ticks": 2273575764,
+      "task_id": "exchange-d64-s-capacity-71f21161e3-a1-2026112001-r1"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2127237,
+      "rss_bytes": 603684864,
+      "start_ticks": 2273575773,
+      "task_id": "exchange-d64-s-capacity-71f21161e3-a1-2026112002-r1"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2127245,
+      "rss_bytes": 613588992,
+      "start_ticks": 2273575784,
+      "task_id": "exchange-d64-s-capacity-71f21161e3-a1-2026112001-r2"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2127255,
+      "rss_bytes": 472952832,
+      "start_ticks": 2273575794,
+      "task_id": "exchange-d64-s-capacity-71f21161e3-a1-2026112002-r2"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2127262,
+      "rss_bytes": 540114944,
+      "start_ticks": 2273575802,
+      "task_id": "exchange-d64-s-independent-9bdefe8e73-a1-2026112001-r0"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2127273,
+      "rss_bytes": 516808704,
+      "start_ticks": 2273575812,
+      "task_id": "exchange-d64-s-independent-9bdefe8e73-a1-2026112002-r0"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2127294,
+      "rss_bytes": 558268416,
+      "start_ticks": 2273575820,
+      "task_id": "exchange-d64-s-independent-9bdefe8e73-a1-2026112001-r1"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2127366,
+      "rss_bytes": 532258816,
+      "start_ticks": 2273575831,
+      "task_id": "exchange-d64-s-independent-9bdefe8e73-a1-2026112002-r1"
+    },
+    {
+      "backend": "npu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": 11,
+      "pid": 2144346,
+      "rss_bytes": 2328100864,
+      "start_ticks": 2273600551,
+      "task_id": "multiscale_settle-d64-s-group5-6e6cec4898-a1-2026112002-r5"
+    },
+    {
+      "backend": "npu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": 11,
+      "pid": 2146009,
+      "rss_bytes": 1439834112,
+      "start_ticks": 2273603264,
+      "task_id": "multiscale_settle-d64-s-singleton7-bf731dfdae-a1-2026112001-r4"
+    },
+    {
+      "backend": "npu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": 7,
+      "pid": 2138159,
+      "rss_bytes": 2321080320,
+      "start_ticks": 2273591574,
+      "task_id": "exchange-d64-s-independent-9bdefe8e73-a1-2026112002-r5"
+    },
+    {
+      "backend": "npu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": 7,
+      "pid": 2143051,
+      "rss_bytes": 2332577792,
+      "start_ticks": 2273598759,
+      "task_id": "multiscale_settle-d64-s-group5-6e6cec4898-a1-2026112002-r4"
+    },
+    {
+      "backend": "npu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": 5,
+      "pid": 2129188,
+      "rss_bytes": 2429673472,
+      "start_ticks": 2273579255,
+      "task_id": "multiscale_timed-d64-k-mixed9-cc3af6a0e9-init-2026112001"
+    },
+    {
+      "backend": "npu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": 5,
+      "pid": 2138332,
+      "rss_bytes": 2359398400,
+      "start_ticks": 2273591834,
+      "task_id": "exchange-d64-s-narrowwide-b198eda51d-a1-2026112002-r3"
+    },
+    {
+      "backend": "npu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": 5,
+      "pid": 2138582,
+      "rss_bytes": 2356105216,
+      "start_ticks": 2273592243,
+      "task_id": "exchange-d64-s-narrowwide-b198eda51d-a1-2026112001-r4"
+    },
+    {
+      "backend": "npu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": 5,
+      "pid": 2145398,
+      "rss_bytes": 2133082112,
+      "start_ticks": 2273602108,
+      "task_id": "multiscale_timed-d64-k-singleton7-1863b5a223-a1-2026112001-r1"
+    },
+    {
+      "backend": "npu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": 10,
+      "pid": 2129562,
+      "rss_bytes": 2426568704,
+      "start_ticks": 2273579925,
+      "task_id": "multiscale_timed-d64-k-mixed9-cc3af6a0e9-init-2026112002"
+    },
+    {
+      "backend": "npu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": 10,
+      "pid": 2132265,
+      "rss_bytes": 2369732608,
+      "start_ticks": 2273582995,
+      "task_id": "multiscale_timed-d64-k-group5-716f8264e2-a1-2026112001-r5"
+    },
+    {
+      "backend": "npu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": 10,
+      "pid": 2144367,
+      "rss_bytes": 2325970944,
+      "start_ticks": 2273600590,
+      "task_id": "exchange-d64-s-narrowwide-b198eda51d-a1-2026112002-r4"
+    },
+    {
+      "backend": "npu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": 10,
+      "pid": 2144848,
+      "rss_bytes": 2125848576,
+      "start_ticks": 2273601233,
+      "task_id": "multiscale_settle-d64-s-singleton7-bf731dfdae-a1-2026112001-r3"
+    },
+    {
+      "backend": "npu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": 0,
+      "pid": 2130248,
+      "rss_bytes": 2429452288,
+      "start_ticks": 2273580688,
+      "task_id": "multiscale_timed-d64-k-mixed9-cc3af6a0e9-init-2026112003"
+    },
+    {
+      "backend": "npu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": 0,
+      "pid": 2132654,
+      "rss_bytes": 2382749696,
+      "start_ticks": 2273583675,
+      "task_id": "multiscale_timed-d64-k-group5-716f8264e2-a1-2026112002-r5"
+    },
+    {
+      "backend": "npu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": 0,
+      "pid": 2143793,
+      "rss_bytes": 2325553152,
+      "start_ticks": 2273599725,
+      "task_id": "multiscale_settle-d64-s-group5-6e6cec4898-a1-2026112001-r3"
+    },
+    {
+      "backend": "npu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": 0,
+      "pid": 2144224,
+      "rss_bytes": 2323283968,
+      "start_ticks": 2273600376,
+      "task_id": "multiscale_settle-d64-s-group5-6e6cec4898-a1-2026112001-r5"
+    },
+    {
+      "backend": "npu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": 4,
+      "pid": 2141301,
+      "rss_bytes": 2347831296,
+      "start_ticks": 2273595814,
+      "task_id": "multiscale_settle-d64-s-group5-6e6cec4898-a1-2026112002-r3"
+    },
+    {
+      "backend": "npu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": 4,
+      "pid": 2141697,
+      "rss_bytes": 2339495936,
+      "start_ticks": 2273596514,
+      "task_id": "multiscale_settle-d64-s-group5-6e6cec4898-a1-2026112001-r4"
+    },
+    {
+      "backend": "npu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": 4,
+      "pid": 2145927,
+      "rss_bytes": 2101043200,
+      "start_ticks": 2273603022,
+      "task_id": "multiscale_settle-d64-s-singleton7-bf731dfdae-a1-2026112002-r3"
+    },
+    {
+      "backend": "npu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": 14,
+      "pid": 2140584,
+      "rss_bytes": 2353905664,
+      "start_ticks": 2273594689,
+      "task_id": "exchange-d64-s-narrowwide-b198eda51d-a1-2026112001-r5"
+    },
+    {
+      "backend": "npu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": 14,
+      "pid": 2140912,
+      "rss_bytes": 2349944832,
+      "start_ticks": 2273595158,
+      "task_id": "exchange-d64-s-narrowwide-b198eda51d-a1-2026112002-r5"
+    },
+    {
+      "backend": "npu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": 14,
+      "pid": 2144929,
+      "rss_bytes": 2128744448,
+      "start_ticks": 2273601334,
+      "task_id": "multiscale_timed-d64-k-singleton7-1863b5a223-a1-2026112001-r0"
+    },
+    {
+      "backend": "npu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": 14,
+      "pid": 2145199,
+      "rss_bytes": 2126770176,
+      "start_ticks": 2273601759,
+      "task_id": "multiscale_timed-d64-k-singleton7-1863b5a223-a1-2026112002-r0"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2130997,
+      "rss_bytes": 547586048,
+      "start_ticks": 2273581431,
+      "task_id": "exchange-d64-s-independent-9bdefe8e73-a1-2026112001-r2"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2132395,
+      "rss_bytes": 559931392,
+      "start_ticks": 2273583338,
+      "task_id": "exchange-d64-s-independent-9bdefe8e73-a1-2026112002-r2"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2132714,
+      "rss_bytes": 529780736,
+      "start_ticks": 2273583783,
+      "task_id": "exchange-d64-s-narrowwide-b198eda51d-a1-2026112001-r0"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2132716,
+      "rss_bytes": 561704960,
+      "start_ticks": 2273583799,
+      "task_id": "exchange-d64-s-narrowwide-b198eda51d-a1-2026112002-r0"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2132936,
+      "rss_bytes": 586436608,
+      "start_ticks": 2273584241,
+      "task_id": "exchange-d64-s-narrowwide-b198eda51d-a1-2026112001-r1"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2133152,
+      "rss_bytes": 591859712,
+      "start_ticks": 2273584503,
+      "task_id": "exchange-d64-s-narrowwide-b198eda51d-a1-2026112002-r1"
+    },
+    {
+      "backend": "npu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": 1,
+      "pid": 2139300,
+      "rss_bytes": 2390016000,
+      "start_ticks": 2273592783,
+      "task_id": "multiscale_timed-d64-s-mixed9-9be2af0261-preflight-2026112021-capacity-large"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2139750,
+      "rss_bytes": 586182656,
+      "start_ticks": 2273593344,
+      "task_id": "exchange-d64-s-narrowwide-b198eda51d-a1-2026112001-r2"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2140005,
+      "rss_bytes": 538140672,
+      "start_ticks": 2273593785,
+      "task_id": "exchange-d64-s-narrowwide-b198eda51d-a1-2026112002-r2"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2140453,
+      "rss_bytes": 573108224,
+      "start_ticks": 2273594488,
+      "task_id": "exchange-d64-k-base-8e5f1d5288-a3-2026112001-r2"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2140801,
+      "rss_bytes": 552665088,
+      "start_ticks": 2273594949,
+      "task_id": "exchange-d64-k-base-8e5f1d5288-a3-2026112002-r2"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2141309,
+      "rss_bytes": 555618304,
+      "start_ticks": 2273595852,
+      "task_id": "exchange-d64-k-shannon-615836a776-a3-2026112001-r2"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2141310,
+      "rss_bytes": 562028544,
+      "start_ticks": 2273595864,
+      "task_id": "exchange-d64-k-shannon-615836a776-a3-2026112002-r2"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2142023,
+      "rss_bytes": 518569984,
+      "start_ticks": 2273597218,
+      "task_id": "exchange-d64-k-pool-d1990a0160-a3-2026112001-r2"
+    },
+    {
+      "backend": "cpu",
+      "cgroup_matches": true,
+      "cpu_threads": 4,
+      "physical_id": null,
+      "pid": 2142204,
+      "rss_bytes": 512327680,
+      "start_ticks": 2273597667,
+      "task_id": "exchange-d64-k-pool-d1990a0160-a3-2026112002-r2"
+    }
+  ],
+  "main_pid_cgroup": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r07.service\n",
+  "memory_scope": "RSS/reservation software budget 1 TB; no effective per-service memory cgroup",
+  "new_completed_tasks": [
+    {
+      "device": "npu:0",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "not_started",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_settle-d64-s-mixed9-9bee809995-preflight-2026112021-capacity-large/attempt-0/result.json",
+        "sha256": "741e265fdf6fc25945f6c7a312417f4078cf5819582d37a24e8f0bae749ab41f"
+      },
+      "resume": null,
+      "review_scope": "fresh task or bounded replay; no trained-state continuation claim",
+      "task_id": "multiscale_settle-d64-s-mixed9-9bee809995-preflight-2026112021-capacity-large",
+      "training": {
+        "from_steps": 0,
+        "from_tokens": 0,
+        "seconds": 28.67811894416809,
+        "segment_steps": 4,
+        "segment_tokens": 32768,
+        "steps": 4,
+        "target_tokens": 32768,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 32768,
+        "tokens_per_second": 1142.613295655628
+      }
+    },
+    {
+      "device": "npu:0",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "retry",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_timed-d64-s-singleton7-b9f49cccdc-preflight-2026112021-capacity-large/attempt-0/result.json",
+        "sha256": "18762971b06533061527c28fe895863ae98bcf00a57e921527ef82432da866e0"
+      },
+      "resume": null,
+      "review_scope": "fresh task or bounded replay; no trained-state continuation claim",
+      "task_id": "multiscale_timed-d64-s-singleton7-b9f49cccdc-preflight-2026112021-capacity-large",
+      "training": {
+        "from_steps": 0,
+        "from_tokens": 0,
+        "seconds": 66.65045515820384,
+        "segment_steps": 4,
+        "segment_tokens": 16384,
+        "steps": 4,
+        "target_tokens": 16384,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 16384,
+        "tokens_per_second": 245.81977664084013
+      }
+    },
+    {
+      "device": "npu:0",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_timed-d64-k-singleton7-1863b5a223-init-2026112001/attempt-0/result.json",
+        "sha256": "175e7fd070985adec21cfe668f4bb3a9820549c276932a12fb8e3d91ea8817b6"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "6b8d7cf77e752f588964b1eedf57823e57fe393c72d30eecc93b5d3bcaeb0246",
+        "fallback_used": false,
+        "from_steps": 55,
+        "from_tokens": 28160,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/multiscale_timed-d64-k-singleton7-1863b5a223-init-2026112001/attempt-0/checkpoints/step-000000055-a35ed5505a.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "fd3927964c65f322efbfe43f25e2f6c08eb046e0eb4bb7c112a71329aa6df9a8",
+        "source_task_id": "multiscale_timed-d64-k-singleton7-1863b5a223-init-2026112001",
+        "state_reused": true,
+        "state_sha256": "07331bc8a42adfed6e2f3053f0403cfcc4422bfed958c81fa6e79e726c91e1ab"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "multiscale_timed-d64-k-singleton7-1863b5a223-init-2026112001",
+      "training": {
+        "from_steps": 55,
+        "from_tokens": 28160,
+        "seconds": 63.25005766749382,
+        "segment_steps": 9,
+        "segment_tokens": 4608,
+        "steps": 64,
+        "target_tokens": 32768,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 32768,
+        "tokens_per_second": 72.85368851715997
+      }
+    },
+    {
+      "device": "npu:0",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 3,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_timed-d64-k-singleton7-1863b5a223-init-2026112003/attempt-0/result.json",
+        "sha256": "0af141747f5c9309cb53f72f1f88d28b6d971618abaff9ab2d26b97a5b9e0725"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "7c46aede55b9c531f64f76844c28524126cd318ce9d969b359c134db8a7442bc",
+        "fallback_used": false,
+        "from_steps": 41,
+        "from_tokens": 20992,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/multiscale_timed-d64-k-singleton7-1863b5a223-init-2026112003/attempt-0/checkpoints/step-000000041-ad18df718d.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "bcacdaa54d261423deefbf0b02b60a9a144d2e7302840db017148dd3f9d0186b",
+        "source_task_id": "multiscale_timed-d64-k-singleton7-1863b5a223-init-2026112003",
+        "state_reused": true,
+        "state_sha256": "65a1ae075ae1197504079e439f2328132b0e352c3ae3b53a8850341e2b8b9c1e"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "multiscale_timed-d64-k-singleton7-1863b5a223-init-2026112003",
+      "training": {
+        "from_steps": 41,
+        "from_tokens": 20992,
+        "seconds": 194.67826345935464,
+        "segment_steps": 23,
+        "segment_tokens": 11776,
+        "steps": 64,
+        "target_tokens": 32768,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 32768,
+        "tokens_per_second": 60.48954716744029
+      }
+    },
+    {
+      "device": "npu:0",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": false,
+        "sample_count": 0,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112002-r3/attempt-0/result.json",
+        "sha256": "2383bac7b82bb07146456cd3bee33e6da747bb517ca6ca0514428315d8922b9f"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "f765d321ccd2a7fede980a1f06f6ba50c09d597ac79cfdff597379e339b28ebb",
+        "fallback_used": false,
+        "from_steps": 128,
+        "from_tokens": 262144,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112002-r3/attempt-0/checkpoints/step-000000128-e19e7ce0fc.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "5d020737211b048b733d4b1dbafd9b483576bf57b5c1a1a2ff6805ebe6683745",
+        "source_task_id": "multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112002-r3",
+        "state_reused": true,
+        "state_sha256": "b6f21b9aa50d4907f768256e54692dfbcdc3e423512958b4276b83c8ecf27e84"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112002-r3",
+      "training": {
+        "from_steps": 128,
+        "from_tokens": 262144,
+        "seconds": 0.0,
+        "segment_steps": 0,
+        "segment_tokens": 0,
+        "steps": 128,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": null
+      }
+    },
+    {
+      "device": "npu:0",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": false,
+        "sample_count": 0,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112001-r4/attempt-0/result.json",
+        "sha256": "e4d5fa8d7d60d14f3ab7938ef3a515c986236668f71cbae5e7b192a71e8c1192"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "4c3d5c286a2c2d9c8d4aed11e0a06db167ac74a8309d2fb0fdbbf0337ff4b2a6",
+        "fallback_used": false,
+        "from_steps": 128,
+        "from_tokens": 262144,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112001-r4/attempt-0/checkpoints/step-000000128-c7df834da4.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "febd5b512ee83a46f5845afde682070d6863ac6149baa3866e25b7071f7ff756",
+        "source_task_id": "multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112001-r4",
+        "state_reused": true,
+        "state_sha256": "1e384a7d77380b2158ee4d07ce992e6227a90b1edc4080c405320f10447f17b0"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112001-r4",
+      "training": {
+        "from_steps": 128,
+        "from_tokens": 262144,
+        "seconds": 0.0,
+        "segment_steps": 0,
+        "segment_tokens": 0,
+        "steps": 128,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": null
+      }
+    },
+    {
+      "device": "npu:0",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112001-r5/attempt-0/result.json",
+        "sha256": "22097ddd61e840b2a0f32a660cb6595052d5474b02f2cf2e749f80274a8fce46"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "b3819e1b4056f7ea28b8d2bc18c3bd69584e54234c49c9de34b54fc744d0e2bc",
+        "fallback_used": false,
+        "from_steps": 120,
+        "from_tokens": 245760,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112001-r5/attempt-0/checkpoints/step-000000120-a49b0e4f36.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "1c42c6bcb9eacf21cda8d4837689ef6044d6f1ba8fffb4dee3d102cebe97f51a",
+        "source_task_id": "multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112001-r5",
+        "state_reused": true,
+        "state_sha256": "5e8782ef9f290d0b8d86633b7a55d0bbb3abffb57fe79217fc8980a97b8851b8"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112001-r5",
+      "training": {
+        "from_steps": 120,
+        "from_tokens": 245760,
+        "seconds": 17.67380326613784,
+        "segment_steps": 8,
+        "segment_tokens": 16384,
+        "steps": 128,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": 927.0217481367443
+      }
+    },
+    {
+      "device": "npu:0",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112002-r5/attempt-0/result.json",
+        "sha256": "0a93a2851c2f17c1ac27cdcc0989e08e371349f541608a377557c26d2830c4e3"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "f393e62ff5fe652d7ac8423f1eb70906641e11957b0c169b52f64879233bdaca",
+        "fallback_used": false,
+        "from_steps": 118,
+        "from_tokens": 241664,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112002-r5/attempt-0/checkpoints/step-000000118-806b7a2aaf.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "8d2ef171d40207b0971141bd0787585e4fd6a0371b8d4de1bc65853d87204652",
+        "source_task_id": "multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112002-r5",
+        "state_reused": true,
+        "state_sha256": "8371aa436abfc91fee3755d46ad77adc1ed89d449ce0da8aa69c4d9c8d212820"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112002-r5",
+      "training": {
+        "from_steps": 118,
+        "from_tokens": 241664,
+        "seconds": 25.14274413138628,
+        "segment_steps": 10,
+        "segment_tokens": 20480,
+        "steps": 128,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": 814.5491157599752
+      }
+    },
+    {
+      "device": "npu:0",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112001-r3/attempt-0/result.json",
+        "sha256": "b40de6225bfd4734a3d8a1b194a298da4dae9a3ab22ed067c6afeb167ef77f9a"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "9449d52c0a35fd3103e32caf3ec0ab898895c794b8a9e7ca2189e24450c9d044",
+        "fallback_used": false,
+        "from_steps": 110,
+        "from_tokens": 225280,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112001-r3/attempt-0/checkpoints/step-000000110-bddbc54e52.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "8d693e00c376102050f82db991beb7732f97e5bf9dcb003ab990c3d4b4231a34",
+        "source_task_id": "multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112001-r3",
+        "state_reused": true,
+        "state_sha256": "c7657e15ca6bd0b701a718d6d7dc2da8daf497c0082afc9a198813b1106dcc7b"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112001-r3",
+      "training": {
+        "from_steps": 110,
+        "from_tokens": 225280,
+        "seconds": 56.17838021367788,
+        "segment_steps": 18,
+        "segment_tokens": 36864,
+        "steps": 128,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": 656.1954947754908
+      }
+    },
+    {
+      "device": "npu:0",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112001-r4/attempt-0/result.json",
+        "sha256": "52c11a152581f91437985449a23f7470971f13b4aede8996451f6dc04f00a75d"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "58af2a6692909f1e670054c074afe0b1b509918463e7b6248784feb46f8f1823",
+        "fallback_used": false,
+        "from_steps": 95,
+        "from_tokens": 194560,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112001-r4/attempt-0/checkpoints/step-000000095-fa9a513b08.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "54ba3ba8c40a5c7341e055f24fa93a9ce5d0d8cceba8ca8e190cfc0f619b34cf",
+        "source_task_id": "multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112001-r4",
+        "state_reused": true,
+        "state_sha256": "6aa02871f75d7940a33a8911403eb0a4fd15d4bef2fad18be03ce39e422d7301"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112001-r4",
+      "training": {
+        "from_steps": 95,
+        "from_tokens": 194560,
+        "seconds": 105.03186878561974,
+        "segment_steps": 33,
+        "segment_tokens": 67584,
+        "steps": 128,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": 643.4618443088499
+      }
+    },
+    {
+      "device": "npu:0",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112002-r4/attempt-0/result.json",
+        "sha256": "a12f09ff609fc83740119515189046a28c2a1d7e356c87e3af318614bd8fdcb0"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "852ed59a8a14607da5b1919566787211382eb9fe53c78c55eda564e9aedbf311",
+        "fallback_used": false,
+        "from_steps": 95,
+        "from_tokens": 194560,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112002-r4/attempt-0/checkpoints/step-000000095-f4948024ce.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "4eb2c980c31862fd906cd9182370ae109265fae0c6d7eb755bec5d4e88ebb5a0",
+        "source_task_id": "multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112002-r4",
+        "state_reused": true,
+        "state_sha256": "14bb265581c4243f8b5b6a75f1c2a5ddff160b0906d52cef6add237b0c6a6387"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112002-r4",
+      "training": {
+        "from_steps": 95,
+        "from_tokens": 194560,
+        "seconds": 89.56581087782979,
+        "segment_steps": 33,
+        "segment_tokens": 67584,
+        "steps": 128,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": 754.5736407409566
+      }
+    },
+    {
+      "device": "npu:0",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112001-r5/attempt-0/result.json",
+        "sha256": "09aca0dd892d80c12081bd0b1983b8341a6e5a54f02464404b2a96555455e96a"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "5ecd56a85896dfab9842685ad6d981fbc125c2082c071d0438a10e5e87044c11",
+        "fallback_used": false,
+        "from_steps": 100,
+        "from_tokens": 204800,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112001-r5/attempt-0/checkpoints/step-000000100-0fe21cdabc.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "9a65f8c4d173ab33a338b3c2e6b3f60de9284b08c0e56a9471c2c9521cb5eb75",
+        "source_task_id": "multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112001-r5",
+        "state_reused": true,
+        "state_sha256": "0ec0d30dd7d108a5e7eff9dc0b3f99dffacf5e4aab2cc129161c119e7522a89a"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112001-r5",
+      "training": {
+        "from_steps": 100,
+        "from_tokens": 204800,
+        "seconds": 82.4718618132174,
+        "segment_steps": 28,
+        "segment_tokens": 57344,
+        "steps": 128,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": 695.315938542444
+      }
+    },
+    {
+      "device": "npu:0",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112002-r5/attempt-0/result.json",
+        "sha256": "286def511e7fbcbb2594b91f5e91f7c4684dd130e4d99115bfd1c47951940631"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "591ffb4b8e709c9e9b5b62ef105ba488625a4cc9b3b2a01431cad75b3cd828df",
+        "fallback_used": false,
+        "from_steps": 122,
+        "from_tokens": 249856,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112002-r5/attempt-0/checkpoints/step-000000122-8a976030f1.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "e6a4b34d51150c1b52d8e44feef6970bebb2b959590bee2ac5f8c4fdcf017536",
+        "source_task_id": "multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112002-r5",
+        "state_reused": true,
+        "state_sha256": "50c3683e0c590d065b12599f626fc65ae1adc04b4e983ee4cd721a3e3344507c"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112002-r5",
+      "training": {
+        "from_steps": 122,
+        "from_tokens": 249856,
+        "seconds": 23.993621800094843,
+        "segment_steps": 6,
+        "segment_tokens": 12288,
+        "steps": 128,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": 512.1361044355308
+      }
+    },
+    {
+      "device": "cpu",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/exchange-d64-s-base-f9310d4300-a1-2026112001-r0/attempt-0/result.json",
+        "sha256": "4524c780974dd9be57215a23475ba65dda5bb3f1d37148ac639814abfe15843b"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "d2718f18fce753871c7fb0bddedd202a7e2ef8959888dd5c6ce67aae92c5170d",
+        "fallback_used": false,
+        "from_steps": 922,
+        "from_tokens": 236032,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/exchange-d64-s-base-f9310d4300-a1-2026112001-r0/attempt-0/checkpoints/step-000000922-f306bfdda4.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "8ca5252a9a2e4ad439e7dfb4400f9c96b58e56d89a5c5e69d01f8a5f8b48b08b",
+        "source_task_id": "exchange-d64-s-base-f9310d4300-a1-2026112001-r0",
+        "state_reused": true,
+        "state_sha256": "46386fd2e862771b8a8fa8f80940bb433ae89d91a49994ebf72e4ee0fac9b5d6"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "exchange-d64-s-base-f9310d4300-a1-2026112001-r0",
+      "training": {
+        "from_steps": 922,
+        "from_tokens": 236032,
+        "seconds": 56.95452357456088,
+        "segment_steps": 102,
+        "segment_tokens": 26112,
+        "steps": 1024,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": 458.4710460410751
+      }
+    },
+    {
+      "device": "cpu",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/exchange-d64-s-base-f9310d4300-a1-2026112002-r0/attempt-0/result.json",
+        "sha256": "c92739619c5d49515350ad04f2a7cb05d68dea1107e55d6115d072974723fadc"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "d7b1107a3194962035701738744a3e2bc0f91fbe32ee5538a56ebbea8d19d338",
+        "fallback_used": false,
+        "from_steps": 915,
+        "from_tokens": 234240,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/exchange-d64-s-base-f9310d4300-a1-2026112002-r0/attempt-0/checkpoints/step-000000915-c4b9c08d34.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "8464976611f9d23bf6223a961e10c3510ee108680ad0972e3aeee7e8c08e71e8",
+        "source_task_id": "exchange-d64-s-base-f9310d4300-a1-2026112002-r0",
+        "state_reused": true,
+        "state_sha256": "68a638cc16b14c6dd0649afbf43a48d451bf2ea33c70aa475ab70c59acfe5378"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "exchange-d64-s-base-f9310d4300-a1-2026112002-r0",
+      "training": {
+        "from_steps": 915,
+        "from_tokens": 234240,
+        "seconds": 61.42855669185519,
+        "segment_steps": 109,
+        "segment_tokens": 27904,
+        "steps": 1024,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": 454.2512717655922
+      }
+    },
+    {
+      "device": "cpu",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/exchange-d64-s-base-f9310d4300-a1-2026112001-r1/attempt-0/result.json",
+        "sha256": "9c740a922749b51ae9a336f5aa277c493c41abd55e3e8711bfb1540b1967cbc0"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "bf6b2e0319801c1ea2bd918d791712072e0b18ab1c8ae47342d24c8dcce9446f",
+        "fallback_used": false,
+        "from_steps": 910,
+        "from_tokens": 232960,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/exchange-d64-s-base-f9310d4300-a1-2026112001-r1/attempt-0/checkpoints/step-000000910-5e326f0dcb.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "7a50f0a7df3db13bc7e3ecf9f5c7c97f682ab0725bc382686d5d22061dbca58f",
+        "source_task_id": "exchange-d64-s-base-f9310d4300-a1-2026112001-r1",
+        "state_reused": true,
+        "state_sha256": "b8fb3fd265d824394279ff2d2daa196e5b061459f937ca4306729b2f201923b8"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "exchange-d64-s-base-f9310d4300-a1-2026112001-r1",
+      "training": {
+        "from_steps": 910,
+        "from_tokens": 232960,
+        "seconds": 67.0917231105268,
+        "segment_steps": 114,
+        "segment_tokens": 29184,
+        "steps": 1024,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": 434.9865921899535
+      }
+    },
+    {
+      "device": "cpu",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/exchange-d64-s-base-f9310d4300-a1-2026112002-r1/attempt-0/result.json",
+        "sha256": "67277a1202d63e6c554fbf61a2e485109796c184eed2750355b3f0c56ef82c27"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "76b4c93f3c0438c18dc0e2e8300ac3eec13c674f1bb0733fea3a3e84aa9a9416",
+        "fallback_used": false,
+        "from_steps": 921,
+        "from_tokens": 235776,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/exchange-d64-s-base-f9310d4300-a1-2026112002-r1/attempt-0/checkpoints/step-000000921-97874200f7.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "f841fcdb090b5676292da5316ec28ff9865aef82fae2bd9cde85e5a4fd0dddd9",
+        "source_task_id": "exchange-d64-s-base-f9310d4300-a1-2026112002-r1",
+        "state_reused": true,
+        "state_sha256": "dd6ad248af5b74d687c9e498dc3eabae27d38d64bc32342e0fb75cffbca118e1"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "exchange-d64-s-base-f9310d4300-a1-2026112002-r1",
+      "training": {
+        "from_steps": 921,
+        "from_tokens": 235776,
+        "seconds": 60.584730107337236,
+        "segment_steps": 103,
+        "segment_tokens": 26368,
+        "steps": 1024,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": 435.2251789070304
+      }
+    },
+    {
+      "device": "cpu",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/exchange-d64-s-base-f9310d4300-a1-2026112001-r2/attempt-0/result.json",
+        "sha256": "c713d4bed9fe51b253f88adb2335e6513121a1987ad0ce41c8c25369ddcec88c"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "6e4709f8fc99294c50f26fd028bb3510b08b7587fc35cca1030fad1ccd23ba2f",
+        "fallback_used": false,
+        "from_steps": 955,
+        "from_tokens": 244480,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/exchange-d64-s-base-f9310d4300-a1-2026112001-r2/attempt-0/checkpoints/step-000000955-aa9719b9f7.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "3102503bc53beaf96adcb90db6efa6667a107c37b8918333794bbca0fd0342b9",
+        "source_task_id": "exchange-d64-s-base-f9310d4300-a1-2026112001-r2",
+        "state_reused": true,
+        "state_sha256": "f9d4a652029bffb8302e1ff9bec0c5660edc707f6254fedb672c1e37ff4e5954"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "exchange-d64-s-base-f9310d4300-a1-2026112001-r2",
+      "training": {
+        "from_steps": 955,
+        "from_tokens": 244480,
+        "seconds": 38.37723247334361,
+        "segment_steps": 69,
+        "segment_tokens": 17664,
+        "steps": 1024,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": 460.27289779869386
+      }
+    },
+    {
+      "device": "cpu",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/exchange-d64-s-base-f9310d4300-a1-2026112002-r2/attempt-0/result.json",
+        "sha256": "da215e3df4a6d7a7e1599acb669a3e7e370c14792bda7950cf51b0f099086b84"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "d43c676491c6db1cd418001eba94df6cf557fff886bd45a6d36de196efe4143b",
+        "fallback_used": false,
+        "from_steps": 903,
+        "from_tokens": 231168,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/exchange-d64-s-base-f9310d4300-a1-2026112002-r2/attempt-0/checkpoints/step-000000903-037095f347.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "68542cb2f78919c60824563862e4ec48e7d6a185efd1aede93472b030e131d80",
+        "source_task_id": "exchange-d64-s-base-f9310d4300-a1-2026112002-r2",
+        "state_reused": true,
+        "state_sha256": "7e88d07a33205f83811042dd44d4ef9ef2296b7a39d8c189863a4708c991ca67"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "exchange-d64-s-base-f9310d4300-a1-2026112002-r2",
+      "training": {
+        "from_steps": 903,
+        "from_tokens": 231168,
+        "seconds": 68.77097565680742,
+        "segment_steps": 121,
+        "segment_tokens": 30976,
+        "steps": 1024,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": 450.4225758637144
+      }
+    },
+    {
+      "device": "cpu",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/exchange-d64-s-shannon-e8ace058ca-a1-2026112001-r0/attempt-0/result.json",
+        "sha256": "d077d5ee9eb2b23f2cd2fb6f51d36011630016f40fd9c03fab8facda210cb814"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "010a5c92902383eadba0ca49b672157a6757e2e8c22ae201bc4a8cd957ae48ff",
+        "fallback_used": false,
+        "from_steps": 739,
+        "from_tokens": 189184,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/exchange-d64-s-shannon-e8ace058ca-a1-2026112001-r0/attempt-0/checkpoints/step-000000739-29a1620af7.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "23f406d9077a835a3f0ee9ac2b5ffb6cabf59228f41b45a7567631428bf380db",
+        "source_task_id": "exchange-d64-s-shannon-e8ace058ca-a1-2026112001-r0",
+        "state_reused": true,
+        "state_sha256": "aa166dfb21f687b4cd1710a98f30ea84d71ac06050ed3e93599044598d492e3d"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "exchange-d64-s-shannon-e8ace058ca-a1-2026112001-r0",
+      "training": {
+        "from_steps": 739,
+        "from_tokens": 189184,
+        "seconds": 160.40392324328423,
+        "segment_steps": 285,
+        "segment_tokens": 72960,
+        "steps": 1024,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": 454.85171761878763
+      }
+    },
+    {
+      "device": "cpu",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/exchange-d64-s-shannon-e8ace058ca-a1-2026112002-r0/attempt-0/result.json",
+        "sha256": "7ad583ac8d59e1edf00e46d2e5c074832a63ab8f61d412623912b3860a37bd62"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "0c59acb1b6484fe77907450da5d8192b2a0a5694918fe703c56d0d8d24a11bd7",
+        "fallback_used": false,
+        "from_steps": 677,
+        "from_tokens": 173312,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/exchange-d64-s-shannon-e8ace058ca-a1-2026112002-r0/attempt-0/checkpoints/step-000000677-ba71ab04a3.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "39c47a9441e6f1c5facccf012384f5e1187daed638354a35f587856cc678fa00",
+        "source_task_id": "exchange-d64-s-shannon-e8ace058ca-a1-2026112002-r0",
+        "state_reused": true,
+        "state_sha256": "58262991e767358f939ccb1e95cb0de94df54d4ac018cbfc2ba636e6ce3d3f66"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "exchange-d64-s-shannon-e8ace058ca-a1-2026112002-r0",
+      "training": {
+        "from_steps": 677,
+        "from_tokens": 173312,
+        "seconds": 194.247631277889,
+        "segment_steps": 347,
+        "segment_tokens": 88832,
+        "steps": 1024,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": 457.3131698729324
+      }
+    },
+    {
+      "device": "cpu",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/exchange-d64-s-shannon-e8ace058ca-a1-2026112001-r1/attempt-0/result.json",
+        "sha256": "44ddc5e93eae3094d08faee37cc5042185073e02ac36d04d6b921ad80e650959"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "9e790d734eb3ca4cc11b89eb2935109b8bb8f062067aba7b49173d720fc22752",
+        "fallback_used": false,
+        "from_steps": 702,
+        "from_tokens": 179712,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/exchange-d64-s-shannon-e8ace058ca-a1-2026112001-r1/attempt-0/checkpoints/step-000000702-7ab2e5314a.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "196663a73aa558bce61acd436c19148681000ee29341c29c0935600ed7fb2f60",
+        "source_task_id": "exchange-d64-s-shannon-e8ace058ca-a1-2026112001-r1",
+        "state_reused": true,
+        "state_sha256": "6e459e262f5c1ccb438ecef767c3186189139d7b05a0af81bcd5889704f12a55"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "exchange-d64-s-shannon-e8ace058ca-a1-2026112001-r1",
+      "training": {
+        "from_steps": 702,
+        "from_tokens": 179712,
+        "seconds": 180.83057336881757,
+        "segment_steps": 322,
+        "segment_tokens": 82432,
+        "steps": 1024,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": 455.8521187226107
+      }
+    },
+    {
+      "device": "cpu",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/exchange-d64-s-shannon-e8ace058ca-a1-2026112002-r1/attempt-0/result.json",
+        "sha256": "8944191bad9a7c56ebccd21ad71ee89d87fad4d4fffe25b2ef88785147242bc2"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "a9f64691b6168c2e6e5ec8907d2426eb784266f9d45db4c001ed0fa29816b26b",
+        "fallback_used": false,
+        "from_steps": 751,
+        "from_tokens": 192256,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/exchange-d64-s-shannon-e8ace058ca-a1-2026112002-r1/attempt-0/checkpoints/step-000000751-6583dafa37.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "933f404da1ea004d910f87f3079034006d3e414dcf3b8331d56d33a44b4f5b74",
+        "source_task_id": "exchange-d64-s-shannon-e8ace058ca-a1-2026112002-r1",
+        "state_reused": true,
+        "state_sha256": "d484ebc4be78d1eb10b87332df7eba64cd41060bdf7ddeba56dd150805ad2bb6"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "exchange-d64-s-shannon-e8ace058ca-a1-2026112002-r1",
+      "training": {
+        "from_steps": 751,
+        "from_tokens": 192256,
+        "seconds": 155.34253744408488,
+        "segment_steps": 273,
+        "segment_tokens": 69888,
+        "steps": 1024,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": 449.8960886689262
+      }
+    },
+    {
+      "device": "cpu",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/exchange-d64-s-shannon-e8ace058ca-a1-2026112001-r2/attempt-0/result.json",
+        "sha256": "009c88d0b1c987e7a8a318e8a169ab1678f8bf54a4a886a5d64a9b50079d74f9"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "847ed3efa89b078e2464ded2fc41e5953c58a398b1f9a8da4913ac3a616fc2dc",
+        "fallback_used": false,
+        "from_steps": 718,
+        "from_tokens": 183808,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/exchange-d64-s-shannon-e8ace058ca-a1-2026112001-r2/attempt-0/checkpoints/step-000000718-6a98f1bed3.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "45aff6d5c885be59f930fae38fe0c0049284fa82b8cd9ee2cde0fdfda95a7f70",
+        "source_task_id": "exchange-d64-s-shannon-e8ace058ca-a1-2026112001-r2",
+        "state_reused": true,
+        "state_sha256": "28412b889aa394cebb334889afda95b25a2b5637d3f0dd0a0e14d4ca7c27d3e6"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "exchange-d64-s-shannon-e8ace058ca-a1-2026112001-r2",
+      "training": {
+        "from_steps": 718,
+        "from_tokens": 183808,
+        "seconds": 170.9797333367169,
+        "segment_steps": 306,
+        "segment_tokens": 78336,
+        "steps": 1024,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": 458.1595635415452
+      }
+    },
+    {
+      "device": "cpu",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/exchange-d64-s-shannon-e8ace058ca-a1-2026112002-r2/attempt-0/result.json",
+        "sha256": "f5af22d0e75ca4fe8a76fb83033fcf65bbd3f6799b1a7a20c14f678e209be71a"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "7d0f12afb873f918c65a5714808833b158fcd1b309bcd05d0e1ef11b5ef7fd5c",
+        "fallback_used": false,
+        "from_steps": 737,
+        "from_tokens": 188672,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/exchange-d64-s-shannon-e8ace058ca-a1-2026112002-r2/attempt-0/checkpoints/step-000000737-9f94abdd60.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "e94cc883396016e3596e11ea461bad7ce7ef7c9d7c17a11713e82dcfb574b724",
+        "source_task_id": "exchange-d64-s-shannon-e8ace058ca-a1-2026112002-r2",
+        "state_reused": true,
+        "state_sha256": "c022cc31af2840c06ed10b5e72abf284ef17cf3bd537f69f84186eb2b0789975"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "exchange-d64-s-shannon-e8ace058ca-a1-2026112002-r2",
+      "training": {
+        "from_steps": 737,
+        "from_tokens": 188672,
+        "seconds": 166.34603618830442,
+        "segment_steps": 287,
+        "segment_tokens": 73472,
+        "steps": 1024,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": 441.68169968792876
+      }
+    },
+    {
+      "device": "cpu",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/exchange-d64-s-pool-822470137c-a1-2026112001-r0/attempt-0/result.json",
+        "sha256": "65ae4f4137a5b43d3ec80750da20ee8470abbc8ba965e4181e8b0844fb7ca2cc"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "0b940291d984dba5d50301e46ae140045d5e5d1b80bb19202dc04beca2915f02",
+        "fallback_used": false,
+        "from_steps": 665,
+        "from_tokens": 170240,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/exchange-d64-s-pool-822470137c-a1-2026112001-r0/attempt-0/checkpoints/step-000000665-73b724f64f.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "94da61118567a4f12dccef823fa798ab9b4c4ec7d0ee7df1de680199e4344290",
+        "source_task_id": "exchange-d64-s-pool-822470137c-a1-2026112001-r0",
+        "state_reused": true,
+        "state_sha256": "2e0c48af0733cc23d233496235b77f42b05ad2ac3c0b9e672ec1080b082a3971"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "exchange-d64-s-pool-822470137c-a1-2026112001-r0",
+      "training": {
+        "from_steps": 665,
+        "from_tokens": 170240,
+        "seconds": 198.35668053478003,
+        "segment_steps": 359,
+        "segment_tokens": 91904,
+        "steps": 1024,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": 463.3269711522798
+      }
+    },
+    {
+      "device": "cpu",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/exchange-d64-s-pool-822470137c-a1-2026112002-r0/attempt-0/result.json",
+        "sha256": "2b9c96e69a2daf82edd503e88ae266020fc792e5ea2ac40fa6880a585e0b053d"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "94ddadc8441d236e4bb5df004e0ced5c4b65aa305601be0a140993f2d0134e79",
+        "fallback_used": false,
+        "from_steps": 692,
+        "from_tokens": 177152,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/exchange-d64-s-pool-822470137c-a1-2026112002-r0/attempt-0/checkpoints/step-000000692-75802c31b4.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "6dbc7cca1f0823d5fa8b8ecfd802365f4a08c2910a4757e2b14cb341a7237913",
+        "source_task_id": "exchange-d64-s-pool-822470137c-a1-2026112002-r0",
+        "state_reused": true,
+        "state_sha256": "24ff1bd125e89007a2e8ee6be457f1a8a2afb2f4f90f13024d804d717ecf6fde"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "exchange-d64-s-pool-822470137c-a1-2026112002-r0",
+      "training": {
+        "from_steps": 692,
+        "from_tokens": 177152,
+        "seconds": 180.91145963966846,
+        "segment_steps": 332,
+        "segment_tokens": 84992,
+        "steps": 1024,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": 469.7988738208367
+      }
+    },
+    {
+      "device": "npu:0",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/exchange-d64-s-capacity-71f21161e3-a1-2026112001-r5/attempt-0/result.json",
+        "sha256": "dcf5ffca0d020a49457cbeeb759adaa70803e05b7490872fac19d5b8bca0f7c3"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "68f28fde88ac5792de5e4094c83f98f7664567ec1790ccdc35eb94c3afb1b1ef",
+        "fallback_used": false,
+        "from_steps": 19,
+        "from_tokens": 155648,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/exchange-d64-s-capacity-71f21161e3-a1-2026112001-r5/attempt-0/checkpoints/step-000000019-5f9d494678.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "47684a274e4c7ccb1953279042255fa173b0adcc56229f11c11b78d909e7142a",
+        "source_task_id": "exchange-d64-s-capacity-71f21161e3-a1-2026112001-r5",
+        "state_reused": true,
+        "state_sha256": "4b4914ac4464aa1710cc36081be783f5c24b691f17cfef0c0e04b0e32cdfa2b9"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "exchange-d64-s-capacity-71f21161e3-a1-2026112001-r5",
+      "training": {
+        "from_steps": 19,
+        "from_tokens": 155648,
+        "seconds": 60.544126603752375,
+        "segment_steps": 13,
+        "segment_tokens": 106496,
+        "steps": 32,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": 1758.9815226337685
+      }
+    },
+    {
+      "device": "npu:0",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/exchange-d64-s-capacity-71f21161e3-a1-2026112002-r5/attempt-0/result.json",
+        "sha256": "f9a592b3bafe13c995344f77f13812608c0de1e30a6585e442c1d4d13ca6c8ca"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "050df45a18f828b25e025753b64106fb3f2046087bffade00cbe72d48e8874e4",
+        "fallback_used": false,
+        "from_steps": 19,
+        "from_tokens": 155648,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/exchange-d64-s-capacity-71f21161e3-a1-2026112002-r5/attempt-0/checkpoints/step-000000019-2b9c26bef5.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "548f4a41a38c1713a1dc083da8453b4ef19e94ce0d10ed51b737a0d2a2cea96d",
+        "source_task_id": "exchange-d64-s-capacity-71f21161e3-a1-2026112002-r5",
+        "state_reused": true,
+        "state_sha256": "f1701311cb4f8ef9c32cd6d515cc83085b3b86759ab54e43dd8ea7bc79b2b558"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "exchange-d64-s-capacity-71f21161e3-a1-2026112002-r5",
+      "training": {
+        "from_steps": 19,
+        "from_tokens": 155648,
+        "seconds": 54.72649686783552,
+        "segment_steps": 13,
+        "segment_tokens": 106496,
+        "steps": 32,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": 1945.9677869969973
+      }
+    },
+    {
+      "device": "npu:0",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "not_started",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_settle-d64-s-group5-6e6cec4898-init-2026112002/attempt-0/result.json",
+        "sha256": "07c7f5bbf32428a561db05ea7400b7174c33fb484e81a196958e5433da937807"
+      },
+      "resume": null,
+      "review_scope": "fresh task or bounded replay; no trained-state continuation claim",
+      "task_id": "multiscale_settle-d64-s-group5-6e6cec4898-init-2026112002",
+      "training": {
+        "from_steps": 0,
+        "from_tokens": 0,
+        "seconds": 10.10872896015644,
+        "segment_steps": 2,
+        "segment_tokens": 32768,
+        "steps": 2,
+        "target_tokens": 32768,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 32768,
+        "tokens_per_second": 3241.5549105288196
+      }
+    },
+    {
+      "device": "npu:0",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_settle-d64-s-group5-6e6cec4898-init-2026112003/attempt-0/result.json",
+        "sha256": "f38f6cb25571eb978d5cd0485b9f420d3b0671cf30405727d4eb8df69728d84b"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "061b56195d186c64987b678240a78e4ce40ff1652c5465468d8d54aaeaac35f8",
+        "fallback_used": false,
+        "from_steps": 0,
+        "from_tokens": 0,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/multiscale_settle-d64-s-group5-6e6cec4898-init-2026112003/attempt-0/checkpoints/step-000000000-a6115a9100.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "8ccdbc6c630334d74edad8124ced87dba96a8c7173e854f629ec2776264dc9f9",
+        "source_task_id": "multiscale_settle-d64-s-group5-6e6cec4898-init-2026112003",
+        "state_reused": false,
+        "state_sha256": "26a66069fb0aa24a85628a52725961c097519fbeaa8f521f644163e52c86a0db"
+      },
+      "review_scope": "exact zero-token initialization checkpoint load; frozen worker reports state_reused=false; no positive-exposure continuation claim",
+      "task_id": "multiscale_settle-d64-s-group5-6e6cec4898-init-2026112003",
+      "training": {
+        "from_steps": 0,
+        "from_tokens": 0,
+        "seconds": 10.056217852979898,
+        "segment_steps": 2,
+        "segment_tokens": 32768,
+        "steps": 2,
+        "target_tokens": 32768,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 32768,
+        "tokens_per_second": 3258.481516516675
+      }
+    },
+    {
+      "device": "npu:0",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/exchange-d64-s-independent-9bdefe8e73-a1-2026112001-r3/attempt-0/result.json",
+        "sha256": "6b0ebefe3bcfb2fb79f883f0090955a7e4de9975dbb30b294d890593c2627e25"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "9d0412edf74a686dc904f27e0b804f18ad0be2b0c4eb43e9d943aff47e7268c9",
+        "fallback_used": false,
+        "from_steps": 6,
+        "from_tokens": 98304,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/exchange-d64-s-independent-9bdefe8e73-a1-2026112001-r3/attempt-0/checkpoints/step-000000006-67692f804f.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "7f3f70fd323ea8ab13f6322d3055955e2a426862833efd280e070cc4576213a3",
+        "source_task_id": "exchange-d64-s-independent-9bdefe8e73-a1-2026112001-r3",
+        "state_reused": true,
+        "state_sha256": "2cd44e2994b1d91608149e8ae7e3788fa1726c64dd8471ecadcb04b4c8f118c4"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "exchange-d64-s-independent-9bdefe8e73-a1-2026112001-r3",
+      "training": {
+        "from_steps": 6,
+        "from_tokens": 98304,
+        "seconds": 53.48538015410304,
+        "segment_steps": 10,
+        "segment_tokens": 163840,
+        "steps": 16,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": 3063.2669998407273
+      }
+    },
+    {
+      "device": "npu:0",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/exchange-d64-s-independent-9bdefe8e73-a1-2026112002-r3/attempt-0/result.json",
+        "sha256": "0b01bd61e13119c63efbc108e94d3a6c98a5e4e7969e5e86c8865794cc33aa43"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "3691bc9f2b94d14346a4708b92e7be5b331151f28911367fb5bcde6d822ed7db",
+        "fallback_used": false,
+        "from_steps": 12,
+        "from_tokens": 196608,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/exchange-d64-s-independent-9bdefe8e73-a1-2026112002-r3/attempt-0/checkpoints/step-000000012-538e5ac1eb.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "6ec13ed13d9955d78df5ef832079df1cf0e48de99cf26b90cb4701d8020fe6e3",
+        "source_task_id": "exchange-d64-s-independent-9bdefe8e73-a1-2026112002-r3",
+        "state_reused": true,
+        "state_sha256": "cd2ded31b953743be0a5d46e2fc9a19fa3bef203425f8df5e5f8fa42cf26f353"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "exchange-d64-s-independent-9bdefe8e73-a1-2026112002-r3",
+      "training": {
+        "from_steps": 12,
+        "from_tokens": 196608,
+        "seconds": 26.51351460441947,
+        "segment_steps": 4,
+        "segment_tokens": 65536,
+        "steps": 16,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": 2471.7960246988896
+      }
+    },
+    {
+      "device": "npu:0",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/exchange-d64-s-independent-9bdefe8e73-a1-2026112001-r4/attempt-0/result.json",
+        "sha256": "dff4a194852ac66f8bf18a26fee63f24084e8994e5c7cdbdb8a44852d22549c6"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "c73176da842c83dbeafe6ebed8c34ba525b7b17f15f65a8a31fb245b320e28c9",
+        "fallback_used": false,
+        "from_steps": 11,
+        "from_tokens": 180224,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/exchange-d64-s-independent-9bdefe8e73-a1-2026112001-r4/attempt-0/checkpoints/step-000000011-535591df8f.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "80f9df7b834831bcf1f12bbf5e1fb7ed7cebcf26b71d25fcf388c56a9caa8156",
+        "source_task_id": "exchange-d64-s-independent-9bdefe8e73-a1-2026112001-r4",
+        "state_reused": true,
+        "state_sha256": "65f6b51d85c4218f60db3a04cf6ff13b84881fa64e6356752ada2d43177f085e"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "exchange-d64-s-independent-9bdefe8e73-a1-2026112001-r4",
+      "training": {
+        "from_steps": 11,
+        "from_tokens": 180224,
+        "seconds": 25.76742236316204,
+        "segment_steps": 5,
+        "segment_tokens": 81920,
+        "steps": 16,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": 3179.208181766584
+      }
+    },
+    {
+      "device": "npu:0",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/exchange-d64-s-independent-9bdefe8e73-a1-2026112002-r4/attempt-0/result.json",
+        "sha256": "28949294a4f05732e89d667bc4b8c53227536d2ca8bb33ca6beb263a5a11f604"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "68c500817300110efc3d925bbd96e360d1488091c4077a7a02081fc44d6d8c39",
+        "fallback_used": false,
+        "from_steps": 12,
+        "from_tokens": 196608,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/exchange-d64-s-independent-9bdefe8e73-a1-2026112002-r4/attempt-0/checkpoints/step-000000012-da9d6f5f32.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "c541d1269479b5f7b6dc5abec859681517a5da8da635fca5596ba50a231c755f",
+        "source_task_id": "exchange-d64-s-independent-9bdefe8e73-a1-2026112002-r4",
+        "state_reused": true,
+        "state_sha256": "e3649afc15e87b117963e95ec53198532934633c7841090fb45881caddaa0cdb"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "exchange-d64-s-independent-9bdefe8e73-a1-2026112002-r4",
+      "training": {
+        "from_steps": 12,
+        "from_tokens": 196608,
+        "seconds": 23.28751976415515,
+        "segment_steps": 4,
+        "segment_tokens": 65536,
+        "steps": 16,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": 2814.211245496181
+      }
+    },
+    {
+      "device": "npu:0",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "resume",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/exchange-d64-s-independent-9bdefe8e73-a1-2026112001-r5/attempt-0/result.json",
+        "sha256": "767b94e291fad72e2387bb79c021ade1e59b649d8ce4524a30084daed00112da"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "a11dc1e3bbad8afa47103aed07218055236b20621789b5911b081cacbe097773",
+        "fallback_used": false,
+        "from_steps": 10,
+        "from_tokens": 163840,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/exchange-d64-s-independent-9bdefe8e73-a1-2026112001-r5/attempt-0/checkpoints/step-000000010-39ff3c6b83.pt",
+        "rejected_generations": [],
+        "runtime_override": true,
+        "sha256": "eaa5ad5ec8417c2700fd7a04411aa85cf08eeeefc9627f20b1e7a199994a6c20",
+        "source_task_id": "exchange-d64-s-independent-9bdefe8e73-a1-2026112001-r5",
+        "state_reused": true,
+        "state_sha256": "c5cbdfcb378a72a0dd0ddf53db8ad4a8d7c5808e679d2bfe5c4f4a0b326be671"
+      },
+      "review_scope": "verified immutable same-task ancestry and exact trained-state load",
+      "task_id": "exchange-d64-s-independent-9bdefe8e73-a1-2026112001-r5",
+      "training": {
+        "from_steps": 10,
+        "from_tokens": 163840,
+        "seconds": 33.28693140670657,
+        "segment_steps": 6,
+        "segment_tokens": 98304,
+        "steps": 16,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": 2953.2310683403502
+      }
+    },
+    {
+      "device": "npu:0",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 4,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "not_started",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_settle-d64-s-singleton7-bf731dfdae-init-2026112001/attempt-0/result.json",
+        "sha256": "21f12a2679ad8d266b8c0104390b79e09dc6bdc4e4a4c5a83d7d0a7d888719aa"
+      },
+      "resume": null,
+      "review_scope": "fresh task or bounded replay; no trained-state continuation claim",
+      "task_id": "multiscale_settle-d64-s-singleton7-bf731dfdae-init-2026112001",
+      "training": {
+        "from_steps": 0,
+        "from_tokens": 0,
+        "seconds": 25.413778588175774,
+        "segment_steps": 4,
+        "segment_tokens": 32768,
+        "steps": 4,
+        "target_tokens": 32768,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 32768,
+        "tokens_per_second": 1289.3792981751212
+      }
+    },
+    {
+      "device": "npu:0",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 4,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "not_started",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_settle-d64-s-singleton7-bf731dfdae-init-2026112002/attempt-0/result.json",
+        "sha256": "2f2c4501c1bef729dbae3010cb6051aeb442faa8d52c4b41c51bd77dddb55d27"
+      },
+      "resume": null,
+      "review_scope": "fresh task or bounded replay; no trained-state continuation claim",
+      "task_id": "multiscale_settle-d64-s-singleton7-bf731dfdae-init-2026112002",
+      "training": {
+        "from_steps": 0,
+        "from_tokens": 0,
+        "seconds": 25.529542934149504,
+        "segment_steps": 4,
+        "segment_tokens": 32768,
+        "steps": 4,
+        "target_tokens": 32768,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 32768,
+        "tokens_per_second": 1283.532575750426
+      }
+    },
+    {
+      "device": "npu:0",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 4,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "not_started",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_settle-d64-s-singleton7-bf731dfdae-init-2026112003/attempt-0/result.json",
+        "sha256": "2a10dd7500c7c5b9534e2de0411eba6e8b72b863383aef0dca8c0f26834978ab"
+      },
+      "resume": null,
+      "review_scope": "fresh task or bounded replay; no trained-state continuation claim",
+      "task_id": "multiscale_settle-d64-s-singleton7-bf731dfdae-init-2026112003",
+      "training": {
+        "from_steps": 0,
+        "from_tokens": 0,
+        "seconds": 25.096599988639355,
+        "segment_steps": 4,
+        "segment_tokens": 32768,
+        "steps": 4,
+        "target_tokens": 32768,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 32768,
+        "tokens_per_second": 1305.6748728845066
+      }
+    },
+    {
+      "device": "npu:0",
+      "health": {
+        "blocking_reasons": [],
+        "eligible": true,
+        "nonzero_backbone_gradient_observed": true,
+        "sample_count": 2,
+        "scope": "observed single-trajectory diagnostics; prescribed seed groups assessed by controller"
+      },
+      "prior_disposition": "not_started",
+      "result": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/exchange-d64-s-narrowwide-b198eda51d-a1-2026112001-r3/attempt-0/result.json",
+        "sha256": "a337d64cffa4255db3e575c5e7c1f0deccc18b88773a8c8da716392e1aaa40ae"
+      },
+      "resume": null,
+      "review_scope": "fresh task or bounded replay; no trained-state continuation claim",
+      "task_id": "exchange-d64-s-narrowwide-b198eda51d-a1-2026112001-r3",
+      "training": {
+        "from_steps": 0,
+        "from_tokens": 0,
+        "seconds": 69.80855827778578,
+        "segment_steps": 16,
+        "segment_tokens": 262144,
+        "steps": 16,
+        "target_tokens": 262144,
+        "timing_scope": "sampling, transfers, forward/backward, clipping, optimizer, synchronization and sampled diagnostics; excludes eval/checkpoint",
+        "tokens": 262144,
+        "tokens_per_second": 3755.1842706285843
+      }
+    }
+  ],
+  "observed_beijing": "2026-11-20T12:44:25.275144+08:00",
+  "observed_unix": 1795149865.2751443,
+  "original_deadline_unix": 1797698913.9318287,
+  "original_started_unix": 1795106913.9318287,
+  "original_strict_audit": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-campaign-r06-terminal-audit.json",
+    "sha256": "8ee86bb6a171617e4177151758885d935c7af73cb4129f1c363dd852597c839d"
+  },
+  "original_worker_file_count": 62,
+  "presubmission_review": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-r07-presubmission.json",
+    "sha256": "977cb14c04ac44cfa1b9577e2208ebab5b28c61471cae1959834b2e6b5ac72e6"
+  },
+  "repair_review": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-r07-repair-review.json",
+    "sha256": "c8a6f31a1bddaeef24018c48e8e7c95a87782dcef84b42629dcfe48f346d9ba4"
+  },
+  "repaired_blocker": {
+    "chain_receipt": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/decisions/exchange-d64-k-independent-9af84f69cb-chain-receipt.json",
+      "sha256": "ea6ccb1201cbf7269752b1536267ed6304871fd86e3693d3d2ce9a11e2a38bb9"
+    },
+    "independent_reconstruction": "passed",
+    "model_id": "exchange-d64-k-independent-9af84f69cb",
+    "retained_checkpoints": [
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/exchange-d64-k-independent-9af84f69cb-a3-2026112001-r2/attempt-0/checkpoints/step-000008192-8a54ae62cb.pt",
+        "phase": "a3",
+        "seed": 2026112001,
+        "sha256": "1d21f3f3f63f2af4da7dadc18f76fd66c72bec95aea153aa5363ea113987cbe6",
+        "size_bytes": 17376451
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r06/round/tasks/exchange-d64-k-independent-9af84f69cb-a3-2026112002-r2/attempt-0/checkpoints/step-000008192-c316819f34.pt",
+        "phase": "a3",
+        "seed": 2026112002,
+        "sha256": "2a882186e827b613ed318a78ba08e77461edb63d4886d69aa388db8952a340e7",
+        "size_bytes": 17376451
+      }
+    ],
+    "selected_recipe": "r2"
+  },
+  "resume_policy": "audit terminal release before any future relay; no duplicate submission",
+  "resumed_progress_tasks": [
+    {
+      "device": "npu:0",
+      "from_tokens": 227328,
+      "task_id": "multiscale_timed-d64-k-group5-716f8264e2-a1-2026112001-r5",
+      "tokens": 259072,
+      "updated_unix": 1795149861.5359435
+    },
+    {
+      "device": "npu:0",
+      "from_tokens": 102400,
+      "task_id": "multiscale_timed-d64-k-group5-716f8264e2-a1-2026112002-r5",
+      "tokens": 132096,
+      "updated_unix": 1795149858.3002956
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 1816576,
+      "task_id": "exchange-d64-k-pool-d1990a0160-a3-2026112001-r2",
+      "tokens": 1848576,
+      "updated_unix": 1795149863.2895646
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 1795840,
+      "task_id": "exchange-d64-k-pool-d1990a0160-a3-2026112002-r2",
+      "tokens": 1824512,
+      "updated_unix": 1795149863.3617039
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 1807616,
+      "task_id": "exchange-d64-k-base-8e5f1d5288-a3-2026112001-r2",
+      "tokens": 1856000,
+      "updated_unix": 1795149863.2737331
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 1787904,
+      "task_id": "exchange-d64-k-base-8e5f1d5288-a3-2026112002-r2",
+      "tokens": 1831168,
+      "updated_unix": 1795149863.2176757
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 1757952,
+      "task_id": "exchange-d64-k-shannon-615836a776-a3-2026112001-r2",
+      "tokens": 1796864,
+      "updated_unix": 1795149863.0834754
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 1766656,
+      "task_id": "exchange-d64-k-shannon-615836a776-a3-2026112002-r2",
+      "tokens": 1801472,
+      "updated_unix": 1795149863.134167
+    },
+    {
+      "device": "npu:0",
+      "from_tokens": 28160,
+      "task_id": "multiscale_timed-d64-k-singleton7-1863b5a223-init-2026112001",
+      "tokens": 32768,
+      "updated_unix": 1795149682.6868901
+    },
+    {
+      "device": "npu:0",
+      "from_tokens": 20992,
+      "task_id": "multiscale_timed-d64-k-singleton7-1863b5a223-init-2026112003",
+      "tokens": 32768,
+      "updated_unix": 1795149821.7576284
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 143104,
+      "task_id": "multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112001-r0",
+      "tokens": 212736,
+      "updated_unix": 1795149862.4494915
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 142336,
+      "task_id": "multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112002-r0",
+      "tokens": 211200,
+      "updated_unix": 1795149862.9552937
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 141568,
+      "task_id": "multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112001-r1",
+      "tokens": 211968,
+      "updated_unix": 1795149862.9532757
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 143104,
+      "task_id": "multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112002-r1",
+      "tokens": 212224,
+      "updated_unix": 1795149862.412262
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 140032,
+      "task_id": "multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112001-r2",
+      "tokens": 210688,
+      "updated_unix": 1795149862.9203598
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 136448,
+      "task_id": "multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112002-r2",
+      "tokens": 205568,
+      "updated_unix": 1795149862.195935
+    },
+    {
+      "device": "npu:0",
+      "from_tokens": 245760,
+      "task_id": "multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112001-r5",
+      "tokens": 262144,
+      "updated_unix": 1795149720.7075987
+    },
+    {
+      "device": "npu:0",
+      "from_tokens": 241664,
+      "task_id": "multiscale_settle-d64-k-singleton7-121b8d2af3-a1-2026112002-r5",
+      "tokens": 262144,
+      "updated_unix": 1795149737.1411152
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 152576,
+      "task_id": "multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112001-r0",
+      "tokens": 228864,
+      "updated_unix": 1795149862.8326492
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 142336,
+      "task_id": "multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112002-r0",
+      "tokens": 218880,
+      "updated_unix": 1795149863.0033937
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 148992,
+      "task_id": "multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112001-r1",
+      "tokens": 221696,
+      "updated_unix": 1795149863.3224356
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 137984,
+      "task_id": "multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112002-r1",
+      "tokens": 215552,
+      "updated_unix": 1795149863.050175
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 144896,
+      "task_id": "multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112001-r2",
+      "tokens": 222464,
+      "updated_unix": 1795149862.9143198
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 144896,
+      "task_id": "multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112002-r2",
+      "tokens": 222976,
+      "updated_unix": 1795149863.3100557
+    },
+    {
+      "device": "npu:0",
+      "from_tokens": 225280,
+      "task_id": "multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112001-r3",
+      "tokens": 262144,
+      "updated_unix": 1795149765.838423
+    },
+    {
+      "device": "npu:0",
+      "from_tokens": 194560,
+      "task_id": "multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112001-r4",
+      "tokens": 262144,
+      "updated_unix": 1795149835.407747
+    },
+    {
+      "device": "npu:0",
+      "from_tokens": 194560,
+      "task_id": "multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112002-r4",
+      "tokens": 262144,
+      "updated_unix": 1795149824.3406582
+    },
+    {
+      "device": "npu:0",
+      "from_tokens": 204800,
+      "task_id": "multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112001-r5",
+      "tokens": 262144,
+      "updated_unix": 1795149836.9128332
+    },
+    {
+      "device": "npu:0",
+      "from_tokens": 249856,
+      "task_id": "multiscale_settle-d64-k-mixed9-42e89ddc50-a1-2026112002-r5",
+      "tokens": 262144,
+      "updated_unix": 1795149765.4901369
+    },
+    {
+      "device": "npu:0",
+      "from_tokens": 9216,
+      "task_id": "multiscale_timed-d64-k-mixed9-cc3af6a0e9-init-2026112001",
+      "tokens": 14848,
+      "updated_unix": 1795149851.6543455
+    },
+    {
+      "device": "npu:0",
+      "from_tokens": 12032,
+      "task_id": "multiscale_timed-d64-k-mixed9-cc3af6a0e9-init-2026112002",
+      "tokens": 19200,
+      "updated_unix": 1795149862.7093742
+    },
+    {
+      "device": "npu:0",
+      "from_tokens": 12800,
+      "task_id": "multiscale_timed-d64-k-mixed9-cc3af6a0e9-init-2026112003",
+      "tokens": 19200,
+      "updated_unix": 1795149863.0645914
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 236032,
+      "task_id": "exchange-d64-s-base-f9310d4300-a1-2026112001-r0",
+      "tokens": 262144,
+      "updated_unix": 1795149658.8689914
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 234240,
+      "task_id": "exchange-d64-s-base-f9310d4300-a1-2026112002-r0",
+      "tokens": 262144,
+      "updated_unix": 1795149663.8230538
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 232960,
+      "task_id": "exchange-d64-s-base-f9310d4300-a1-2026112001-r1",
+      "tokens": 262144,
+      "updated_unix": 1795149669.3597567
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 235776,
+      "task_id": "exchange-d64-s-base-f9310d4300-a1-2026112002-r1",
+      "tokens": 262144,
+      "updated_unix": 1795149663.391143
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 244480,
+      "task_id": "exchange-d64-s-base-f9310d4300-a1-2026112001-r2",
+      "tokens": 262144,
+      "updated_unix": 1795149639.9354594
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 231168,
+      "task_id": "exchange-d64-s-base-f9310d4300-a1-2026112002-r2",
+      "tokens": 262144,
+      "updated_unix": 1795149671.6435537
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 189184,
+      "task_id": "exchange-d64-s-shannon-e8ace058ca-a1-2026112001-r0",
+      "tokens": 262144,
+      "updated_unix": 1795149763.863032
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 173312,
+      "task_id": "exchange-d64-s-shannon-e8ace058ca-a1-2026112002-r0",
+      "tokens": 262144,
+      "updated_unix": 1795149798.154856
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 179712,
+      "task_id": "exchange-d64-s-shannon-e8ace058ca-a1-2026112001-r1",
+      "tokens": 262144,
+      "updated_unix": 1795149785.0058284
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 192256,
+      "task_id": "exchange-d64-s-shannon-e8ace058ca-a1-2026112002-r1",
+      "tokens": 262144,
+      "updated_unix": 1795149759.8197074
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 183808,
+      "task_id": "exchange-d64-s-shannon-e8ace058ca-a1-2026112001-r2",
+      "tokens": 262144,
+      "updated_unix": 1795149775.1655416
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 188672,
+      "task_id": "exchange-d64-s-shannon-e8ace058ca-a1-2026112002-r2",
+      "tokens": 262144,
+      "updated_unix": 1795149770.478325
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 170240,
+      "task_id": "exchange-d64-s-pool-822470137c-a1-2026112001-r0",
+      "tokens": 262144,
+      "updated_unix": 1795149802.5475514
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 177152,
+      "task_id": "exchange-d64-s-pool-822470137c-a1-2026112002-r0",
+      "tokens": 262144,
+      "updated_unix": 1795149785.0711374
+    },
+    {
+      "device": "cpu",
+      "from_tokens": 5632,
+      "task_id": "exchange-d64-s-pool-822470137c-a1-2026112001-r1",
+      "tokens": 131840,
+      "updated_unix": 1795149863.1718462
+    },
+    {
+      "device": "npu:0",
+      "from_tokens": 155648,
+      "task_id": "exchange-d64-s-capacity-71f21161e3-a1-2026112001-r5",
+      "tokens": 262144,
+      "updated_unix": 1795149794.2969134
+    },
+    {
+      "device": "npu:0",
+      "from_tokens": 155648,
+      "task_id": "exchange-d64-s-capacity-71f21161e3-a1-2026112002-r5",
+      "tokens": 262144,
+      "updated_unix": 1795149779.859965
+    },
+    {
+      "device": "npu:0",
+      "from_tokens": 0,
+      "task_id": "multiscale_settle-d64-s-group5-6e6cec4898-init-2026112003",
+      "tokens": 32768,
+      "updated_unix": 1795149668.265333
+    },
+    {
+      "device": "npu:0",
+      "from_tokens": 98304,
+      "task_id": "exchange-d64-s-independent-9bdefe8e73-a1-2026112001-r3",
+      "tokens": 262144,
+      "updated_unix": 1795149787.9328072
+    },
+    {
+      "device": "npu:0",
+      "from_tokens": 196608,
+      "task_id": "exchange-d64-s-independent-9bdefe8e73-a1-2026112002-r3",
+      "tokens": 262144,
+      "updated_unix": 1795149773.7601812
+    },
+    {
+      "device": "npu:0",
+      "from_tokens": 180224,
+      "task_id": "exchange-d64-s-independent-9bdefe8e73-a1-2026112001-r4",
+      "tokens": 262144,
+      "updated_unix": 1795149763.742131
+    },
+    {
+      "device": "npu:0",
+      "from_tokens": 196608,
+      "task_id": "exchange-d64-s-independent-9bdefe8e73-a1-2026112002-r4",
+      "tokens": 262144,
+      "updated_unix": 1795149776.5141828
+    },
+    {
+      "device": "npu:0",
+      "from_tokens": 163840,
+      "task_id": "exchange-d64-s-independent-9bdefe8e73-a1-2026112001-r5",
+      "tokens": 262144,
+      "updated_unix": 1795149803.8883007
+    }
+  ],
+  "schema": "pilot-r3-main-r07-handoff-v1",
+  "selected_model_count": 25,
+  "snapshot": {
+    "actual_cpu_worker_concurrency": 40,
+    "actual_npu_concurrency": 8,
+    "actual_npu_worker_concurrency": 24,
+    "blocking_reason": null,
+    "counts": {
+      "completed": 324,
+      "pending": 56,
+      "running": 65
+    },
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/scheduler.json",
+    "resources": {
+      "available_storage_bytes": 188834697216,
+      "filesystem_free_bytes": 1627075465216,
+      "observed_unix": 1795149863.387009,
+      "quota": {
+        "filesystem": "/dev/mapper/ascend_data-data",
+        "grace_epoch": 0,
+        "hard_bytes": 751619276800,
+        "soft_bytes": 322122547200,
+        "used_bytes": 133287849984
+      },
+      "rss_bytes": 77653458944
+    },
+    "sha256_at_observation": "14b0c1409405a8098cf552adc7d895c48d9fa69d1049f095b58c9d80a8f8c732",
+    "stage": "stage-a-training-pipeline",
+    "stage_b_gate": "closed",
+    "status": "running",
+    "updated_unix": 1795149863.4537592
+  },
+  "status": "observed_running",
+  "stop_command": "systemctl --user stop tide-pilot-r3-campaign-r07.service",
+  "systemd": {
+    "ActiveState": "active",
+    "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r07.service",
+    "ExecMainStatus": "0",
+    "MainPID": "2126081",
+    "MemoryCurrent": "[not set]",
+    "MemoryMax": "1000000000000",
+    "Slice": "background.slice",
+    "SubState": "running"
+  },
+  "terminal_reconciliation": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-campaign-r06-terminal-reconciliation.json",
+    "sha256": "f253f114e93bc8d68efebb124b56d3e1dfbb77ecb23205889d1cfb38acb54266"
+  },
+  "unit": "tide-pilot-r3-campaign-r07.service"
+}

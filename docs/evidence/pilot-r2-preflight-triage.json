@@ -1,0 +1,936 @@
+{
+  "comparison_totals": {
+    "all_fields_exact_groups": 4,
+    "finite_groups": 80,
+    "integer_equal_groups": 80,
+    "per_step_category_groups": 80,
+    "structure_equal_groups": 80,
+    "within_tolerance_groups": 78
+  },
+  "created_at": "2026-11-19T12:54:00.466896+00:00",
+  "first_observed_divergence": {
+    "clipped_gradient_max_abs_difference": 1.4901161193847656e-08,
+    "first_private_state_or_logits_nonexact_step": 11,
+    "first_threshold_failure_step": 13,
+    "gradient_norm_exact": true,
+    "logits_exact": true,
+    "loss_abs_difference": 9.5367431640625e-07,
+    "model_max_abs_difference": 4.656612873077393e-10,
+    "optimizer_max_abs_difference": 1.862645149230957e-09,
+    "private_state_exact": true,
+    "resolution": "First serialized update; internal operator not localized",
+    "step": 10,
+    "task": "preflight-shannon-parent"
+  },
+  "frozen_sources": [
+    {
+      "bytes": 46804,
+      "path": ".local/pilot-r2/frozen-v2/source/pilotlab/worker.py",
+      "relevant_lines": {
+        "capture_and_comparison": [
+          529,
+          573
+        ],
+        "restore_identity_and_state": [
+          510,
+          526
+        ],
+        "train_update": [
+          311,
+          337
+        ]
+      },
+      "sha256": "542b1f5b88389e902f2aedb19eb368321152f1fff012f66d553cfc0cccf349d8"
+    },
+    {
+      "bytes": 9270,
+      "path": ".local/pilot-r2/foundation/src/tide/kv.py",
+      "relevant_lines": {
+        "cache_selection": [
+          118,
+          124
+        ],
+        "new_and_prior_cache_values": [
+          88,
+          103
+        ]
+      },
+      "sha256": "789cc6b7543bc156ba0f650791194c716454f1bda422d59c791ce8231c69b4f2"
+    }
+  ],
+  "guidance": {
+    "section": "Numerical differences and learning evidence",
+    "skill": "run-ml-experiments",
+    "source": "/mi/data2T/zlong/home/.agents/skills/run-ml-experiments/references/measurement.md"
+  },
+  "interpretation": [
+    "The observed order is consistent with finite reduction/autograd/update differences accumulating into later floating KV values. The originating operator and mechanism are not established.",
+    "No explicit checkpoint corruption, input/RNG/stream mismatch, reset error, recorded integer mismatch or causality failure was found in this bounded review.",
+    "Small relative L2 differences and a one-element threshold exceedance do not make the strict recovery failure disappear or prove that the numerical difference is harmless."
+  ],
+  "limitations": [
+    "Initial causality samples passing is not a complete causal proof.",
+    "Only clipped gradient tensors are compared; raw gradients and full per-operator execution traces are unavailable.",
+    "Exact saved integer fields and weight support masks do not certify every internal Full/routing decision.",
+    "Actual snapshots are retained only for failed comparisons; first-step exact/nonexact facts come from recorded comparator summaries.",
+    "The positive learning rate and small loss decline do not by themselves prove every feature has correct or useful gradients.",
+    "No new numerical threshold, dtype policy or automatic eligibility exception was introduced."
+  ],
+  "mechanism_evidence": {
+    "bytes": 17375,
+    "path": "docs/evidence/pilot-r2-shannon-repair.json",
+    "sha256": "55d2fe8be99c20ef3e205fea8cb888f9edf07dfe60655d56b9b67f12525bd7a3"
+  },
+  "observations": [
+    "Parent restore identity, contract and model/optimizer/private-state digest are exact before updates; each of eight inputs, RNG-before, RNG-after, stream-after, step and reset checks is exact.",
+    "The first update has identical logits and private state but nonexact scalar loss, clipped gradients and post-update parameters; all are within the original tolerance.",
+    "Only parent global steps 13 and 14 fail tolerance, in one private-state field. Offline checking finds exactly one out-of-tolerance element in that field at each step.",
+    "The failing element, its cache timestamp and both reference/restored values are identical across steps 13 and 14: the same stored discrepancy persists into the next cache window.",
+    "Step 13 is a matching reset in both trajectories; its newly generated cache discrepancy is not evidence of a missed document-boundary reset.",
+    "All saved integer/private-position fields and all observed weight positive/zero masks in the two mismatch snapshots are exact. Full internal routing histories were not recorded.",
+    "Child startup from parent step 9 has exact identity/contract/state checks and trains to step 17; its own step 17-to-25 recovery passes all eight original-tolerance comparisons."
+  ],
+  "offline_mismatch_analysis": {
+    "artifacts": [
+      {
+        "bytes": 90162532,
+        "path": ".local/pilot-r2/preflight-v2/tasks/preflight-shannon-parent/reference-updates/0003.pt",
+        "sha256": "f18c9efae85b8c281e6f04ac1a81102c20bcf65b51fdea6c174f0b98a3d6606a"
+      },
+      {
+        "bytes": 90162660,
+        "path": ".local/pilot-r2/preflight-v2/tasks/preflight-shannon-parent/fresh-process/mismatch-0003.pt",
+        "sha256": "2245cb8dc6eee8c0e4cccc3a63748b81e77f886dd2b9757bd58013343d2c3269"
+      },
+      {
+        "bytes": 109430180,
+        "path": ".local/pilot-r2/preflight-v2/tasks/preflight-shannon-parent/reference-updates/0004.pt",
+        "sha256": "68116ee38ff5dcbd24a6944a6214c5e7fb0aac8a90d95080c01886daa71df726"
+      },
+      {
+        "bytes": 109430244,
+        "path": ".local/pilot-r2/preflight-v2/tasks/preflight-shannon-parent/fresh-process/mismatch-0004.pt",
+        "sha256": "9641e9c6a9f2de99b24162ed1bb0bdbf560829ccdaabfc735e4ba781d7fca432"
+      }
+    ],
+    "device": "cpu",
+    "load_policy": "Sequential pair inspection with torch.load(map_location=cpu,mmap=True); no concurrent loading of all checkpoints or eight-step trajectories.",
+    "rows": [
+      {
+        "all_discrete_exact": true,
+        "all_weight_positive_and_zero_masks_exact": true,
+        "clipped_gradient_relative_l2_difference": 1.0916280846142068e-06,
+        "difference_l2": 0.00031573300140540824,
+        "differing_elements": 247472,
+        "discrete_elements": 37249,
+        "discrete_fields": 23,
+        "field": "/memories/14/K/values",
+        "field_max_abs_difference": 2.2709369659423828e-05,
+        "model_relative_l2_difference": 4.363701806562725e-08,
+        "numel": 262144,
+        "offending_element": {
+          "abs_difference": 1.8164515495300293e-05,
+          "index": [
+            5,
+            0,
+            54,
+            21
+          ],
+          "original_element_tolerance": 1.6788778305053713e-05,
+          "reference": 0.06786961853504181,
+          "reference_cache_time": 329,
+          "reference_weight": 0.9307016730308533,
+          "restored": 0.06788778305053711,
+          "restored_cache_time": 329,
+          "restored_weight": 0.9306944608688354,
+          "tolerance_ratio": 1.0819438535222339
+        },
+        "outside_tolerance_elements": 1,
+        "private_position": 64,
+        "reference_abs_max": 4.288085460662842,
+        "reference_l2": 511.1752287183976,
+        "relative_l2_difference": 6.176609969872837e-07,
+        "shape": [
+          8,
+          8,
+          64,
+          64
+        ],
+        "state_reset": true,
+        "step": 13,
+        "weight_mask_elements": 33216,
+        "weight_mask_fields": 22
+      },
+      {
+        "all_discrete_exact": true,
+        "all_weight_positive_and_zero_masks_exact": true,
+        "clipped_gradient_relative_l2_difference": 9.668438711753945e-07,
+        "difference_l2": 0.00042155087726767373,
+        "differing_elements": 493561,
+        "discrete_elements": 70017,
+        "discrete_fields": 23,
+        "field": "/memories/14/K/values",
+        "field_max_abs_difference": 2.2709369659423828e-05,
+        "model_relative_l2_difference": 6.554596691462772e-08,
+        "numel": 524288,
+        "offending_element": {
+          "abs_difference": 1.8164515495300293e-05,
+          "index": [
+            5,
+            0,
+            54,
+            21
+          ],
+          "original_element_tolerance": 1.6788778305053713e-05,
+          "reference": 0.06786961853504181,
+          "reference_cache_time": 329,
+          "reference_weight": 0.9307016730308533,
+          "restored": 0.06788778305053711,
+          "restored_cache_time": 329,
+          "restored_weight": 0.9306944608688354,
+          "tolerance_ratio": 1.0819438535222339
+        },
+        "outside_tolerance_elements": 1,
+        "private_position": 128,
+        "reference_abs_max": 4.391127109527588,
+        "reference_l2": 726.5988558409003,
+        "relative_l2_difference": 5.801700262517047e-07,
+        "shape": [
+          8,
+          8,
+          128,
+          64
+        ],
+        "state_reset": false,
+        "step": 14,
+        "weight_mask_elements": 65984,
+        "weight_mask_fields": 22
+      }
+    ],
+    "threads": 2
+  },
+  "recommendation": {
+    "basis": "Finite failure with exact restore/data/discrete checks, no identified causal/state/shared-gradient defect, independent repaired-solver primal/VJP evidence, and child eight-step recovery within the unchanged tolerance.",
+    "bounded_independent_positive_lr_learning_exploration": "supported within the already authorized two short Shannon tasks",
+    "plan_scope": "Retain the parent-submitted plan and its two designated independent Shannon learning observations; this review adds no tasks or broader continuation.",
+    "reporting": "Keep parent comparison_failed and raw artifacts. Label the two tasks as learning observations; exclude them from automatic candidate selection and strict-equivalence claims.",
+    "strict_recovery_qualified": false
+  },
+  "records": {
+    "preflight-shannon-child": {
+      "aggregate_comparisons": {
+        "gradients": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 1624,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 4.7497451305389404e-08,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "logits": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 8,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 3.5762786865234375e-07,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "model": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 1840,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 1.3560056686401367e-06,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "optimizer": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 6592,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 1.1175870895385742e-08,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "private_state": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 776,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 6.103515625e-05,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        }
+      },
+      "all_per_step_input_rng_stream_step_reset_exact": true,
+      "causality": {
+        "atol": 1e-05,
+        "exact": true,
+        "failed_field_count": 0,
+        "failed_fields": [],
+        "fields": 1,
+        "finite": true,
+        "integer_equal": true,
+        "max_abs": 0.0,
+        "rtol": 0.0001,
+        "structure_equal": true,
+        "within_tolerance": true
+      },
+      "checkpoint_identity": {
+        "data_manifest_sha256": "122f912828ff701de8dd449b75a473fb03082a3ae0bb40dee50d5d90f5f23b1b",
+        "experiment_files": {
+          "data.py": "d327409f049891273c315c654870a6cbdda8b1162307cabe100225c11ddbcbdd",
+          "io.py": "d846049973ea6c7a952353b8a4ed25e2d89e9a67741e3c16e3dd67d39e802170",
+          "models.py": "42ac16fa4353d47898dc0d40fbb4b689c50856f06007ccf43f887e65cc51becb",
+          "worker.py": "542b1f5b88389e902f2aedb19eb368321152f1fff012f66d553cfc0cccf349d8"
+        },
+        "experiment_sha256": "945d958b6deddec46f73c8e70e2f7a4dc6570d3555f99b243f3c789bd10f0a78",
+        "foundation_distributions": {
+          "tide-instances": "0.1.0"
+        },
+        "foundation_files": {
+          "__init__.py": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195",
+          "allocation.py": "1749c52190680ed82f38d981d751aaf84774aca6b9a995de716cd2573cecdb1f",
+          "attention.py": "0a8231713a2801ed397cee093c5d1112867a2057fc20804717fd39fd9e1609e8",
+          "checkpoint.py": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+          "config.py": "2b890c0ae9eac381aa3ab9726eb386339345f62dc7b3e27433ecd5a0b1c0299f",
+          "ffn_packing.py": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449",
+          "grouped_linear.py": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1",
+          "kv.py": "789cc6b7543bc156ba0f650791194c716454f1bda422d59c791ce8231c69b4f2",
+          "layout.py": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+          "model.py": "1911afe3b66b199eb7e066ea57c5900fead1e390ebb5894818d423284850255e",
+          "parameters.py": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc",
+          "placement.py": "0f77def73da20f467756e5dc1f701f25942565f762e82be5d23218ecee39d05f",
+          "placement_ownership.py": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+          "precision.py": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+          "reception.py": "bae0d61c805b68fcf97800f40baa17ff549d90c3e2a47763cfc9f687a7c752f1",
+          "region.py": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+          "region_batch.py": "514ee30c5077d416c02cec81380280eb45509f20922a0f812657b93d2d8b7e80",
+          "region_execution.py": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950",
+          "region_placement.py": "fd082f035185d04af6bc3ba27b949a8f065ccdf62f8b32a1b442accbfa6f2b6d",
+          "ssd.py": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+          "ssd_memory.py": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2",
+          "topology.py": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+          "topology_hb.py": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06"
+        },
+        "foundation_sha256": "03f84656aa1132878816a54253cea54f154bd18c2e23a61e29e5ee8526661a33",
+        "python_version": "3.12.13",
+        "runtime_packages": {
+          "numpy": "2.5.2",
+          "tide": "0.1.0",
+          "torch": "2.12.0+cpu",
+          "torch-npu": "2.12.0.post3"
+        },
+        "schema": "pilot-checkpoint-identity-v1"
+      },
+      "checkpoint_metadata": {
+        "bytes": 3501,
+        "path": ".local/pilot-r2/preflight-v2/tasks/preflight-shannon-child/checkpoint.json",
+        "sha256": "c2991761a31abbe374efc72a912e8c6e8083cc2975d160d03beb00387b810676"
+      },
+      "continuation_metadata": {
+        "continuation": {
+          "additional_steps": 8,
+          "budget_overrides": [
+            "max_steps"
+          ],
+          "contract_exact": true,
+          "first_input_reused_private_history": true,
+          "from_step": 9,
+          "identity_exact": true,
+          "restored_digest": "5a2ac425bd9a06d1caf739e809a9d6747a46464e86b587a0ce5d6f1bf2367be2",
+          "sha256": "a0471773ad35d1733e466af34b598f9c818d580eb71c54a9582824a633f0f6a1",
+          "source": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r2/preflight-v2/tasks/preflight-shannon-parent/checkpoint.pt",
+          "state_digest_exact": true,
+          "to_step": 17
+        }
+      },
+      "execution_status": "completed",
+      "fresh_process_result": {
+        "bytes": 19581,
+        "path": ".local/pilot-r2/preflight-v2/tasks/preflight-shannon-child/fresh-process/result.json",
+        "sha256": "b9402833a64bd122e8bca50aedbecb611fc230f83c3f3c7c9b53a88f4fb1662b"
+      },
+      "from_step": 17,
+      "per_step_summary": [
+        {
+          "continued_private_state": true,
+          "exact_by_category": {
+            "gradients": false,
+            "logits": true,
+            "model": false,
+            "optimizer": false,
+            "private_state": true
+          },
+          "failed_fields": {},
+          "grad_norm_abs_difference": 0.0,
+          "loss_abs_difference": 9.5367431640625e-07,
+          "max_abs_by_category": {
+            "gradients": 7.450580596923828e-09,
+            "logits": 0.0,
+            "model": 2.3283064365386963e-10,
+            "optimizer": 1.862645149230957e-09,
+            "private_state": 0.0
+          },
+          "step": 18,
+          "within_tolerance": true
+        },
+        {
+          "continued_private_state": true,
+          "exact_by_category": {
+            "gradients": false,
+            "logits": false,
+            "model": false,
+            "optimizer": false,
+            "private_state": false
+          },
+          "failed_fields": {},
+          "grad_norm_abs_difference": 1.1920928955078125e-07,
+          "loss_abs_difference": 0.0,
+          "max_abs_by_category": {
+            "gradients": 7.916241884231567e-09,
+            "logits": 2.980232238769531e-07,
+            "model": 1.1175870895385742e-07,
+            "optimizer": 1.862645149230957e-09,
+            "private_state": 1.52587890625e-05
+          },
+          "step": 19,
+          "within_tolerance": true
+        },
+        {
+          "continued_private_state": true,
+          "exact_by_category": {
+            "gradients": false,
+            "logits": false,
+            "model": false,
+            "optimizer": false,
+            "private_state": false
+          },
+          "failed_fields": {},
+          "grad_norm_abs_difference": 1.1920928955078125e-07,
+          "loss_abs_difference": 0.0,
+          "max_abs_by_category": {
+            "gradients": 1.7695128917694092e-08,
+            "logits": 2.980232238769531e-07,
+            "model": 3.0547380447387695e-07,
+            "optimizer": 3.725290298461914e-09,
+            "private_state": 4.57763671875e-05
+          },
+          "step": 20,
+          "within_tolerance": true
+        },
+        {
+          "continued_private_state": false,
+          "exact_by_category": {
+            "gradients": false,
+            "logits": false,
+            "model": false,
+            "optimizer": false,
+            "private_state": false
+          },
+          "failed_fields": {},
+          "grad_norm_abs_difference": 0.0,
+          "loss_abs_difference": 0.0,
+          "max_abs_by_category": {
+            "gradients": 4.6566128730773926e-08,
+            "logits": 2.980232238769531e-07,
+            "model": 8.419156074523926e-07,
+            "optimizer": 7.450580596923828e-09,
+            "private_state": 1.9073486328125e-05
+          },
+          "step": 21,
+          "within_tolerance": true
+        },
+        {
+          "continued_private_state": true,
+          "exact_by_category": {
+            "gradients": false,
+            "logits": false,
+            "model": false,
+            "optimizer": false,
+            "private_state": false
+          },
+          "failed_fields": {},
+          "grad_norm_abs_difference": 0.0,
+          "loss_abs_difference": 1.9073486328125e-06,
+          "max_abs_by_category": {
+            "gradients": 2.60770320892334e-08,
+            "logits": 3.5762786865234375e-07,
+            "model": 1.1473894119262695e-06,
+            "optimizer": 7.450580596923828e-09,
+            "private_state": 4.57763671875e-05
+          },
+          "step": 22,
+          "within_tolerance": true
+        },
+        {
+          "continued_private_state": true,
+          "exact_by_category": {
+            "gradients": false,
+            "logits": false,
+            "model": false,
+            "optimizer": false,
+            "private_state": false
+          },
+          "failed_fields": {},
+          "grad_norm_abs_difference": 0.0,
+          "loss_abs_difference": 1.9073486328125e-06,
+          "max_abs_by_category": {
+            "gradients": 2.2351741790771484e-08,
+            "logits": 2.980232238769531e-07,
+            "model": 1.2367963790893555e-06,
+            "optimizer": 7.450580596923828e-09,
+            "private_state": 6.103515625e-05
+          },
+          "step": 23,
+          "within_tolerance": true
+        },
+        {
+          "continued_private_state": true,
+          "exact_by_category": {
+            "gradients": false,
+            "logits": false,
+            "model": false,
+            "optimizer": false,
+            "private_state": false
+          },
+          "failed_fields": {},
+          "grad_norm_abs_difference": 0.0,
+          "loss_abs_difference": 9.5367431640625e-07,
+          "max_abs_by_category": {
+            "gradients": 3.958120942115784e-08,
+            "logits": 2.980232238769531e-07,
+            "model": 1.296401023864746e-06,
+            "optimizer": 7.450580596923828e-09,
+            "private_state": 6.103515625e-05
+          },
+          "step": 24,
+          "within_tolerance": true
+        },
+        {
+          "continued_private_state": false,
+          "exact_by_category": {
+            "gradients": false,
+            "logits": false,
+            "model": false,
+            "optimizer": false,
+            "private_state": false
+          },
+          "failed_fields": {},
+          "grad_norm_abs_difference": 0.0,
+          "loss_abs_difference": 0.0,
+          "max_abs_by_category": {
+            "gradients": 4.7497451305389404e-08,
+            "logits": 3.5762786865234375e-07,
+            "model": 1.3560056686401367e-06,
+            "optimizer": 1.1175870895385742e-08,
+            "private_state": 1.9073486328125e-05
+          },
+          "step": 25,
+          "within_tolerance": true
+        }
+      ],
+      "physical_visibility": "11",
+      "recovery_status": "within_tolerance",
+      "restore_validation": {
+        "budget_overrides": [],
+        "contract_exact": true,
+        "identity_exact": true,
+        "state_digest_exact": true
+      },
+      "result": {
+        "bytes": 41469,
+        "path": ".local/pilot-r2/preflight-v2/tasks/preflight-shannon-child/result.json",
+        "sha256": "96408db40639224de44f9c8742119608afdd44988af3f00bda9a6c5e6e93de89"
+      },
+      "saved_data_exact": true,
+      "to_step": 25,
+      "training_from_step": 9,
+      "training_steps": 8,
+      "training_to_step": 17,
+      "verified_steps": 8
+    },
+    "preflight-shannon-parent": {
+      "aggregate_comparisons": {
+        "gradients": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 1624,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 1.9371509552001953e-07,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "logits": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 8,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 6.92903995513916e-07,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "model": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 1840,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 4.4852495193481445e-06,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "optimizer": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 6592,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 1.5832483768463135e-08,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "private_state": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 2,
+          "failed_fields": [
+            "step13:/memories/14/K/values",
+            "step14:/memories/14/K/values"
+          ],
+          "fields": 776,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 6.103515625e-05,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": false
+        }
+      },
+      "all_per_step_input_rng_stream_step_reset_exact": true,
+      "causality": {
+        "atol": 1e-05,
+        "exact": true,
+        "failed_field_count": 0,
+        "failed_fields": [],
+        "fields": 1,
+        "finite": true,
+        "integer_equal": true,
+        "max_abs": 0.0,
+        "rtol": 0.0001,
+        "structure_equal": true,
+        "within_tolerance": true
+      },
+      "checkpoint_identity": {
+        "data_manifest_sha256": "122f912828ff701de8dd449b75a473fb03082a3ae0bb40dee50d5d90f5f23b1b",
+        "experiment_files": {
+          "data.py": "d327409f049891273c315c654870a6cbdda8b1162307cabe100225c11ddbcbdd",
+          "io.py": "d846049973ea6c7a952353b8a4ed25e2d89e9a67741e3c16e3dd67d39e802170",
+          "models.py": "42ac16fa4353d47898dc0d40fbb4b689c50856f06007ccf43f887e65cc51becb",
+          "worker.py": "542b1f5b88389e902f2aedb19eb368321152f1fff012f66d553cfc0cccf349d8"
+        },
+        "experiment_sha256": "945d958b6deddec46f73c8e70e2f7a4dc6570d3555f99b243f3c789bd10f0a78",
+        "foundation_distributions": {
+          "tide-instances": "0.1.0"
+        },
+        "foundation_files": {
+          "__init__.py": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195",
+          "allocation.py": "1749c52190680ed82f38d981d751aaf84774aca6b9a995de716cd2573cecdb1f",
+          "attention.py": "0a8231713a2801ed397cee093c5d1112867a2057fc20804717fd39fd9e1609e8",
+          "checkpoint.py": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+          "config.py": "2b890c0ae9eac381aa3ab9726eb386339345f62dc7b3e27433ecd5a0b1c0299f",
+          "ffn_packing.py": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449",
+          "grouped_linear.py": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1",
+          "kv.py": "789cc6b7543bc156ba0f650791194c716454f1bda422d59c791ce8231c69b4f2",
+          "layout.py": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+          "model.py": "1911afe3b66b199eb7e066ea57c5900fead1e390ebb5894818d423284850255e",
+          "parameters.py": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc",
+          "placement.py": "0f77def73da20f467756e5dc1f701f25942565f762e82be5d23218ecee39d05f",
+          "placement_ownership.py": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+          "precision.py": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+          "reception.py": "bae0d61c805b68fcf97800f40baa17ff549d90c3e2a47763cfc9f687a7c752f1",
+          "region.py": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+          "region_batch.py": "514ee30c5077d416c02cec81380280eb45509f20922a0f812657b93d2d8b7e80",
+          "region_execution.py": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950",
+          "region_placement.py": "fd082f035185d04af6bc3ba27b949a8f065ccdf62f8b32a1b442accbfa6f2b6d",
+          "ssd.py": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+          "ssd_memory.py": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2",
+          "topology.py": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+          "topology_hb.py": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06"
+        },
+        "foundation_sha256": "03f84656aa1132878816a54253cea54f154bd18c2e23a61e29e5ee8526661a33",
+        "python_version": "3.12.13",
+        "runtime_packages": {
+          "numpy": "2.5.2",
+          "tide": "0.1.0",
+          "torch": "2.12.0+cpu",
+          "torch-npu": "2.12.0.post3"
+        },
+        "schema": "pilot-checkpoint-identity-v1"
+      },
+      "checkpoint_metadata": {
+        "bytes": 3501,
+        "path": ".local/pilot-r2/preflight-v2/tasks/preflight-shannon-parent/checkpoint.json",
+        "sha256": "86eccbb89da26c35955e47cf8c05df6322a4a880fe43e5b8248ef0f13799d49a"
+      },
+      "continuation_metadata": {},
+      "execution_status": "completed",
+      "fresh_process_result": {
+        "bytes": 19674,
+        "path": ".local/pilot-r2/preflight-v2/tasks/preflight-shannon-parent/fresh-process/result.json",
+        "sha256": "71aa64eee05ada0c71bb054255e0ed994677d95788b0d67b9147bd2ee97a5971"
+      },
+      "from_step": 9,
+      "per_step_summary": [
+        {
+          "continued_private_state": true,
+          "exact_by_category": {
+            "gradients": false,
+            "logits": true,
+            "model": false,
+            "optimizer": false,
+            "private_state": true
+          },
+          "failed_fields": {},
+          "grad_norm_abs_difference": 0.0,
+          "loss_abs_difference": 9.5367431640625e-07,
+          "max_abs_by_category": {
+            "gradients": 1.4901161193847656e-08,
+            "logits": 0.0,
+            "model": 4.656612873077393e-10,
+            "optimizer": 1.862645149230957e-09,
+            "private_state": 0.0
+          },
+          "step": 10,
+          "within_tolerance": true
+        },
+        {
+          "continued_private_state": true,
+          "exact_by_category": {
+            "gradients": false,
+            "logits": false,
+            "model": false,
+            "optimizer": false,
+            "private_state": false
+          },
+          "failed_fields": {},
+          "grad_norm_abs_difference": 0.0,
+          "loss_abs_difference": 9.5367431640625e-07,
+          "max_abs_by_category": {
+            "gradients": 3.3527612686157227e-08,
+            "logits": 2.384185791015625e-07,
+            "model": 2.60770320892334e-07,
+            "optimizer": 3.259629011154175e-09,
+            "private_state": 3.0517578125e-05
+          },
+          "step": 11,
+          "within_tolerance": true
+        },
+        {
+          "continued_private_state": true,
+          "exact_by_category": {
+            "gradients": false,
+            "logits": false,
+            "model": false,
+            "optimizer": false,
+            "private_state": false
+          },
+          "failed_fields": {},
+          "grad_norm_abs_difference": 1.1920928955078125e-07,
+          "loss_abs_difference": 9.5367431640625e-07,
+          "max_abs_by_category": {
+            "gradients": 8.568167686462402e-08,
+            "logits": 4.6566128730773926e-07,
+            "model": 9.462237358093262e-07,
+            "optimizer": 7.450580596923828e-09,
+            "private_state": 3.0517578125e-05
+          },
+          "step": 12,
+          "within_tolerance": true
+        },
+        {
+          "continued_private_state": false,
+          "exact_by_category": {
+            "gradients": false,
+            "logits": false,
+            "model": false,
+            "optimizer": false,
+            "private_state": false
+          },
+          "failed_fields": {
+            "private_state": [
+              "/memories/14/K/values"
+            ]
+          },
+          "grad_norm_abs_difference": 0.0,
+          "loss_abs_difference": 0.0,
+          "max_abs_by_category": {
+            "gradients": 7.8580342233181e-08,
+            "logits": 6.92903995513916e-07,
+            "model": 1.8477439880371094e-06,
+            "optimizer": 1.3969838619232178e-08,
+            "private_state": 2.288818359375e-05
+          },
+          "step": 13,
+          "within_tolerance": false
+        },
+        {
+          "continued_private_state": true,
+          "exact_by_category": {
+            "gradients": false,
+            "logits": false,
+            "model": false,
+            "optimizer": false,
+            "private_state": false
+          },
+          "failed_fields": {
+            "private_state": [
+              "/memories/14/K/values"
+            ]
+          },
+          "grad_norm_abs_difference": 0.0,
+          "loss_abs_difference": 9.5367431640625e-07,
+          "max_abs_by_category": {
+            "gradients": 6.891787052154541e-08,
+            "logits": 5.662441253662109e-07,
+            "model": 2.816319465637207e-06,
+            "optimizer": 1.0244548320770264e-08,
+            "private_state": 3.147125244140625e-05
+          },
+          "step": 14,
+          "within_tolerance": false
+        },
+        {
+          "continued_private_state": true,
+          "exact_by_category": {
+            "gradients": false,
+            "logits": false,
+            "model": false,
+            "optimizer": false,
+            "private_state": false
+          },
+          "failed_fields": {},
+          "grad_norm_abs_difference": 5.960464477539063e-08,
+          "loss_abs_difference": 0.0,
+          "max_abs_by_category": {
+            "gradients": 6.565824151039124e-08,
+            "logits": 4.6193599700927734e-07,
+            "model": 3.6582350730895996e-06,
+            "optimizer": 1.0593794286251068e-08,
+            "private_state": 4.57763671875e-05
+          },
+          "step": 15,
+          "within_tolerance": true
+        },
+        {
+          "continued_private_state": true,
+          "exact_by_category": {
+            "gradients": false,
+            "logits": false,
+            "model": false,
+            "optimizer": false,
+            "private_state": false
+          },
+          "failed_fields": {},
+          "grad_norm_abs_difference": 5.960464477539063e-08,
+          "loss_abs_difference": 0.0,
+          "max_abs_by_category": {
+            "gradients": 8.568167686462402e-08,
+            "logits": 4.414469003677368e-07,
+            "model": 4.090368747711182e-06,
+            "optimizer": 9.778887033462524e-09,
+            "private_state": 6.103515625e-05
+          },
+          "step": 16,
+          "within_tolerance": true
+        },
+        {
+          "continued_private_state": false,
+          "exact_by_category": {
+            "gradients": false,
+            "logits": false,
+            "model": false,
+            "optimizer": false,
+            "private_state": false
+          },
+          "failed_fields": {},
+          "grad_norm_abs_difference": 0.0,
+          "loss_abs_difference": 0.0,
+          "max_abs_by_category": {
+            "gradients": 1.9371509552001953e-07,
+            "logits": 5.029141902923584e-07,
+            "model": 4.4852495193481445e-06,
+            "optimizer": 1.5832483768463135e-08,
+            "private_state": 3.0517578125e-05
+          },
+          "step": 17,
+          "within_tolerance": true
+        }
+      ],
+      "physical_visibility": "11",
+      "recovery_status": "comparison_failed",
+      "restore_validation": {
+        "budget_overrides": [],
+        "contract_exact": true,
+        "identity_exact": true,
+        "state_digest_exact": true
+      },
+      "result": {
+        "bytes": 40687,
+        "path": ".local/pilot-r2/preflight-v2/tasks/preflight-shannon-parent/result.json",
+        "sha256": "d9a6482d18b31fa00e1afe4d52c00d69cc9ba65231fb6cf8e59da78a3b6bab5a"
+      },
+      "saved_data_exact": true,
+      "to_step": 17,
+      "training_from_step": 0,
+      "training_steps": 9,
+      "training_to_step": 9,
+      "verified_steps": 8
+    }
+  },
+  "schema": "pilot-r2-preflight-triage-v1",
+  "scope": "Read-only bounded review of completed preflight-v2 Shannon parent/child and the two saved mismatch pairs. No model execution, backward replay, new NPU job or frozen-source modification.",
+  "thresholds": {
+    "atol": 1e-05,
+    "changed": false,
+    "orientation": "torch.isclose(reference, restored); element allowance is atol + rtol * abs(restored)",
+    "rtol": 0.0001
+  }
+}

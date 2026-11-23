@@ -1,0 +1,474 @@
+{
+  "allocated_disk_usage": {
+    ".local/pilot-r1": {
+      "allocated_bytes": 3661594624,
+      "return_code": 0
+    },
+    ".local/pilot-r1/round": {
+      "allocated_bytes": 3246182400,
+      "return_code": 0
+    },
+    ".venv-pilot": {
+      "allocated_bytes": 207761408,
+      "return_code": 0
+    }
+  },
+  "checkpoint_checks": {
+    "cpu-exchange-x-b2-l32-t40": {
+      "bytes": 45812271,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/cpu-exchange-x-b2-l32-t40/checkpoint.pt",
+      "sha256": "bebc4e8f54706810710df2c475ece08f09343cce700a55a609c2071caf14c8bd"
+    },
+    "cpu-exchange-x-b8-l64-t40": {
+      "bytes": 60930287,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/cpu-exchange-x-b8-l64-t40/checkpoint.pt",
+      "sha256": "ec1e5db5b6dc584243ebcd46558a0677215121283cf8e142b283dcc782bd2d81"
+    },
+    "cpu-fc-k-independent-b2-l32-t8": {
+      "bytes": 38035657,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/cpu-fc-k-independent-b2-l32-t8/checkpoint.pt",
+      "sha256": "2d2b896e9eb7b91b9d3ac4745b34ea6183d9804fa56e8a64bfac858c243d49c5"
+    },
+    "cpu-fc-k-independent-b8-l64-t40": {
+      "bytes": 53705545,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/cpu-fc-k-independent-b8-l64-t40/checkpoint.pt",
+      "sha256": "b35809ccc3b70af03000d25c2a5ed9dbb9de0f15429a190b814ecdf72730b457"
+    },
+    "cpu-fc-s-shared-t16": {
+      "bytes": 20653023,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/cpu-fc-s-shared-t16/checkpoint.pt",
+      "sha256": "a18ce5c0b1ed74566b065591abeaa3491d083c4aa7a71ec28d8396a20e20276f"
+    },
+    "cpu-timed-x-group-b2-l32": {
+      "bytes": 70666103,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/cpu-timed-x-group-b2-l32/checkpoint.pt",
+      "sha256": "f2696974617276b56b3f3950c3d129dd54873cc1c6f01b586acdc385bf4ed9d7"
+    },
+    "cpu-transformer-d128-l4-t16": {
+      "bytes": 24980765,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/cpu-transformer-d128-l4-t16/checkpoint.pt",
+      "sha256": "743c8925bbbf43c99b0c7a6e8a9c68190813a6b6d720bfd30f547d7a45e66a82"
+    },
+    "cpu-transformer-d256-l6-t40": {
+      "bytes": 92917045,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/cpu-transformer-d256-l6-t40/checkpoint.pt",
+      "sha256": "8d200242fac5a04a169a841152760070808a7a81cd4df0fd597e63510004a82c"
+    },
+    "npu-exchange-k": {
+      "bytes": 64176655,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-exchange-k/checkpoint.pt",
+      "sha256": "67722e326b7e05b583d63688e84fe3cbab1561720612870aacb2484347a6dccb"
+    },
+    "npu-exchange-k-independent": {
+      "bytes": 81744447,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-exchange-k-independent/checkpoint.pt",
+      "sha256": "0ee0c45b19637725b83ac97587d992bec49cbef6bca8cd0c156c3a1268cec644"
+    },
+    "npu-exchange-s": {
+      "bytes": 50865165,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-exchange-s/checkpoint.pt",
+      "sha256": "16b8361d99e5e1ec87f0f9e366bd8e888e17c94f740f38ee15f0ecf8c123058e"
+    },
+    "npu-exchange-x": {
+      "bytes": 60930541,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-exchange-x/checkpoint.pt",
+      "sha256": "d0780073cc96b309ae35e7e7945820fa79cb14275664abf8a6d9777f59ce2b7a"
+    },
+    "npu-exchange-x-b16-l128": {
+      "bytes": 122864941,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-exchange-x-b16-l128/checkpoint.pt",
+      "sha256": "3f102527f5be60d53ba6d00c4a8f058bcce0a804e91af938466835f0c42e8848"
+    },
+    "npu-exchange-x-budget4": {
+      "bytes": 60930541,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-exchange-x-budget4/checkpoint.pt",
+      "sha256": "91097be8ca37dea780081dae723aaa312bdb9a8b486a0e6a61368ea6a371ed1c"
+    },
+    "npu-exchange-x-d128": {
+      "bytes": 187985657,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-exchange-x-d128/checkpoint.pt",
+      "sha256": "5f386fb2088c18b880ad83d04b227f2300c79c218ea52161129ade50d766d6ab"
+    },
+    "npu-exchange-x-incoming-wide": {
+      "bytes": 90011515,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-exchange-x-incoming-wide/checkpoint.pt",
+      "sha256": "e61c0bc643fe80575fa2c085ae9a74ab0467ff00370dbebe11966b5672678a7e"
+    },
+    "npu-exchange-x-incoming128": {
+      "bytes": 92923451,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-exchange-x-incoming128/checkpoint.pt",
+      "sha256": "8a30f615d875dfb7ef58679f24faccfcc60a8859ccefafd68feb7278dad1b093"
+    },
+    "npu-exchange-x-incoming64": {
+      "bytes": 68445691,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-exchange-x-incoming64/checkpoint.pt",
+      "sha256": "b4a8d561e5e86787bffca0acb539e3c91ab94e92a88700676ae12502763de1c1"
+    },
+    "npu-exchange-x-independent": {
+      "bytes": 111456141,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-exchange-x-independent/checkpoint.pt",
+      "sha256": "5b8010a8f9eaa442f3328c05dcf7924613f6484d2d6b8385ed9450537ff59b2c"
+    },
+    "npu-exchange-x-kv32": {
+      "bytes": 61450631,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-exchange-x-kv32/checkpoint.pt",
+      "sha256": "58a251070d8a508bb803962fb230a1084b9b3651d5615a512b369a41d49e4d69"
+    },
+    "npu-exchange-x-layer-shared": {
+      "bytes": 55031453,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-exchange-x-layer-shared/checkpoint.pt",
+      "sha256": "1d8be3bac6c62f0335dc0ff70fe87fb550214ed5810ed52b853b7c40c82fe752"
+    },
+    "npu-exchange-x-memory-shared": {
+      "bytes": 100026941,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-exchange-x-memory-shared/checkpoint.pt",
+      "sha256": "df83bc69aa3e21de655cf4c0e3d70051746dc9369497a607ef43c2f26eec1505"
+    },
+    "npu-exchange-x-pool": {
+      "bytes": 60930541,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-exchange-x-pool/checkpoint.pt",
+      "sha256": "8c910ee1827f7ac47a15412499600d70d1c04c20ab36f3d50d8fd9ec14080d02"
+    },
+    "npu-exchange-x-reverse": {
+      "bytes": 55204967,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-exchange-x-reverse/checkpoint.pt",
+      "sha256": "f4349b3126ad4516ce56ee3d683af6f191441f7d8249435478733566373993bf"
+    },
+    "npu-fc-k-d128": {
+      "bytes": 162848947,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-fc-k-d128/checkpoint.pt",
+      "sha256": "3d4c06d05da8c7ef688cbdfaa6993f28f8c18448566d244172e56f350a5c64b5"
+    },
+    "npu-fc-k-incoming64": {
+      "bytes": 28046501,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-fc-k-incoming64/checkpoint.pt",
+      "sha256": "7abb518d8595c072d593d0f0fc741dcdbb1ce19119ffe483042ddbb239785fa8"
+    },
+    "npu-fc-k-independent": {
+      "bytes": 44071943,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-fc-k-independent/checkpoint.pt",
+      "sha256": "2989186257d66634d5662e4294bae4133f3033f0c86c86dc15217af6148015d5"
+    },
+    "npu-fc-s-shared": {
+      "bytes": 20653213,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-fc-s-shared/checkpoint.pt",
+      "sha256": "3d4e1c9b07ba45d29e478f3f379716cf63c13a676a082343bf6823a837890d4d"
+    },
+    "npu-lattice-k": {
+      "bytes": 78614763,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-lattice-k/checkpoint.pt",
+      "sha256": "0617c1888608bd06d1141d9e390a5e2811a81bd828b2d47d6eac56383b3ac0f8"
+    },
+    "npu-lattice-s": {
+      "bytes": 42988621,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-lattice-s/checkpoint.pt",
+      "sha256": "d1f97aeb29e26cba0b19625e2f12a5a227eb2c851c12f2471e56fcda26efa303"
+    },
+    "npu-multiscale-k": {
+      "bytes": 54531691,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-multiscale-k/checkpoint.pt",
+      "sha256": "044ac404769021608cd192889c1cd76a37df1849905d5ad0ffd1be3c5761a83b"
+    },
+    "npu-multiscale-x-compact9": {
+      "bytes": 120640198,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-multiscale-x-compact9/checkpoint.pt",
+      "sha256": "80484fffea0ac7d61f406075ea3856270e3e05c0b0a5ca1634f0aac712465f1c"
+    },
+    "npu-timed-s": {
+      "bytes": 37170161,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-timed-s/checkpoint.pt",
+      "sha256": "7e9621e5ff1303c40ab1c52de06f8e340f6f4d4e703743ecd3b134fbf00f83ec"
+    },
+    "npu-timed-x-group": {
+      "bytes": 241704246,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-timed-x-group/checkpoint.pt",
+      "sha256": "bcb9058aeedfb7fc30035865e9f51e18a263345c577d00a726bb80d009893d37"
+    },
+    "npu-timed-x-mixed": {
+      "bytes": 144377989,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-timed-x-mixed/checkpoint.pt",
+      "sha256": "b66e517c6805cf65abb21dd951737affb2c3eaef66e8d2ed6f83cfc3e8fac78e"
+    },
+    "npu-timed-x-singleton": {
+      "bytes": 164957113,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-timed-x-singleton/checkpoint.pt",
+      "sha256": "dfd39952cdc5c6fc71031986a0fec78b3e042eaaa57db303db1aff0cb318e52b"
+    },
+    "npu-transformer-d128-l4": {
+      "bytes": 24981019,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-transformer-d128-l4/checkpoint.pt",
+      "sha256": "57015d44a74c23717cdad27daeecc2136a26e387289f88c28308cb39a453356f"
+    },
+    "npu-transformer-d256-l6": {
+      "bytes": 92917235,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-transformer-d256-l6/checkpoint.pt",
+      "sha256": "6099918c5be61ebab59a875436c8c6a0415346e61ac94c20dacfaf0e113fc6b5"
+    },
+    "npu-transformer-d384-l8": {
+      "bytes": 232758475,
+      "matches": true,
+      "path": ".local/pilot-r1/round/tasks/npu-transformer-d384-l8/checkpoint.pt",
+      "sha256": "5b1459ee1bb19a56f88cddc496e26ed96a348ac5fedf61f4692b112094bc3d94"
+    }
+  },
+  "data_file_checks": {
+    "tokenizer-training-document-ids.txt": {
+      "bytes": 64935,
+      "matches": true,
+      "sha256": "455f8baf28a3d0fe53517d83d96e14c6186122be85298b8811ddc693fb114936"
+    },
+    "tokenizer.json": {
+      "bytes": 550678,
+      "matches": true,
+      "sha256": "830de1c70c9bbdcc3e778446f7c2f6f0fa4366874facbf4bcba2521f184ee7b7"
+    },
+    "train.documents.jsonl": {
+      "bytes": 5500206,
+      "matches": true,
+      "sha256": "563dd9b280201439114c2a5069926a636fd0187ee24f2900731de10675553d22"
+    },
+    "train.documents.npy": {
+      "bytes": 462016,
+      "matches": true,
+      "sha256": "c6a3223cd23dc323ff83e80ecb556872e1a8313ee2afa4d27399e7b3bad71f3e"
+    },
+    "train.tokens.bin": {
+      "bytes": 266448088,
+      "matches": true,
+      "sha256": "4d71ceecd9c8ab317faa1e4a9f2a6cb546b62a9661571a9bc26063130199256f"
+    },
+    "validation.documents.jsonl": {
+      "bytes": 107576,
+      "matches": true,
+      "sha256": "1f8b346d1d5b3c0187eb3b3d0be2c442a9b2c02eb65c022bfc8ede3067c1b366"
+    },
+    "validation.documents.npy": {
+      "bytes": 9344,
+      "matches": true,
+      "sha256": "11910e02b71aee5e7812304cdc2c571d20ad46961f65fab783513553ad4322f0"
+    },
+    "validation.tokens.bin": {
+      "bytes": 5451898,
+      "matches": true,
+      "sha256": "a79732e9bdb5b73697a21e484b03272b288e9a7915c271b33a4614919663fef5"
+    }
+  },
+  "frozen_input_checks": {
+    ".local/pilot-r1/data/manifest.json": {
+      "expected": "122f912828ff701de8dd449b75a473fb03082a3ae0bb40dee50d5d90f5f23b1b",
+      "matches": true,
+      "observed": "122f912828ff701de8dd449b75a473fb03082a3ae0bb40dee50d5d90f5f23b1b"
+    },
+    ".local/pilot-r1/frozen/plan.json": {
+      "expected": "ded369bcaa8bfcd2698206469448f0612b2f997984185bb26c6e9f664338a1fc",
+      "matches": true,
+      "observed": "ded369bcaa8bfcd2698206469448f0612b2f997984185bb26c6e9f664338a1fc"
+    },
+    ".local/pilot-r1/frozen/source/pilotlab/__init__.py": {
+      "expected": "8208b80d75d5de0a39089a54db7a24924819bb81a1ed6a61adaac931a2fddf95",
+      "matches": true,
+      "observed": "8208b80d75d5de0a39089a54db7a24924819bb81a1ed6a61adaac931a2fddf95"
+    },
+    ".local/pilot-r1/frozen/source/pilotlab/data.py": {
+      "expected": "d327409f049891273c315c654870a6cbdda8b1162307cabe100225c11ddbcbdd",
+      "matches": true,
+      "observed": "d327409f049891273c315c654870a6cbdda8b1162307cabe100225c11ddbcbdd"
+    },
+    ".local/pilot-r1/frozen/source/pilotlab/io.py": {
+      "expected": "d846049973ea6c7a952353b8a4ed25e2d89e9a67741e3c16e3dd67d39e802170",
+      "matches": true,
+      "observed": "d846049973ea6c7a952353b8a4ed25e2d89e9a67741e3c16e3dd67d39e802170"
+    },
+    ".local/pilot-r1/frozen/source/pilotlab/models.py": {
+      "expected": "42ac16fa4353d47898dc0d40fbb4b689c50856f06007ccf43f887e65cc51becb",
+      "matches": true,
+      "observed": "42ac16fa4353d47898dc0d40fbb4b689c50856f06007ccf43f887e65cc51becb"
+    },
+    ".local/pilot-r1/frozen/source/pilotlab/plan.py": {
+      "expected": "680567ef8fed0835f62d890b9696120a1a6e3edb323f0b88437805171c2fc834",
+      "matches": true,
+      "observed": "680567ef8fed0835f62d890b9696120a1a6e3edb323f0b88437805171c2fc834"
+    },
+    ".local/pilot-r1/frozen/source/pilotlab/scheduler.py": {
+      "expected": "3e15be583a26ab022f213c4636aa67d85f05f1f2555e48b7b430057a71d260d1",
+      "matches": true,
+      "observed": "3e15be583a26ab022f213c4636aa67d85f05f1f2555e48b7b430057a71d260d1"
+    },
+    ".local/pilot-r1/frozen/source/pilotlab/worker.py": {
+      "expected": "4cd05ffe1fc63b9a58a3fad7777844d258a00b6f7abf6c8ebdad55925b033b66",
+      "matches": true,
+      "observed": "4cd05ffe1fc63b9a58a3fad7777844d258a00b6f7abf6c8ebdad55925b033b66"
+    },
+    ".local/pilot-r1/round/plan.json": {
+      "expected": "ded369bcaa8bfcd2698206469448f0612b2f997984185bb26c6e9f664338a1fc",
+      "matches": true,
+      "observed": "ded369bcaa8bfcd2698206469448f0612b2f997984185bb26c6e9f664338a1fc"
+    },
+    "configs/pilot-round1/plan.json": {
+      "expected": "ded369bcaa8bfcd2698206469448f0612b2f997984185bb26c6e9f664338a1fc",
+      "matches": true,
+      "observed": "ded369bcaa8bfcd2698206469448f0612b2f997984185bb26c6e9f664338a1fc"
+    }
+  },
+  "installed_foundation_python_matches_frozen": {
+    "__init__.py": true,
+    "allocation.py": true,
+    "attention.py": true,
+    "checkpoint.py": true,
+    "config.py": true,
+    "ffn_packing.py": true,
+    "grouped_linear.py": true,
+    "kv.py": true,
+    "layout.py": true,
+    "model.py": true,
+    "parameters.py": true,
+    "placement.py": true,
+    "placement_ownership.py": true,
+    "precision.py": true,
+    "reception.py": true,
+    "region.py": true,
+    "region_batch.py": true,
+    "region_execution.py": true,
+    "region_placement.py": true,
+    "ssd.py": true,
+    "ssd_memory.py": true,
+    "topology.py": true,
+    "topology_hb.py": true
+  },
+  "limits": [
+    "Service resource settings are requested values; effective controller limits are recorded in resource-policy evidence.",
+    "Input validation covers recorded source/config/data hashes and installed Tide Python sources, not every shared binary.",
+    "No claim that other projects or the whole device host are idle."
+  ],
+  "live_recorded_processes": [],
+  "matching_live_worker_or_queue_commands": [],
+  "matching_process_identities": [],
+  "observed_utc": "2026-11-19T12:19:35.858104+00:00",
+  "queue_status_counts": {
+    "completed": 31,
+    "failed": 1
+  },
+  "recorded_process_identities_count": 249,
+  "resource_policy_evidence": {
+    "bytes": 15894,
+    "path": "docs/evidence/pilot-r1-resource-policy.json",
+    "sha256": "85d3a605cef6e18445926310188d587a0129bb8d5d1fe52f263d7e99d0b49edb"
+  },
+  "scheduler_all_task_processes_terminated": true,
+  "scheduler_counts": {
+    "completed": 39,
+    "failed": 1
+  },
+  "scheduler_identity": {
+    "bytes": 164102,
+    "path": ".local/pilot-r1/round/scheduler.json",
+    "sha256": "5f727ff8b1525a265b9ddeb359af5033e6084cd05fe1a6729d61418ae7f75844"
+  },
+  "scheduler_status": "completed_with_failures",
+  "schema": "pilot-r1-terminal-audit-v1",
+  "service_cgroup_exists": false,
+  "service_cgroup_pids": {},
+  "service_systemd_cgroup": "/sys/fs/cgroup/systemd/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r1-round-20261119.service",
+  "storage": {
+    "available_for_admission_bytes": 683950215857,
+    "filesystem_free_bytes": 1796075843584,
+    "observed_unix": 1795090775.8406785,
+    "output_bytes": 3244551503,
+    "output_limit_bytes": 687194767360,
+    "quota": {
+      "filesystem": "/dev/mapper/ascend_data-data",
+      "grace_epoch": 0,
+      "hard_bytes": 751619276800,
+      "soft_bytes": 322122547200,
+      "used_bytes": 47083536384
+    },
+    "reserve_bytes": 17179869184,
+    "soft_grace_expired_or_unknown": false
+  },
+  "systemctl_command": [
+    "systemctl",
+    "--user",
+    "show",
+    "tide-pilot-r1-round-20261119.service",
+    "-p",
+    "ActiveState",
+    "-p",
+    "SubState",
+    "-p",
+    "Result",
+    "-p",
+    "ExecMainCode",
+    "-p",
+    "ExecMainStatus",
+    "-p",
+    "MainPID",
+    "-p",
+    "ControlGroup",
+    "-p",
+    "Slice",
+    "-p",
+    "MemoryMax",
+    "-p",
+    "TimeoutStopUSec",
+    "-p",
+    "RuntimeMaxUSec",
+    "-p",
+    "Restart"
+  ],
+  "systemctl_properties": {
+    "ActiveState": "failed",
+    "ControlGroup": "",
+    "ExecMainCode": "1",
+    "ExecMainStatus": "1",
+    "MainPID": "0",
+    "MemoryMax": "274877906944",
+    "Restart": "no",
+    "Result": "exit-code",
+    "RuntimeMaxUSec": "1h 50s",
+    "Slice": "background.slice",
+    "SubState": "failed",
+    "TimeoutStopUSec": "45s"
+  },
+  "systemctl_return_code": 0,
+  "systemctl_stderr": "",
+  "terminal_and_identity_checks_passed": true,
+  "unit": "tide-pilot-r1-round-20261119.service"
+}

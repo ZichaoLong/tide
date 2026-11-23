@@ -1,0 +1,1178 @@
+{
+  "alternatives": {
+    "cpu": {
+      "deep_peak_measured_tiled_prior_vjp": 0.16915658116340637,
+      "deep_receiver_28": {
+        "after": [
+          false,
+          true,
+          true,
+          false,
+          true,
+          true,
+          false
+        ],
+        "before": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "true_edges": 6,
+        "weights": [
+          1.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "known_edges_cut_before_all_consumers": {
+        "baseline_logits_bitwise_equal": true,
+        "baseline_next_private_state_bitwise_equal": true,
+        "logits_sha256": "116a588f9e07680fe93e73bdd66c7a15df67f0a161445a76d68c5b09aca63301",
+        "next_state_sha256": "276f55f0d6aac5c90ae7f77a7ff31f3948d1f69381f627a2d82fb663c5a7acc3",
+        "norm": 1.1710860090090573,
+        "normalized_l2": 4.131523153421472e-06,
+        "objective": 6.206477165222168,
+        "param_check": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 123,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 5.327222628200012e-07,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "root_gradients": 123
+      },
+      "propagate_all_certified_real_inputs": {
+        "baseline_logits_bitwise_equal": true,
+        "baseline_next_private_state_bitwise_equal": true,
+        "logits_sha256": "116a588f9e07680fe93e73bdd66c7a15df67f0a161445a76d68c5b09aca63301",
+        "next_state_sha256": "276f55f0d6aac5c90ae7f77a7ff31f3948d1f69381f627a2d82fb663c5a7acc3",
+        "norm": 1.1710860090090573,
+        "normalized_l2": 4.131523153421472e-06,
+        "objective": 6.206477165222168,
+        "param_check": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 123,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 5.327222628200012e-07,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "root_gradients": 123
+      }
+    },
+    "npu": {
+      "deep_peak_measured_tiled_prior_vjp": 0.16916370391845703,
+      "deep_receiver_28": {
+        "after": [
+          false,
+          true,
+          true,
+          false,
+          true,
+          true,
+          false
+        ],
+        "before": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "true_edges": 6,
+        "weights": [
+          1.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "known_edges_cut_before_all_consumers": {
+        "baseline_logits_bitwise_equal": true,
+        "baseline_next_private_state_bitwise_equal": true,
+        "logits_sha256": "6b2557ad01489401ed7507b6bac90c018891be0f3441de18152da9fd12b336f8",
+        "next_state_sha256": "897c007275be1fb2b290150282756f957a821b828904e0b9dc4f5cb9274657c1",
+        "norm": 1.171086080454601,
+        "normalized_l2": 2.697391992172491e-06,
+        "objective": 6.206477165222168,
+        "param_check": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 123,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 3.199479650106696e-07,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "root_gradients": 123
+      },
+      "propagate_all_certified_real_inputs": {
+        "baseline_logits_bitwise_equal": true,
+        "baseline_next_private_state_bitwise_equal": true,
+        "logits_sha256": "6b2557ad01489401ed7507b6bac90c018891be0f3441de18152da9fd12b336f8",
+        "next_state_sha256": "897c007275be1fb2b290150282756f957a821b828904e0b9dc4f5cb9274657c1",
+        "norm": 1.1710860536037098,
+        "normalized_l2": 2.694274870477671e-06,
+        "objective": 6.206477165222168,
+        "param_check": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 123,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 3.236732553091315e-07,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "root_gradients": 123
+      }
+    }
+  },
+  "attempted_step": 3252,
+  "bindings": {
+    "capture": {
+      "path": ".local/pilot-r3/campaign-r14/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2/attempt-0/failure.pt",
+      "sha256": "3232ddcf0f627366cdd7b082d02eacea7d7c9cbd815f9d77d3d2f1183ae94b22"
+    },
+    "checkpoint": {
+      "path": ".local/pilot-r3/campaign-r14/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2/attempt-0/checkpoints/step-000003221-685b31687a.pt",
+      "sha256": "4a6472307444b170a4af369f74a0bd259289517ecb05ead9278cdf81caa3cd81",
+      "steps": 3221
+    },
+    "launch_plan": {
+      "path": ".local/pilot-r3/campaign-r14/campaign-plan.json",
+      "sha256": "3a9da7a141cd2796fbe59ba7f3f4ff2d7e3d5e0bb37adcb28a5cc900c1314c81"
+    },
+    "result": {
+      "path": ".local/pilot-r3/campaign-r14/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2/attempt-0/result.json",
+      "sha256": "55946a826902bd98b82e94e14a321f26faee3ea4f4d293c630deaf0becfbc6e2"
+    },
+    "task": {
+      "path": ".local/pilot-r3/campaign-r14/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2/attempt-0/task.json",
+      "sha256": "604f84de1bef529aeb34c8eb01b5972fbc72025fe09be9a15bbb3f042c6402a0"
+    }
+  },
+  "completed_steps": 3251,
+  "completed_tokens": 416128,
+  "diagnostic_loss_scaling": {
+    "cpu": {
+      "atol": 1e-05,
+      "exact": false,
+      "failed_field_count": 0,
+      "failed_fields": [],
+      "fields": 123,
+      "finite": true,
+      "integer_equal": true,
+      "max_abs": 5.327222628200012e-07,
+      "rtol": 0.0001,
+      "structure_equal": true,
+      "within_tolerance": true
+    },
+    "loss_power_of_two": -32,
+    "npu": {
+      "atol": 1e-05,
+      "exact": false,
+      "failed_field_count": 0,
+      "failed_fields": [],
+      "fields": 123,
+      "finite": true,
+      "integer_equal": true,
+      "max_abs": 3.1249738441374575e-07,
+      "rtol": 0.0001,
+      "structure_equal": true,
+      "within_tolerance": true
+    },
+    "undo_before_comparing_parameter_gradients": true
+  },
+  "fp32_limit": 3.4028234663852886e+38,
+  "fp64_reference": {
+    "all_finite": true,
+    "maximum": 0.08017898975272483,
+    "norm_unclipped": 1.1710859813941834,
+    "objective": 6.206477000704048,
+    "root_gradients": 123
+  },
+  "frozen_checks": {
+    "numerical_records": [
+      {
+        "path": ".local/pilot-r3/r14-vjp-3252/cpu-unscaled.json",
+        "sha256": "93abb1fe3a9e6ffcfc7ce6b6d1893e3f4b8a6479f47b4293a5e8d6689151d679"
+      },
+      {
+        "path": ".local/pilot-r3/r14-vjp-3252/npu-unscaled.json",
+        "sha256": "33d574383b5422367c07b4a2bba337d41bbca42b77ecd195cf96c14f8797a098"
+      },
+      {
+        "path": ".local/pilot-r3/r14-vjp-3252/cpu-census.json",
+        "sha256": "ffebe5d3a10d5e3b62f7c9872ae1253a1a8c4c7dc8eadc8272fe072387f77755"
+      },
+      {
+        "path": ".local/pilot-r3/r14-vjp-3252/cpu-independent-controls.json",
+        "sha256": "46e5db6c3fa096b2032f4a9097086c640f5dde255fdd067e36a258ad7b6c2db4"
+      },
+      {
+        "path": ".local/pilot-r3/r14-vjp-3252/cpu-route.json",
+        "sha256": "3bb6878ff36a06db04562ae4030c79007de1dc88654861dee2fc50b21dc279f8"
+      },
+      {
+        "path": ".local/pilot-r3/r14-vjp-3252/npu-route.json",
+        "sha256": "4306d398e59c9e014ecf04fa0a070df0e070ca0997b834abf6cbab1fc07a3bc0"
+      },
+      {
+        "path": ".local/pilot-r3/r14-vjp-3252/cpu-propagate.json",
+        "sha256": "c5ff0c1cc77316bf2c42d69fd2c250edff9371ba563073eec90c3165dc9df285"
+      },
+      {
+        "path": ".local/pilot-r3/r14-vjp-3252/npu-propagate.json",
+        "sha256": "9ad2493aea5fc32f89aeff79a2538a5bb516f072147c443091d94be0efc77b00"
+      },
+      {
+        "path": ".local/pilot-r3/r14-vjp-3252/previous-batch/cpu-propagate.json",
+        "sha256": "e290a641810144fbdcaf60a5c26086cbbe95b6907d8fa20a28a8b29cb3d8a999"
+      },
+      {
+        "path": ".local/pilot-r3/r14-vjp-3252/previous-batch/npu-propagate.json",
+        "sha256": "44b7ffe419bf4ea9b2297206fd5bd308756dc8925af22b6c7a991c2a40b24809"
+      },
+      {
+        "path": ".local/pilot-r3/r14-vjp-3252/cpu-down32.json",
+        "sha256": "752901030573a5893f3402a0d19626360c217b512febaa9fca9022a8b0b1035a"
+      },
+      {
+        "path": ".local/pilot-r3/r14-vjp-3252/npu-scale.json",
+        "sha256": "9c458d568885a301914346933e99bfad4fa0190fcedc672701964831338d7aa5"
+      }
+    ],
+    "prototype_sources": [
+      {
+        "path": ".local/pilot-r3/r14-vjp-3252/run.sh",
+        "sha256": "dad27fc5ad9cb3f08ce6b10c55537c0d73ef7e9311629771c9665350c90b14e0"
+      },
+      {
+        "path": ".local/pilot-r3/r14-vjp-3252/trace.py",
+        "sha256": "d6dbcf913d15571a971653c6d310b7603d80c68010ad7443ecea297260c89138"
+      },
+      {
+        "path": ".local/pilot-r3/r14-vjp-3252/census.py",
+        "sha256": "d1ebe6354f33bd1fc2e927c7888c06c0257e0f0131b34183e86d65290b5e57bc"
+      },
+      {
+        "path": ".local/pilot-r3/r14-vjp-3252/fanout.py",
+        "sha256": "7e73dc23b8b1f3cf8790ce8c378c479c1c6aba033036e89603589580d2296c8f"
+      },
+      {
+        "path": ".local/pilot-r3/r14-vjp-3252/propagate.py",
+        "sha256": "546f350f1f41c07e4fd1636dba4bf71e9ba960e07cc59343efef4f453a1cbdf5"
+      },
+      {
+        "path": ".local/pilot-r3/r14-vjp-3252/boundary.py",
+        "sha256": "12cf42852cfb28d8cfb2f85c5cbb4e76da98699ff5980bc0e66732cdc057f84d"
+      },
+      {
+        "path": ".local/pilot-r3/r14-vjp-3252/previous.py",
+        "sha256": "d8f3375adc7f95bb5c703c907a150c371c5fa7f4df06434b854c1d0ce93bb363"
+      }
+    ],
+    "queues": {
+      "npu-base-queue": {
+        "elapsed_seconds": 22.66153982281685,
+        "job_id": "tide-r14-vjp-3252-capture",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 1,
+        "physical_ids": [
+          1
+        ],
+        "priority": 0,
+        "project": "tide-learning-lab",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-11-21T12:07:40.593109+00:00"
+      },
+      "npu-propagate-queue": {
+        "elapsed_seconds": 16.511873926967382,
+        "job_id": "tide-r14-vjp-3252-proof",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 1,
+        "physical_ids": [
+          1
+        ],
+        "priority": 0,
+        "project": "tide-learning-lab",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-11-21T12:13:22.478778+00:00"
+      },
+      "npu-route-queue": {
+        "elapsed_seconds": 40.73862050101161,
+        "job_id": "tide-r14-vjp-3252-route",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 1,
+        "physical_ids": [
+          1
+        ],
+        "priority": 0,
+        "project": "tide-learning-lab",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-11-21T12:11:30.493273+00:00"
+      },
+      "previous-batch/npu-queue": {
+        "elapsed_seconds": 18.110866334289312,
+        "job_id": "tide-r14-vjp-2727-control",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 1,
+        "physical_ids": [
+          1
+        ],
+        "priority": 0,
+        "project": "tide-learning-lab",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-11-21T12:15:25.613233+00:00"
+      }
+    },
+    "r14_reference": {
+      "path": ".local/pilot-r3/r14-vjp-3252/cpu-reference-grad.pt",
+      "sha256": "34fcd59f0329b67894ed7b249d8379f058c680f1803e357f01a9c15d2d640cf7"
+    }
+  },
+  "graph_instrumentation": {
+    "first_observed": "CatBackward0",
+    "node_count": 37096,
+    "note": "First observable backward operator already received Inf. Direct taps on every autograd user of the layer strengths locate creation in the intervening cotangent accumulation. All ten per-user vectors are recorded.",
+    "record": {
+      "path": ".local/pilot-r3/r14-vjp-3252/cpu-census.json",
+      "sha256": "ffebe5d3a10d5e3b62f7c9872ae1253a1a8c4c7dc8eadc8272fe072387f77755"
+    }
+  },
+  "historical_mechanisms": {
+    "one_edge_clock_zero": {
+      "path": "docs/evidence/pilot-r3-r13-timed-ingress-vjp.json",
+      "sha256": "048a9919398045cb4a0c6b371b5ba8eba74a9d76a5b685adbde1302b85a15c20"
+    },
+    "quad_independent_prior": {
+      "path": "docs/evidence/pilot-r3-r11-quad-reception-vjp.json",
+      "sha256": "a27487821ff06c26ff20fe9e113d495f88820e1694175a53e434c3a74730108c"
+    },
+    "shannon_forward_underflow": {
+      "path": "docs/evidence/pilot-r3-r09-shannon-underflow.json",
+      "sha256": "a537b63c0c39425b87f48117054167a8c782acc9a6e99db5e808c2f8a7919961"
+    }
+  },
+  "mechanism": "A deep receiver has four actual zero priors missing their transitive constant proof. Locally finite derivatives return through sums of incoming masses, sender upper bounds and multiple downstream uses. Fan-in to the two silent first-layer nodes produces Inf on the FP32 autograd edge before the Shannon allocation backward. Both score derivatives are mathematically zero for this fixed row.",
+  "observations": {
+    "cpu": {
+      "allocation_saved_fields": [
+        "slope",
+        "lower_face",
+        "upper_face",
+        "fixed",
+        "fixed_mu",
+        "low_active",
+        "high_active",
+        "scores",
+        "mu",
+        "lower",
+        "upper",
+        "low_total",
+        "high_total"
+      ],
+      "allocation_saved_row": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          false,
+          false
+        ],
+        [
+          false,
+          false
+        ],
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ],
+        [
+          false
+        ],
+        [
+          false
+        ],
+        [
+          -0.3452431559562683,
+          0.1470339596271515
+        ],
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ]
+      ],
+      "attention_zero_key_rows": [
+        {
+          "index": [
+            1,
+            0,
+            378,
+            0,
+            0,
+            1
+          ],
+          "key": 1,
+          "log_ratio_max": 94.8200178272852,
+          "upstream_peak": 3.628414901868382e-07,
+          "visibility": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            false
+          ],
+          "vjp": 2.3863754291671773e+35,
+          "vjp_fp64": 2.386348903058234e+35,
+          "weights": [
+            1.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "index": [
+            1,
+            0,
+            378,
+            0,
+            0,
+            2
+          ],
+          "key": 2,
+          "log_ratio_max": 94.8200178272852,
+          "upstream_peak": 3.628414901868382e-07,
+          "visibility": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            false
+          ],
+          "vjp": 2.3863754291671773e+35,
+          "vjp_fp64": 2.386348903058234e+35,
+          "weights": [
+            1.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "index": [
+            1,
+            0,
+            378,
+            0,
+            0,
+            4
+          ],
+          "key": 4,
+          "log_ratio_max": 89.29595524569487,
+          "upstream_peak": 3.628414901868382e-07,
+          "visibility": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            false
+          ],
+          "vjp": 6.599176718071425e+32,
+          "vjp_fp64": 6.599101541594677e+32,
+          "weights": [
+            1.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "index": [
+            1,
+            0,
+            378,
+            0,
+            0,
+            5
+          ],
+          "key": 5,
+          "log_ratio_max": 89.29595524569487,
+          "upstream_peak": 3.628414901868382e-07,
+          "visibility": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            false
+          ],
+          "vjp": 6.599176718071425e+32,
+          "vjp_fp64": 6.599101541594677e+32,
+          "weights": [
+            1.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "detector": {
+        "failing_call": 0,
+        "floor_policy": true,
+        "grad": {
+          "abs_max_finite": 7.458161966274217e+37,
+          "dtype": "torch.float32",
+          "nonfinite": 2,
+          "shape": [
+            1,
+            1024,
+            2
+          ]
+        },
+        "kind": "shannon",
+        "region": 0,
+        "source_grads": {
+          "scores": {
+            "abs_max_finite": 0.004669873043894768,
+            "dtype": "torch.float32",
+            "nonfinite": 2,
+            "shape": [
+              1,
+              1024,
+              2
+            ]
+          }
+        },
+        "support": {
+          "refined_rows": 0,
+          "repaired_coordinates": 0,
+          "repaired_rows": 0
+        }
+      },
+      "first_layer_nodes": [
+        0,
+        1,
+        2
+      ],
+      "incoming_branches": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.9005627957693672e+35
+        ],
+        [
+          5.068167719478854e+35,
+          5.068167719478854e+35,
+          5.068167719478854e+35
+        ],
+        [
+          0.0,
+          0.0,
+          1.9005627957693672e+35
+        ],
+        [
+          5.068167719478854e+35,
+          5.068167719478854e+35,
+          5.068167719478854e+35
+        ],
+        [
+          9.224921594968866e+37,
+          9.224921594968866e+37,
+          9.224921594968866e+37
+        ],
+        [
+          3.2212259261194735e+38,
+          3.2212259261194735e+38,
+          1.6106129630597368e+38
+        ]
+      ],
+      "largest_two_returns_to_each_failing_sender": [
+        3.2212259261194735e+38,
+        9.224921594968866e+37
+      ],
+      "native_primals": {
+        "logits_sha256": "116a588f9e07680fe93e73bdd66c7a15df67f0a161445a76d68c5b09aca63301",
+        "next_state_sha256": "276f55f0d6aac5c90ae7f77a7ff31f3948d1f69381f627a2d82fb663c5a7acc3",
+        "objective": 6.206477165222168
+      },
+      "original_fp32_merged": [
+        "inf",
+        "inf",
+        2.5470426873760128e+38
+      ],
+      "receiver_logical_time": 3451,
+      "receiver_node": 28,
+      "receiver_region": 18,
+      "record": {
+        "path": ".local/pilot-r3/r14-vjp-3252/cpu-measure.json",
+        "sha256": "bc0829e5288087baa94f67d811a9893a975f0dd6dfc07664a126f4d695626cf4"
+      },
+      "source_certified_by": "Timed external injection occurs only at window offsets divisible by 8. Here 373 % 8 = 5. The first-layer upper bounds are identically zero on this tick.",
+      "source_logical_time": 3446,
+      "source_window_tick": 373,
+      "source_zero_mass": [
+        0.0,
+        0.0
+      ],
+      "summed_in_fp64": [
+        4.153854421055318e+38,
+        4.153854421055318e+38,
+        2.54704258358712e+38
+      ]
+    },
+    "npu": {
+      "allocation_saved_fields": [
+        "slope",
+        "lower_face",
+        "upper_face",
+        "fixed",
+        "fixed_mu",
+        "low_active",
+        "high_active",
+        "scores",
+        "mu",
+        "lower",
+        "upper",
+        "low_total",
+        "high_total"
+      ],
+      "allocation_saved_row": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          false,
+          false
+        ],
+        [
+          false,
+          false
+        ],
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ],
+        [
+          false
+        ],
+        [
+          false
+        ],
+        [
+          -0.3452432155609131,
+          0.14703401923179626
+        ],
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ]
+      ],
+      "attention_zero_key_rows": [
+        {
+          "index": [
+            1,
+            0,
+            378,
+            0,
+            0,
+            1
+          ],
+          "key": 1,
+          "log_ratio_max": 94.82002632058197,
+          "upstream_peak": 3.6283918802837434e-07,
+          "visibility": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            false
+          ],
+          "vjp": 2.3863570086193927e+35,
+          "vjp_fp64": 2.386349566393313e+35,
+          "weights": [
+            1.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "index": [
+            1,
+            0,
+            378,
+            0,
+            0,
+            2
+          ],
+          "key": 2,
+          "log_ratio_max": 94.82002632058197,
+          "upstream_peak": 3.6283918802837434e-07,
+          "visibility": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            false
+          ],
+          "vjp": 2.3863570086193927e+35,
+          "vjp_fp64": 2.386349566393313e+35,
+          "weights": [
+            1.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "index": [
+            1,
+            0,
+            378,
+            0,
+            0,
+            4
+          ],
+          "key": 4,
+          "log_ratio_max": 89.29596332844318,
+          "upstream_peak": 3.6283918802837434e-07,
+          "visibility": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            false
+          ],
+          "vjp": 6.599126426757329e+32,
+          "vjp_fp64": 6.599099497715956e+32,
+          "weights": [
+            1.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "index": [
+            1,
+            0,
+            378,
+            0,
+            0,
+            5
+          ],
+          "key": 5,
+          "log_ratio_max": 89.29596332844318,
+          "upstream_peak": 3.6283918802837434e-07,
+          "visibility": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            false
+          ],
+          "vjp": 6.599126426757329e+32,
+          "vjp_fp64": 6.599099497715956e+32,
+          "weights": [
+            1.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "detector": {
+        "failing_call": 0,
+        "floor_policy": true,
+        "grad": {
+          "abs_max_finite": 7.458104161406846e+37,
+          "dtype": "torch.float32",
+          "nonfinite": 2,
+          "shape": [
+            1,
+            1024,
+            2
+          ]
+        },
+        "kind": "shannon",
+        "region": 0,
+        "source_grads": {
+          "scores": {
+            "abs_max_finite": 0.004669887013733387,
+            "dtype": "torch.float32",
+            "nonfinite": 2,
+            "shape": [
+              1,
+              1024,
+              2
+            ]
+          }
+        },
+        "support": {
+          "refined_rows": 0,
+          "repaired_coordinates": 0,
+          "repaired_rows": 0
+        }
+      },
+      "first_layer_nodes": [
+        0,
+        1,
+        2
+      ],
+      "incoming_branches": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.9005485347001146e+35
+        ],
+        [
+          5.068129293820035e+35,
+          5.068129293820035e+35,
+          5.068129293820035e+35
+        ],
+        [
+          0.0,
+          0.0,
+          1.9005485347001146e+35
+        ],
+        [
+          5.068129293820035e+35,
+          5.068129293820035e+35,
+          5.068129293820035e+35
+        ],
+        [
+          9.224850606535254e+37,
+          9.224850606535254e+37,
+          9.224850606535254e+37
+        ],
+        [
+          3.221201181579757e+38,
+          3.221201181579757e+38,
+          1.6106005907898785e+38
+        ]
+      ],
+      "largest_two_returns_to_each_failing_sender": [
+        3.221201181579757e+38,
+        9.224850606535254e+37
+      ],
+      "native_primals": {
+        "logits_sha256": "6b2557ad01489401ed7507b6bac90c018891be0f3441de18152da9fd12b336f8",
+        "next_state_sha256": "897c007275be1fb2b290150282756f957a821b828904e0b9dc4f5cb9274657c1",
+        "objective": 6.206477165222168
+      },
+      "original_fp32_merged": [
+        "inf",
+        "inf",
+        2.5470230134386972e+38
+      ],
+      "receiver_logical_time": 3451,
+      "receiver_node": 28,
+      "receiver_region": 18,
+      "record": {
+        "path": ".local/pilot-r3/r14-vjp-3252/npu-measure.json",
+        "sha256": "2ff926324bccc2381a242748f41a51efe2d559bca12a8e2b27577cc4b65f178e"
+      },
+      "source_certified_by": "Timed external injection occurs only at window offsets divisible by 8. Here 373 % 8 = 5. The first-layer upper bounds are identically zero on this tick.",
+      "source_logical_time": 3446,
+      "source_window_tick": 373,
+      "source_zero_mass": [
+        0.0,
+        0.0
+      ],
+      "summed_in_fp64": [
+        4.1538225008209225e+38,
+        4.1538225008209225e+38,
+        2.5470230071004442e+38
+      ]
+    }
+  },
+  "observed_local": "2026-11-21T20:17:58+08:00",
+  "previous_2727": {
+    "failure_capture": {
+      "path": ".local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2/attempt-0/failure.pt",
+      "sha256": "6d9a69be1a63ff4ed909b9fa179ba7d27f58e6a30a95b97493f6ef47ed757464"
+    },
+    "previous_official_acceptance": {
+      "path": "docs/evidence/pilot-r3-r13-foundation-ingress-acceptance.json",
+      "sha256": "6b46b5e69520cdde98bd00f8485f7e09040c2431ad7e5673eb32c38b5165243f"
+    },
+    "same_propagating_prototype": {
+      "cpu": {
+        "baseline_logits_bitwise_equal": true,
+        "baseline_next_private_state_bitwise_equal": true,
+        "logits_sha256": "ee43c1ff0aa81067a48812bc71d2fea46fe39748f63ff7a0b71efddc80165236",
+        "next_state_sha256": "8d8ad3c4f2a79ad69c72ca4a06c0b54589d3034bfe43fd16ff8de82271b67cd8",
+        "norm": 1.1957029954237268,
+        "normalized_l2": 2.2646959641632057e-06,
+        "objective": 5.667013645172119,
+        "param_check": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 123,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 2.1200658113090798e-07,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "root_gradients": 123
+      },
+      "npu": {
+        "baseline_logits_bitwise_equal": true,
+        "baseline_next_private_state_bitwise_equal": true,
+        "logits_sha256": "6f774f431bdf44e632ae0fa33330602f1623c43f81e5d1af1ad54ae7f38277c8",
+        "next_state_sha256": "e65f4d05aeb958a8573ae6af168d670d601d2b08b17a17f9f182bea849e4fcf4",
+        "norm": 1.1957027700840075,
+        "normalized_l2": 1.4043022575585315e-06,
+        "objective": 5.667013168334961,
+        "param_check": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 123,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 7.94878830760043e-08,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "root_gradients": 123
+      }
+    }
+  },
+  "recommendation": [
+    "Make certified source constancy apply to all edge-mass consumers before fan-in. Derive new zero-sender certificates only when every real inbound mass is proven constant zero and the sender upper bound is zero. Propagate with the correct delay and respect external differentiable pending state, tiny positive senders, genuine independent zero priors and separate content derivatives.",
+    "Model tests should jointly cover silent and active clocks, padding, fan-out/fan-in, independent zeros, positive tiny priors, batched regions, recomputation and window boundaries. Before resuming A qualify a frozen foundation revision against the two archived failures, a multi-step Ascend continuation from the original checkpoint through step 3252 and a fresh-process optimizer/state round trip."
+  ],
+  "scheduler": {
+    "B": "closed",
+    "counts": {
+      "completed": 135,
+      "failed": 33,
+      "pending": 250,
+      "stopped_budget": 50
+    },
+    "failures_by_reason": {
+      "ArithmeticError": 1,
+      "cleanup_evidence_error:Blocked:dynamic_owner_exited_before_worker_terminal_evidence": 2,
+      "shared_group_not_completed:signal_15": 25,
+      "stopped_before_worker_start": 4,
+      "worker_exit_-9": 1
+    },
+    "selected": 43,
+    "status": "a_blocked_needs_repair",
+    "terminal": {
+      "path": ".local/pilot-r3/campaign-r14/round/report.json",
+      "sha256": "5722b2e887c18ddd32cf67e9320982069d3c43e2cac163c3d2f4f0222ce3b008"
+    }
+  },
+  "schema": "pilot-r3-r14-timed-route-vjp-diagnosis-v1",
+  "scope": "Isolated single batch diagnosis and backward-only controls on the frozen r14 source, repeating the original 3252 and prior 2727 failure batches. No optimizer update or campaign restart.",
+  "source": "29c4798f121b324f811b2a35a908e9d5e74b0cc7",
+  "task": "multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2",
+  "window_period": 8,
+  "zero_and_positive_controls": {
+    "certified_zero": {
+      "grad": [
+        0.0,
+        0.0
+      ],
+      "out": 2.0
+    },
+    "external_pending_leaf_has_no_constant_certificate": true,
+    "independent_zero": {
+      "grad": [
+        0.0,
+        3.0
+      ],
+      "out": 2.0
+    },
+    "weak_positive": {
+      "grad": [
+        -2.9999993975505526e-07,
+        2.9999994000000902
+      ],
+      "out": 2.0000002999999698
+    }
+  }
+}

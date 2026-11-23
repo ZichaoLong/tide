@@ -1,0 +1,333 @@
+{
+  "artifacts": [
+    {
+      "path": ".local/pilot-r3/r21-key-prior-diagnosis-rKREeMQn/replay.py",
+      "sha256": "c2fb3bb797abcf43798a6c09b3811d041242a0e7f34aebf44a52cc84f28f8434"
+    },
+    {
+      "path": ".local/pilot-r3/r21-key-prior-diagnosis-rKREeMQn/compare.py",
+      "sha256": "bb531dcde36c8c44a656117ce9d011d7c209f625f002d78b08a9cc88c0f8aab1"
+    },
+    {
+      "path": ".local/pilot-r3/r21-key-prior-diagnosis-rKREeMQn/comparison.json",
+      "sha256": "7801dc6179e6ee63bace89bc9b41b37d1009752bc9353bb15fe6c0ccbffd52bd"
+    },
+    {
+      "path": ".local/pilot-r3/r21-key-prior-diagnosis-rKREeMQn/cpu-original.json",
+      "sha256": "1b2423349c0c0cb8f0ca64672e7ce66ea9ac1b060f2abd183e3b7fc4905b17cd"
+    },
+    {
+      "path": ".local/pilot-r3/r21-key-prior-diagnosis-rKREeMQn/cpu-certified.json",
+      "sha256": "116d2f043d0329660ad2c6ee8ad92ff115a9cb7615f7a8cab3f99c17e9f31789"
+    },
+    {
+      "path": ".local/pilot-r3/r21-key-prior-diagnosis-rKREeMQn/npu-original.json",
+      "sha256": "e42a45ebb250522f31184ca6e8dbe5023a301e6a6642ff23dd156b1562ef426a"
+    },
+    {
+      "path": ".local/pilot-r3/r21-key-prior-diagnosis-rKREeMQn/npu-certified.json",
+      "sha256": "5d77301745f982dbd0b9b0a752fccf6f21f7bed4691bf0e18c3c80b3d5a75252"
+    },
+    {
+      "path": ".local/pilot-r3/r21-key-prior-diagnosis-rKREeMQn/cpu-fp64.json",
+      "sha256": "9415f6053a04c0eb0dfb8a825093eafa8110a9eeac87ccbe1cdcd3a5b3215b36"
+    },
+    {
+      "path": ".local/pilot-r3/r21-key-prior-diagnosis-rKREeMQn/cpu-fp64-certified.json",
+      "sha256": "45e6d485e940a0907c74d018302d7072edb4c06a9a045715e64ce1e2b7d64e1a"
+    },
+    {
+      "path": ".local/pilot-r3/r21-key-prior-diagnosis-rKREeMQn/cpu-original-attention-row.pt",
+      "sha256": "868a70bb5313fc6d3218818843f5886ed83928d8f63f0a7496505b34fa53da5e"
+    },
+    {
+      "path": ".local/pilot-r3/r21-key-prior-diagnosis-rKREeMQn/npu-original-attention-row.pt",
+      "sha256": "cb7fb98fc6fe66a197b20c3740155e8d78a367d333c0ce64f1d06022ddfb8275"
+    },
+    {
+      "path": ".local/pilot-r3/r21-key-prior-diagnosis-rKREeMQn/npu-original-queue.json",
+      "sha256": "41c4718ecc6aca817b3f01e2b4d433030b3eae2a31fdcecb161b5da41bb95a15"
+    },
+    {
+      "path": ".local/pilot-r3/r21-key-prior-diagnosis-rKREeMQn/npu-certified-queue.json",
+      "sha256": "2ad6da8e7a277e34ec05f847a131202b52a2153eb25cfe92dee3b6e5a540ef02"
+    }
+  ],
+  "attempted_step": 2614,
+  "capture": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r21/round/tasks/exchange-d256-k-capacity-afae2c3e83-a2-2026112001-r2/attempt-0/failure.pt",
+    "sha256": "27406e9f739820d09429ab6fdd61855619ebf6ca9b9bd555b016bc4a800ea16d"
+  },
+  "causal_chain": [
+    "\u56db\u4e2a\u5b9e\u9645\u53d1\u9001\u8282\u70b9\u5728 quad \u7684\u5df2\u9009\u4e0b\u754c\u4e0a\u8f93\u51fa\u5c40\u90e8\u6052\u96f6\uff0c\u8def\u7531\u4fdd\u7559\u56db\u4efd\u6807\u8bb0\u3002\u7b2c\u4e94\u69fd\u4e3a\u586b\u5145\u3002",
+    "\u6536\u5230\u7684\u603b\u91cf\u4e3a\u96f6\u3002\u5355\u533a\u57df\u6253\u5206\u53ea\u5411 weighted_attention \u4f20\u5165\u6743\u91cd\uff0c\u7f3a\u5c11\u6bcf\u4e2a\u533a\u57df\u8282\u70b9\u7684\u5c40\u90e8\u6052\u96f6\u4fe1\u606f\u3002",
+    "\u5f52\u4e00\u5316\u6ce8\u610f\u529b\u5bf9\u72ec\u7acb\u96f6\u5148\u9a8c\u7684\u53f3\u5bfc\u6570\u5305\u542b exp(logit - log Z) \u4e58\u4ee5\u4e0a\u6e38\u68af\u5ea6\u4e0e\u503c\u504f\u5dee\u7684\u5185\u79ef\u3002\u8be5\u5750\u6807\u7684\u5f62\u5f0f\u5bfc\u6570\u8d85\u8fc7 FP32 \u4e0a\u754c\uff0c\u53c2\u6570\u53ef\u8fbe\u65b9\u5411\u4e0a\u7684\u8fd9\u9879\u8d21\u732e\u5e94\u4e3a\u96f6\u3002"
+  ],
+  "checked_local_foundation_head": "744b426237339262353fdade17cd26753a26a272",
+  "checkpoint": {
+    "path": ".local/pilot-r3/campaign-r21/round/tasks/exchange-d256-k-capacity-afae2c3e83-a2-2026112001-r2/attempt-0/checkpoints/step-000002569-492a6fa870.pt",
+    "sha256": "44367bd6a6be5e8e391055a371b8843bbdc7760660a97d6646f5677926ce8a80",
+    "step": 2569
+  },
+  "completed_tokens": 668928,
+  "error": "nonfinite tiled attention key-prior VJP for torch.float32 at (1, 26, 0, 0, 1)",
+  "frozen_base_commit": "b93eeae761b5e691f5786cf8098dc23cb714b8bb",
+  "identical_frozen_and_local_foundation_files": {
+    "attention.py": "fc6faa1ff5897b1ed43a2b7a5a1db54294aaf1f04ee669ce84b734e9efeab4a2",
+    "model.py": "21192d7a9790fe8b5d2c0d8feb3f549f80d68b574820cd33b04cc42924d2c9ab",
+    "reception.py": "3fd496749a3e3fddd4983237eb0ea6b192a1c2cc0b226c46d7d927b456415eb4",
+    "region.py": "c8a63c6e5ee80318b44a8d5032cf8284cee29bb245e17b5ecf926a7bde0ba63c",
+    "region_batch.py": "7ec76f3757668aaa27a7d08019d6ba1909c6f87aad3b45ace8dd301e518cf9b5"
+  },
+  "localization": {
+    "incoming_masses": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "index": [
+      1,
+      26,
+      0,
+      0,
+      1
+    ],
+    "input_face": [
+      true,
+      true,
+      true,
+      true,
+      false
+    ],
+    "key_face": true,
+    "key_id": 16,
+    "layer": 2,
+    "membership": [
+      true,
+      true,
+      true,
+      true,
+      false
+    ],
+    "node_ids": [
+      15,
+      16,
+      17,
+      18
+    ],
+    "ordered_real_senders": [
+      6,
+      8,
+      11,
+      13
+    ],
+    "priors": [
+      1.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    "reference_fp64": {
+      "centered_dot": 0.05573133112845387,
+      "gradient": 2.0028707125968437e+39,
+      "kernel_inputs_finite": true,
+      "largest_head": 0,
+      "largest_query": 0,
+      "largest_term": 2.00287071259587e+39,
+      "log_z": -65.94281790108617,
+      "logit_minus_log_z": 93.38261292686013,
+      "logits": [
+        -67.18716660999249,
+        27.439795025773957,
+        -66.28267576607199,
+        27.439795025773957
+      ],
+      "probabilities": [
+        0.2881285025624034,
+        0.0,
+        0.7118714974375925,
+        0.0
+      ]
+    },
+    "region": 6
+  },
+  "next_acceptance": [
+    "\u5355\u533a\u57df\u4e0e\u6279\u91cf\u533a\u57df\u8986\u76d6\u5168\u90e8\u5b9e\u9645\u5165\u8fb9\u56fa\u5b9a\u3001\u90e8\u5206\u53ef\u53d8\u3001\u586b\u5145\u3001\u7a7a\u884c\u548c\u6781\u5c0f\u6b63\u6743\u91cd\u3002",
+    "\u5728\u4fee\u590d\u540e\u7684\u51bb\u7ed3\u57fa\u5ea7\u4e0a\u91cd\u653e\u539f\u6545\u969c\u6279\u6b21\uff0c\u4ece\u7b2c 2569 \u6b65\u6b63\u5f0f\u68c0\u67e5\u70b9\u8d8a\u8fc7\u7b2c 2614 \u6b65\uff0c\u6838\u9a8c\u65b0\u7684\u68c0\u67e5\u70b9\u80fd\u72ec\u7acb\u6062\u590d\u3002"
+  ],
+  "observed_at": "2026-11-22T18:19:27+08:00",
+  "one_batch_prototype": {
+    "comparison": {
+      "cpu_forward": {
+        "logits_hash": true,
+        "nll_difference": 0.0,
+        "private_state_hash": true
+      },
+      "cpu_fp32": {
+        "atol": 1e-05,
+        "elements": 8598741,
+        "exact": false,
+        "failed_elements": 0,
+        "failed_tensor_count": 0,
+        "failed_tensors": {},
+        "relative_l2": 5.0242705120467966e-05,
+        "rtol": 0.0001,
+        "tensors": 122,
+        "worst_absolute": 6.628175326525709e-06,
+        "worst_tensor": "core.memories.K.kv.left"
+      },
+      "cpu_fp64": {
+        "atol": 1e-05,
+        "elements": 8598741,
+        "exact": true,
+        "failed_elements": 0,
+        "failed_tensor_count": 0,
+        "failed_tensors": {},
+        "relative_l2": 0.0,
+        "rtol": 0.0001,
+        "tensors": 122,
+        "worst_absolute": 0.0,
+        "worst_tensor": null
+      },
+      "cpu_quotient": {
+        "derivative_to_fp32_max": 5.885894654166804,
+        "eps_for_sensitivity_comparison": 1.1920928955078125e-07,
+        "fp32_max": 3.4028234663852886e+38,
+        "independent_key_derivative": 2.0028660449870522e+39,
+        "probability_after_floor_on_this_head_query": [
+          3.3627510410066184e-35,
+          0.5,
+          8.308324399264831e-35,
+          0.5
+        ],
+        "relative_difference_from_analytic": 4.9960036108132044e-15
+      },
+      "npu_forward": {
+        "logits_hash": true,
+        "nll_difference": 4.76837158203125e-07,
+        "private_state_hash": true
+      },
+      "npu_fp32": {
+        "atol": 1e-05,
+        "elements": 8598741,
+        "exact": false,
+        "failed_elements": 0,
+        "failed_tensor_count": 0,
+        "failed_tensors": {},
+        "relative_l2": 3.082108753068283e-05,
+        "rtol": 0.0001,
+        "tensors": 122,
+        "worst_absolute": 3.3722716056699964e-06,
+        "worst_tensor": "core.memories.K.kv.left"
+      },
+      "npu_quotient": {
+        "derivative_to_fp32_max": 5.88590837104,
+        "eps_for_sensitivity_comparison": 1.1920928955078125e-07,
+        "fp32_max": 3.4028234663852886e+38,
+        "independent_key_derivative": 2.0028707125968522e+39,
+        "probability_after_floor_on_this_head_query": [
+          3.3627348667759696e-35,
+          0.5,
+          8.308220407937432e-35,
+          0.5
+        ],
+        "relative_difference_from_analytic": 4.218847493575595e-15
+      },
+      "zero_prior_boundary": {
+        "certified": {
+          "dw": [
+            0.0,
+            0.0
+          ],
+          "value": 0.0
+        },
+        "independent": {
+          "dw": [
+            0.0,
+            1.0
+          ],
+          "value": 0.0
+        },
+        "positive": {
+          "dw": [
+            -9.997999586630613e-05,
+            0.9997999668121338
+          ],
+          "value": 9.998999303206801e-05
+        },
+        "positive_with_marker": {
+          "dw": [
+            -9.997999586630613e-05,
+            0.9997999668121338
+          ],
+          "value": 9.998999303206801e-05
+        }
+      }
+    },
+    "cpu": {
+      "grad_norm": 1.1526511907577515,
+      "gradient_count": 122,
+      "gradients_finite": true,
+      "outcome": "update_completed",
+      "updated_model_and_adamw_finite": true
+    },
+    "npu": {
+      "grad_norm": 1.1528254747390747,
+      "gradient_count": 122,
+      "gradients_finite": true,
+      "outcome": "update_completed",
+      "updated_model_and_adamw_finite": true
+    },
+    "policy": "\u5c06\u6240\u6709\u5b9e\u9645\u5165\u8fb9\u90fd\u5e26\u5c40\u90e8\u6052\u96f6\u8bc1\u660e\u7684\u8282\u70b9\u6807\u8bb0\u4f20\u5165\u533a\u57df\u6ce8\u610f\u529b\u73b0\u6709\u7684 _constant_zero_prior \u63a5\u53e3\uff0c\u53ea\u4f5c\u7528\u4e8e\u5b9e\u9645\u96f6\u6743\u91cd\u3002\u8bca\u65ad\u539f\u578b\u8986\u76d6\u6545\u969c\u6240\u7528\u7684\u5355\u533a\u57df\u8def\u5f84\u3002"
+  },
+  "original_physical_id": "5",
+  "recommended_upstream_change": "\u5728\u57fa\u5ea7\u590d\u7528\u5b9e\u9645\u5165\u8fb9\u7684\u6052\u96f6\u5f52\u7ea6\u89c4\u5219\uff0c\u8d2f\u7a7f\u5355\u533a\u57df\u6253\u5206\u4e0e\u6279\u91cf\u533a\u57df\u6253\u5206\uff1b\u4ecd\u4fdd\u7559\u65e0\u8bc1\u660e\u96f6\u5148\u9a8c\u7684\u53f3\u5bfc\u6570\u3001\u6b63\u6743\u91cd\u4e0e\u975e\u6709\u9650\u68af\u5ea6\u68c0\u67e5\u3002",
+  "replay_physical_id": "9",
+  "result": {
+    "path": ".local/pilot-r3/campaign-r21/round/tasks/exchange-d256-k-capacity-afae2c3e83-a2-2026112001-r2/attempt-0/result.json",
+    "sha256": "36cbaf7df6d90ea65287190cdef027f8968d2c70a4696e2912796e3fa3387ebe"
+  },
+  "schema": "pilot-r3-regional-key-prior-diagnosis-v1",
+  "scope": "\u5355\u4e00\u771f\u5b9e\u6545\u969c\u6279\u6b21\u7684\u8bca\u65ad\u3001\u4e34\u65f6\u539f\u578b\u4e0e\u68af\u5ea6\u5bf9\u7167\uff1b\u6b63\u5f0f\u4f5c\u4e1a\u7ef4\u6301\u539f\u7ec8\u6001\u3002",
+  "sender_trace_fp64": [
+    {
+      "batch": 1,
+      "node": 6,
+      "quad_lower_constant": true,
+      "region": 2,
+      "routing_constant": true,
+      "strength": 0.0,
+      "time_in_sequence": 26
+    },
+    {
+      "batch": 1,
+      "node": 8,
+      "quad_lower_constant": true,
+      "region": 2,
+      "routing_constant": true,
+      "strength": 0.0,
+      "time_in_sequence": 26
+    },
+    {
+      "batch": 1,
+      "node": 11,
+      "quad_lower_constant": true,
+      "region": 4,
+      "routing_constant": true,
+      "strength": 0.0,
+      "time_in_sequence": 26
+    },
+    {
+      "batch": 1,
+      "node": 13,
+      "quad_lower_constant": true,
+      "region": 4,
+      "routing_constant": true,
+      "strength": 0.0,
+      "time_in_sequence": 26
+    }
+  ],
+  "task_id": "exchange-d256-k-capacity-afae2c3e83-a2-2026112001-r2"
+}

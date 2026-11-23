@@ -1,0 +1,186 @@
+{
+  "models": {
+    "fc-d64-k-base-6a381e00da": {
+      "confirmation_reserved_tokens": 131616,
+      "formal_reserved_tokens": 213024,
+      "limit": 1048576,
+      "prior_reserved_tokens": 592032,
+      "remaining_after_normal_completion": 111904
+    },
+    "fc-d64-k-depth3-82a8ff2b30": {
+      "confirmation_reserved_tokens": 131616,
+      "formal_reserved_tokens": 213024,
+      "limit": 1048576,
+      "prior_reserved_tokens": 592032,
+      "remaining_after_normal_completion": 111904
+    },
+    "fc-d64-k-ffn1-ac09385120": {
+      "confirmation_reserved_tokens": 131616,
+      "formal_reserved_tokens": 213024,
+      "limit": 1048576,
+      "prior_reserved_tokens": 592032,
+      "remaining_after_normal_completion": 111904
+    },
+    "fc-d64-k-shared-6c8fbd0874": {
+      "confirmation_reserved_tokens": 131616,
+      "formal_reserved_tokens": 213024,
+      "limit": 1048576,
+      "prior_reserved_tokens": 592032,
+      "remaining_after_normal_completion": 111904
+    },
+    "fc-d64-s-base-30a947a88a": {
+      "confirmation_reserved_tokens": 131616,
+      "formal_reserved_tokens": 213024,
+      "limit": 1048576,
+      "prior_reserved_tokens": 592032,
+      "remaining_after_normal_completion": 111904
+    },
+    "fc-d64-s-depth3-960007ce16": {
+      "confirmation_reserved_tokens": 131616,
+      "formal_reserved_tokens": 213024,
+      "limit": 1048576,
+      "prior_reserved_tokens": 592032,
+      "remaining_after_normal_completion": 111904
+    },
+    "fc-d64-s-ffn1-ab57ed5c39": {
+      "confirmation_reserved_tokens": 131616,
+      "formal_reserved_tokens": 213024,
+      "limit": 1048576,
+      "prior_reserved_tokens": 592032,
+      "remaining_after_normal_completion": 111904
+    },
+    "fc-d64-s-shared-7239f57e95": {
+      "confirmation_reserved_tokens": 131616,
+      "formal_reserved_tokens": 213024,
+      "limit": 1048576,
+      "prior_reserved_tokens": 592032,
+      "remaining_after_normal_completion": 111904
+    },
+    "lattice-d64-k-base-23c0a95fd0": {
+      "confirmation_reserved_tokens": 131616,
+      "formal_reserved_tokens": 213024,
+      "limit": 1048576,
+      "prior_reserved_tokens": 592032,
+      "remaining_after_normal_completion": 111904
+    },
+    "lattice-d64-k-depth2-417579f46f": {
+      "confirmation_reserved_tokens": 131616,
+      "formal_reserved_tokens": 213024,
+      "limit": 1048576,
+      "prior_reserved_tokens": 592032,
+      "remaining_after_normal_completion": 111904
+    },
+    "lattice-d64-k-ffn2-f4ae630b9b": {
+      "confirmation_reserved_tokens": 131616,
+      "formal_reserved_tokens": 213024,
+      "limit": 1048576,
+      "prior_reserved_tokens": 592032,
+      "remaining_after_normal_completion": 111904
+    },
+    "lattice-d64-k-layershared-f07cadf26f": {
+      "confirmation_reserved_tokens": 131616,
+      "formal_reserved_tokens": 213024,
+      "limit": 1048576,
+      "prior_reserved_tokens": 592032,
+      "remaining_after_normal_completion": 111904
+    },
+    "lattice-d64-k-memoryshared-f296b03e23": {
+      "confirmation_reserved_tokens": 131616,
+      "formal_reserved_tokens": 213024,
+      "limit": 1048576,
+      "prior_reserved_tokens": 592032,
+      "remaining_after_normal_completion": 111904
+    },
+    "lattice-d64-k-nodes4-1e06d38bdb": {
+      "confirmation_reserved_tokens": 131616,
+      "formal_reserved_tokens": 213024,
+      "limit": 1048576,
+      "prior_reserved_tokens": 592032,
+      "remaining_after_normal_completion": 111904
+    },
+    "lattice-d64-k-receive128-f163ef6985": {
+      "confirmation_reserved_tokens": 131616,
+      "formal_reserved_tokens": 213024,
+      "limit": 1048576,
+      "prior_reserved_tokens": 592032,
+      "remaining_after_normal_completion": 111904
+    },
+    "lattice-d64-k-receive64-3c1639c9b9": {
+      "confirmation_reserved_tokens": 131616,
+      "formal_reserved_tokens": 213024,
+      "limit": 1048576,
+      "prior_reserved_tokens": 592032,
+      "remaining_after_normal_completion": 111904
+    },
+    "lattice-d64-s-base-0895c1ce27": {
+      "confirmation_reserved_tokens": 131616,
+      "formal_reserved_tokens": 213024,
+      "limit": 1048576,
+      "prior_reserved_tokens": 592032,
+      "remaining_after_normal_completion": 111904
+    },
+    "lattice-d64-s-depth2-5f26693f30": {
+      "confirmation_reserved_tokens": 131616,
+      "formal_reserved_tokens": 213024,
+      "limit": 1048576,
+      "prior_reserved_tokens": 592032,
+      "remaining_after_normal_completion": 111904
+    },
+    "lattice-d64-s-ffn2-0e362d7071": {
+      "confirmation_reserved_tokens": 131616,
+      "formal_reserved_tokens": 213024,
+      "limit": 1048576,
+      "prior_reserved_tokens": 592032,
+      "remaining_after_normal_completion": 111904
+    },
+    "lattice-d64-s-layershared-351ff0ef53": {
+      "confirmation_reserved_tokens": 131616,
+      "formal_reserved_tokens": 213024,
+      "limit": 1048576,
+      "prior_reserved_tokens": 592032,
+      "remaining_after_normal_completion": 111904
+    },
+    "lattice-d64-s-memoryshared-16897885fd": {
+      "confirmation_reserved_tokens": 131616,
+      "formal_reserved_tokens": 213024,
+      "limit": 1048576,
+      "prior_reserved_tokens": 592032,
+      "remaining_after_normal_completion": 111904
+    },
+    "lattice-d64-s-nodes4-3b597e8e65": {
+      "confirmation_reserved_tokens": 131616,
+      "formal_reserved_tokens": 213024,
+      "limit": 1048576,
+      "prior_reserved_tokens": 592032,
+      "remaining_after_normal_completion": 111904
+    },
+    "lattice-d64-s-receive128-623981f84d": {
+      "confirmation_reserved_tokens": 131616,
+      "formal_reserved_tokens": 213024,
+      "limit": 1048576,
+      "prior_reserved_tokens": 592032,
+      "remaining_after_normal_completion": 111904
+    },
+    "lattice-d64-s-receive64-8a0fbc01ad": {
+      "confirmation_reserved_tokens": 131616,
+      "formal_reserved_tokens": 213024,
+      "limit": 1048576,
+      "prior_reserved_tokens": 592032,
+      "remaining_after_normal_completion": 111904
+    }
+  },
+  "observed_unix": 1795140176.5512738,
+  "old_scheduler": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/scheduler.json",
+    "sha256": "0566ac185a4b3142fb8189fa0259e10bc8f654d37e63dc472b1a8b2fc4b84bbb"
+  },
+  "old_selected": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/selected.json",
+    "sha256": "2f887fb4109435dd767e85c3883116559d80420e1014efb83f8f00b9db5aec26"
+  },
+  "repeat_independent_key_reserved_tokens": 238144,
+  "repeat_limit": 262144,
+  "schema": "pilot-r3-evaluation-budget-transfer-review-v1",
+  "scope": "retain all old A evaluation reservations including unselected recipes; no refund based on observed exposure; repeated formal seed uses its own budget key",
+  "status": "passed"
+}

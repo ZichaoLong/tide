@@ -1,0 +1,549 @@
+{
+  "allocation_sha256": "b4d0e130c1a87391606e6abedfb2a9b0ab870bfb9027dc31b8c91135bdacd4ca",
+  "allocation_source": "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot/lib/python3.12/site-packages/tide/allocation.py",
+  "command": "source /usr/share/Modules/init/bash\nmodule purge\nmodule load ascend/dev-workspace-9.2.0\nOMP_NUM_THREADS=2 MKL_NUM_THREADS=2 timeout 30s .venv-pilot/bin/python -m pilotlab.diagnose_shannon --evidence docs/evidence/pilot-r1-shannon-scalar-diagnostic.json",
+  "cpu_threads": 2,
+  "created_unix": 1795089638.2912781,
+  "device": "cpu",
+  "fp32_attempts": [
+    {
+      "bisect_before_final_clipping": {
+        "c": [
+          [
+            0.09999999403953552,
+            0.44999998807907104
+          ]
+        ],
+        "inside": [
+          [
+            true,
+            true
+          ]
+        ],
+        "multiplier": [
+          [
+            -5.2014923095703125
+          ]
+        ],
+        "reconstructed": [
+          [
+            0.5463189482688904,
+            0.0036810680758208036
+          ]
+        ],
+        "remainder": [
+          [
+            0.550000011920929
+          ]
+        ],
+        "shifted": [
+          [
+            0.0,
+            -5.0
+          ]
+        ],
+        "target": [
+          [
+            0.550000011920929
+          ]
+        ]
+      },
+      "budget": 1.0,
+      "c": [
+        [
+          0.10000000149011612,
+          0.0036810680758208036
+        ]
+      ],
+      "cap_roundtrip": [
+        [
+          0.09999999403953552,
+          1.0
+        ]
+      ],
+      "dtype": "torch.float32",
+      "error": "allocation multiplier did not meet the total constraint",
+      "error_type": "ArithmeticError",
+      "high_active": [
+        [
+          false
+        ]
+      ],
+      "independent_reference": {
+        "allocation": [
+          "0.100000001490116119384765625",
+          "0.45000001043081283569335937500000000000000000000000000000000000000000000000000000"
+        ],
+        "method": "Decimal 80-digit scalar bisection, 300 iterations",
+        "multiplier": "-0.20149232696181220002728839290205537615580727406676653530763465888576313109949262",
+        "residual": "0E-80",
+        "sum": "0.55000001192092895507812500000000000000000000000000000000000000000000000000000000",
+        "target": "0.550000011920928955078125",
+        "upper_face": [
+          true,
+          false
+        ]
+      },
+      "low_active": [
+        [
+          true
+        ]
+      ],
+      "lower": [
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "mu": [
+        [
+          0.10000000149011612,
+          1.0
+        ]
+      ],
+      "residual": [
+        [
+          0.44631892442703247
+        ]
+      ],
+      "roundtrip_below_cap": [
+        [
+          true,
+          false
+        ]
+      ],
+      "scores": [
+        [
+          5.0,
+          0.0
+        ]
+      ],
+      "status": "failed",
+      "target": [
+        [
+          0.550000011920929
+        ]
+      ],
+      "tolerance": [
+        [
+          2.098083541568485e-06
+        ]
+      ],
+      "upper": [
+        [
+          0.10000000149011612,
+          1.0
+        ]
+      ],
+      "w": [
+        [
+          0.05000000074505806,
+          0.5
+        ]
+      ]
+    },
+    {
+      "bisect_before_final_clipping": {
+        "c": [
+          [
+            0.09999999403953552,
+            0.44999998807907104
+          ]
+        ],
+        "inside": [
+          [
+            true,
+            true
+          ]
+        ],
+        "multiplier": [
+          [
+            -5.2014923095703125
+          ]
+        ],
+        "reconstructed": [
+          [
+            0.5463189482688904,
+            0.0036810680758208036
+          ]
+        ],
+        "remainder": [
+          [
+            0.550000011920929
+          ]
+        ],
+        "shifted": [
+          [
+            0.0,
+            -5.0
+          ]
+        ],
+        "target": [
+          [
+            0.550000011920929
+          ]
+        ]
+      },
+      "budget": 1.0,
+      "c": [
+        [
+          0.10000000149011612,
+          0.0036810680758208036
+        ]
+      ],
+      "cap_roundtrip": [
+        [
+          0.09999999403953552,
+          1.0
+        ]
+      ],
+      "dtype": "torch.float32",
+      "error": "allocation multiplier did not meet the total constraint",
+      "error_type": "ArithmeticError",
+      "high_active": [
+        [
+          false
+        ]
+      ],
+      "independent_reference": {
+        "allocation": [
+          "0.100000001490116119384765625",
+          "0.45000001043081283569335937500000000000000000000000000000000000000000000000000000"
+        ],
+        "method": "Decimal 80-digit scalar bisection, 300 iterations",
+        "multiplier": "-0.20149232696181220002728839290205537615580727406676653530763465888576313109949262",
+        "residual": "0E-80",
+        "sum": "0.55000001192092895507812500000000000000000000000000000000000000000000000000000000",
+        "target": "0.550000011920928955078125",
+        "upper_face": [
+          true,
+          false
+        ]
+      },
+      "low_active": [
+        [
+          true
+        ]
+      ],
+      "lower": [
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "mu": [
+        [
+          0.10000000149011612,
+          1.0
+        ]
+      ],
+      "residual": [
+        [
+          0.44631892442703247
+        ]
+      ],
+      "roundtrip_below_cap": [
+        [
+          true,
+          false
+        ]
+      ],
+      "scores": [
+        [
+          5.0,
+          0.0
+        ]
+      ],
+      "status": "failed",
+      "target": [
+        [
+          0.550000011920929
+        ]
+      ],
+      "tolerance": [
+        [
+          2.098083541568485e-06
+        ]
+      ],
+      "upper": [
+        [
+          0.10000000149011612,
+          1.0
+        ]
+      ],
+      "w": [
+        [
+          0.05000000074505806,
+          0.5
+        ]
+      ]
+    },
+    {
+      "bisect_before_final_clipping": {
+        "c": [
+          [
+            0.09999999403953552,
+            0.44999998807907104
+          ]
+        ],
+        "inside": [
+          [
+            true,
+            true
+          ]
+        ],
+        "multiplier": [
+          [
+            -5.2014923095703125
+          ]
+        ],
+        "reconstructed": [
+          [
+            0.5463189482688904,
+            0.0036810680758208036
+          ]
+        ],
+        "remainder": [
+          [
+            0.550000011920929
+          ]
+        ],
+        "shifted": [
+          [
+            0.0,
+            -5.0
+          ]
+        ],
+        "target": [
+          [
+            0.550000011920929
+          ]
+        ]
+      },
+      "budget": 1.0,
+      "c": [
+        [
+          0.10000000149011612,
+          0.0036810680758208036
+        ]
+      ],
+      "cap_roundtrip": [
+        [
+          0.09999999403953552,
+          1.0
+        ]
+      ],
+      "dtype": "torch.float32",
+      "error": "allocation multiplier did not meet the total constraint",
+      "error_type": "ArithmeticError",
+      "high_active": [
+        [
+          false
+        ]
+      ],
+      "independent_reference": {
+        "allocation": [
+          "0.100000001490116119384765625",
+          "0.45000001043081283569335937500000000000000000000000000000000000000000000000000000"
+        ],
+        "method": "Decimal 80-digit scalar bisection, 300 iterations",
+        "multiplier": "-0.20149232696181220002728839290205537615580727406676653530763465888576313109949262",
+        "residual": "0E-80",
+        "sum": "0.55000001192092895507812500000000000000000000000000000000000000000000000000000000",
+        "target": "0.550000011920928955078125",
+        "upper_face": [
+          true,
+          false
+        ]
+      },
+      "low_active": [
+        [
+          true
+        ]
+      ],
+      "lower": [
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "mu": [
+        [
+          0.10000000149011612,
+          1.0
+        ]
+      ],
+      "residual": [
+        [
+          0.44631892442703247
+        ]
+      ],
+      "roundtrip_below_cap": [
+        [
+          true,
+          false
+        ]
+      ],
+      "scores": [
+        [
+          5.0,
+          0.0
+        ]
+      ],
+      "status": "failed",
+      "target": [
+        [
+          0.550000011920929
+        ]
+      ],
+      "tolerance": [
+        [
+          2.098083541568485e-06
+        ]
+      ],
+      "upper": [
+        [
+          0.10000000149011612,
+          1.0
+        ]
+      ],
+      "w": [
+        [
+          0.05000000074505806,
+          0.5
+        ]
+      ]
+    }
+  ],
+  "fp32_attempts_identical": true,
+  "fp64_witness": {
+    "allocation": [
+      [
+        0.1,
+        0.45000000000000007
+      ]
+    ],
+    "bisect_before_final_clipping": {
+      "c": [
+        [
+          0.1,
+          0.4500000000000001
+        ]
+      ],
+      "inside": [
+        [
+          false,
+          true
+        ]
+      ],
+      "multiplier": [
+        [
+          -5.201492303782229
+        ]
+      ],
+      "reconstructed": [
+        [
+          0.0,
+          0.45000000000000007
+        ]
+      ],
+      "remainder": [
+        [
+          0.45000000000000007
+        ]
+      ],
+      "shifted": [
+        [
+          0.0,
+          -5.0
+        ]
+      ],
+      "target": [
+        [
+          0.55
+        ]
+      ]
+    },
+    "budget": 1.0,
+    "cap_roundtrip": [
+      [
+        0.10000000000000002,
+        1.0
+      ]
+    ],
+    "dtype": "torch.float64",
+    "independent_reference": {
+      "allocation": [
+        "0.1000000000000000055511151231257827021181583404541015625",
+        "0.45000000000000003885780586188047891482710838317871093750000000000000000000000001"
+      ],
+      "method": "Decimal 80-digit scalar bisection, 300 iterations",
+      "multiplier": "-0.20149230378222847570594659077023782723645639455281134030628602588210574573742804",
+      "residual": "1E-80",
+      "sum": "0.55000000000000004440892098500626161694526672363281250000000000000000000000000001",
+      "target": "0.5500000000000000444089209850062616169452667236328125",
+      "upper_face": [
+        true,
+        false
+      ]
+    },
+    "lower": [
+      [
+        0.0,
+        0.0
+      ]
+    ],
+    "mu": [
+      [
+        0.1,
+        1.0
+      ]
+    ],
+    "roundtrip_below_cap": [
+      [
+        false,
+        false
+      ]
+    ],
+    "scores": [
+      [
+        5.0,
+        0.0
+      ]
+    ],
+    "status": "completed",
+    "upper": [
+      [
+        0.1,
+        1.0
+      ]
+    ],
+    "w": [
+      [
+        0.05,
+        0.5
+      ]
+    ]
+  },
+  "limits": [
+    "Original solver and total-constraint tolerance are unchanged",
+    "No training, backward, NPU operations or production fixes",
+    "A passing FP64 witness is not general FP64 qualification or a training policy change",
+    "The original NPU failing allocation row and region were not captured",
+    "The same-seed CPU model validation passed; this is a mechanism witness, not proof of the exact NPU failure cause"
+  ],
+  "original_npu_result": {
+    "path": ".local/pilot-r1/round/tasks/npu-exchange-x-shannon/result.json",
+    "sha256": "29fd69473155ccfea9f64f6232a8e0bffc01f114ad4e01cb2271b4bca3c5a367"
+  },
+  "same_seed_cpu_evidence": {
+    "path": "docs/evidence/pilot-r1-shannon-cpu-diagnostic.json",
+    "sha256": "23e683306b563825f17c35e2eaf6bb3efe29984dafee3ae2cdb5889defb6fba7"
+  },
+  "schema": "pilot-r1-shannon-scalar-diagnostic-v1",
+  "script": "pilotlab/diagnose_shannon.py",
+  "script_sha256": "d81bf90d3d85762f355c71375f47145aceff4e06167b95749f738372fbf3bcea",
+  "seconds": 0.19459158182144165,
+  "status": "reproduced",
+  "torch_version": "2.12.0+cpu"
+}

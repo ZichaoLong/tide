@@ -1,0 +1,556 @@
+{
+  "campaign": {
+    "blocking_reason": "dynamic_owner_failed:group-000006:worker_process_failed:multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2:1",
+    "counts": {
+      "completed": 32,
+      "failed": 3,
+      "pending": 179,
+      "stopped_budget": 49
+    },
+    "failed_task_receipts": {
+      "fc-d256-k-depth3-2f03e71304-a1-2026112002-r0": {
+        "group": "group-000012",
+        "group_reason": "signal_15",
+        "scheduler_reason": "target_reached",
+        "tokens": 262144,
+        "worker_health_eligible": true,
+        "worker_status": "completed",
+        "worker_stop": "target_reached"
+      },
+      "multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2": {
+        "group": "group-000006",
+        "group_reason": "worker_process_failed:multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2:1",
+        "scheduler_reason": "ArithmeticError",
+        "tokens": 348928,
+        "worker_health_eligible": false,
+        "worker_status": "failed",
+        "worker_stop": "ArithmeticError"
+      },
+      "multiscale_timed-d128-s-mixed9-542e33dbf6-init-2026112003": {
+        "group": "group-000035",
+        "group_reason": "signal_15",
+        "scheduler_reason": "shared_group_not_completed:signal_15",
+        "tokens": 8192,
+        "worker_health_eligible": false,
+        "worker_status": "budget_exhausted",
+        "worker_stop": "signal"
+      }
+    },
+    "remaining_descendants": [],
+    "report": {
+      "path": ".local/pilot-r3/campaign-r13/round/report.json",
+      "sha256": "ac0b3f4be373a1299ed08cb54c4a5636127ec90b6b25b76f832fa29c49f0bfeb"
+    },
+    "stage_b": "closed",
+    "status": "a_blocked_needs_repair"
+  },
+  "cause": {
+    "anomaly_site": "model.py:255, TideModel._incoming: MulBackward0 on invalid bank slot",
+    "detection_site": "allocation.py:522 in _Constrained.backward, _finite_vjp; zero-based forward call 1; incoming [0,641,0]",
+    "detector": {
+      "cpu": {
+        "failing_call": 1,
+        "floor_policy": true,
+        "grad": {
+          "abs_max_finite": 7.715360228647613e+31,
+          "dtype": "torch.float32",
+          "nonfinite": 1,
+          "shape": [
+            1,
+            1024,
+            2
+          ]
+        },
+        "kind": "shannon",
+        "region": 2,
+        "source_grads": {
+          "high_total": {
+            "abs_max_finite": 0.002743754768744111,
+            "dtype": "torch.float32",
+            "nonfinite": 1,
+            "shape": [
+              1,
+              1024,
+              1
+            ]
+          },
+          "low_total": {
+            "abs_max_finite": 0.001557313953526318,
+            "dtype": "torch.float32",
+            "nonfinite": 0,
+            "shape": [
+              1,
+              1024,
+              1
+            ]
+          },
+          "lower": {
+            "abs_max_finite": 0.0,
+            "dtype": "torch.float32",
+            "nonfinite": 0,
+            "shape": [
+              1,
+              1024,
+              2
+            ]
+          },
+          "mu": {
+            "abs_max_finite": 7.715360228647613e+31,
+            "dtype": "torch.float32",
+            "nonfinite": 0,
+            "shape": [
+              1,
+              1024,
+              2
+            ]
+          },
+          "scores": {
+            "abs_max_finite": 0.0010522169759497046,
+            "dtype": "torch.float32",
+            "nonfinite": 2,
+            "shape": [
+              1,
+              1024,
+              2
+            ]
+          },
+          "upper": {
+            "abs_max_finite": 0.0,
+            "dtype": "torch.float32",
+            "nonfinite": 0,
+            "shape": [
+              1,
+              1024,
+              2
+            ]
+          }
+        },
+        "support": {
+          "refined_rows": 0,
+          "repaired_coordinates": 0,
+          "repaired_rows": 0
+        }
+      },
+      "npu": {
+        "failing_call": 1,
+        "floor_policy": true,
+        "grad": {
+          "abs_max_finite": 7.715035752957628e+31,
+          "dtype": "torch.float32",
+          "nonfinite": 1,
+          "shape": [
+            1,
+            1024,
+            2
+          ]
+        },
+        "kind": "shannon",
+        "region": 2,
+        "source_grads": {
+          "high_total": {
+            "abs_max_finite": 0.002743752673268318,
+            "dtype": "torch.float32",
+            "nonfinite": 1,
+            "shape": [
+              1,
+              1024,
+              1
+            ]
+          },
+          "low_total": {
+            "abs_max_finite": 0.0015573159325867891,
+            "dtype": "torch.float32",
+            "nonfinite": 0,
+            "shape": [
+              1,
+              1024,
+              1
+            ]
+          },
+          "lower": {
+            "abs_max_finite": 0.0,
+            "dtype": "torch.float32",
+            "nonfinite": 0,
+            "shape": [
+              1,
+              1024,
+              2
+            ]
+          },
+          "mu": {
+            "abs_max_finite": 7.715035752957628e+31,
+            "dtype": "torch.float32",
+            "nonfinite": 0,
+            "shape": [
+              1,
+              1024,
+              2
+            ]
+          },
+          "scores": {
+            "abs_max_finite": 0.0010522198863327503,
+            "dtype": "torch.float32",
+            "nonfinite": 2,
+            "shape": [
+              1,
+              1024,
+              2
+            ]
+          },
+          "upper": {
+            "abs_max_finite": 0.0,
+            "dtype": "torch.float32",
+            "nonfinite": 0,
+            "shape": [
+              1,
+              1024,
+              2
+            ]
+          }
+        },
+        "support": {
+          "refined_rows": 0,
+          "repaired_coordinates": 0,
+          "repaired_rows": 0
+        }
+      }
+    },
+    "first_operator": "attention.py:313 in _TiledAttention.backward, prior VJP",
+    "fp32_max": 3.4028234663852886e+38,
+    "independent_reference": "Promote the same FP32 q, k, v and incoming cotangent to CPU FP64. Sum exp(logit_j - log Z) * dot(g, v_j - mean) over heads and queries at the visible zero key.",
+    "location": {
+      "cpu": {
+        "receiver_region": 4,
+        "routed_slot": {
+          "actual": "Edge(id=3, src=0, dst=7, delay=1, source_class='DD2')",
+          "banks": [
+            {
+              "bank_layer": 0,
+              "indexed_sender": 0,
+              "valid": true
+            },
+            {
+              "bank_layer": 1,
+              "indexed_sender": 3,
+              "valid": false
+            }
+          ],
+          "batch": 0,
+          "node": 7,
+          "slot": 0,
+          "tick": 642,
+          "value": "inf",
+          "weights": [
+            0.0,
+            0.3530437648296356,
+            0.6469562649726868,
+            0.0,
+            0.0
+          ]
+        },
+        "tiled_prior_vjp": {
+          "index": [
+            1,
+            0,
+            642,
+            0,
+            0,
+            0
+          ],
+          "largest_log_ratio": 99.85046205650684,
+          "logical_time": 2691,
+          "mask": [
+            true,
+            true,
+            true,
+            false,
+            false
+          ],
+          "sum_fp64": 7.374559126581806e+38,
+          "upstream_max": 7.215994628495537e-06,
+          "weights": [
+            0.0,
+            0.3530437648296356,
+            0.6469562649726868,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "npu": {
+        "receiver_region": 4,
+        "routed_slot": {
+          "actual": "Edge(id=3, src=0, dst=7, delay=1, source_class='DD2')",
+          "banks": [
+            {
+              "bank_layer": 0,
+              "indexed_sender": 0,
+              "valid": true
+            },
+            {
+              "bank_layer": 1,
+              "indexed_sender": 3,
+              "valid": false
+            }
+          ],
+          "batch": 0,
+          "node": 7,
+          "slot": 0,
+          "tick": 642,
+          "value": "inf",
+          "weights": [
+            0.0,
+            0.35304370522499084,
+            0.6469562649726868,
+            0.0,
+            0.0
+          ]
+        },
+        "tiled_prior_vjp": {
+          "index": [
+            1,
+            0,
+            642,
+            0,
+            0,
+            0
+          ],
+          "largest_log_ratio": 99.85045466489426,
+          "logical_time": 2691,
+          "mask": [
+            true,
+            true,
+            true,
+            false,
+            false
+          ],
+          "sum_fp64": 7.374505381839052e+38,
+          "upstream_max": 7.2159878072852734e-06,
+          "weights": [
+            0.0,
+            0.35304370522499084,
+            0.6469562649726868,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    "producer": {
+      "certified": true,
+      "node": 0,
+      "received_masses": [
+        0.0
+      ],
+      "region": 0,
+      "requires_grad": false,
+      "sender": 0.0,
+      "tick": 641,
+      "time": 2690
+    },
+    "propagation": "2690 \u62cd\uff0c\u9996\u5c42\u8282\u70b9 0 \u6ca1\u6709\u5916\u90e8\u8f93\u5165\uff0c\u53d1\u9001\u4e0a\u754c\u4e3a\u96f6\u30022691 \u62cd\u533a\u57df 4 \u7684\u8282\u70b9 7 \u6536\u5230\u5ef6\u8fdf\u4e00\u62cd\u7684\u771f\u5b9e\u8fb9 0\u21927\u3002\u5c06\u6052\u96f6\u8d28\u91cf\u5f53\u4f5c\u72ec\u7acb\u53ef\u5fae\u8f93\u5165\uff0c\u6ce8\u610f\u529b\u53f3\u5bfc\u6570\u8d85\u51fa FP32\u3002\u53e6\u4e00\u6765\u6e90\u5c42\u5728\u8be5\u69fd\u4f4d\u7684\u4e58\u6cd5\u63a9\u7801\u4ee4 Inf \u00d7 0 \u4ea7\u751f NaN\uff0c\u56de\u4f20\u5230\u533a\u57df 2 \u7684\u8282\u70b9 3\u3002"
+  },
+  "fp64_parameter_reference": {
+    "finite": true,
+    "max": 0.07703149434387228,
+    "norm": 1.1957028696345338,
+    "objective": 5.667013757457969,
+    "reference": "entire CPU FP64 model, FP64 loss, FP32 initial tensors promoted",
+    "roots": 123,
+    "support": {
+      "refined_rows": 0,
+      "repaired_coordinates": 0,
+      "repaired_rows": 0
+    }
+  },
+  "local_diagnostics": {
+    "directory": ".local/pilot-r3/r13-allocation-S6O5gjAJ",
+    "files": {
+      "anomaly-cpu.log": "554f810c8280f50cedb91a64a39e5b524765371939482aeb659a8c6677757a1c",
+      "checkpoint-verified.json": "bd19a2eeaae4d5efbca9f26329dea22797fc196488fead711dda8cfc3cba822d",
+      "cpu-double.json": "69d8fed494e473650ddae594267cdae9ada17a944d3fd7bac5ce7a7befdb1f45",
+      "cpu-down32.json": "95e005234b03fa1c448e92b97e98aa8c541f19093632c3c9c2019ace0f4880f3",
+      "cpu-ingress-where.json": "9a2310027dc98a12148f5f00799a1fb9eb962ddf7110103f3f1ea7fff36657c8",
+      "cpu-ingress.json": "a7c51cf9c56ba31d3826b51b9932e9b8c56609743f21a351852591e0b0f8ee6a",
+      "cpu-route-trace.json": "09dfe15ebbe4622b644c6646bdaacdc2483ccf75b9449f02628300ec9e6dcbcd",
+      "cpu-transient.json": "9926f974cfe8788d14e43958589b458df531ac54098bb4b42313d0da00897829",
+      "cpu-unscaled.json": "6bb0b00e061be3b837748027b704066ecb960d293913678b59f53175ae2fb3ce",
+      "cpu-where.json": "208e5b0d82977f893937e32a9acfe19fa53fee5ade5edb327cfffea94568aa24",
+      "env.sh": "49d6adea75e3715b541daabbe143831e828fb284b5f58415782a90a2dd363577",
+      "ingress-queue.json": "ca80f1e50013a9c3863fa48cbf0cae95809fca8f1ddc884d6de6760d155cea58",
+      "next-state.json": "3abf7ace6e41e136455f71c2471c5f6d379f2822e7f8dbaa89c8ba4e05875fbb",
+      "npu-ingress.json": "03f6367ffdac5afefa9ff9bf174864bf4d9c1224476ebe1045b00510dfd79f9d",
+      "npu-route-trace.json": "d444a52773b9c4b0a2e3d831492f634098ceafabde055d4b85a69810f925c7de",
+      "npu-transient.json": "57e8071761074f79754cb3e4cfe1d5f494e7bca2e8f7745c9af7dadd80ab5076",
+      "npu-unscaled-queue.json": "c558678c3a89278850f979d66308136881ab8b4caca8fb6c9b6fb62597a25d9d",
+      "npu-unscaled.json": "04557061535dc9b5f96af8a308d34dedd290989bb17ac88fd86edd481a35f6f3",
+      "record_diagnosis.py": "b2c03a768e4796776d95587c3b62d2aa02c17605e7fbb4703f9afc4f40b2262b",
+      "reference-comparison.json": "7ee7514701d9bc5cbaadf38df72c8f67053cb346e682c871a4aad19709ac6975",
+      "route-trace-queue.json": "ef093dc954d6c8157b409e811782afec6731e2825e8255d7107939e80fb05f8d",
+      "routing_replay.py": "316a2522b4771a39acbb2dbf09ed8fca4ed49fb0bb22e91a664af427029c6a8b",
+      "state_probe.py": "3b2375da0fc8482a3da7d9a5308b6d0030fc40a34fd704cec72d82458f783d0e",
+      "trace.py": "fe0901f406d96b1d5cfeb199ad46e66fab4d1c2b9d9af954e4a561c6d04f25c0",
+      "transient-queue.json": "2bfd503468e8d01d68e65310f619d3d643d7cc4b0bd6fdc6ba12c1de09428d5b",
+      "transient.py": "943083d280208b6144fa1ec28b3eda3e7c52ef2921326732aecbdb4f5c58fa34",
+      "zero-prior-control.json": "d2170991fc276b52f07541f67873dd4bf3b262d02c4b9618ecf95c4cb587356d"
+    }
+  },
+  "observed_local": "2026-11-21T18:27:49+08:00",
+  "probes": {
+    "boolean_route_selection_alone": {
+      "backward": "failed",
+      "error": "allocation VJP exceeds the requested dtype range"
+    },
+    "cpu_downscale_control": {
+      "loss_scale_exp": -32,
+      "relative_l2_fp64": 2.264695964163206e-06,
+      "unscaled_parameters": {
+        "bitwise_equal_tensors": 123,
+        "total": 123
+      }
+    },
+    "independent_zero_prior": {
+      "independent": {
+        "grad": [
+          0.0,
+          3.0,
+          5.0
+        ],
+        "output": 2.0
+      },
+      "third_fixed": {
+        "grad": [
+          0.0,
+          3.0,
+          0.0
+        ],
+        "output": 2.0
+      }
+    },
+    "runtime_only_clock_proof": {
+      "cpu": {
+        "baseline_logits_sha256": "ee43c1ff0aa81067a48812bc71d2fea46fe39748f63ff7a0b71efddc80165236",
+        "baseline_nextstate_sha256": "8d8ad3c4f2a79ad69c72ca4a06c0b54589d3034bfe43fd16ff8de82271b67cd8",
+        "finite": true,
+        "logits_equal": true,
+        "max_abs_gradient_difference_fp64": 2.1200658113090798e-07,
+        "nextstate_equal": true,
+        "norm": 1.1957029954237268,
+        "objective": 5.667013645172119,
+        "physical": null,
+        "relative_l2_fp64": 2.2646959641632057e-06,
+        "roots": 123,
+        "trial_logits_sha256": "ee43c1ff0aa81067a48812bc71d2fea46fe39748f63ff7a0b71efddc80165236",
+        "trial_nextstate_sha256": "8d8ad3c4f2a79ad69c72ca4a06c0b54589d3034bfe43fd16ff8de82271b67cd8"
+      },
+      "npu": {
+        "baseline_logits_sha256": "6f774f431bdf44e632ae0fa33330602f1623c43f81e5d1af1ad54ae7f38277c8",
+        "baseline_nextstate_sha256": "e65f4d05aeb958a8573ae6af168d670d601d2b08b17a17f9f182bea849e4fcf4",
+        "finite": true,
+        "logits_equal": true,
+        "max_abs_gradient_difference_fp64": 1.0513956116842138e-07,
+        "nextstate_equal": true,
+        "norm": 1.1957027697755962,
+        "objective": 5.667013168334961,
+        "physical": "1",
+        "relative_l2_fp64": 1.4102235502785226e-06,
+        "roots": 123,
+        "trial_logits_sha256": "6f774f431bdf44e632ae0fa33330602f1623c43f81e5d1af1ad54ae7f38277c8",
+        "trial_nextstate_sha256": "e65f4d05aeb958a8573ae6af168d670d601d2b08b17a17f9f182bea849e4fcf4"
+      }
+    },
+    "serialized_first_layer_proof": {
+      "baseline_digest": "8d8ad3c4f2a79ad69c72ca4a06c0b54589d3034bfe43fd16ff8de82271b67cd8",
+      "candidate_digest": "fbb5295860dd684b9b4b52ac74d07bdd4f4e0af502a0b622d3edff4b06329f5a",
+      "different_fields": [
+        "published_state_sha256",
+        "pending_types"
+      ]
+    }
+  },
+  "recommendation": [
+    "\u5728 graph-execution-foundation \u7684 timed \u8def\u7531\u4e2d\uff0c\u6309\u786e\u5b9a\u7684\u9996\u5c42\u5916\u90e8\u6ce8\u5165\u65f6\u949f\u4e34\u65f6\u63a8\u5bfc\u6052\u96f6\u53d1\u9001\u91cf\uff0c\u590d\u7528\u63a5\u6536\u6ce8\u610f\u529b\u7684 constant_zero_prior\u3002\u72ec\u7acb\u53ef\u5fae\u7684\u96f6\u5148\u9a8c\u548c\u5916\u90e8\u53ef\u5fae pending \u4fdd\u7559\u53f3\u5bfc\u6570\u3002",
+    "\u5206\u5c42\u8def\u7531\u5bf9\u65e0\u6548\u6765\u6e90\u69fd\u4f4d\u4f7f\u7528\u5e03\u5c14\u9009\u62e9\uff1b\u771f\u6b63\u53ef\u5fae\u4e14\u53f3\u5bfc\u6570\u8d85\u8fc7 dtype \u7684\u5148\u9a8c\u5e94\u5728\u6ce8\u610f\u529b\u5904\u62a5\u660e\u6765\u6e90\u3002",
+    "\u7528\u51bb\u7ed3\u4fee\u8ba2\u590d\u6838\u539f\u6279\u524d\u5411\u3001\u652f\u6301\u3001\u68af\u5ea6\u548c\u79c1\u6709\u72b6\u6001\uff1b\u4ece\u7b2c 2720 \u6b65\u68c0\u67e5\u70b9\u5728 NPU \u8de8\u8fc7\u7b2c 2727 \u6b65\uff0c\u6838\u9a8c AdamW \u66f4\u65b0\u3001\u4fdd\u5b58\u548c\u65b0\u8fdb\u7a0b\u6062\u590d\uff0c\u518d\u63a5\u7eed A\u3002"
+  ],
+  "schema": "pilot-r3-timed-ingress-vjp-diagnosis-v1",
+  "scope": "r13 A2 \u7684\u5931\u8d25\u5b9a\u4f4d\u4e0e\u9694\u79bb\u5355\u6279\u9a8c\u8bc1\u3002\u6b63\u5f0f\u57fa\u5ea7\u4fee\u8ba2\u3001\u8de8\u6b65\u8bad\u7ec3\u53ca\u6062\u590d\u9a8c\u6536\u5f85\u6267\u884c\u3002",
+  "source": {
+    "frozen_foundation_commit": "75d2a8938f71e260ac928a2f558b109e025ec2a1",
+    "identical_relevant_files": {
+      "allocation.py": "ead87a2b240437f7bc3898f218ccae46d2fd3a2371946b5bae4f4d33b9d8f176",
+      "attention.py": "dd8a919a2fadd2a743125e47eb6d8cb12c90300a0f57abf5d717c4394cd002e4",
+      "model.py": "b5564a713f968cfc0a6619f5dc2a730a5b2fb787a9579d2e7acd36b08ff37f95",
+      "reception.py": "3fd496749a3e3fddd4983237eb0ea6b192a1c2cc0b226c46d7d927b456415eb4",
+      "region.py": "ab57fe6bb2204c8d3dc9ebd2ec14a5469968f5b2f627c6d9bdd12b12d9f678ba",
+      "region_batch.py": "787f64c9fc2fb186f3956b4593e2bbbd67185df2fd97a3c94cf23607334504f0"
+    },
+    "local_foundation_head": "e004eac61cf8289ef3df1647e188d17c6e1cd1ea",
+    "replay_physical_ids": {
+      "ingress": [
+        1
+      ],
+      "npu-unscaled": [
+        1
+      ],
+      "route-trace": [
+        1
+      ],
+      "transient": [
+        1
+      ]
+    },
+    "runtime": {
+      "numpy": "2.5.2",
+      "torch": "2.12.0+cpu",
+      "torch-npu": "2.12.0.post3"
+    },
+    "software_module": "ascend/dev-workspace-9.2.0",
+    "worker_digest": "55214c233a3d4e39a7831e0c0c4c3aec3861825cda678f30f96105d45cf5318a"
+  },
+  "task": {
+    "attempted_step": 2727,
+    "batch": 1,
+    "capture": {
+      "path": ".local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2/attempt-0/failure.pt",
+      "resumable": false,
+      "sha256": "6d9a69be1a63ff4ed909b9fa179ba7d27f58e6a30a95b97493f6ef47ed757464",
+      "update_in_progress": true
+    },
+    "completed_steps": 2726,
+    "completed_tokens": 348928,
+    "definition": {
+      "path": ".local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2/attempt-0/task.json",
+      "sha256": "9738fb80c2ad33dd7eafefb6c76b2bae30f22d7c281a2bea16e7b15dcf98a424"
+    },
+    "id": "multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2",
+    "length": 128,
+    "original_physical": "9",
+    "period": 8,
+    "phase": "a2",
+    "precision": "fp32",
+    "result": {
+      "path": ".local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2/attempt-0/result.json",
+      "sha256": "e0a1e85a2d2919a80365488992ee992047e37807d789883d5502c238fa566a4e"
+    },
+    "target_tokens": 1048576
+  },
+  "verification_scope": {
+    "formal_restart": false,
+    "new_revision_checkpoint_replay": false,
+    "optimizer_step": false,
+    "production_foundation_change": false,
+    "single_batch_backward": true
+  },
+  "verified_checkpoint": {
+    "contract_device": "npu:0",
+    "fallback_used": false,
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r13/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2/attempt-0/checkpoints/step-000002720-ed60e141ed.pt",
+    "schema": "pilot-r3-checkpoint-v1",
+    "scope": "frozen worker verified file hash, decoded CPU payload, validated state digest, source and trajectory contract; no fresh NPU optimizer/stream restart",
+    "sha256": "5cafd6b557c5d1ba3338872c2cc3859f3d3bd229963a598d825fb2a4838a704e",
+    "state_sha256": "3b71530ec735fe4aabf17f563d1aa4fafc4274894c510b068ab82115042464e1",
+    "steps": 2720,
+    "tokens": 348160
+  }
+}

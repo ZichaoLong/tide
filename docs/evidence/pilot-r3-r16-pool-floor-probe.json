@@ -1,0 +1,89 @@
+{
+  "batch_floor_calls": [
+    {
+      "coordinates": [
+        [
+          1,
+          77,
+          0
+        ]
+      ],
+      "fp64": [
+        6.728549548943073e-47
+      ]
+    }
+  ],
+  "capture_sha256": "73857f759eed5cfc08af7bc59f958c686ca2c8d9f47a53d620781a7203d23806",
+  "cpu_threads": 4,
+  "failed_step": 3775,
+  "finite_gradients": true,
+  "finite_logits": true,
+  "finite_state": true,
+  "gradient_tensor_count": 137,
+  "nll": 5.383492946624756,
+  "schema": "pilot-r3-r16-pool-floor-cpu-probe-v1",
+  "scope": "one CPU FP32 batch, no optimizer step",
+  "script": ".local/pilot-r3/diagnostic-r16-pool/probe_floor.py",
+  "script_sha256": "ba85ae65d2271ca8aeb6c25c4603aaeefaddf46cafae62c0970867d0e51a677a",
+  "ssd_selected_floor_coordinates_node_batch_time": [
+    [
+      0,
+      1,
+      77
+    ]
+  ],
+  "state_tensor_count": 73,
+  "status": "forward_and_backward_completed",
+  "storage_floor": 1.401298464324817e-45,
+  "task_id": "exchange-d128-x_reverse-pool-26a8635043-a2-2026112002-r2",
+  "tiny_mass_example": {
+    "individually_floored_output": [
+      1.401298464324817e-45,
+      5.605193857299268e-45
+    ],
+    "priors": [
+      2.802596928649634e-45,
+      2.802596928649634e-45
+    ],
+    "received": [
+      1.401298464324817e-45,
+      1.401298464324817e-45
+    ],
+    "scores": [
+      0,
+      3
+    ],
+    "stored_total_over_budget": 1.25,
+    "total": 5.605193857299268e-45
+  },
+  "torch_version": "2.12.0+cpu",
+  "two_node_gradient_check": {
+    "atol": 0,
+    "dmu": [
+      8.529460313195234e-17,
+      -8.529460313195234e-17
+    ],
+    "ds": [
+      8.529460313195234e-17,
+      -8.529460313195234e-17
+    ],
+    "fp64_dmu": [
+      8.529449874383068e-17,
+      -8.529449874383068e-17
+    ],
+    "fp64_ds": [
+      8.529449874383068e-17,
+      -8.529449874383068e-17
+    ],
+    "incoming": [
+      1.2676506002282294e+30,
+      0.0
+    ],
+    "rtol": 1e-05,
+    "stored": [
+      1.401298464324817e-45,
+      1.0
+    ]
+  },
+  "unclipped_gradient_norm": 1.1118415594100952
+}

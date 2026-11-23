@@ -1,0 +1,1203 @@
+{
+  "accounting": {
+    "device_seconds": 349.62101459130645,
+    "diagnostic_completed_update_tokens": 11008,
+    "preparation": true,
+    "preparation_device_seconds": 349.62101459130645,
+    "preparation_reserved_tokens": 12032,
+    "queue_receipts": [
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-r25-release/npu-tests-queue.json",
+        "sha256": "369d850de4cacc031e6867e8f4fd1dfc41c4e14639e4713b94f5be8898fd109e"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-r25-release/npu-qualification-queue.json",
+        "sha256": "e9fbc0e60b1ed4668cf72c3886154a343a51f8ed5fe15847147d187c9e5c956b"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-r25-release/npu-qualification-r2-queue.json",
+        "sha256": "b8b42c6796ba34a627c88c8e9f4b462f9e72b58fd9a63dfc9d9fedc4c6a2918d"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-r25-final/npu-queue.json",
+        "sha256": "fbd36f122ef593454adb77a58bdddad4d536e7c22cf84bf0029c5177deba540d"
+      }
+    ],
+    "scope": "All four NPU queue receipts including rejected candidates, queue entry through exit. 43 complete fixed updates across CPU and NPU, one interrupted comparison, one diagnostic forward and three original-checkpoint audit batches.",
+    "status": "completed_with_intermediate_rejection"
+  },
+  "authority": {
+    "commit": "6e14a6cc90e3ea1972611ee98b9de9bfea3b14fe",
+    "files_digest": "3c469d46ac004f6f6edc12841cde56ec9c5e78852a27de9c31b185cc9eb1ce77",
+    "files_sha256": {
+      "__init__.py": "51b2da0ae87b715638de8ef789edabdada69ad43c05b19e0ef79eefa0113dd3c",
+      "allocation.py": "6b7fc455ec760d996e213fd93f9d6ca5bf8fdc2a9c40e1ec475148e53148a0e9",
+      "attention.py": "fc6faa1ff5897b1ed43a2b7a5a1db54294aaf1f04ee669ce84b734e9efeab4a2",
+      "checkpoint.py": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+      "config.py": "bce6100a72ce0c076eb3b7072bbc1520c810c434f5078b6f1f0f846534cba443",
+      "ffn_packing.py": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449",
+      "grouped_linear.py": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1",
+      "kv.py": "39bc279b687dffb72e91ea984faaac5bb5ac7530ed5f86f364eb00d8137d6773",
+      "layout.py": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+      "model.py": "91e3107629e51d3327cfd3e957886b8de204f8619cc08204076a1fdc31d81504",
+      "parameters.py": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc",
+      "placement.py": "8c0e73f1e5d1190d0fee602d4c2122b990c7974135803a8199b794fa71a61ae2",
+      "placement_ownership.py": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+      "pool_support.py": "030ecf959cf921bca10e136b4bd42e60f7a8393f3660fa974409c9dd63a351d2",
+      "precision.py": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+      "quad.py": "aaebfc4116b267a3c920005283e178c55ae49ec5df7ab6085cbc8cdbe212f4df",
+      "reception.py": "3fd496749a3e3fddd4983237eb0ea6b192a1c2cc0b226c46d7d927b456415eb4",
+      "region.py": "dae7b504a99a49237c36e9cc6f8323f2b01d0923d023808fcab4804cef514845",
+      "region_batch.py": "c4058045320013bacf440d97f642ccbe3adfc3ce3b935fd2899f3eaef3887048",
+      "region_execution.py": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950",
+      "region_placement.py": "b8aa232d045c965fb4d2e70bbc9fd17a6c1daf6cadb8b724527d8a378b3abdeb",
+      "scaled_arithmetic.py": "5949256c6d54e02705c0ef9fa4d54310cd8cde2d06d2b964d2891d030d9dcd66",
+      "shannon_support.py": "29507db503a88d880614142411004fa7eaa39a77374a6e1c1dc640501c5f6105",
+      "ssd.py": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+      "ssd_memory.py": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2",
+      "topology.py": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+      "topology_hb.py": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06",
+      "weighted_mean.py": "6c993386c66f611c371c75e2e66a52dec7954c4fb9078819aab23f13d6c76d88"
+    },
+    "remote_head_at_acceptance": "6e14a6cc90e3ea1972611ee98b9de9bfea3b14fe"
+  },
+  "diagnosis": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-r24-quad-total-constraint.json",
+    "sha256": "228289e28063b79218b0ac34b0acb374cade594ee3791ea8969a0b26bdf27c14"
+  },
+  "driver": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-r25-final/driver/accept_r24_quad.py",
+    "sha256": "ff7f966cf781e6347106a4c6c4253ea714f7eb11a046a27075ebdcfdbc8846a2"
+  },
+  "failure_input": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112001-r5/attempt-0/failure.pt",
+    "sha256": "fec1d1105a1852396c5e1830b59fb20fe3859f8e12c5706e15801eb813bdf793"
+  },
+  "initial_candidate": {
+    "commit": "76b1c01488d247d122a3ede546d1c7cd8582e1a8",
+    "cpu_failed_comparison": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-r25-release/cpu-qualification-r2.log",
+      "sha256": "720a9ebb93f3980be14393404f5fce277d12db4084ecce013c051e77be2db437"
+    },
+    "driver_reset_fix": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-r25-release/qualification-r2-launch.json",
+      "sha256": "39ef7f9724ae65b2f2fbc418401c5f714cbed1bb33590a28ecdea326416474ed"
+    },
+    "reproduced_witness": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-r25-release/cpu-witness.log",
+      "sha256": "866eb6186295fd017825f154585b90a8fd8486a3a2ca81e18069085abdfb52cd"
+    }
+  },
+  "launch": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-r25-final/qualification-launch.json",
+    "sha256": "8f672408e2c7e44733de5008dfdab905a0773665fe308295e355bbef4aec018c"
+  },
+  "measurement_driver": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-r25-final/measure.py",
+    "sha256": "d0a4e2ab9ba59575a87c8daacc4e6d7f0a5edbeba029f4fc25fae515208431b9"
+  },
+  "observed_local": "2026-11-23T09:47:50+08:00",
+  "old_result": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112001-r5/attempt-0/result.json",
+    "sha256": "c01420d772fc4bc74d7d739e2bf414ca0962795ada2f1109b5c80b40c468c260"
+  },
+  "original_row_samples": {
+    "cpu": {
+      "device": "cpu",
+      "physical": null,
+      "replays": [
+        {
+          "batch_sha256": "64dfe977b6f5784bb1929b9c1a7856d64f806bd492ff587a85a0a1fcf53ff133",
+          "calls": 16,
+          "checkpoint": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112001-r5/attempt-0/checkpoints/step-000000913-88c78bcae0.pt",
+            "sha256": "2243939a3710bc538936a045f8daee4bc52429803f1a3ec9b031160506095fac",
+            "size_bytes": 404226167,
+            "state_sha256": "57fb03562d92a0914863a8db4958b6ecb0a8dcec26a60b40976884d9b9ea3cb5",
+            "steps": 913,
+            "tokens": 233728
+          },
+          "max_old_vjp_error": 0.0,
+          "max_released_vjp_error": 0.0,
+          "old_gradient_rows": 0,
+          "old_support_rows": 0,
+          "old_value_rows": 0,
+          "released_gradient_rows": 0,
+          "released_support_rows": 0,
+          "released_value_rows": 0,
+          "rows": 40960,
+          "step": 914,
+          "task": "multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112001-r5"
+        }
+      ],
+      "scope": "one batch per indicated checkpoint, isolated original-source forward; independent exact row solution and one deterministic cotangent per call",
+      "source_digest": "3c469d46ac004f6f6edc12841cde56ec9c5e78852a27de9c31b185cc9eb1ce77"
+    },
+    "npu": {
+      "device": "npu:0",
+      "physical": "9",
+      "replays": [
+        {
+          "batch_sha256": "a2da509f6a86231f3bd7c732b4bf69a431a31d61f8f1125acdc67e11d677b99f",
+          "calls": 16,
+          "checkpoint": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112002-r1/attempt-0/checkpoints/step-000002047-5bffa0d803.pt",
+            "sha256": "867139554c318f52cd1a63688ec91dafddc811cf22edadfd2de0a425bedab0e4",
+            "size_bytes": 288567477,
+            "state_sha256": "7be54c6fd41bb7e7f0c62e91e0a2443d5ce2fedcd53fc92e8dd49677a8331b4d",
+            "steps": 2047,
+            "tokens": 262016
+          },
+          "max_old_vjp_error": 0.0,
+          "max_released_vjp_error": 0.0,
+          "old_gradient_rows": 0,
+          "old_support_rows": 0,
+          "old_value_rows": 0,
+          "released_gradient_rows": 0,
+          "released_support_rows": 0,
+          "released_value_rows": 0,
+          "rows": 20480,
+          "step": 2048,
+          "task": "multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112002-r1"
+        },
+        {
+          "batch_sha256": "38b3a939f0173ef7d199bbe1468e23e494b53b3cee381e957609ce0662069ef3",
+          "calls": 16,
+          "checkpoint": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112002-r2/attempt-0/checkpoints/step-000002029-120b76215d.pt",
+            "sha256": "5eeff08221b3498b1abcfb13f2e8c7f4fab81d6fdd345f9a56cf7dfde0ab81e2",
+            "size_bytes": 288567477,
+            "state_sha256": "1766d47e8d392b8e0d1d747a514965e35dbead78c2d76f7caed25305f1d9daf5",
+            "steps": 2029,
+            "tokens": 259712
+          },
+          "max_old_vjp_error": 0.0,
+          "max_released_vjp_error": 0.0,
+          "old_gradient_rows": 0,
+          "old_support_rows": 0,
+          "old_value_rows": 0,
+          "released_gradient_rows": 0,
+          "released_support_rows": 0,
+          "released_value_rows": 0,
+          "rows": 20480,
+          "step": 2030,
+          "task": "multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112002-r2"
+        }
+      ],
+      "scope": "one batch per indicated checkpoint, isolated original-source forward; independent exact row solution and one deterministic cotangent per call",
+      "source_digest": "3c469d46ac004f6f6edc12841cde56ec9c5e78852a27de9c31b185cc9eb1ce77"
+    }
+  },
+  "original_task": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112001-r5/task.json",
+    "sha256": "1f2af0b73299d23322a56587fd679d69cf4be19f2fe94f996806883b2b44bc62"
+  },
+  "paired_timing": {
+    "cpu": {
+      "affinity": [
+        280,
+        282,
+        284,
+        286
+      ],
+      "checkpoint": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112001-r5/attempt-0/checkpoints/step-000000913-88c78bcae0.pt",
+        "sha256": "2243939a3710bc538936a045f8daee4bc52429803f1a3ec9b031160506095fac",
+        "size_bytes": 404226167,
+        "state_sha256": "57fb03562d92a0914863a8db4958b6ecb0a8dcec26a60b40976884d9b9ea3cb5",
+        "steps": 913,
+        "tokens": 233728
+      },
+      "complete": true,
+      "device": "cpu",
+      "old_source": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/foundation/src/tide/allocation.py",
+        "sha256": "af35b432f4da0d253cfc44220a3aac1d4ecedb6a4f6c07060dcefd3cd8f171eb"
+      },
+      "order": [
+        [
+          "original",
+          "released"
+        ],
+        [
+          "released",
+          "original"
+        ],
+        [
+          "released",
+          "original"
+        ],
+        [
+          "original",
+          "released"
+        ]
+      ],
+      "paired_median_percent": 0.9398542136965338,
+      "paired_percent": [
+        1.084457761690527,
+        0.9257153436125876,
+        -0.2992916316753469,
+        0.95399308378048
+      ],
+      "rows": [
+        {
+          "metrics": {
+            "grad_norm": 1.103547215461731,
+            "loss": 6.264223575592041,
+            "lr": 0.0009995979105307995,
+            "objective": 6.264223575592041
+          },
+          "pair": 0,
+          "seconds": 19.473838698118925,
+          "state": "b512199e95b6855200787049729fe31093d63cfb148715b726caa3f3d2451b1a",
+          "variant": "original",
+          "warmup": true
+        },
+        {
+          "metrics": {
+            "grad_norm": 1.103547215461731,
+            "loss": 6.264223575592041,
+            "lr": 0.0009995979105307995,
+            "objective": 6.264223575592041
+          },
+          "pair": 0,
+          "seconds": 20.050618313252926,
+          "state": "b512199e95b6855200787049729fe31093d63cfb148715b726caa3f3d2451b1a",
+          "variant": "released",
+          "warmup": true
+        },
+        {
+          "metrics": {
+            "grad_norm": 1.103547215461731,
+            "loss": 6.264223575592041,
+            "lr": 0.0009995979105307995,
+            "objective": 6.264223575592041
+          },
+          "pair": 1,
+          "seconds": 20.04560463503003,
+          "state": "b512199e95b6855200787049729fe31093d63cfb148715b726caa3f3d2451b1a",
+          "variant": "original",
+          "warmup": false
+        },
+        {
+          "metrics": {
+            "grad_norm": 1.103547215461731,
+            "loss": 6.264223575592041,
+            "lr": 0.0009995979105307995,
+            "objective": 6.264223575592041
+          },
+          "pair": 1,
+          "seconds": 20.26299075037241,
+          "state": "b512199e95b6855200787049729fe31093d63cfb148715b726caa3f3d2451b1a",
+          "variant": "released",
+          "warmup": false
+        },
+        {
+          "metrics": {
+            "grad_norm": 1.103547215461731,
+            "loss": 6.264223575592041,
+            "lr": 0.0009995979105307995,
+            "objective": 6.264223575592041
+          },
+          "pair": 2,
+          "seconds": 20.455756310373545,
+          "state": "b512199e95b6855200787049729fe31093d63cfb148715b726caa3f3d2451b1a",
+          "variant": "released",
+          "warmup": false
+        },
+        {
+          "metrics": {
+            "grad_norm": 1.103547215461731,
+            "loss": 6.264223575592041,
+            "lr": 0.0009995979105307995,
+            "objective": 6.264223575592041
+          },
+          "pair": 2,
+          "seconds": 20.268131110817194,
+          "state": "b512199e95b6855200787049729fe31093d63cfb148715b726caa3f3d2451b1a",
+          "variant": "original",
+          "warmup": false
+        },
+        {
+          "metrics": {
+            "grad_norm": 1.103547215461731,
+            "loss": 6.264223575592041,
+            "lr": 0.0009995979105307995,
+            "objective": 6.264223575592041
+          },
+          "pair": 3,
+          "seconds": 20.37416459619999,
+          "state": "b512199e95b6855200787049729fe31093d63cfb148715b726caa3f3d2451b1a",
+          "variant": "released",
+          "warmup": false
+        },
+        {
+          "metrics": {
+            "grad_norm": 1.103547215461731,
+            "loss": 6.264223575592041,
+            "lr": 0.0009995979105307995,
+            "objective": 6.264223575592041
+          },
+          "pair": 3,
+          "seconds": 20.43532581627369,
+          "state": "b512199e95b6855200787049729fe31093d63cfb148715b726caa3f3d2451b1a",
+          "variant": "original",
+          "warmup": false
+        },
+        {
+          "metrics": {
+            "grad_norm": 1.103547215461731,
+            "loss": 6.264223575592041,
+            "lr": 0.0009995979105307995,
+            "objective": 6.264223575592041
+          },
+          "pair": 4,
+          "seconds": 20.506841644644737,
+          "state": "b512199e95b6855200787049729fe31093d63cfb148715b726caa3f3d2451b1a",
+          "variant": "original",
+          "warmup": false
+        },
+        {
+          "metrics": {
+            "grad_norm": 1.103547215461731,
+            "loss": 6.264223575592041,
+            "lr": 0.0009995979105307995,
+            "objective": 6.264223575592041
+          },
+          "pair": 4,
+          "seconds": 20.702475495636463,
+          "state": "b512199e95b6855200787049729fe31093d63cfb148715b726caa3f3d2451b1a",
+          "variant": "released",
+          "warmup": false
+        }
+      ],
+      "schema": "pilot-r3-quad-released-step-cost-v1",
+      "scope": "train_update and completion sync; new owners and identical starting data/RNG for every sample; excludes restore, diagnostics and checkpoint writes",
+      "seconds": {
+        "original": 20.35172846354544,
+        "released": 20.414960453286767
+      },
+      "source_digest": "3c469d46ac004f6f6edc12841cde56ec9c5e78852a27de9c31b185cc9eb1ce77",
+      "step": 914,
+      "threads": 4,
+      "visible": null
+    },
+    "npu": {
+      "affinity": [
+        244,
+        250,
+        252,
+        254
+      ],
+      "checkpoint": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112001-r5/attempt-0/checkpoints/step-000000913-88c78bcae0.pt",
+        "sha256": "2243939a3710bc538936a045f8daee4bc52429803f1a3ec9b031160506095fac",
+        "size_bytes": 404226167,
+        "state_sha256": "57fb03562d92a0914863a8db4958b6ecb0a8dcec26a60b40976884d9b9ea3cb5",
+        "steps": 913,
+        "tokens": 233728
+      },
+      "complete": true,
+      "device": "npu:0",
+      "old_source": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/foundation/src/tide/allocation.py",
+        "sha256": "af35b432f4da0d253cfc44220a3aac1d4ecedb6a4f6c07060dcefd3cd8f171eb"
+      },
+      "order": [
+        [
+          "original",
+          "released"
+        ],
+        [
+          "released",
+          "original"
+        ],
+        [
+          "released",
+          "original"
+        ],
+        [
+          "original",
+          "released"
+        ]
+      ],
+      "paired_median_percent": 0.4543197981649705,
+      "paired_percent": [
+        0.4047780156692271,
+        0.6553888009439124,
+        -0.7260791742867201,
+        0.5038615806607138
+      ],
+      "rows": [
+        {
+          "metrics": {
+            "grad_norm": 1.1037677526474,
+            "loss": 6.264223098754883,
+            "lr": 0.0009995979105307995,
+            "objective": 6.264223098754883
+          },
+          "pair": 0,
+          "seconds": 9.430756594985723,
+          "state": "022b9dcb5458007581778f0eb08991a8282c57d70f91536cda273dc2c398f7e3",
+          "variant": "original",
+          "warmup": true
+        },
+        {
+          "metrics": {
+            "grad_norm": 1.1037677526474,
+            "loss": 6.264222145080566,
+            "lr": 0.0009995979105307995,
+            "objective": 6.264222145080566
+          },
+          "pair": 0,
+          "seconds": 7.901033136993647,
+          "state": "022b9dcb5458007581778f0eb08991a8282c57d70f91536cda273dc2c398f7e3",
+          "variant": "released",
+          "warmup": true
+        },
+        {
+          "metrics": {
+            "grad_norm": 1.1037676334381104,
+            "loss": 6.264222145080566,
+            "lr": 0.0009995979105307995,
+            "objective": 6.264222145080566
+          },
+          "pair": 1,
+          "seconds": 7.813364878296852,
+          "state": "022b9dcb5458007581778f0eb08991a8282c57d70f91536cda273dc2c398f7e3",
+          "variant": "original",
+          "warmup": false
+        },
+        {
+          "metrics": {
+            "grad_norm": 1.1037677526474,
+            "loss": 6.264221668243408,
+            "lr": 0.0009995979105307995,
+            "objective": 6.264221668243408
+          },
+          "pair": 1,
+          "seconds": 7.844991661608219,
+          "state": "022b9dcb5458007581778f0eb08991a8282c57d70f91536cda273dc2c398f7e3",
+          "variant": "released",
+          "warmup": false
+        },
+        {
+          "metrics": {
+            "grad_norm": 1.1037676334381104,
+            "loss": 6.264222145080566,
+            "lr": 0.0009995979105307995,
+            "objective": 6.264222145080566
+          },
+          "pair": 2,
+          "seconds": 7.8660340718925,
+          "state": "022b9dcb5458007581778f0eb08991a8282c57d70f91536cda273dc2c398f7e3",
+          "variant": "released",
+          "warmup": false
+        },
+        {
+          "metrics": {
+            "grad_norm": 1.1037676334381104,
+            "loss": 6.264221668243408,
+            "lr": 0.0009995979105307995,
+            "objective": 6.264221668243408
+          },
+          "pair": 2,
+          "seconds": 7.814816638827324,
+          "state": "022b9dcb5458007581778f0eb08991a8282c57d70f91536cda273dc2c398f7e3",
+          "variant": "original",
+          "warmup": false
+        },
+        {
+          "metrics": {
+            "grad_norm": 1.1037677526474,
+            "loss": 6.264222621917725,
+            "lr": 0.0009995979105307995,
+            "objective": 6.264222621917725
+          },
+          "pair": 3,
+          "seconds": 7.850244179368019,
+          "state": "022b9dcb5458007581778f0eb08991a8282c57d70f91536cda273dc2c398f7e3",
+          "variant": "released",
+          "warmup": false
+        },
+        {
+          "metrics": {
+            "grad_norm": 1.1037677526474,
+            "loss": 6.264222621917725,
+            "lr": 0.0009995979105307995,
+            "objective": 6.264222621917725
+          },
+          "pair": 3,
+          "seconds": 7.90766005218029,
+          "state": "022b9dcb5458007581778f0eb08991a8282c57d70f91536cda273dc2c398f7e3",
+          "variant": "original",
+          "warmup": false
+        },
+        {
+          "metrics": {
+            "grad_norm": 1.1037677526474,
+            "loss": 6.264222621917725,
+            "lr": 0.0009995979105307995,
+            "objective": 6.264222621917725
+          },
+          "pair": 4,
+          "seconds": 7.777591526508331,
+          "state": "022b9dcb5458007581778f0eb08991a8282c57d70f91536cda273dc2c398f7e3",
+          "variant": "original",
+          "warmup": false
+        },
+        {
+          "metrics": {
+            "grad_norm": 1.1037676334381104,
+            "loss": 6.264221668243408,
+            "lr": 0.0009995979105307995,
+            "objective": 6.264221668243408
+          },
+          "pair": 4,
+          "seconds": 7.81677982211113,
+          "state": "022b9dcb5458007581778f0eb08991a8282c57d70f91536cda273dc2c398f7e3",
+          "variant": "released",
+          "warmup": false
+        }
+      ],
+      "schema": "pilot-r3-quad-released-step-cost-v1",
+      "scope": "train_update and completion sync; new owners and identical starting data/RNG for every sample; excludes restore, diagnostics and checkpoint writes",
+      "seconds": {
+        "original": 7.814090758562088,
+        "released": 7.847617920488119
+      },
+      "source_digest": "3c469d46ac004f6f6edc12841cde56ec9c5e78852a27de9c31b185cc9eb1ce77",
+      "step": 914,
+      "threads": 4,
+      "visible": "9"
+    }
+  },
+  "qualification": {
+    "cpu": {
+      "capture": {
+        "actual_module": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-r25-final/base/src/tide/__init__.py",
+        "allocation": {
+          "calls": 16,
+          "disputed_projection_rows": 2,
+          "exact_projection_rows": 1,
+          "exact_total_rows": 0,
+          "lower_face_mismatches": 0,
+          "max_abs": 0.0,
+          "positive_mismatches": 0,
+          "rows": 40960
+        },
+        "comparison": {
+          "adamw": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 752,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 2.9103830456733704e-11,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "before_clip": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 185,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 2.3283064365386963e-10,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "gradients_after_clip": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 185,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 2.3283064365386963e-10,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "logits": {
+            "atol": 1e-05,
+            "exact": true,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 1,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 0.0,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "model": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 205,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 4.656612873077393e-10,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "private_state": {
+            "atol": 1e-05,
+            "exact": true,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 108,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 0.0,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "device": "cpu",
+        "fault_step": 921,
+        "files_digest": "3c469d46ac004f6f6edc12841cde56ec9c5e78852a27de9c31b185cc9eb1ce77",
+        "metrics": {
+          "counts": {
+            "refined_rows": 0,
+            "repaired_coordinates": 0,
+            "repaired_rows": 0
+          },
+          "grad_norm": 1.170858383178711,
+          "gradient_tensors": 185,
+          "input_sha256": "30d9fe080a0506f83113aff251ae39abe12501690ce45279139bb831e3746dcc",
+          "loss": 6.279026985168457,
+          "lr": 0.0009995893112383328,
+          "objective": 6.279026985168457,
+          "reset": true,
+          "state_sha256": {
+            "adamw": "76886f83c356235bd792d2ca096b5b0b8200ce2ddcea012218e6943aab7408e7",
+            "gradients_after_clip": "ecc100871fa9a6c7490cf59448701e19e0c0dbaa11be9367aa398a14807d5cf2",
+            "model": "dd4a283af53e2cb0d8401482d74c969b1db76ef4354da7810b2c431ef9a4d85b",
+            "private_state": "7c0962a594d4e4a9d18c34c2ea4be1d832172f6a54da61060298f19f37356f5e"
+          }
+        },
+        "passed": true,
+        "physical_id": null,
+        "pid": 1351375,
+        "reference_metrics": {
+          "counts": {
+            "refined_rows": 0,
+            "repaired_coordinates": 0,
+            "repaired_rows": 0
+          },
+          "grad_norm": 1.170858383178711,
+          "gradient_tensors": 185,
+          "input_sha256": "30d9fe080a0506f83113aff251ae39abe12501690ce45279139bb831e3746dcc",
+          "loss": 6.279026985168457,
+          "lr": 0.0009995893112383328,
+          "objective": 6.279026985168457,
+          "reset": true,
+          "state_sha256": {
+            "adamw": "222aaf941e6922a20db34ad89462100423ad4797556ec043477eeebb797ae045",
+            "gradients_after_clip": "72640c45c97994250669e512e47ec94089c95f88f64d5808adbed658ae924ffe",
+            "model": "919341aad6686105764f2897e7644cd2b2809ba618382195822c58c3a8f3a564",
+            "private_state": "7c0962a594d4e4a9d18c34c2ea4be1d832172f6a54da61060298f19f37356f5e"
+          }
+        }
+      },
+      "direct": {
+        "actual_module": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-r25-final/base/src/tide/__init__.py",
+        "device": "cpu",
+        "fault_batch_matched": true,
+        "fault_state_reset": true,
+        "fault_step": 921,
+        "files_digest": "3c469d46ac004f6f6edc12841cde56ec9c5e78852a27de9c31b185cc9eb1ce77",
+        "new_checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-r25-final/replay/cpu/checkpoints/step-000000922-064f1bae48.pt",
+          "sha256": "73e9da0e21f1f239cfa8c2ca5358aab294c2fdeca581cf1bf993d04105efcb0d",
+          "size_bytes": 404226359,
+          "state_sha256": "c4b6f7891bb87e822a802322847f50116700d466785ca6ac19897e20ece9c4e2",
+          "steps": 922,
+          "tokens": 236032
+        },
+        "official_checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112001-r5/attempt-0/checkpoints/step-000000920-c8044c5cf2.pt",
+          "sha256": "bb1d7b0a10e62d47f6735539cb445621ca401a46c010ec4647c22fea21e5c1e1",
+          "size_bytes": 404226231,
+          "state_sha256": "c3f868a5bc44237fac6166fa96a16f8d9c0f434aa183672572201fec4e17f497",
+          "steps": 920,
+          "tokens": 235520
+        },
+        "origin_backend": "cpu",
+        "original_error": "allocation multiplier did not meet the total constraint",
+        "original_state_loaded_exact": true,
+        "passed": true,
+        "physical_id": null,
+        "pid": 1352693,
+        "portable_origin_fields_equal": true,
+        "rng_sha256": "36c33571470d44d162f98eeb408fda3339369e8067cf47846cd376dd94872c3f",
+        "stream_sha256": "f935902fff45d93ea0f9feda677c44e28bcfd5ee8428e3bf920214226d71c638",
+        "updates": [
+          {
+            "grad_norm": 1.170858383178711,
+            "loss": 6.279026985168457,
+            "lr": 0.0009995893112383328,
+            "objective": 6.279026985168457,
+            "step": 921,
+            "tokens": 235776
+          },
+          {
+            "grad_norm": 1.1740590333938599,
+            "loss": 6.365695476531982,
+            "lr": 0.0009995880753440921,
+            "objective": 6.365695476531982,
+            "step": 922,
+            "tokens": 236032
+          },
+          {
+            "counts": {
+              "refined_rows": 0,
+              "repaired_coordinates": 0,
+              "repaired_rows": 0
+            },
+            "grad_norm": 1.1900739669799805,
+            "gradient_tensors": 185,
+            "input_sha256": "2417a423fded16f88c56bd44bfa801f576c9f8de53f74c1df98baef953596e90",
+            "loss": 6.635601997375488,
+            "lr": 0.0009995868375938946,
+            "objective": 6.635601997375488,
+            "reset": false,
+            "state_sha256": {
+              "adamw": "a6e5a88d3ad85fafde35c735c1a547279316bb5cac4a0728a030f54c16ab5320",
+              "gradients_after_clip": "71aaa1b10a66303f8be2514f60884aae6d30dacdf9683f805bf45e3979504522",
+              "model": "6ddcf5083047a7d198f98e01f4ce82dd8dc76962f62a3576490d90c232f7f3d9",
+              "private_state": "0b690f61cd1c083756fd2d7df6a22a6912ba19599c903b3673b7eea39f2b3c26"
+            },
+            "step": 923,
+            "tokens": 236288
+          }
+        ]
+      },
+      "restored": {
+        "actual_module": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-r25-final/base/src/tide/__init__.py",
+        "checkpoint_sha256": "73e9da0e21f1f239cfa8c2ca5358aab294c2fdeca581cf1bf993d04105efcb0d",
+        "comparison": {
+          "adamw": {
+            "atol": 1e-05,
+            "exact": true,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 752,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 0.0,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "gradients_after_clip": {
+            "atol": 1e-05,
+            "exact": true,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 185,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 0.0,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "model": {
+            "atol": 1e-05,
+            "exact": true,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 205,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 0.0,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "private_state": {
+            "atol": 1e-05,
+            "exact": true,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 108,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 0.0,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "device": "cpu",
+        "discrete_exact": true,
+        "fault_step": 921,
+        "files_digest": "3c469d46ac004f6f6edc12841cde56ec9c5e78852a27de9c31b185cc9eb1ce77",
+        "loaded_state_exact": true,
+        "metrics": {
+          "counts": {
+            "refined_rows": 0,
+            "repaired_coordinates": 0,
+            "repaired_rows": 0
+          },
+          "grad_norm": 1.1900739669799805,
+          "gradient_tensors": 185,
+          "input_sha256": "2417a423fded16f88c56bd44bfa801f576c9f8de53f74c1df98baef953596e90",
+          "loss": 6.635601997375488,
+          "lr": 0.0009995868375938946,
+          "objective": 6.635601997375488,
+          "reset": false,
+          "state_sha256": {
+            "adamw": "a6e5a88d3ad85fafde35c735c1a547279316bb5cac4a0728a030f54c16ab5320",
+            "gradients_after_clip": "71aaa1b10a66303f8be2514f60884aae6d30dacdf9683f805bf45e3979504522",
+            "model": "6ddcf5083047a7d198f98e01f4ce82dd8dc76962f62a3576490d90c232f7f3d9",
+            "private_state": "0b690f61cd1c083756fd2d7df6a22a6912ba19599c903b3673b7eea39f2b3c26"
+          }
+        },
+        "passed": true,
+        "physical_id": null,
+        "pid": 1354371,
+        "step": 923
+      }
+    },
+    "npu": {
+      "capture": {
+        "actual_module": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-r25-final/base/src/tide/__init__.py",
+        "allocation": {
+          "calls": 16,
+          "disputed_projection_rows": 2,
+          "exact_projection_rows": 1,
+          "exact_total_rows": 0,
+          "lower_face_mismatches": 0,
+          "max_abs": 1.4901161193847656e-08,
+          "positive_mismatches": 0,
+          "rows": 40960
+        },
+        "comparison": {
+          "adamw": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 752,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 2.2118911147117615e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "before_clip": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 185,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 2.6542693376541138e-08,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "gradients_after_clip": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 185,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 2.2351741790771484e-08,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "logits": {
+            "atol": 1e-05,
+            "exact": true,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 1,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 0.0,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "model": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 205,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 4.805624485015869e-07,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "private_state": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 108,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 9.5367431640625e-07,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "device": "npu:0",
+        "fault_step": 921,
+        "files_digest": "3c469d46ac004f6f6edc12841cde56ec9c5e78852a27de9c31b185cc9eb1ce77",
+        "metrics": {
+          "counts": {
+            "refined_rows": 0,
+            "repaired_coordinates": 0,
+            "repaired_rows": 0
+          },
+          "grad_norm": 1.1711064577102661,
+          "gradient_tensors": 185,
+          "input_sha256": "30d9fe080a0506f83113aff251ae39abe12501690ce45279139bb831e3746dcc",
+          "loss": 6.279026508331299,
+          "lr": 0.0009995893112383328,
+          "objective": 6.279026508331299,
+          "reset": true,
+          "state_sha256": {
+            "adamw": "98bd124c2300893392180c139f9254cc92c1808d7b0412d7a60915b3bb9dad81",
+            "gradients_after_clip": "05834f41ee06dad234875dc531f12a4ea74294ed126ec241e381982635ca4d73",
+            "model": "5dd5b3c1d9194cb378d83e9a8c0fdfbcbaf98a50a9ace5abd09d7b1ac920a809",
+            "private_state": "7486a9d8fd5b07fd4507efdd4e331c14e3cff08f7ed7a76ab02dbaf03d4db857"
+          }
+        },
+        "passed": true,
+        "physical_id": "9",
+        "pid": 1351432,
+        "reference_metrics": {
+          "counts": {
+            "refined_rows": 0,
+            "repaired_coordinates": 0,
+            "repaired_rows": 0
+          },
+          "grad_norm": 1.1711064577102661,
+          "gradient_tensors": 185,
+          "input_sha256": "30d9fe080a0506f83113aff251ae39abe12501690ce45279139bb831e3746dcc",
+          "loss": 6.279026985168457,
+          "lr": 0.0009995893112383328,
+          "objective": 6.279026985168457,
+          "reset": true,
+          "state_sha256": {
+            "adamw": "a3907b875317bbee20a6fad301df3adf2eec838b975fc8a9c17e7995ccdf63d8",
+            "gradients_after_clip": "5a84c3e89889e2298786bdb030208f75bd4847fca50596767f3f9ab331bb6747",
+            "model": "374b919eccfc6f6d487c9ee2626a7b8cc5fdbf3bae2b641b1da5432365156292",
+            "private_state": "2a3ed64a27a54a049926b42d45662be566e296546023c3533c4cecce37f3d9d8"
+          }
+        }
+      },
+      "direct": {
+        "actual_module": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-r25-final/base/src/tide/__init__.py",
+        "device": "npu:0",
+        "fault_batch_matched": true,
+        "fault_state_reset": true,
+        "fault_step": 921,
+        "files_digest": "3c469d46ac004f6f6edc12841cde56ec9c5e78852a27de9c31b185cc9eb1ce77",
+        "new_checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-r25-final/replay/npu/checkpoints/step-000000922-9f5a16d09d.pt",
+          "sha256": "9b0a3553aa311859910a5cdf6f9b8bcbfa4d69a20199bd18d3ba3fdb2e64889a",
+          "size_bytes": 404226613,
+          "state_sha256": "fb7e9e26f7c713a90a1ecd2f554fe5af7175b84b5a749e41f991827d6e20a92d",
+          "steps": 922,
+          "tokens": 236032
+        },
+        "official_checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112001-r5/attempt-0/checkpoints/step-000000920-c8044c5cf2.pt",
+          "sha256": "bb1d7b0a10e62d47f6735539cb445621ca401a46c010ec4647c22fea21e5c1e1",
+          "size_bytes": 404226231,
+          "state_sha256": "c3f868a5bc44237fac6166fa96a16f8d9c0f434aa183672572201fec4e17f497",
+          "steps": 920,
+          "tokens": 235520
+        },
+        "origin_backend": "cpu",
+        "original_error": "allocation multiplier did not meet the total constraint",
+        "original_state_loaded_exact": false,
+        "passed": true,
+        "physical_id": "9",
+        "pid": 1352457,
+        "portable_origin_fields_equal": true,
+        "rng_sha256": "f6146bf46d7e31fdfd8891ae48811978ea810e00f0a4325f39fb0d278991743f",
+        "stream_sha256": "f935902fff45d93ea0f9feda677c44e28bcfd5ee8428e3bf920214226d71c638",
+        "updates": [
+          {
+            "grad_norm": 1.1711064577102661,
+            "loss": 6.279027938842773,
+            "lr": 0.0009995893112383328,
+            "objective": 6.279027938842773,
+            "step": 921,
+            "tokens": 235776
+          },
+          {
+            "grad_norm": 1.1743141412734985,
+            "loss": 6.365697860717773,
+            "lr": 0.0009995880753440921,
+            "objective": 6.365697860717773,
+            "step": 922,
+            "tokens": 236032
+          },
+          {
+            "counts": {
+              "refined_rows": 0,
+              "repaired_coordinates": 0,
+              "repaired_rows": 0
+            },
+            "grad_norm": 1.1904616355895996,
+            "gradient_tensors": 185,
+            "input_sha256": "2417a423fded16f88c56bd44bfa801f576c9f8de53f74c1df98baef953596e90",
+            "loss": 6.635608196258545,
+            "lr": 0.0009995868375938946,
+            "objective": 6.635608196258545,
+            "reset": false,
+            "state_sha256": {
+              "adamw": "83aab6a44129aa09ff334820a257d646ac7b9a0d973b5378d011717423c4c1e5",
+              "gradients_after_clip": "122b269a5943c5c6dd05c27ac4a09eda6c429d90434cbec5bf2c42e6432719db",
+              "model": "bdc4ec14d6a0acbdf0a7f599d4249b3372cf0cce7253bed98ed8841b4d0266fe",
+              "private_state": "c60eee72ce38ffcdacba787d6d8954fde54d694443b0b4ff74f66cf356940a85"
+            },
+            "step": 923,
+            "tokens": 236288
+          }
+        ]
+      },
+      "restored": {
+        "actual_module": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-r25-final/base/src/tide/__init__.py",
+        "checkpoint_sha256": "9b0a3553aa311859910a5cdf6f9b8bcbfa4d69a20199bd18d3ba3fdb2e64889a",
+        "comparison": {
+          "adamw": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 752,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 3.073364496231079e-08,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "gradients_after_clip": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 185,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 3.129243850708008e-07,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "model": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 205,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 7.487833499908447e-07,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          },
+          "private_state": {
+            "atol": 1e-05,
+            "exact": true,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 108,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 0.0,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "device": "npu:0",
+        "discrete_exact": true,
+        "fault_step": 921,
+        "files_digest": "3c469d46ac004f6f6edc12841cde56ec9c5e78852a27de9c31b185cc9eb1ce77",
+        "loaded_state_exact": true,
+        "metrics": {
+          "counts": {
+            "refined_rows": 0,
+            "repaired_coordinates": 0,
+            "repaired_rows": 0
+          },
+          "grad_norm": 1.1904605627059937,
+          "gradient_tensors": 185,
+          "input_sha256": "2417a423fded16f88c56bd44bfa801f576c9f8de53f74c1df98baef953596e90",
+          "loss": 6.635608673095703,
+          "lr": 0.0009995868375938946,
+          "objective": 6.635608673095703,
+          "reset": false,
+          "state_sha256": {
+            "adamw": "2d685b51e59bb7d0ef644d6849676385019ada10c57d84240257d00808fb612a",
+            "gradients_after_clip": "5b9e33760b8877920c034c8c6f8da4de8c5be5f1ec3044f06948f0c2ac332d76",
+            "model": "995dcc3989132ddc188d87e93283275ea90c597fdc435d9bbe83096308c9c609",
+            "private_state": "c60eee72ce38ffcdacba787d6d8954fde54d694443b0b4ff74f66cf356940a85"
+          }
+        },
+        "passed": true,
+        "physical_id": "9",
+        "pid": 1353175,
+        "step": 923
+      }
+    }
+  },
+  "queue": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-r25-final/npu-queue.json",
+    "sha256": "fbd36f122ef593454adb77a58bdddad4d536e7c22cf84bf0029c5177deba540d"
+  },
+  "reference": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-r25-final/driver/r24_quad_reference.py",
+    "sha256": "c667e1bc12fd875a67d275ffd3a3c43d9f401f075c0dfac5b697e42da149aadf"
+  },
+  "schema": "pilot-r3-quad-total-acceptance-v1",
+  "scope": "CPU official checkpoint; NPU starts from the portable CPU payload with independent NPU RNG. Each backend subsequently saves and restores its own checkpoint in a fresh process. Exact-rational allocation/analytic VJP oracle within the local floating-point trajectory. Four warm paired sample timings per backend, and three earlier minibatches sampled, no historical retraining.",
+  "tests": {
+    "cpu": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-r25-final/cpu-tests.log",
+      "sha256": "543debcb7b151b2ced55a59008be1c58d995c9b75fd20a294eac2f85e3fcb52a"
+    },
+    "migration": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-r25-release/migration-tests.log",
+      "sha256": "be4e1d73ed316bcae8d74340ba31710b809114a221b1e2a28bd938c9b38bf551"
+    },
+    "npu": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/quad-r25-final/npu-tests.log",
+      "sha256": "12c9e5f6ffe8c1e33dace9668e998477030f5d6fe71268c7af59d7c679b7eb31"
+    }
+  }
+}

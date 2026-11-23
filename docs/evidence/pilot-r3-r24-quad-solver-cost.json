@@ -1,0 +1,1296 @@
+{
+  "accounting": {
+    "cpu_optimizer_replays": 10,
+    "device_seconds": 152.32044198736548,
+    "diagnostic_completed_update_tokens": 5120,
+    "npu_optimizer_replays": 10,
+    "preparation": true,
+    "preparation_device_seconds": 152.32044198736548,
+    "preparation_reserved_tokens": 5376,
+    "queue_receipts": [
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/queue-op.json",
+        "sha256": "5888d06b55d427d68ca1623772e772d7ea74711e6005043d2c999f739fd39cc7"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/queue-step.json",
+        "sha256": "be44b7d5919ae2d4b173ef6d68454717a515f54893ed186c238482c21e7c01dd"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/queue-entry-op.json",
+        "sha256": "4ff799b0b115d63c6724fdda7b78a2509063a3209f329e59c02ddd74d2963ec1"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/queue-entry-op-r2.json",
+        "sha256": "8fd1ed12ad5ad0f245c6f032ae99ca31512c8d8701ce0c61d0cd8db7e486dad6"
+      }
+    ],
+    "scope": "All four NPU queue leases including the first rejected edge-case probe. Twenty isolated fixed update replays and one partial CPU forward to capture the healthy slab; allocator-only probes did not perform language-model updates.",
+    "status": "completed_with_retained_diagnostic_rejection"
+  },
+  "backends": {
+    "cpu": {
+      "affinity": [
+        280,
+        282,
+        284,
+        286
+      ],
+      "constructed_controls": {
+        "initial_sum": {
+          "budget": 1.0,
+          "entry": {
+            "output": [
+              1.0,
+              0.0
+            ],
+            "vjp_scores": [
+              0.0,
+              0.0
+            ]
+          },
+          "integrated": {
+            "output": [
+              1.0,
+              1.4901161193847656e-08
+            ],
+            "vjp_scores": [
+              0.0,
+              1.0
+            ]
+          },
+          "original": {
+            "output": [
+              1.0,
+              1.4901161193847656e-08
+            ],
+            "vjp_scores": [
+              0.0,
+              1.0
+            ]
+          },
+          "reference": [
+            1.0,
+            0.0
+          ],
+          "scores": [
+            2.0,
+            1.4901161193847656e-08
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "weights": [
+            0.5,
+            0.5
+          ]
+        },
+        "slack_budget_capacity": {
+          "budget": 2.0,
+          "entry": {
+            "error": "candidate could not certify a face"
+          },
+          "integrated": {
+            "output": [
+              1.0,
+              1.4901161193847656e-08
+            ],
+            "vjp_scores": [
+              0.0,
+              0.0
+            ]
+          },
+          "original": {
+            "output": [
+              1.0,
+              1.4901161193847656e-08
+            ],
+            "vjp_scores": [
+              0.0,
+              0.0
+            ]
+          },
+          "reference": [
+            1.0,
+            1.4901161193847656e-08
+          ],
+          "scores": [
+            2.0,
+            2.0
+          ],
+          "upper": [
+            1.0,
+            1.4901161193847656e-08
+          ],
+          "weights": [
+            1.0,
+            7.450580596923828e-09
+          ]
+        },
+        "true_tie": {
+          "budget": 1.0,
+          "entry": {
+            "output": [
+              1.0,
+              0.0
+            ],
+            "vjp_scores": [
+              0.0,
+              0.0
+            ]
+          },
+          "integrated": {
+            "output": [
+              1.0,
+              0.0
+            ],
+            "vjp_scores": [
+              0.0,
+              0.0
+            ]
+          },
+          "original": {
+            "output": [
+              1.0,
+              0.0
+            ],
+            "vjp_scores": [
+              0.0,
+              0.0
+            ]
+          },
+          "reference": [
+            1.0,
+            0.0
+          ],
+          "scores": [
+            2.0,
+            0.0
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "weights": [
+            0.5,
+            0.5
+          ]
+        },
+        "upper_sum": {
+          "budget": 1.0,
+          "entry": {
+            "output": [
+              1.0,
+              0.0
+            ],
+            "vjp_scores": [
+              0.0,
+              0.0
+            ]
+          },
+          "integrated": {
+            "output": [
+              1.0,
+              1.4901161193847656e-08
+            ],
+            "vjp_scores": [
+              0.0,
+              0.0
+            ]
+          },
+          "original": {
+            "output": [
+              1.0,
+              1.4901161193847656e-08
+            ],
+            "vjp_scores": [
+              0.0,
+              0.0
+            ]
+          },
+          "reference": [
+            1.0,
+            0.0
+          ],
+          "scores": [
+            -1.0,
+            -3.0
+          ],
+          "upper": [
+            1.0,
+            1.4901161193847656e-08
+          ],
+          "weights": [
+            1.0,
+            7.450580596923828e-09
+          ]
+        }
+      },
+      "entry_comparison": {
+        "fault": {
+          "against_exact_rounded_reference": {
+            "entry": {
+              "support_mismatch": 0,
+              "test_row": [
+                0.9999942779541016,
+                5.7220458984375e-06
+              ],
+              "values_and_vjp_equal_to_tail_only": true,
+              "weight_mismatch": 0
+            },
+            "integrated": {
+              "support_mismatch": 0,
+              "test_row": [
+                0.9999942779541016,
+                5.7220458984375e-06
+              ],
+              "values_and_vjp_equal_to_tail_only": true,
+              "weight_mismatch": 0
+            },
+            "original": {
+              "error": "allocation multiplier did not meet the total constraint"
+            }
+          },
+          "median_ms": {
+            "entry": 6.298352875,
+            "integrated": 6.19788825
+          },
+          "paired_percent": {
+            "entry_vs_integrated": {
+              "max": 3.8346864751890752,
+              "median": 2.3536758220001897,
+              "min": -0.17465892390485793,
+              "q25": 2.113756841505393,
+              "q75": 2.9369678114784468
+            }
+          }
+        },
+        "healthy": {
+          "against_exact_rounded_reference": {
+            "entry": {
+              "support_mismatch": 0,
+              "test_row": [
+                0.9559578895568848,
+                0.044042110443115234
+              ],
+              "values_and_vjp_equal_to_tail_only": true,
+              "weight_mismatch": 0
+            },
+            "integrated": {
+              "support_mismatch": 0,
+              "test_row": [
+                0.9559578895568848,
+                0.044042110443115234
+              ],
+              "values_and_vjp_equal_to_tail_only": true,
+              "weight_mismatch": 0
+            },
+            "original": {
+              "support_mismatch": 0,
+              "test_row": [
+                0.9559578895568848,
+                0.044042110443115234
+              ],
+              "values_and_vjp_equal_to_tail_only": true,
+              "weight_mismatch": 0
+            }
+          },
+          "median_ms": {
+            "entry": 2.29446075,
+            "integrated": 2.150339,
+            "original": 2.0510096666666664
+          },
+          "paired_percent": {
+            "entry_vs_integrated": {
+              "max": 6.998608252384919,
+              "median": 6.550619765114063,
+              "min": 6.157020160684823,
+              "q25": 6.387090717053573,
+              "q75": 6.807021851994228
+            },
+            "entry_vs_original": {
+              "max": 12.108705752962079,
+              "median": 11.726790280912436,
+              "min": 11.478224174979413,
+              "q25": 11.67372009498196,
+              "q75": 11.970205092672915
+            }
+          }
+        },
+        "small": {
+          "against_exact_rounded_reference": {
+            "entry": {
+              "support_mismatch": 0,
+              "test_row": [
+                0.9999990463256836,
+                9.5367431640625e-07
+              ],
+              "values_and_vjp_equal_to_tail_only": true,
+              "weight_mismatch": 0
+            },
+            "integrated": {
+              "support_mismatch": 0,
+              "test_row": [
+                0.9999990463256836,
+                9.5367431640625e-07
+              ],
+              "values_and_vjp_equal_to_tail_only": true,
+              "weight_mismatch": 0
+            },
+            "original": {
+              "support_mismatch": 1,
+              "test_row": [
+                0.9999990463256836,
+                0.0
+              ],
+              "values_and_vjp_equal_to_tail_only": false,
+              "weight_mismatch": 1
+            }
+          },
+          "median_ms": {
+            "entry": 2.936044375,
+            "integrated": 2.789400625,
+            "original": 2.0526697499999997
+          },
+          "paired_percent": {
+            "entry_vs_integrated": {
+              "max": 6.642126837616091,
+              "median": 5.245284331562495,
+              "min": 4.513708282803064,
+              "q25": 4.993033813598597,
+              "q75": 5.499771126893366
+            },
+            "entry_vs_original": {
+              "max": 43.5702946841422,
+              "median": 42.98339377769472,
+              "min": -13.975457781208146,
+              "q25": 42.59008787524954,
+              "q75": 43.3389642307189
+            }
+          }
+        }
+      },
+      "machine": "aarch64 CPU",
+      "normal_update": {
+        "all_replay_digests_equal_within_backend": true,
+        "all_replay_metrics_equal_within_backend": true,
+        "device_memory": {
+          "cpu_rss_peak_bytes": 15871922176
+        },
+        "distinct_gradient_digests_by_variant": {
+          "integrated": 1,
+          "original": 1
+        },
+        "paired_percent": {
+          "max": 1.8429333709367945,
+          "median": 0.8731713825479992,
+          "min": 0.2562546246670738,
+          "q25": 0.5136454121214051,
+          "q75": 1.3209086606015608,
+          "raw": [
+            1.8429333709367945,
+            0.5994423412728489,
+            0.2562546246670738,
+            1.1469004238231495
+          ]
+        },
+        "seconds": {
+          "integrated": {
+            "max": 21.589991674,
+            "median": 21.212161543500002,
+            "min": 20.921217652,
+            "q25": 21.130484161000002,
+            "q75": 21.31556048575
+          },
+          "original": {
+            "max": 21.345183672,
+            "median": 20.9930338725,
+            "min": 20.7965543,
+            "q25": 20.829150437750002,
+            "q75": 21.195834864
+          }
+        },
+        "warmup_refined_rows": 0
+      },
+      "operator": {
+        "fault": {
+          "counts": {
+            "final_disputed_rows": 1,
+            "old_bisect_rows": 1,
+            "shape": [
+              2,
+              1280,
+              2
+            ],
+            "solved_rows": 562,
+            "strides": [
+              1280,
+              1,
+              2560
+            ]
+          },
+          "median_ms": {
+            "integrated": 6.331744499999999,
+            "unintegrated": 6.849062
+          },
+          "paired_percent": {
+            "integrated_vs_unintegrated": {
+              "max": -7.370983272615206,
+              "median": -7.539301728621883,
+              "min": -7.705651355883214,
+              "q25": -7.638126503269488,
+              "q75": -7.485651379230459
+            }
+          }
+        },
+        "healthy": {
+          "counts": {
+            "final_disputed_rows": 0,
+            "old_bisect_rows": 0,
+            "shape": [
+              2,
+              1280,
+              2
+            ],
+            "solved_rows": 687,
+            "strides": [
+              1280,
+              1,
+              2560
+            ]
+          },
+          "median_ms": {
+            "integrated": 2.1959330833333333,
+            "original": 2.0948942500000003,
+            "unintegrated": 2.2845972916666666
+          },
+          "paired_percent": {
+            "integrated_vs_original": {
+              "max": 5.201365568395944,
+              "median": 4.846480014580834,
+              "min": 4.626111505667274,
+              "q25": 4.77374794417908,
+              "q75": 4.959632004638742
+            },
+            "unintegrated_vs_original": {
+              "max": 9.347179857312682,
+              "median": 9.021964785665492,
+              "min": 8.781122887928206,
+              "q25": 8.862339143014063,
+              "q75": 9.304578999108049
+            }
+          }
+        },
+        "small": {
+          "counts": {
+            "final_disputed_rows": 1,
+            "old_bisect_rows": 0,
+            "shape": [
+              2,
+              1280,
+              2
+            ],
+            "solved_rows": 562,
+            "strides": [
+              1280,
+              1,
+              2560
+            ]
+          },
+          "median_ms": {
+            "integrated": 2.8566111249999997,
+            "original": 2.08930625,
+            "unintegrated": 6.83258925
+          },
+          "paired_percent": {
+            "integrated_vs_original": {
+              "max": 37.65359108733976,
+              "median": 36.6772183075747,
+              "min": 36.0228294246447,
+              "q25": 36.38637902144521,
+              "q75": 36.855167514566766
+            },
+            "unintegrated_vs_original": {
+              "max": 229.81009030184563,
+              "median": 227.1108506662138,
+              "min": 225.26110246570647,
+              "q25": 226.45848067316973,
+              "q75": 227.80736149664767
+            }
+          }
+        }
+      },
+      "physical_id": null,
+      "raw": {
+        "entry-op": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/entry-op-cpu.json",
+          "sha256": "724e853b2c11cb5528c8975a1633cfb0b5ca00b510f6fdda78be8a1613dcb82b"
+        },
+        "op": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/op-cpu.json",
+          "sha256": "b879cad08f0e21de09978bb5e29e270bc94298258ef2594f36bfd6c3d679ca55"
+        },
+        "step": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/step-cpu.json",
+          "sha256": "107330f88e59deb3a0d2e69580884f5b963bc3b21d45c57c1afab556f6c127ba"
+        }
+      },
+      "threads": 4
+    },
+    "npu": {
+      "affinity": [
+        244,
+        250,
+        252,
+        254
+      ],
+      "constructed_controls": {
+        "initial_sum": {
+          "budget": 1.0,
+          "entry": {
+            "output": [
+              1.0,
+              0.0
+            ],
+            "vjp_scores": [
+              0.0,
+              0.0
+            ]
+          },
+          "integrated": {
+            "output": [
+              1.0,
+              1.4901161193847656e-08
+            ],
+            "vjp_scores": [
+              0.0,
+              1.0
+            ]
+          },
+          "original": {
+            "output": [
+              1.0,
+              1.4901161193847656e-08
+            ],
+            "vjp_scores": [
+              0.0,
+              1.0
+            ]
+          },
+          "reference": [
+            1.0,
+            0.0
+          ],
+          "scores": [
+            2.0,
+            1.4901161193847656e-08
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "weights": [
+            0.5,
+            0.5
+          ]
+        },
+        "slack_budget_capacity": {
+          "budget": 2.0,
+          "entry": {
+            "error": "candidate could not certify a face"
+          },
+          "integrated": {
+            "output": [
+              1.0,
+              1.4901161193847656e-08
+            ],
+            "vjp_scores": [
+              0.0,
+              0.0
+            ]
+          },
+          "original": {
+            "output": [
+              1.0,
+              1.4901161193847656e-08
+            ],
+            "vjp_scores": [
+              0.0,
+              0.0
+            ]
+          },
+          "reference": [
+            1.0,
+            1.4901161193847656e-08
+          ],
+          "scores": [
+            2.0,
+            2.0
+          ],
+          "upper": [
+            1.0,
+            1.4901161193847656e-08
+          ],
+          "weights": [
+            1.0,
+            7.450580596923828e-09
+          ]
+        },
+        "true_tie": {
+          "budget": 1.0,
+          "entry": {
+            "output": [
+              1.0,
+              0.0
+            ],
+            "vjp_scores": [
+              0.0,
+              0.0
+            ]
+          },
+          "integrated": {
+            "output": [
+              1.0,
+              0.0
+            ],
+            "vjp_scores": [
+              0.0,
+              0.0
+            ]
+          },
+          "original": {
+            "output": [
+              1.0,
+              0.0
+            ],
+            "vjp_scores": [
+              0.0,
+              0.0
+            ]
+          },
+          "reference": [
+            1.0,
+            0.0
+          ],
+          "scores": [
+            2.0,
+            0.0
+          ],
+          "upper": [
+            1.0,
+            1.0
+          ],
+          "weights": [
+            0.5,
+            0.5
+          ]
+        },
+        "upper_sum": {
+          "budget": 1.0,
+          "entry": {
+            "output": [
+              1.0,
+              0.0
+            ],
+            "vjp_scores": [
+              0.0,
+              0.0
+            ]
+          },
+          "integrated": {
+            "output": [
+              1.0,
+              1.4901161193847656e-08
+            ],
+            "vjp_scores": [
+              0.0,
+              0.0
+            ]
+          },
+          "original": {
+            "output": [
+              1.0,
+              1.4901161193847656e-08
+            ],
+            "vjp_scores": [
+              0.0,
+              0.0
+            ]
+          },
+          "reference": [
+            1.0,
+            0.0
+          ],
+          "scores": [
+            -1.0,
+            -3.0
+          ],
+          "upper": [
+            1.0,
+            1.4901161193847656e-08
+          ],
+          "weights": [
+            1.0,
+            7.450580596923828e-09
+          ]
+        }
+      },
+      "entry_comparison": {
+        "fault": {
+          "against_exact_rounded_reference": {
+            "entry": {
+              "support_mismatch": 0,
+              "test_row": [
+                0.9999942779541016,
+                5.7220458984375e-06
+              ],
+              "values_and_vjp_equal_to_tail_only": true,
+              "weight_mismatch": 0
+            },
+            "integrated": {
+              "support_mismatch": 0,
+              "test_row": [
+                0.9999942779541016,
+                5.7220458984375e-06
+              ],
+              "values_and_vjp_equal_to_tail_only": true,
+              "weight_mismatch": 0
+            },
+            "original": {
+              "error": "allocation multiplier did not meet the total constraint"
+            }
+          },
+          "median_ms": {
+            "entry": 16.375469625,
+            "integrated": 16.013407375
+          },
+          "paired_percent": {
+            "entry_vs_integrated": {
+              "max": 3.9395619575001595,
+              "median": 1.9305773884111366,
+              "min": -0.4385056211159477,
+              "q25": 1.4680097044503404,
+              "q75": 2.80260449614903
+            }
+          }
+        },
+        "healthy": {
+          "against_exact_rounded_reference": {
+            "entry": {
+              "support_mismatch": 0,
+              "test_row": [
+                0.9559578895568848,
+                0.044042110443115234
+              ],
+              "values_and_vjp_equal_to_tail_only": true,
+              "weight_mismatch": 0
+            },
+            "integrated": {
+              "support_mismatch": 0,
+              "test_row": [
+                0.9559578895568848,
+                0.044042110443115234
+              ],
+              "values_and_vjp_equal_to_tail_only": true,
+              "weight_mismatch": 0
+            },
+            "original": {
+              "support_mismatch": 0,
+              "test_row": [
+                0.9559578895568848,
+                0.044042110443115234
+              ],
+              "values_and_vjp_equal_to_tail_only": true,
+              "weight_mismatch": 0
+            }
+          },
+          "median_ms": {
+            "entry": 6.680602,
+            "integrated": 6.321318166666666,
+            "original": 6.087065916666667
+          },
+          "paired_percent": {
+            "entry_vs_integrated": {
+              "max": 8.362180520503237,
+              "median": 5.420734283472795,
+              "min": 2.994738660596341,
+              "q25": 4.89609739037038,
+              "q75": 5.745202485533213
+            },
+            "entry_vs_original": {
+              "max": 11.727882065575113,
+              "median": 9.779694381945559,
+              "min": 8.408948364789715,
+              "q25": 9.2335828512761,
+              "q75": 10.061541328780322
+            }
+          }
+        },
+        "small": {
+          "against_exact_rounded_reference": {
+            "entry": {
+              "support_mismatch": 0,
+              "test_row": [
+                0.9999990463256836,
+                9.5367431640625e-07
+              ],
+              "values_and_vjp_equal_to_tail_only": true,
+              "weight_mismatch": 0
+            },
+            "integrated": {
+              "support_mismatch": 0,
+              "test_row": [
+                0.9999990463256836,
+                9.5367431640625e-07
+              ],
+              "values_and_vjp_equal_to_tail_only": true,
+              "weight_mismatch": 0
+            },
+            "original": {
+              "support_mismatch": 1,
+              "test_row": [
+                0.9999990463256836,
+                0.0
+              ],
+              "values_and_vjp_equal_to_tail_only": false,
+              "weight_mismatch": 1
+            }
+          },
+          "median_ms": {
+            "entry": 9.411833999999999,
+            "integrated": 9.022184,
+            "original": 6.0917460000000005
+          },
+          "paired_percent": {
+            "entry_vs_integrated": {
+              "max": 11.43119161373467,
+              "median": 3.954483711860446,
+              "min": 2.245078639743925,
+              "q25": 3.738534203553251,
+              "q75": 4.8800185155602245
+            },
+            "entry_vs_original": {
+              "max": 64.30329796189646,
+              "median": 54.51216016875341,
+              "min": 50.449072388648794,
+              "q25": 53.914387147996166,
+              "q75": 55.006551343618796
+            }
+          }
+        }
+      },
+      "machine": "Ascend910_9392",
+      "normal_update": {
+        "all_replay_digests_equal_within_backend": false,
+        "all_replay_metrics_equal_within_backend": false,
+        "device_memory": {
+          "cpu_rss_peak_bytes": 2926600192,
+          "npu_allocated_bytes": 469908480,
+          "npu_device_memory_scope": "device-wide mem_get_info; sampled before this worker releases its model/cache",
+          "npu_free_memory_bytes": 51722440704,
+          "npu_memory_sample_unix": 1795395446.7492995,
+          "npu_peak_allocated_bytes": 13190529536,
+          "npu_peak_reserved_bytes": 13788774400,
+          "npu_reserved_bytes": 13788774400,
+          "npu_total_memory_bytes": 65796046848
+        },
+        "distinct_gradient_digests_by_variant": {
+          "integrated": 5,
+          "original": 5
+        },
+        "paired_percent": {
+          "max": 2.159944306362327,
+          "median": 0.33527386998024045,
+          "min": -0.9273163243289306,
+          "q25": -0.7596859162668168,
+          "q75": 1.5707537167455266,
+          "raw": [
+            1.3743568535399264,
+            2.159944306362327,
+            -0.9273163243289306,
+            -0.7038091135794455
+          ]
+        },
+        "seconds": {
+          "integrated": {
+            "max": 8.026026821,
+            "median": 7.895331959,
+            "min": 7.812254061,
+            "q25": 7.85859783975,
+            "q75": 7.943970319250001
+          },
+          "original": {
+            "max": 7.929856821,
+            "median": 7.870855409000001,
+            "min": 7.809290631,
+            "q25": 7.84457343825,
+            "q75": 7.89649653825
+          }
+        },
+        "warmup_refined_rows": 0
+      },
+      "operator": {
+        "fault": {
+          "counts": {
+            "final_disputed_rows": 1,
+            "old_bisect_rows": 1,
+            "shape": [
+              2,
+              1280,
+              2
+            ],
+            "solved_rows": 562,
+            "strides": [
+              1280,
+              1,
+              2560
+            ]
+          },
+          "median_ms": {
+            "integrated": 16.104551875,
+            "unintegrated": 17.456547375
+          },
+          "paired_percent": {
+            "integrated_vs_unintegrated": {
+              "max": -5.519911449856163,
+              "median": -7.902755668799378,
+              "min": -8.276324131751133,
+              "q25": -8.06896368985101,
+              "q75": -7.650373456848475
+            }
+          }
+        },
+        "healthy": {
+          "counts": {
+            "final_disputed_rows": 0,
+            "old_bisect_rows": 0,
+            "shape": [
+              2,
+              1280,
+              2
+            ],
+            "solved_rows": 687,
+            "strides": [
+              1280,
+              1,
+              2560
+            ]
+          },
+          "median_ms": {
+            "integrated": 6.337234125,
+            "original": 6.108230666666667,
+            "unintegrated": 6.259625458333333
+          },
+          "paired_percent": {
+            "integrated_vs_original": {
+              "max": 12.87320275617525,
+              "median": 3.77782691714893,
+              "min": 3.4709708344145884,
+              "q25": 3.572194864274164,
+              "q75": 5.173305536809419
+            },
+            "unintegrated_vs_original": {
+              "max": 2.925081191305501,
+              "median": 2.4555051526396032,
+              "min": 2.229464591439756,
+              "q25": 2.377465068773027,
+              "q75": 2.638579960730658
+            }
+          }
+        },
+        "small": {
+          "counts": {
+            "final_disputed_rows": 1,
+            "old_bisect_rows": 0,
+            "shape": [
+              2,
+              1280,
+              2
+            ],
+            "solved_rows": 562,
+            "strides": [
+              1280,
+              1,
+              2560
+            ]
+          },
+          "median_ms": {
+            "integrated": 9.137507625,
+            "original": 6.113996125,
+            "unintegrated": 17.4566835
+          },
+          "paired_percent": {
+            "integrated_vs_original": {
+              "max": 50.9057980865687,
+              "median": 49.994067302264654,
+              "min": 48.51679604722461,
+              "q25": 49.38032176347408,
+              "q75": 50.48097497398887
+            },
+            "unintegrated_vs_original": {
+              "max": 189.26917514408558,
+              "median": 185.92294575098046,
+              "min": 183.53640458703092,
+              "q25": 185.30282789876645,
+              "q75": 187.04308315676855
+            }
+          }
+        }
+      },
+      "physical_id": "9",
+      "raw": {
+        "entry-op": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/entry-op-npu.json",
+          "sha256": "04cec0267bf6b500354c0ce44a202cb88822559b784cc3b3cbdefa9c024b45ab"
+        },
+        "op": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/op-npu.json",
+          "sha256": "dc8b4ab289443555bedea2ac1e46dcb1f92f7537a6bcd023ff4956bffa1d418e"
+        },
+        "step": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/step-npu.json",
+          "sha256": "8e253906fb9b3ae5de1db000967b1d9911b04991cd928a6a2a3fabd294fe7c1e"
+        }
+      },
+      "threads": 4
+    }
+  },
+  "diagnostic_files": {
+    "benchmark_entry.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/benchmark_entry.py",
+      "sha256": "9a6dce353a891086ba3d3cdbe4c211437bd9fe942c0a6a1ca91e12abeb8f9739"
+    },
+    "benchmark_entry_first.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/benchmark_entry_first.py",
+      "sha256": "8d28ad2a82eaca21ace9fda6fe9e2cd4f215a7b1eb50d6c933632ca462560825"
+    },
+    "benchmark_op.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/benchmark_op.py",
+      "sha256": "b5d3463e11f2db8cfe520cd0340f72023049ea3f18132a038ad9ac09ad9f6ae5"
+    },
+    "benchmark_step.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/benchmark_step.py",
+      "sha256": "f9f9c096fd95d8fa3d978eedd51a3ffba6f475eec8ad2e875e29f70f329240ab"
+    },
+    "boundary-controls.json": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/boundary-controls.json",
+      "sha256": "0a36c5c57df0eb3c388edb37d633208376d1b708b4479b3a031f0f51f39dbeb7"
+    },
+    "entry-op-cpu-r2.log": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/entry-op-cpu-r2.log",
+      "sha256": "47be50afabd7f660b2b5052ef16f36d3ae4329872442a2d5bbd6c42c37cb3748"
+    },
+    "entry-op-cpu.log": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/entry-op-cpu.log",
+      "sha256": "70d02b9c55973fc6ce2024ab6cc11017ac8f15f36b153575a275d62898108837"
+    },
+    "entry-op-npu-r2.log": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/entry-op-npu-r2.log",
+      "sha256": "89972ed3cdadffe848a3cf236f67324f3e5092a3f3d755d2397883253efbf596"
+    },
+    "entry-op-npu.log": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/entry-op-npu.log",
+      "sha256": "7d9900babf3cbba33622849da87b76203cbb7be21490207e0694db920fdcb9f1"
+    },
+    "entry_allocation.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/entry_allocation.py",
+      "sha256": "e26a61cb83c6d4889f7766bec327c016459f1ec6ba67247fdcfc42f5360e3fd8"
+    },
+    "entry_variant.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/entry_variant.py",
+      "sha256": "879af2a4476c7448c80f8071bcfac15834ae67f19ee8b691098c3b69b16f0a76"
+    },
+    "integrated_allocation.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/integrated_allocation.py",
+      "sha256": "45a4440c0536e24de0992dfae3cd61b6530d8c36e810d003a107825a0ac89efb"
+    },
+    "prepare.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/prepare.py",
+      "sha256": "4f633928787fe02b1294e76a251dced1001fba68ca154496ae523d71f00c1b93"
+    },
+    "rounded-real-interior.json": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/rounded-real-interior.json",
+      "sha256": "cb73accd169d7bd375eaee94c978f2e114a406cae0897ed9fb3740cee6d0c58a"
+    },
+    "rounding_case.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/rounding_case.py",
+      "sha256": "281b0b8723fba49e1a265d7feef151b5fb81450dcd415a54c771550d808720b4"
+    },
+    "run-step.sh": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/run-step.sh",
+      "sha256": "769b9ac4ed20bebb8936bc876905f18838edbfe749a6291177875c208163481f"
+    },
+    "variants.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/variants.py",
+      "sha256": "55911c2e575db884a9945455ef46ee636c1a01b56eb5eafb03d8e9025a8dde99"
+    }
+  },
+  "experiment": "Frozen r24 allocator compared with two private experimental copies. No formal work items were advanced.",
+  "inputs": {
+    "checkpoint": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112001-r5/attempt-0/checkpoints/step-000000913-88c78bcae0.pt",
+      "sha256": "2243939a3710bc538936a045f8daee4bc52429803f1a3ec9b031160506095fac",
+      "size_bytes": 404226167,
+      "state_sha256": "57fb03562d92a0914863a8db4958b6ecb0a8dcec26a60b40976884d9b9ea3cb5",
+      "steps": 913,
+      "tokens": 233728
+    },
+    "independent_batch": 2,
+    "normal_step": {
+      "batch_digest": "64dfe977b6f5784bb1929b9c1a7856d64f806bd492ff587a85a0a1fcf53ff133",
+      "batch_tokens": 256,
+      "pairs": 4,
+      "state_reset": false,
+      "step": 914,
+      "variants": [
+        "original",
+        "integrated"
+      ],
+      "warmup_per_variant": 1
+    },
+    "precision": "FP32",
+    "sequence_length": 128,
+    "slabs": {
+      "fault": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-total-diagnostic/failed-allocation.pt",
+        "sha256": "6e053b0067a498dde6c165c67464d09d4d93b5909a7e1f1dc20609b4f1925c14"
+      },
+      "healthy": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/healthy.pt",
+        "sha256": "dc4435c460b52832751c05eab01d315625a444cf4ab4e2d9d192721d8fee82fe"
+      }
+    },
+    "tokens_per_replay": 256
+  },
+  "interpretation": [
+    "The remaining-mass check detects both the actual 921 exception and a positive neighbor accepted by the original solver. The seven-step lookback of 72,967 constrained rows is specific to this signature and does not estimate a campaign-wide frequency.",
+    "A check guarded by solve misses incorrectly skipped rows. Compensating the preliminary totals corrects two constructed rows on both backends but rejects a legitimate capacity-limited case with k=2 and cap sum 1+2^-26.",
+    "Even with an independent unit budget, a real interior of 1-2^-26 rounds to the stored cap 1. Correctly rounded values can have a nonzero compensated sum residual, and the face used for the VJP can differ from the stored face.",
+    "Preserve the origin and roundoff of chosen total bounds and the mathematical active face through storage. Treat ambiguous rows as candidates for local reconstruction and certify against representability and boundary conditions. Cross-check values, weak support, and VJPs with exact small-row references.",
+    "Only terminal-check healthy-update cost was measured end to end; the NPU runs used the CPU checkpoint's portable state with a fixed device seed. Repeated NPU baseline updates also produced distinct gradient digests. The observed times do not qualify a repaired release or estimate the whole matrix."
+  ],
+  "mechanism": {
+    "complexity": "For k candidates the new ordinary comparisons need O(k) work per row in addition to existing O(k log k) sorting. Refinement revisits the remaining candidates for at most k+1 passes, O(k^2) work per selected row and O(k) temporary storage. An original FP32 bisection uses 40 iterations and may execute tensor operations over the slab.",
+    "entry_test": "Also use compensated sums before deciding on activation and before selecting the aggregate box endpoints. The test still receives the rounded scalar totals constructed by allocate().",
+    "ordinary": "Solve the active fixed total when it lies strictly between aggregate bounds; use sorted breakpoints, face bounds and the existing safeguarded bisection if needed.",
+    "refinement": "Re-center original scores among free coordinates; peg coordinates provably saturated according to the sign of the clipped residual; redistribute the remaining mass. Refine only selected rows in the same device dtype.",
+    "source_diffs": {
+      "entry_and_terminal_check": {
+        "lines_added": 73,
+        "lines_removed": 4,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/entry.diff",
+        "sha256": "7f4737514269093558da2bed84cbf7aefadac12a647a06aedcf68047b30129e9"
+      },
+      "terminal_check": {
+        "lines_added": 59,
+        "lines_removed": 2,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/integrated.diff",
+        "sha256": "6126ae4132d0e54f3892008120a3448242dad2b1965608d3d65b0e9ccd117956"
+      }
+    },
+    "terminal_check": "For such a row, recompute signed sum(c)-T with a compensated tail. Dispute abs(delta)>32*eps*max(abs(T),tiny) or a wholly bounded stored output with nonzero delta. Retain the original global tolerance checks."
+  },
+  "reviewed_local": "2026-11-23T09:04:18+08:00",
+  "rounded_interior_cpu": {
+    "cases": {
+      "entry-torch.float32": {
+        "error": "candidate could not certify a face"
+      },
+      "integrated-torch.float32": {
+        "first_output_vjp_upper": [
+          1.0,
+          0.0
+        ],
+        "weights": [
+          1.0,
+          1.4901161193847656e-08
+        ]
+      },
+      "original-torch.float32": {
+        "first_output_vjp_upper": [
+          1.0,
+          0.0
+        ],
+        "weights": [
+          1.0,
+          1.4901161193847656e-08
+        ]
+      },
+      "original-torch.float64": {
+        "first_output_vjp_upper": [
+          0.0,
+          -1.0
+        ],
+        "weights": [
+          0.9999999850988388,
+          1.4901161193847656e-08
+        ]
+      }
+    },
+    "exact": [
+      "67108863/67108864",
+      "1/67108864"
+    ],
+    "k": 1.0,
+    "lower": [
+      0.0,
+      0.0
+    ],
+    "mu": [
+      1.0,
+      1.4901161193847656e-08
+    ],
+    "rounded": [
+      1.0,
+      1.4901161193847656e-08
+    ],
+    "scores": [
+      2.0,
+      2.0
+    ],
+    "signed_exact_sum_of_stored_values_minus_target": "1/67108864",
+    "upper": [
+      1.0,
+      1.4901161193847656e-08
+    ],
+    "w": [
+      1.0,
+      7.450580596923828e-09
+    ]
+  },
+  "schema": "pilot-r3-quad-solver-screen-and-cost-v1",
+  "scope": "CPU and one exclusively admitted Ascend device on the same real two-candidate operation, plus synthetic controls. End-to-end comparisons are of the terminal check only on the same fixed healthy training update.",
+  "sources": {
+    "foundation_commit": "68cf6d40e18eacebcd7292c244819f7406cc4ef5",
+    "original": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/foundation/src/tide/allocation.py",
+      "sha256": "af35b432f4da0d253cfc44220a3aac1d4ecedb6a4f6c07060dcefd3cd8f171eb"
+    },
+    "original_diagnosis": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-r24-quad-total-constraint.json",
+      "sha256": "228289e28063b79218b0ac34b0acb374cade594ee3791ea8969a0b26bdf27c14"
+    },
+    "plan": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/plan.json",
+      "sha256": "04ec51bbc54ca278eedf1ddd32d82c0dc365fe9057101ce72e9b9f095990c41f"
+    },
+    "python": "3.12.13",
+    "runtime_packages": {
+      "numpy": "2.5.2",
+      "torch": "2.12.0+cpu",
+      "torch-npu": "2.12.0.post3"
+    },
+    "step_launch": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/r24-quad-cost/step-launch.json",
+      "sha256": "23ed326050bb7d6d8807aabbeb073e254d937eed156ca2070ee38f1cd750056d"
+    },
+    "task_id": "multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112001-r5"
+  },
+  "status": "diagnostic_completed_with_known_counterexamples",
+  "timing": {
+    "operator": "Four warmups per case/variant and twelve balanced counter-ordered blocks; allocations and graph creation included; backward and host copies excluded. NPU synchronized at block boundaries. Running counters and the correctness probes are outside timed windows.",
+    "percentage": "Median of per-block or per-pair elapsed-time ratios, not a confidence interval.",
+    "step": "One warmup per variant per backend, four balanced pairs of replays from step 913, fixed batch for step 914. Includes forward, backward, gradient clipping, AdamW, synchronization and the ordinary train_update transfers. Excludes model/optimizer restore, checkpoint I/O and hashing."
+  }
+}

@@ -1,0 +1,283 @@
+{
+  "budget_remaining_at_review": {
+    "budget_ledger": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/budget.json",
+    "deadline_unix": 1797698913.9318287,
+    "max_device_seconds": 25920000,
+    "observed_unix": 1795271226.805065,
+    "remaining_device_seconds": 25355470.740946963,
+    "remaining_preparation_device_seconds": 150459.95645333454,
+    "remaining_preparation_processed_tokens": 46183648,
+    "remaining_wall_seconds": 2427687.1267638206,
+    "started_unix": 1795106913.9318287
+  },
+  "completed_after_owner_exit": {
+    "exchange-d256-s-independent-c47e3ed498-preflight-2026112021-capacity-large": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r15/round/tasks/exchange-d256-s-independent-c47e3ed498-preflight-2026112021-capacity-large/attempt-0/result.json",
+      "sha256": "361effef53ec8d4f351c904330e2075cb29732bddb1054cd3d59defd5887b688"
+    }
+  },
+  "completed_before_signal": {
+    "multiscale_timed-d128-x_reverse-group5-f83e81e4af-a1-2026112002-r0": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r15/round/tasks/multiscale_timed-d128-x_reverse-group5-f83e81e4af-a1-2026112002-r0/attempt-0/result.json",
+      "sha256": "a42c16ec9b38d4d5b078b5332463838786658fc15958807583ade3d2d15a6b22"
+    }
+  },
+  "current_stage_a": {
+    "blocking_reason": "Blocked: capacity-large: shared_group_not_completed:running",
+    "counts": {
+      "completed": 80,
+      "failed": 10,
+      "pending": 226,
+      "stopped_budget": 58
+    },
+    "status": "a_blocked_needs_repair",
+    "unit": "tide-pilot-r3-campaign-r15.service"
+  },
+  "foundation": {
+    "published_head": "3150ae64806b77091660b9c5ef6ec74d050646b9"
+  },
+  "inputs": {
+    "campaign_plan": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r15/campaign-plan.json",
+      "sha256": "1a5c0616e06dec43193b89d84be02b7173999e8ad57b2e50f3ed91db6623e0da"
+    },
+    "foundation_acceptance": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-r14-foundation-route-acceptance.json",
+      "sha256": "f863e3aa76d649b74e39c62e2d953b3909d2e9c329ef2a30d099a13755ab827a"
+    },
+    "scheduler": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r15/round/scheduler.json",
+      "sha256": "01f580c651422ef60d001eaffe8e503b27f893a48fd454dbd51c914df8f1f244"
+    },
+    "selected": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r15/round/selected.json",
+      "sha256": "7f70e3ea345b93269753e702be774f10a89073b3e100e832fa8631666da9db7d"
+    },
+    "terminal_audit": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-campaign-r15-terminal-audit.json",
+      "sha256": "121611f4cec0ccfe401ab0c349c2946c104481c9afae1851b4957d14641f9941"
+    }
+  },
+  "observed_unix": 1795271226.7830386,
+  "old_timed_a2": {
+    "checkpoint": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r15/round/tasks/multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2/attempt-0/checkpoints/step-000003804-59e7851ca1.pt",
+      "sha256": "995dddbaed14f1539f2098581100383b3732f7d734b1ca6a181747067412b959",
+      "size_bytes": 86028127,
+      "state_sha256": "a14c0c3ac8ab83f8fa173c12bcb5dcac8c239c58ba73c7c02692308d4ff2c8d8",
+      "steps": 3804,
+      "tokens": 486912
+    },
+    "task_id": "multiscale_timed-d128-k-singleton7-eaab60796a-a2-2026112001-r2"
+  },
+  "priority_task_id": "exchange-d256-s-independent-c47e3ed498-preflight-2026112021-capacity-large",
+  "reconciliation": {
+    "certified_r15": 82,
+    "completed_total": 1679,
+    "inherited_completed": 1597,
+    "outstanding": 292
+  },
+  "repair": {
+    "failing_pre_fix_regressions": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/scheduler-r16-release/regression-before.log",
+      "sha256": "afd132f8927bcc8e685ac33705675648a257e2727f5df3c6fabe7b3170056e3e"
+    },
+    "owner_exited_unix": 1795269243.2079618,
+    "owner_group": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r15/round/groups/group-000057/group.json",
+      "sha256": "ed9dc8244c35b2328a0e14f002ee74ac2a13684f3b7fc9c8ab5d3532bfee32d3"
+    },
+    "owner_queue": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r15/round/groups/group-000057/queue.json",
+      "sha256": "a6ee752ed121eb4bc9f6210bb2b8d509a37feefec28b1561163cb673762e30bf"
+    },
+    "rejected_damaged_receipts": [
+      "result_sha256",
+      "return_code",
+      "remaining_descendants"
+    ],
+    "replay": {
+      "driver": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/scheduler-r16-release/replay.py",
+        "sha256": "12f9aaf3f18a7600fa94b8c7a36ff882dacacaad58a5e84a23388ca3c2705dc9"
+      },
+      "injected": "in-memory running snapshot reconstructed from the terminal group; actual task, manifest, queue and worker result",
+      "outputs": {
+        "predecessor": {
+          "controller": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r15/source/pilotlab/scheduler_shared3.py",
+          "group_sha256": "ed9dc8244c35b2328a0e14f002ee74ac2a13684f3b7fc9c8ab5d3532bfee32d3",
+          "reason": "shared_group_not_completed:running",
+          "release_unix": null,
+          "result_sha256": "361effef53ec8d4f351c904330e2075cb29732bddb1054cd3d59defd5887b688",
+          "status": "failed",
+          "task_id": "exchange-d256-s-independent-c47e3ed498-preflight-2026112021-capacity-large",
+          "worker_code": null
+        },
+        "repaired": {
+          "controller": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/scheduler_shared3.py",
+          "group_sha256": "ed9dc8244c35b2328a0e14f002ee74ac2a13684f3b7fc9c8ab5d3532bfee32d3",
+          "reason": null,
+          "release_unix": 1795269243.206871,
+          "result_sha256": "361effef53ec8d4f351c904330e2075cb29732bddb1054cd3d59defd5887b688",
+          "status": "completed",
+          "task_id": "exchange-d256-s-independent-c47e3ed498-preflight-2026112021-capacity-large",
+          "worker_code": 0
+        }
+      }
+    },
+    "scheduler_decision_unix": 1795269243.2424417,
+    "source_files": {
+      "cutover_review3.py": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/cutover_review3.py",
+        "sha256": "13ffb74b3208bbea4b22044cf41c9328c7a64bad504763b804900f7fe101c39a"
+      },
+      "followup_migration3.py": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/followup_migration3.py",
+        "sha256": "53c6f150627e60f6f0f9ac53761a0f2e622240b91f42c8a85111732fdf8ff26a"
+      },
+      "prepare_stage_a_migration3.py": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/prepare_stage_a_migration3.py",
+        "sha256": "c679c487431abef59188a04faa0eb74ad52ce160d36aaf278f5981396cfe49b1"
+      },
+      "scheduler_dynamic3.py": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/scheduler_dynamic3.py",
+        "sha256": "489c5453bb09b9ec7e30fd3daa1ebd9ed8d801f40b6ae6c3494e6850281e9bde"
+      },
+      "scheduler_shared3.py": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/scheduler_shared3.py",
+        "sha256": "10269f10a8e2cdac9be613792bcc8b8756bd298d90e33a9173598aedc790331d"
+      },
+      "stage_a_continued3.py": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/pilotlab/stage_a_continued3.py",
+        "sha256": "b7618be27b08f81b289ad7a8d1c9d7f00b36c86828a6b585f99a8b697a610106"
+      }
+    },
+    "test_log": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/scheduler-r16-release/release-tests.log",
+      "sha256": "76bf21794016b4a3dbecbbaa001817cc6062a677eb897a9882dd11cf050ee67e"
+    },
+    "tests": "347 passed in 51.81s"
+  },
+  "schema": "pilot-r3-owner-exit-continuation-v1",
+  "stage_a_scope": {
+    "already_selected": 47,
+    "exposed_subject_ids": [
+      "exchange-d128-k-base-4aac2dcb10",
+      "exchange-d128-k-capacity-74eba502b1",
+      "exchange-d128-k-independent-d3d8980f6a",
+      "exchange-d128-k-narrowwide-a8b4f1078d",
+      "exchange-d128-k-pool-25a642ea44",
+      "exchange-d128-k-shannon-b4f9572c1e",
+      "exchange-d128-s-base-0f1647288b",
+      "exchange-d128-s-capacity-32268b8664",
+      "exchange-d128-s-independent-9e3c5ca87d",
+      "exchange-d128-s-narrowwide-5d192e0d6d",
+      "exchange-d128-s-pool-0f81d87b81",
+      "exchange-d128-s-shannon-4274ad3518",
+      "exchange-d128-x-base-2ab17f45cd",
+      "exchange-d128-x-capacity-faa7acc649",
+      "exchange-d128-x-independent-1edb3a093d",
+      "exchange-d128-x-narrowwide-f2f75f7e7f",
+      "exchange-d128-x-pool-5c0c9ad46d",
+      "exchange-d128-x-shannon-71abfc07a5",
+      "exchange-d128-x_reverse-base-817dc5b466",
+      "exchange-d128-x_reverse-capacity-e1bd082588",
+      "exchange-d128-x_reverse-independent-9faca6385c",
+      "exchange-d128-x_reverse-narrowwide-a276d01a16",
+      "exchange-d128-x_reverse-pool-26a8635043",
+      "exchange-d128-x_reverse-shannon-86ba13b249",
+      "exchange-d256-k-base-4f97098597",
+      "exchange-d256-k-capacity-afae2c3e83",
+      "exchange-d256-k-independent-7ec4f58bca",
+      "exchange-d256-k-narrowwide-c37cf9388b",
+      "exchange-d256-k-pool-2ad67d691b",
+      "exchange-d256-k-shannon-417a5ef511",
+      "exchange-d256-s-base-05c8908295",
+      "exchange-d256-s-capacity-171c8b98d0",
+      "exchange-d256-s-independent-c47e3ed498",
+      "exchange-d256-s-pool-c419779d1a",
+      "exchange-d256-s-shannon-2b8b292dbc",
+      "fc-d128-k-ffn1-e8be37f2b7",
+      "fc-d128-k-shared-f9498953c0",
+      "fc-d128-s-base-5c4809c97b",
+      "fc-d128-s-depth3-fbc6080d7d",
+      "fc-d128-s-ffn1-f45d256eab",
+      "fc-d128-s-shared-cbe5e2ff4e",
+      "fc-d256-k-base-0e3021c331",
+      "fc-d256-k-depth3-2f03e71304",
+      "fc-d256-k-ffn1-2b14f30d4a",
+      "fc-d256-k-shared-b862e34fe3",
+      "fc-d256-s-base-7e5a1b3415",
+      "fc-d256-s-depth3-91e5cfbe4e",
+      "fc-d256-s-ffn1-ca290fd261",
+      "fc-d256-s-shared-6af703487d",
+      "lattice-d128-k-base-78dbac086a",
+      "lattice-d128-k-depth2-87732fbcda",
+      "lattice-d128-k-ffn2-848b8b0ddd",
+      "lattice-d128-k-layershared-91f7652530",
+      "lattice-d128-k-memoryshared-ce62b8f81b",
+      "lattice-d128-k-nodes4-1f22ba3272",
+      "lattice-d128-k-receive128-ee1edca248",
+      "lattice-d128-k-receive64-c05227ce86",
+      "lattice-d128-s-base-0a353237f5",
+      "lattice-d128-s-depth2-00b9531d37",
+      "lattice-d128-s-ffn2-5c6ff7f21c",
+      "lattice-d128-s-layershared-6312958b4e",
+      "lattice-d128-s-memoryshared-4a1c5168a4",
+      "lattice-d128-s-nodes4-87a2e4a9d9",
+      "lattice-d128-s-receive128-1ede806cba",
+      "lattice-d128-s-receive64-cd47a49acb",
+      "lattice-d256-k-base-416b5585a2",
+      "lattice-d256-k-depth2-c24a34d6ed",
+      "lattice-d256-k-ffn2-e4a5b07a08",
+      "lattice-d256-k-layershared-1bb62cd81d",
+      "lattice-d256-k-memoryshared-719a561efa",
+      "lattice-d256-k-nodes4-910f84829b",
+      "lattice-d256-k-receive128-959d85255b",
+      "lattice-d256-k-receive64-c3e271805b",
+      "lattice-d256-s-base-7f0fca324e",
+      "lattice-d256-s-depth2-8bfed52ede",
+      "lattice-d256-s-ffn2-5372474eb5",
+      "lattice-d256-s-layershared-015f2cec51",
+      "lattice-d256-s-memoryshared-f80260ac11",
+      "lattice-d256-s-nodes4-3f686fda6a",
+      "lattice-d256-s-receive128-0a7681b33e",
+      "lattice-d256-s-receive64-2d8d03e9f1",
+      "multiscale_settle-d128-k-group5-b152141dc5",
+      "multiscale_settle-d128-k-mixed9-e96a17a14d",
+      "multiscale_settle-d128-k-singleton7-43b1716b2d",
+      "multiscale_settle-d128-s-group5-e393757acf",
+      "multiscale_settle-d128-s-mixed9-5bc345edf5",
+      "multiscale_settle-d128-s-singleton7-ffd53c4df7",
+      "multiscale_settle-d128-x-group5-4380cdb1f8",
+      "multiscale_settle-d128-x-mixed9-70e3fa0199",
+      "multiscale_settle-d128-x-singleton7-281f04cf8c",
+      "multiscale_settle-d128-x_reverse-group5-5850ce5a6d",
+      "multiscale_settle-d128-x_reverse-mixed9-35343ff0aa",
+      "multiscale_settle-d128-x_reverse-singleton7-655942fdd4",
+      "multiscale_settle-d256-k-group5-53ebbbaa25",
+      "multiscale_settle-d256-k-mixed9-0fad868c8b",
+      "multiscale_settle-d256-k-singleton7-cad34be170",
+      "multiscale_timed-d128-k-group5-b74cd801f3",
+      "multiscale_timed-d128-k-mixed9-b193254132",
+      "multiscale_timed-d128-k-singleton7-eaab60796a",
+      "multiscale_timed-d128-s-group5-37506fa4ee",
+      "multiscale_timed-d128-s-mixed9-542e33dbf6",
+      "multiscale_timed-d128-s-singleton7-139de547de",
+      "multiscale_timed-d128-x-group5-4b26d12571",
+      "multiscale_timed-d128-x-mixed9-ae4ffdec56",
+      "multiscale_timed-d128-x-singleton7-8ac3511b6a",
+      "multiscale_timed-d128-x_reverse-group5-f83e81e4af",
+      "multiscale_timed-d128-x_reverse-mixed9-99820c3100",
+      "multiscale_timed-d128-x_reverse-singleton7-2f58b0a0f6",
+      "multiscale_timed-d256-k-group5-27d7c0e70b",
+      "multiscale_timed-d256-k-mixed9-fa94f99487",
+      "multiscale_timed-d256-k-singleton7-ffd4b110ac"
+    ],
+    "prospective_recipe_check": {
+      "canonical_prospective_subjects_sha256": "774529bc86f126044bc6cd8f6bef143b8acd6e9c6d0aa96637578765e51eed49"
+    },
+    "subject_count": 270
+  },
+  "stage_b_gate": "closed"
+}

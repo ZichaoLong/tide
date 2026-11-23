@@ -1,0 +1,339 @@
+{
+  "budget_ledger": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/budget.json",
+  "checks": {
+    "actual_resume_completed_count": 5,
+    "background_slice_outside_focus": true,
+    "controller_and_worker_frozen_sources_match": true,
+    "old_raw_records_retained": true,
+    "stage_b_closed": true
+  },
+  "completed_resumptions": [
+    {
+      "adapter": {
+        "adapter": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r05/source/pilotlab/resume_adapter3.py",
+          "sha256": "9523fc960661cf8eee9e84ce9d0bd86f7cb72db3a8b50ca3375b54abe38ec810"
+        },
+        "checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/round/tasks/exchange-d64-k-narrowwide-fdc0f72367-a1-2026112001-r2/attempt-0/checkpoints/step-000001024-305c9f2a4f.pt",
+          "sha256": "1f130644f8fc38dd6ee836af0142d2bc00d2266296521f289ba19385e8967abf",
+          "size_bytes": 15207859,
+          "state_sha256": "df036d01666abac29daef7c7e251bae85e46039fbb60a26f1447a50dbe075164",
+          "steps": 1024,
+          "tokens": 262144
+        },
+        "evaluation_additional_reservation_tokens": 6432,
+        "initial_evaluation_inherited": true,
+        "numerical_scope": "state loading is checked by the frozen worker; numerical trajectory thresholds and verdicts are unchanged",
+        "original_result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/round/tasks/exchange-d64-k-narrowwide-fdc0f72367-a1-2026112001-r2/attempt-0/result.json",
+          "sha256": "ac91c570e0b363dac7f5029a3f6aca7f8d49b3bbfa59c4e59be44b575d2b88fd"
+        },
+        "original_task": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/round/tasks/exchange-d64-k-narrowwide-fdc0f72367-a1-2026112001-r2/task.json",
+          "sha256": "6df5eb29d10be6f35681cbb855309c85dd102031e0c6650f9ada0f033ae58351"
+        },
+        "receipt": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r05/resume-receipts/exchange-d64-k-narrowwide-fdc0f72367-a1-2026112001-r2.json",
+          "sha256": "f4d729a7656108416bdc425ad90d601906021afdd93d683331d8a2a3f782dae1"
+        },
+        "schema": "pilot-r3-execution-adapter-v1",
+        "source_identity_scope": "original frozen training core and checkpoint contract; execution adapter is identified separately",
+        "worker": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/worker3.py",
+          "sha256": "a5e9b27350521ef7bcd929f001add25679ed7e26482287c7937340cf30d4f3a8"
+        }
+      },
+      "checkpoint_load": {
+        "scope": "file/state digest and fresh host model/optimizer owners; not numerical trajectory",
+        "state_sha256": "df036d01666abac29daef7c7e251bae85e46039fbb60a26f1447a50dbe075164",
+        "status": "exact",
+        "steps": 1024,
+        "tokens": 262144
+      },
+      "from_tokens": 262144,
+      "id": "exchange-d64-k-narrowwide-fdc0f72367-a1-2026112001-r2",
+      "new_loss_tokens": 0,
+      "result_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r05/round/tasks/exchange-d64-k-narrowwide-fdc0f72367-a1-2026112001-r2/attempt-0/result.json",
+      "result_sha256": "f093819ebdc6a4b0297d0b0240a9d73ab613a3c16ecffda4078b56eea7e77ef6",
+      "tokens": 262144
+    },
+    {
+      "adapter": {
+        "adapter": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r05/source/pilotlab/resume_adapter3.py",
+          "sha256": "9523fc960661cf8eee9e84ce9d0bd86f7cb72db3a8b50ca3375b54abe38ec810"
+        },
+        "checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/round/tasks/multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112001-r1/attempt-0/checkpoints/step-000001000-7319963285.pt",
+          "sha256": "02fae7c4fe7519a9742ae6dc19e79a7e5fa42785f1fc5f5e94f3d28f8570e25a",
+          "size_bytes": 15920035,
+          "state_sha256": "588af5d634ff0f3e5d1489f61352c121376c9bb20a37f03d90b985fbaeddce2b",
+          "steps": 1000,
+          "tokens": 256000
+        },
+        "evaluation_additional_reservation_tokens": 32,
+        "initial_evaluation_inherited": true,
+        "numerical_scope": "state loading is checked by the frozen worker; numerical trajectory thresholds and verdicts are unchanged",
+        "original_result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/round/tasks/multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112001-r1/attempt-0/result.json",
+          "sha256": "6381b1d61dc8eb46ad352988cfdbca91ee881759439255205e4a71d6124e4450"
+        },
+        "original_task": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/round/tasks/multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112001-r1/task.json",
+          "sha256": "2799bac2913a417fc24f7801facbaeeb811907da064c7e041a40f40087fc586a"
+        },
+        "receipt": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r05/resume-receipts/multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112001-r1.json",
+          "sha256": "646846b11646788b921ab6063e41de9909f261bcdd27f9e907d670993f00b2a3"
+        },
+        "schema": "pilot-r3-execution-adapter-v1",
+        "source_identity_scope": "original frozen training core and checkpoint contract; execution adapter is identified separately",
+        "worker": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/worker3.py",
+          "sha256": "a5e9b27350521ef7bcd929f001add25679ed7e26482287c7937340cf30d4f3a8"
+        }
+      },
+      "checkpoint_load": {
+        "scope": "file/state digest and fresh host model/optimizer owners; not numerical trajectory",
+        "state_sha256": "8a2db3a65f66792fa8bbd729298601f31a57b80d41679adf6ac92c7283e97f79",
+        "status": "exact",
+        "steps": 1024,
+        "tokens": 262144
+      },
+      "from_tokens": 256000,
+      "id": "multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112001-r1",
+      "new_loss_tokens": 6144,
+      "result_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r05/round/tasks/multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112001-r1/attempt-0/result.json",
+      "result_sha256": "2e8278425dfff056e22f8dc87831d20218b446fdab4995e3d530a982a565f1ac",
+      "tokens": 262144
+    },
+    {
+      "adapter": {
+        "adapter": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r05/source/pilotlab/resume_adapter3.py",
+          "sha256": "9523fc960661cf8eee9e84ce9d0bd86f7cb72db3a8b50ca3375b54abe38ec810"
+        },
+        "checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/round/tasks/multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112002-r1/attempt-0/checkpoints/step-000000965-8afdc13682.pt",
+          "sha256": "4dbe09d4a65e2a09bb909201b9ef45c657c7d65baf03087378bc4e5582fa0129",
+          "size_bytes": 15919971,
+          "state_sha256": "8ece9adc7f9af67123a18470c3a304aeceaa298efe494b9ec99a92e9b4c2c892",
+          "steps": 965,
+          "tokens": 247040
+        },
+        "evaluation_additional_reservation_tokens": 32,
+        "initial_evaluation_inherited": true,
+        "numerical_scope": "state loading is checked by the frozen worker; numerical trajectory thresholds and verdicts are unchanged",
+        "original_result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/round/tasks/multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112002-r1/attempt-0/result.json",
+          "sha256": "82322db7f9c99c37ca68f4c24703316b880fd30a1be05803e3b8c8d057e75aaf"
+        },
+        "original_task": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/round/tasks/multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112002-r1/task.json",
+          "sha256": "a513e6e09293d42f4a8085979f46f2280e0b81e9d4946765440e8d407e169a6b"
+        },
+        "receipt": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r05/resume-receipts/multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112002-r1.json",
+          "sha256": "b039984abef5eac72f81799a5ae3f3ee2f97d62b27d63920848589c9f237f75f"
+        },
+        "schema": "pilot-r3-execution-adapter-v1",
+        "source_identity_scope": "original frozen training core and checkpoint contract; execution adapter is identified separately",
+        "worker": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/worker3.py",
+          "sha256": "a5e9b27350521ef7bcd929f001add25679ed7e26482287c7937340cf30d4f3a8"
+        }
+      },
+      "checkpoint_load": {
+        "scope": "file/state digest and fresh host model/optimizer owners; not numerical trajectory",
+        "state_sha256": "ac4c0150bfdc607759cb14698fa2b8f8e72d89f5be569c7525d9378da2eb86ef",
+        "status": "exact",
+        "steps": 1024,
+        "tokens": 262144
+      },
+      "from_tokens": 247040,
+      "id": "multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112002-r1",
+      "new_loss_tokens": 15104,
+      "result_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r05/round/tasks/multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112002-r1/attempt-0/result.json",
+      "result_sha256": "d8c469e59f73b854dee131ee01943d4c9d1163efc4788dc8d2e61b5285ca6dc2",
+      "tokens": 262144
+    },
+    {
+      "adapter": {
+        "adapter": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r05/source/pilotlab/resume_adapter3.py",
+          "sha256": "9523fc960661cf8eee9e84ce9d0bd86f7cb72db3a8b50ca3375b54abe38ec810"
+        },
+        "checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/round/tasks/multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112001-r2/attempt-0/checkpoints/step-000000973-4375acf3ef.pt",
+          "sha256": "c99fc67e3910ebb912541c8d03760b41d601eead719e38da9b34333df6af552a",
+          "size_bytes": 15919971,
+          "state_sha256": "2b22e0a1d8ead8cf6cc173a08f897b12d041916f079feeb5a77430e56dc0be95",
+          "steps": 973,
+          "tokens": 249088
+        },
+        "evaluation_additional_reservation_tokens": 32,
+        "initial_evaluation_inherited": true,
+        "numerical_scope": "state loading is checked by the frozen worker; numerical trajectory thresholds and verdicts are unchanged",
+        "original_result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/round/tasks/multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112001-r2/attempt-0/result.json",
+          "sha256": "ea9520fdcc34bd64a2ad6c727fda2ab0524df147c93da97aae93267aefcbdb20"
+        },
+        "original_task": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/round/tasks/multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112001-r2/task.json",
+          "sha256": "f4583818e0793ba9b2f0c3ee51f6d2cf9d6ec997dd2c5afdc73b37d35663daf7"
+        },
+        "receipt": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r05/resume-receipts/multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112001-r2.json",
+          "sha256": "57efed1ad6a83d853791c2525c28e0d60788658cf99dac710cfb436c1e19a084"
+        },
+        "schema": "pilot-r3-execution-adapter-v1",
+        "source_identity_scope": "original frozen training core and checkpoint contract; execution adapter is identified separately",
+        "worker": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/worker3.py",
+          "sha256": "a5e9b27350521ef7bcd929f001add25679ed7e26482287c7937340cf30d4f3a8"
+        }
+      },
+      "checkpoint_load": {
+        "scope": "file/state digest and fresh host model/optimizer owners; not numerical trajectory",
+        "state_sha256": "cfe6c6b468fa64209a21b38fc78fe926fceaf75202b5e2b82487ada1ba5199ce",
+        "status": "exact",
+        "steps": 1024,
+        "tokens": 262144
+      },
+      "from_tokens": 249088,
+      "id": "multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112001-r2",
+      "new_loss_tokens": 13056,
+      "result_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r05/round/tasks/multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112001-r2/attempt-0/result.json",
+      "result_sha256": "1f04150faeb9f63ba5a908567ca8b5660aa55d5adfa753b613ae3005657b647d",
+      "tokens": 262144
+    },
+    {
+      "adapter": {
+        "adapter": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r05/source/pilotlab/resume_adapter3.py",
+          "sha256": "9523fc960661cf8eee9e84ce9d0bd86f7cb72db3a8b50ca3375b54abe38ec810"
+        },
+        "checkpoint": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/round/tasks/multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112002-r2/attempt-0/checkpoints/step-000001002-c5fa2ed094.pt",
+          "sha256": "04bb01e2af9dfd94c90bd98b40497d626affbe5e7d8aa6260f16a14ebab76558",
+          "size_bytes": 15919971,
+          "state_sha256": "e12858b68697fc81e6367341c10a4886782581fc0d68b4cee0ea552b82c57f20",
+          "steps": 1002,
+          "tokens": 256512
+        },
+        "evaluation_additional_reservation_tokens": 32,
+        "initial_evaluation_inherited": true,
+        "numerical_scope": "state loading is checked by the frozen worker; numerical trajectory thresholds and verdicts are unchanged",
+        "original_result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/round/tasks/multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112002-r2/attempt-0/result.json",
+          "sha256": "56daa722fa22e9b140e020334cfa25fee148dc4bdb1716bce603a97f36752a3a"
+        },
+        "original_task": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/round/tasks/multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112002-r2/task.json",
+          "sha256": "f8c1025ee0a12a94ed01e10659507cdf26facc0e37e1d6116947b026cca343d7"
+        },
+        "receipt": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r05/resume-receipts/multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112002-r2.json",
+          "sha256": "b2c3bbac420076619cfc1b62423f0eece80622b64a3f846d162c3e39566dfb30"
+        },
+        "schema": "pilot-r3-execution-adapter-v1",
+        "source_identity_scope": "original frozen training core and checkpoint contract; execution adapter is identified separately",
+        "worker": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/worker3.py",
+          "sha256": "a5e9b27350521ef7bcd929f001add25679ed7e26482287c7937340cf30d4f3a8"
+        }
+      },
+      "checkpoint_load": {
+        "scope": "file/state digest and fresh host model/optimizer owners; not numerical trajectory",
+        "state_sha256": "84157478eb514b1d260c60ab4df38c1ae7e3c83518a39b4edc00430f52b43183",
+        "status": "exact",
+        "steps": 1024,
+        "tokens": 262144
+      },
+      "from_tokens": 256512,
+      "id": "multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112002-r2",
+      "new_loss_tokens": 5632,
+      "result_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r05/round/tasks/multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112002-r2/attempt-0/result.json",
+      "result_sha256": "957a7e3eb6eb6efe855aa33bf0c0be2fa3c0f7364009f62e6ff5a5bbb7a25960",
+      "tokens": 262144
+    }
+  ],
+  "controller_cgroup": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r05.service\n",
+  "controller_command": "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-pilot-r3/bin/python -u -m pilotlab.round3 --plan /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r05/campaign-plan.json --output /mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r05/round ",
+  "deadline_unix": 1797698913.9318287,
+  "inspection_command": "python .local/pilot-r3/inspect.py",
+  "limits": {
+    "cpu_pool_threads": 160,
+    "cpu_pool_workers": 40,
+    "max_npu_devices": 8,
+    "max_workers": 80,
+    "model_pipeline_window": 32,
+    "per_card_workers": 16,
+    "total_worker_threads": 320
+  },
+  "memory_enforcement": {
+    "effective_memory_cgroup": "/user.slice/user-1003.slice/user@1003.service",
+    "effective_memory_limit_in_bytes": 9223372036854771712,
+    "scheduler_rss_and_reservation_limit_bytes": 1000000000000,
+    "scope": "1 TB enforced as project admission and sampled process-tree RSS stop budget; no proven service-specific kernel hard cap",
+    "service_memory_cgroup_delegated": false,
+    "systemd_declared_memory_max_bytes": 1000000000000
+  },
+  "observed_unix": 1795144281.2337492,
+  "plan": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r05/campaign-plan.json",
+    "sha256": "235142a3eff06c5d6d3b86c0cf8c8c7b00d395fadc94f8de6d03c1f09b7e714e"
+  },
+  "prepared": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r05/campaign-prepared.json",
+    "sha256": "7f0926ff7502084c37fd9d4cf41714a67766b8ced6f318ea76dfb2254834f17d"
+  },
+  "scheduler_snapshot": {
+    "actual_cpu_worker_concurrency": 29,
+    "actual_npu_concurrency": 6,
+    "actual_npu_worker_concurrency": 6,
+    "blocking_reason": null,
+    "counts": {
+      "completed": 167,
+      "pending": 28,
+      "running": 37
+    },
+    "peak_cpu_worker_concurrency": 40,
+    "peak_npu_worker_concurrency": 7,
+    "resources": {
+      "available_storage_bytes": 209925251072,
+      "filesystem_free_bytes": 1664261042176,
+      "observed_unix": 1795144280.769408,
+      "quota": {
+        "filesystem": "/dev/mapper/ascend_data-data",
+        "grace_epoch": 0,
+        "hard_bytes": 751619276800,
+        "soft_bytes": 322122547200,
+        "used_bytes": 112197296128
+      },
+      "rss_bytes": 30203494400
+    },
+    "stage": "stage-a-training-pipeline",
+    "stage_b_gate": "closed",
+    "status": "running"
+  },
+  "schema": "pilot-r3-live-handoff-v1",
+  "scientific_scope": "live execution handoff; completed state loading is not a long-run trajectory or learning conclusion; original Shannon disagreement remains",
+  "service": {
+    "ActiveState": "active",
+    "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r05.service",
+    "ExecMainStatus": "0",
+    "MainPID": "1815085",
+    "MemoryCurrent": "[not set]",
+    "MemoryMax": "1000000000000",
+    "Slice": "background.slice",
+    "SubState": "running"
+  },
+  "status": "running",
+  "stop_command": "systemctl --user stop tide-pilot-r3-campaign-r05.service",
+  "worker_prepared": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/prepared.json",
+    "sha256": "5f3bdbed87710a27c9a43cc8957d53aedbe9f17110e6ae6e434e0b8275abf54e"
+  }
+}

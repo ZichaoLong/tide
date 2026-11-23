@@ -1,0 +1,614 @@
+{
+  "candidate_allocation": {
+    "path": ".local/pilot-r2/foundation/src/tide/allocation.py",
+    "sha256": "1749c52190680ed82f38d981d751aaf84774aca6b9a995de716cd2573cecdb1f"
+  },
+  "candidate_cpu_capture_validation": {
+    "captured_failed_rows": [
+      {
+        "candidate": [
+          0.13781307637691498,
+          0.14486485719680786,
+          0.08669251948595047,
+          0.09458432346582413,
+          0.0836159735918045,
+          0.08318517357110977,
+          0.13472633063793182,
+          0.2345176637172699
+        ],
+        "comparisons": {
+          "budget": {
+            "actual": [
+              0.7732076048851013
+            ],
+            "expected": [
+              0.7732076538066859
+            ],
+            "max_abs": 4.8921584561156806e-08,
+            "within_tolerance": true
+          },
+          "lower": {
+            "actual": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "expected": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "max_abs": 0.0,
+            "within_tolerance": true
+          },
+          "mu": {
+            "actual": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "expected": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "max_abs": 0.0,
+            "within_tolerance": true
+          },
+          "scores": {
+            "actual": [
+              0.03125495836138725,
+              -0.40174034237861633,
+              0.19304624199867249,
+              -0.45147061347961426,
+              0.35342735052108765,
+              -0.5634304285049438,
+              0.8389129042625427,
+              -0.0
+            ],
+            "expected": [
+              0.03125495552082434,
+              -0.4017403876296719,
+              0.19304624203097998,
+              -0.45147060625348023,
+              0.35342739636155174,
+              -0.5634305760896142,
+              0.8389129760594102,
+              0.0
+            ],
+            "max_abs": 1.4758467037356837e-07,
+            "within_tolerance": true
+          },
+          "upper": {
+            "actual": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              -8.773207664489746
+            ],
+            "expected": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              -8.773207653806686
+            ],
+            "max_abs": 1.068305977014461e-08,
+            "within_tolerance": true
+          },
+          "w": {
+            "actual": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "expected": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "max_abs": 0.0,
+            "within_tolerance": true
+          }
+        },
+        "index": [
+          1,
+          49
+        ],
+        "reference": {
+          "active": "high",
+          "high": 1.0,
+          "low": 1.0,
+          "multiplier": 0.35422486216026594,
+          "target": 1.0,
+          "values": [
+            0.13781309662973867,
+            0.14486487770874887,
+            0.08669252090837799,
+            0.09458432127783659,
+            0.08361598285750932,
+            0.08318519154996737,
+            0.13472634535055134,
+            0.2345176637172699
+          ]
+        },
+        "upper_face": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          true
+        ]
+      }
+    ],
+    "checks": {
+      "bounds": true,
+      "finite_forward": true,
+      "finite_gradients": true,
+      "independent_kkt": true,
+      "independent_solution": true,
+      "independent_vjp": true,
+      "positive_support_matches_reference": true,
+      "total_within_original_tolerance": true
+    },
+    "max_kkt_ratio": 0.012507564971341385,
+    "max_solution_error": 3.747783527963122e-08,
+    "max_total_residual": 1.2665987014770508e-07,
+    "path": ".local/pilot-r2/diagnostics/shannon-candidate-cpu/validation.json",
+    "sha256": "73d0c82441f5f2963522079b149bd76f3e73955e7da64e70733b2f0ed6f44fbf",
+    "shape": [
+      4,
+      64,
+      8
+    ],
+    "status": "passed"
+  },
+  "candidate_npu_capture_validation": {
+    "captured_failed_rows": [
+      {
+        "candidate": [
+          0.13781309127807617,
+          0.14486485719680786,
+          0.08669251948595047,
+          0.09458432346582413,
+          0.0836159735918045,
+          0.08318517357110977,
+          0.13472633063793182,
+          0.2345176637172699
+        ],
+        "comparisons": {
+          "budget": {
+            "actual": [
+              0.7732076048851013
+            ],
+            "expected": [
+              0.7732076538066859
+            ],
+            "max_abs": 4.8921584561156806e-08,
+            "within_tolerance": true
+          },
+          "lower": {
+            "actual": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "expected": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "max_abs": 0.0,
+            "within_tolerance": true
+          },
+          "mu": {
+            "actual": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "expected": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "max_abs": 0.0,
+            "within_tolerance": true
+          },
+          "scores": {
+            "actual": [
+              0.03125496208667755,
+              -0.40174034237861633,
+              0.19304624199867249,
+              -0.45147061347961426,
+              0.35342735052108765,
+              -0.5634304285049438,
+              0.8389129042625427,
+              -0.0
+            ],
+            "expected": [
+              0.03125495552082434,
+              -0.4017403876296719,
+              0.19304624203097998,
+              -0.45147060625348023,
+              0.35342739636155174,
+              -0.5634305760896142,
+              0.8389129760594102,
+              0.0
+            ],
+            "max_abs": 1.4758467037356837e-07,
+            "within_tolerance": true
+          },
+          "upper": {
+            "actual": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              -8.773207664489746
+            ],
+            "expected": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              -8.773207653806686
+            ],
+            "max_abs": 1.068305977014461e-08,
+            "within_tolerance": true
+          },
+          "w": {
+            "actual": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "expected": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "max_abs": 0.0,
+            "within_tolerance": true
+          }
+        },
+        "index": [
+          1,
+          49
+        ],
+        "reference": {
+          "active": "high",
+          "high": 1.0,
+          "low": 1.0,
+          "multiplier": 0.35422486216026594,
+          "target": 1.0,
+          "values": [
+            0.13781309662973867,
+            0.14486487770874887,
+            0.08669252090837799,
+            0.09458432127783659,
+            0.08361598285750932,
+            0.08318519154996737,
+            0.13472634535055134,
+            0.2345176637172699
+          ]
+        },
+        "upper_face": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          true
+        ]
+      }
+    ],
+    "checks": {
+      "bounds": true,
+      "finite_forward": true,
+      "finite_gradients": true,
+      "independent_kkt": true,
+      "independent_solution": true,
+      "independent_vjp": true,
+      "positive_support_matches_reference": true,
+      "total_within_original_tolerance": true
+    },
+    "device": "npu:0",
+    "execution_owner": "Parent agent via cooperative device queue; this child did not allocate NPU",
+    "max_kkt_ratio": 0.012865991055150516,
+    "max_solution_error": 3.408248189229468e-08,
+    "max_total_residual": 1.0058283805847168e-07,
+    "max_total_tolerance_ratio": 0.0263671875,
+    "max_vjp_abs_error": 1.4758467037356837e-07,
+    "path": ".local/pilot-r2/diagnostics/shannon-candidate-npu/validation.json",
+    "physical_visibility": "7",
+    "sha256": "305ad75215b046cc56d2e419eb67c5159838dcc2ab469c998e9d2931cba4a465",
+    "shape": [
+      4,
+      64,
+      8
+    ],
+    "status": "passed"
+  },
+  "capture_validator": {
+    "path": "pilotlab/validate_shannon_capture.py",
+    "sha256": "d79a79f370babe4302fb7c2976d424425978047d32255d14b595cb6eeb2528ff"
+  },
+  "change": "Return the exact original upper tensor on the selected Shannon saturation branch, before face reconstruction and VJP classification.",
+  "cpu_tests": {
+    "baseline_activation": "source /usr/share/Modules/init/bash; module purge; module load ascend/dev-workspace-9.2.0",
+    "coverage": [
+      "Original FP32 minimum witness still raises in r1 source",
+      "Independent 80-digit Decimal primal solutions in FP32/FP64",
+      "Original total tolerance, bounds and KKT inequalities",
+      "Independent objective finite-difference VJP for scores, received weights, mu, lower, upper and budget on smooth faces",
+      "Slack capped coordinate has exact cap, zero score gradient and upper gradient as declared",
+      "Fixed-through-mu/fixed-through-lower and exact upper endpoint VJP conventions",
+      "Zero caps, empty candidate axis and unrepresentable positive sender rejection",
+      "Batched noncontiguous input with mixed active/slack faces",
+      "Quad forward and VJP exactly unchanged"
+    ],
+    "runs": [
+      {
+        "command": "OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 PYTHONDONTWRITEBYTECODE=1 timeout 60s .venv-pilot/bin/python -m pytest -q tests/test_pilot_shannon.py",
+        "passed": 27,
+        "seconds": 10.26,
+        "source_note": "Before adding the three batch-layout/endpoint cases; existing definitions were retained unchanged."
+      },
+      {
+        "command": "OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 PYTHONDONTWRITEBYTECODE=1 timeout 30s .venv-pilot/bin/python -m pytest -q tests/test_pilot_shannon.py -k 'batched_noncontiguous or exact_log_cap_tie'",
+        "deselected": 27,
+        "passed": 3,
+        "seconds": 3.12
+      }
+    ],
+    "threads": 2,
+    "unique_passed_cases": 30
+  },
+  "created_at": "2026-11-19T12:37:49.742047+00:00",
+  "foundation_comparison": {
+    "candidate_tree_sha256": "6d6ed29959cce93af8bf4fe552c43f7bfd3e9ad98af2692ddaea7b5960bb1b54",
+    "changed_files": [
+      "src/tide/allocation.py"
+    ],
+    "noncache_file_counts": [
+      52,
+      52
+    ],
+    "original_tree_sha256": "f6691eb0f1a37c560ddfe04bb6c9d1f0c3a3c297102ff16d8640c8b8507e9ada",
+    "tree_hash_method": "sha256 of sorted relative_path + NUL + file_sha256 + newline; excludes __pycache__ and .pytest_cache"
+  },
+  "handoff_status": "Private foundation correction and independent CPU/NPU regional verification complete; whole-model training and multistep recovery acceptance handed to parent.",
+  "limits": [
+    "CPU and NPU forward/backward are verified for this captured regional input tensor; this does not qualify arbitrary NPU configurations or every numerical boundary.",
+    "The regional input replay does not qualify whole-model training, optimizer behavior or multistep recovery; these remain r2 matrix checks.",
+    "Finite fixture/KKT/VJP coverage is not a proof for every floating-point boundary case.",
+    "Only the new project-private foundation was patched; no upstream or r1 input was changed."
+  ],
+  "original_allocation": {
+    "path": ".local/pilot-r1/foundation/src/tide/allocation.py",
+    "sha256": "b4d0e130c1a87391606e6abedfb2a9b0ab870bfb9027dc31b8c91135bdacd4ca"
+  },
+  "original_cpu_replay_of_npu_inputs": {
+    "device": "cpu",
+    "full_batch": "raised original total-constraint ArithmeticError",
+    "note": "This reuses the saved NPU regional inputs; the earlier CPU whole-model trajectory did not reproduce the failure.",
+    "single_failed_row": "raised original total-constraint ArithmeticError",
+    "source": "unchanged r1 frozen allocation",
+    "threads": 2
+  },
+  "original_npu_capture": {
+    "path": ".local/pilot-r2/diagnostics/shannon-original-npu/failure.pt",
+    "sha256": "d2a9198a00e0f4aadb9f8d94ac575a0fb369d6a3696cca5904b96f42f025f320"
+  },
+  "original_npu_mechanism": {
+    "batch_index": 1,
+    "candidate_index": 7,
+    "cap_error_ulps": 1,
+    "classified_inside": true,
+    "conclusion": "The exact captured NPU row exhibits the same one-ULP cap loss, false interior classification, excessive reconstruction and clipped-away total mass as the retained minimum witness.",
+    "node_id": 55,
+    "original_residual": 0.0472031831741333,
+    "original_tolerance": 3.814697265625e-06,
+    "pre_reconstruction_c": 0.2345176488161087,
+    "reconstructed_candidate": 0.2817208766937256,
+    "target": 1.0,
+    "time_index": 49,
+    "upper": 0.2345176637172699
+  },
+  "original_npu_trace": {
+    "failing_indices": [
+      [
+        1,
+        49
+      ]
+    ],
+    "failure_stage": "validation_batch_0",
+    "location": {
+      "kind": "shannon",
+      "layer_zero_based": 2,
+      "members": [
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55
+      ],
+      "nodes": [
+        {
+          "id": 48,
+          "layer": 2,
+          "local": 0,
+          "position": 1,
+          "region": 8,
+          "role": "D"
+        },
+        {
+          "id": 49,
+          "layer": 2,
+          "local": 1,
+          "position": 1,
+          "region": 8,
+          "role": "D"
+        },
+        {
+          "id": 50,
+          "layer": 2,
+          "local": 2,
+          "position": 1,
+          "region": 8,
+          "role": "D"
+        },
+        {
+          "id": 51,
+          "layer": 2,
+          "local": 3,
+          "position": 1,
+          "region": 8,
+          "role": "D"
+        },
+        {
+          "id": 52,
+          "layer": 2,
+          "local": 4,
+          "position": 1,
+          "region": 8,
+          "role": "D"
+        },
+        {
+          "id": 53,
+          "layer": 2,
+          "local": 5,
+          "position": 1,
+          "region": 8,
+          "role": "D"
+        },
+        {
+          "id": 54,
+          "layer": 2,
+          "local": 6,
+          "position": 1,
+          "region": 8,
+          "role": "D"
+        },
+        {
+          "id": 55,
+          "layer": 2,
+          "local": 7,
+          "position": 1,
+          "region": 8,
+          "role": "D"
+        }
+      ],
+      "region": 8
+    },
+    "path": ".local/pilot-r2/diagnostics/shannon-original-npu/trace.json",
+    "physical_visibility": "11",
+    "sha256": "38ea7680f154a470c9be49614e1ecec2afb4c4056b7ffea379e477c96fef6c25",
+    "status": "original_failure_captured"
+  },
+  "patch": {
+    "path": "patches/pilot-round2-shannon-cap.patch",
+    "sha256": "3fa3bd1614e6eea01665e50dc5f4b90ea870ff43c52a602900e20de7d5e41b16"
+  },
+  "patch_apply_check": {
+    "command": "git apply --check --directory=.local/pilot-r1/foundation patches/pilot-round2-shannon-cap.patch",
+    "exit_code": 0,
+    "mutation": false
+  },
+  "schema": "pilot-r2-shannon-repair-review-v1",
+  "semantic_base_commit": "bef26abb2458cfff003c84f376f93bc18a0b4106",
+  "test_source": {
+    "path": "tests/test_pilot_shannon.py",
+    "sha256": "eeb9a590578316bc76848eed73188bb683b65c2c6fe7520d822fb02699602700"
+  },
+  "unchanged_contracts": [
+    "Shannon mathematical objective and role/received bounds",
+    "Original total tolerance: 32 * dtype eps * abs(target), with existing tiny clamp",
+    "Global training precision",
+    "All other allocation source including first-order VJP equations and positive-sender underflow rejection",
+    "R1 frozen foundation, frozen experimental inputs and installed environment"
+  ],
+  "updated_at": "2026-11-19T12:38:40.288817+00:00"
+}

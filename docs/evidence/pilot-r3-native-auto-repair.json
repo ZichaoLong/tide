@@ -1,0 +1,3594 @@
+{
+  "audits": {
+    "initial_native_gate": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-native-support-r01-terminal-audit.json",
+      "sha256": "7c4e30bf82754f61f9bcf875cd9862e8b19b73945876eaac1a2d57b0c0274fb5"
+    },
+    "performance": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-attention-perf-r02-terminal-audit.json",
+      "sha256": "9005da9231b04a6d6198269b3f1013f29dab34f744afcba8603cd32c3fc02c67"
+    },
+    "qualification_only": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-native-support-r02-terminal-audit.json",
+      "sha256": "9981a364808b18a55e8537ae55fda559f9a39f1e4ed1ad606c0b14a7db4bf23c"
+    },
+    "remaining_screen": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-risk-screen-r02-terminal-audit.json",
+      "sha256": "098e421c7778fd4daa29382deeb7afea4484e0f21ebe036521f00d1f935793d8"
+    },
+    "trained_gate": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-native-support-r03-terminal-audit.json",
+      "sha256": "345ebda024da8e0daf3f560be07983ae505446a2d0c8ebf85166d045b989e492"
+    }
+  },
+  "finite_screen": {
+    "all_fp64_windows_within_original_thresholds": true,
+    "cold_model_configurations": 19,
+    "cold_states": 38,
+    "completed": 42,
+    "fp64_windows": 8,
+    "max_fresh_process_abs_difference": 5.690380930900574e-07,
+    "scope": "same-stack continuation; CPU FP64 model diagnostics share the implementation; primitive identities are independently specified; no long-learning certification",
+    "thresholds": {
+      "atol": 1e-05,
+      "rtol": 0.0001
+    },
+    "trained_states": 4,
+    "windows": [
+      {
+        "attention_paths": {
+          "_SingleKeyAttention": 35,
+          "_native_attention": 96
+        },
+        "fp64": [
+          {
+            "execution_device": "npu:0",
+            "fields": {
+              "gradients": {
+                "failed_elements": 0,
+                "max_abs_error": 1.1241979850848405e-07,
+                "relative_l2_error": 6.835098887676988e-07
+              },
+              "optimizer": {
+                "failed_elements": 0,
+                "max_abs_error": 8.271326177797245e-09,
+                "relative_l2_error": 1.4211468025850295e-12
+              },
+              "parameter_delta": {
+                "failed_elements": 0,
+                "max_abs_error": 3.697480714832946e-07,
+                "relative_l2_error": 2.345981791454684e-05
+              },
+              "parameters": {
+                "failed_elements": 0,
+                "max_abs_error": 3.697480714832946e-07,
+                "relative_l2_error": 3.727804171119395e-08
+              },
+              "private_state": {
+                "failed_elements": 0,
+                "max_abs_error": 5.4904379696019134e-06,
+                "relative_l2_error": 1.563742898952449e-07
+              }
+            },
+            "original_threshold_gate": {
+              "atol": 1e-05,
+              "exact": false,
+              "failed_field_count": 0,
+              "failed_fields": [],
+              "fields": 289,
+              "finite": true,
+              "integer_equal": true,
+              "max_abs": 5.4904379696019134e-06,
+              "rtol": 0.0001,
+              "structure_equal": true,
+              "within_tolerance": true
+            },
+            "rng_policy": "same saved CPU RNG; non-CPU updates must consume no CPU/device randomness",
+            "scope": "same implementation promoted to CPU FP64; not an independent model oracle",
+            "step": 8193,
+            "witness": {
+              "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r03/frozen/round/tasks/native-support-gate-r03/attempt-0/precision-0.pt",
+              "sha256": "34a4b21f5c5c861252debab7c524af9e8c48179ce0ce0774f10173a81f290c85"
+            }
+          },
+          {
+            "execution_device": "npu:0",
+            "fields": {
+              "gradients": {
+                "failed_elements": 0,
+                "max_abs_error": 8.904685325217265e-08,
+                "relative_l2_error": 7.641586443441633e-07
+              },
+              "optimizer": {
+                "failed_elements": 0,
+                "max_abs_error": 7.870534122871031e-09,
+                "relative_l2_error": 1.5611536556429471e-12
+              },
+              "parameter_delta": {
+                "failed_elements": 0,
+                "max_abs_error": 1.53565048658863e-06,
+                "relative_l2_error": 2.5284612940912588e-05
+              },
+              "parameters": {
+                "failed_elements": 0,
+                "max_abs_error": 1.53565048658863e-06,
+                "relative_l2_error": 3.987707721621923e-08
+              },
+              "private_state": {
+                "failed_elements": 0,
+                "max_abs_error": 2.0400663418573828e-06,
+                "relative_l2_error": 1.3734404936053593e-07
+              }
+            },
+            "original_threshold_gate": {
+              "atol": 1e-05,
+              "exact": false,
+              "failed_field_count": 0,
+              "failed_fields": [],
+              "fields": 289,
+              "finite": true,
+              "integer_equal": true,
+              "max_abs": 2.0400663418573828e-06,
+              "rtol": 0.0001,
+              "structure_equal": true,
+              "within_tolerance": true
+            },
+            "rng_policy": "same saved CPU RNG; non-CPU updates must consume no CPU/device randomness",
+            "scope": "same implementation promoted to CPU FP64; not an independent model oracle",
+            "step": 8208,
+            "witness": {
+              "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r03/frozen/round/tasks/native-support-gate-r03/attempt-0/precision-15.pt",
+              "sha256": "abfeb3c045b7bc9ff5afef017c3a022ef57c45bc146f58187ba1826e118b7365"
+            }
+          }
+        ],
+        "id": "native-support-gate-r03",
+        "processed_loss_tokens": 4864,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r03/frozen/round/tasks/native-support-gate-r03/attempt-0/restored/restore.json",
+            "sha256": "44bbde483632045d458be9171b2340d7cb31952930a2e0f981c16b2a8b26d277"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 255,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 7.450580596923828e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r03/frozen/round/tasks/native-support-gate-r03/attempt-0/result.json",
+          "sha256": "1697683214ad1d11f6a75c2e837c48bb651bd7a302a0ff8770debf03b43bb261"
+        },
+        "trained": true,
+        "trajectory": {
+          "from_steps": 8192,
+          "from_tokens": 2097152,
+          "seconds_including_precision_checks": 2.7231835834681988,
+          "to_steps": 8208,
+          "to_tokens": 2101248
+        },
+        "transition": {
+          "from_steps": 8192,
+          "from_tokens": 2097152,
+          "load": "exact",
+          "origin_checkpoint": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-base-6a381e00da-a3-2026112001-r2/attempt-0/checkpoints/step-000008192-f84286cbd1.pt",
+            "sha256": "cf67bcc4c6a829e96594ae376d3eb42f2e95cde6b4d1bf770d05b6d08cc1bb88",
+            "size_bytes": 9495339,
+            "state_sha256": "c6e99a15ff2f397478853249b3c0dd9b2f8598ff4f00cb8976c664d82697d960",
+            "steps": 8192,
+            "tokens": 2097152
+          },
+          "origin_source_identity": {
+            "data_manifest_sha256": "2f4617d73b5dad4f6a343707382714738e8012432fda85d9f7e36f44b26a4e1a",
+            "python_version": "3.12.13",
+            "runtime_packages": {
+              "numpy": "2.5.2",
+              "torch": "2.12.0+cpu",
+              "torch-npu": "2.12.0.post3"
+            },
+            "schema": "pilot-r3-source-v1",
+            "source_files": {
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/__init__.py": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/allocation.py": "004051c7178380b270e2cce020661bd144ed9afd78c98271d9e5c253beb9d65f",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/attention.py": "58602a6211632de9db1632c53cbcbf6b9890360ee4d0266d32bb536b1bec2214",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/checkpoint.py": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/config.py": "2b890c0ae9eac381aa3ab9726eb386339345f62dc7b3e27433ecd5a0b1c0299f",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/ffn_packing.py": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/grouped_linear.py": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/kv.py": "6ce42c759d8bfa9843c006d0bbda31ad1bc0602b0c9584718d73959bc11a3e3b",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/layout.py": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/model.py": "1911afe3b66b199eb7e066ea57c5900fead1e390ebb5894818d423284850255e",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/parameters.py": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/placement.py": "0f77def73da20f467756e5dc1f701f25942565f762e82be5d23218ecee39d05f",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/placement_ownership.py": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/precision.py": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/reception.py": "43f72f3f1a55263b8d1185a41f0bf2711b7e1179cd664710ced08e70563b45c4",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/region.py": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/region_batch.py": "514ee30c5077d416c02cec81380280eb45509f20922a0f812657b93d2d8b7e80",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/region_execution.py": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/region_placement.py": "fd082f035185d04af6bc3ba27b949a8f065ccdf62f8b32a1b442accbfa6f2b6d",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/scaled_arithmetic.py": "21b696170e73ae28a3238a4db7dd9b613d92a2b0eb88610df74a5d01a8006c62",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/ssd.py": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/ssd_memory.py": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/topology.py": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/topology_hb.py": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/weighted_mean.py": "6c993386c66f611c371c75e2e66a52dec7954c4fb9078819aab23f13d6c76d88",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/__init__.py": "8208b80d75d5de0a39089a54db7a24924819bb81a1ed6a61adaac931a2fddf95",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/audit3.py": "9e9d4b4e3daee75ce71e215400faac71783704eed40b328c5df3eff8cca878cb",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/catalog3.py": "5ae4145270d63aaba85bf3f3aa56224d9c642e7bd1b1e75df74100e6f8d5242b",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/data.py": "d327409f049891273c315c654870a6cbdda8b1162307cabe100225c11ddbcbdd",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/data3.py": "da91d2df3a59d840bdafe181721f579ce1a8d8a4203b5872a700a812e2587cbe",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/diagnose_shannon.py": "d81bf90d3d85762f355c71375f47145aceff4e06167b95749f738372fbf3bcea",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/gate3.py": "b0b69bf919c04629c8f38bec075753e9d6775eb74cc50e6ddd272bd705f05dcc",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/inspect3.py": "dacffdb2c7da0e030a67244c66ba31d38a0bb89b912e24afbc5710c4f4634859",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/io.py": "d846049973ea6c7a952353b8a4ed25e2d89e9a67741e3c16e3dd67d39e802170",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/models.py": "42ac16fa4353d47898dc0d40fbb4b689c50856f06007ccf43f887e65cc51becb",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/models3.py": "07f6c919215d1bc79fb433d8120c133e4ff5173b7ac192b018d64819498e9b71",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/plan.py": "680567ef8fed0835f62d890b9696120a1a6e3edb323f0b88437805171c2fc834",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/plan2.py": "a0452bf80628baf4cc6c02601200f2ea22b3b3218f611dfcdfaeb2f909f594b4",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/preflight3.py": "cd8841d99e58605322a80f5e898bf299fce129bacc8c8b42191398aabbbe10a5",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/prepare3.py": "19b9736bbd43e21e4faf8590ff8b4d5033630a35b4dcd9d41f68ec6076f26056",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/prepare_campaign3.py": "fcb5446da851e35b478988b4d325ff3b09bfcc41a0134e3c1635b710418b3bf7",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/report.py": "9b87332e2d4ca021b0adffb44e19d9eb5d477cf27eaf068042730f2ab20f2c00",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/report2.py": "5a5cb8eefe33f5fd92d6e9aaa89b833f631b778a73edb18bb48acc3c686848ce",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/report3.py": "5633f35833da5d62525535f9953d33dc1d6d98499bfe54d3de750b26fe554571",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/round3.py": "50c656b6106487d1d679b72861fc45a1cf0540fe3cf6fd49752d2115f8141458",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/scheduler.py": "dbd209fe22f252bc88aa13f27b616f0cb34bcaf468b03e85751edca6f2b9d7b7",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/scheduler3.py": "ba12bdd1cf439ac07881a6d540a39d7ebe17aab40f3ea41eb330123998a40fef",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/selection.py": "9607cb8ac5f29af0e43a7de92eb36e0a4a0801eac1e493da972aba1df4360787",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/trace_shannon.py": "15e08a2038b9d5270269a46e8cf4acc656868018a9e47cbac99854a9a1faa7ae",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/validate_shannon_capture.py": "d79a79f370babe4302fb7c2976d424425978047d32255d14b595cb6eeb2528ff",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/worker.py": "542b1f5b88389e902f2aedb19eb368321152f1fff012f66d553cfc0cccf349d8",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/worker3.py": "a5e9b27350521ef7bcd929f001add25679ed7e26482287c7937340cf30d4f3a8"
+            }
+          },
+          "origin_task": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-k-base-6a381e00da-a3-2026112001-r2/task.json",
+            "sha256": "046c4eb03d0c056757e093eb3e09b72fbbe95eeee81eb62bca2b5b783334c68b"
+          },
+          "scope": "diagnostic continuation on repaired source; original trajectory is retained"
+        }
+      },
+      {
+        "attention_paths": {
+          "_SingleKeyAttention": 44,
+          "_native_attention": 88
+        },
+        "fp64": [],
+        "id": "risk-cold-00-2026112001-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-00-2026112001-native-r02/attempt-0/restored/restore.json",
+            "sha256": "c56300e8ec45c76561638a0f3d7cfcbbd89f0cc271ac6c0651f41e15f7794f5a"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 255,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 3.725290298461914e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-00-2026112001-native-r02/attempt-0/result.json",
+          "sha256": "8047e64903c95110452f13115a3f46042b420b9f6cfa188f5c75033d535e7468"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 2.3934748619794846,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_SingleKeyAttention": 42,
+          "_native_attention": 88
+        },
+        "fp64": [],
+        "id": "risk-cold-00-2026112002-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-00-2026112002-native-r02/attempt-0/restored/restore.json",
+            "sha256": "fe4e2cb3b1c5a5a08ea52de60ffb6b6330bee9522c456cabd68d2b61a154b3cd"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 255,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 3.725290298461914e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-00-2026112002-native-r02/attempt-0/result.json",
+          "sha256": "3d02be4ea1e4be411e0af0e4cf5759f2582daba924e519201c1d5034e07171e7"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 2.3380184434354305,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_SingleKeyAttention": 81,
+          "_native_attention": 176
+        },
+        "fp64": [],
+        "id": "risk-cold-01-2026112001-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-01-2026112001-native-r02/attempt-0/restored/restore.json",
+            "sha256": "152ce8ba1b4a6cb041f93209271f14b3e6d086883b66b17024c69ada800d7cff"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 373,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 3.725290298461914e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-01-2026112001-native-r02/attempt-0/result.json",
+          "sha256": "4d6d347e7e0870e03f29a57323f721e9183ffa1faeca4c2f9e5319cf5d0be65c"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 4.375651489943266,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_SingleKeyAttention": 80,
+          "_native_attention": 176
+        },
+        "fp64": [],
+        "id": "risk-cold-01-2026112002-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-01-2026112002-native-r02/attempt-0/restored/restore.json",
+            "sha256": "ad52ed306df4b79e7c8056cb8f500e7509012cd23d673c2b84f4800618806f77"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 373,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 7.450580596923828e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-01-2026112002-native-r02/attempt-0/result.json",
+          "sha256": "7468b043d7541506b1acbe67245010c3ef309d1c57953af9b9412f0e4a3a58a4"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 4.173839293420315,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_SingleKeyAttention": 217,
+          "_native_attention": 264
+        },
+        "fp64": [],
+        "id": "risk-cold-02-2026112001-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-02-2026112001-native-r02/attempt-0/restored/restore.json",
+            "sha256": "cea6b237dd9e9199142c2a5a013106e0e8ad5df9967a1c0cc41bd21549926b49"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 898,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 3.725290298461914e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-02-2026112001-native-r02/attempt-0/result.json",
+          "sha256": "7ca6bc155bd42820f976979b8b57bc7c36b85bdbf060481ddc7873ec5a8143e5"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 12.39243172109127,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_SingleKeyAttention": 215,
+          "_native_attention": 264
+        },
+        "fp64": [],
+        "id": "risk-cold-02-2026112002-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-02-2026112002-native-r02/attempt-0/restored/restore.json",
+            "sha256": "023ba8b24d880cadf6eeea03f15d74a9304c49064a6051b85551b9a9621a2a38"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 898,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 3.725290298461914e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-02-2026112002-native-r02/attempt-0/result.json",
+          "sha256": "477fb5741ec27fec5aa54b9b20b728318c803e4545e85d384469d3fbb42c2a44"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 13.648915220052004,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_SingleKeyAttention": 234,
+          "_native_attention": 1012
+        },
+        "fp64": [],
+        "id": "risk-cold-03-2026112001-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-03-2026112001-native-r02/attempt-0/restored/restore.json",
+            "sha256": "1bbf10565b1cc903b78ef5f7bf5e034719318d8b0d0b1d06781511427cfaecb5"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 831,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 3.725290298461914e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-03-2026112001-native-r02/attempt-0/result.json",
+          "sha256": "28486c1c6f7128cd395da990011c00ac7fff2617a857aeae58bea80102f897b0"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 20.06991818919778,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_SingleKeyAttention": 234,
+          "_native_attention": 1012
+        },
+        "fp64": [],
+        "id": "risk-cold-03-2026112002-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-03-2026112002-native-r02/attempt-0/restored/restore.json",
+            "sha256": "c262034c0c49694a597fb19a689621430af5c2a273daba32a25bf078bfe0d148"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 831,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 3.725290298461914e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-03-2026112002-native-r02/attempt-0/result.json",
+          "sha256": "3e4a20f0a49f1328fef2fea5b5f4562077a723078e1bcab552cade190a12dc05"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 21.512418545782566,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_MassScaledAttention": 2385,
+          "_SingleKeyAttention": 876,
+          "_TiledAttention": 240,
+          "_native_attention": 963
+        },
+        "fp64": [],
+        "id": "risk-cold-04-2026112001-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-04-2026112001-native-r02/attempt-0/restored/restore.json",
+            "sha256": "aec8bfc99bd68eb7f71828ad4044b868f87149d4a76ef6198e1145d992126e49"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 1360,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 1.9371509552001953e-07,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-04-2026112001-native-r02/attempt-0/result.json",
+          "sha256": "db6d464e29199a55d714e0d833201704240aa749c4b6ca81902eb538afca4415"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 147.81856379657984,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_MassScaledAttention": 2345,
+          "_SingleKeyAttention": 869,
+          "_TiledAttention": 240,
+          "_native_attention": 954
+        },
+        "fp64": [],
+        "id": "risk-cold-04-2026112002-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-04-2026112002-native-r02/attempt-0/restored/restore.json",
+            "sha256": "441b0bc1887361d06e9a7988cad31e2819ada7812c34a655bdd9b8abf32a73a8"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 1360,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 6.705522537231445e-08,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-04-2026112002-native-r02/attempt-0/result.json",
+          "sha256": "54b85fe528a042274cc7f65672aa6fb7fba1c010d15323529320406e9bc65a23"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 149.18914652243257,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_SingleKeyAttention": 44,
+          "_native_attention": 88
+        },
+        "fp64": [],
+        "id": "risk-cold-05-2026112001-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-05-2026112001-native-r02/attempt-0/restored/restore.json",
+            "sha256": "185b3528c477b32099544b947b9b3606e1aaaeb20715eef5ff049b3395ccb906"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 269,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 2.9802322387695312e-08,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-05-2026112001-native-r02/attempt-0/result.json",
+          "sha256": "cd8b9cf33b6c88ae064baeff26fb522e4629e4dcb448d081404eeb3e3f3399fc"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 7.4198993146419525,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_SingleKeyAttention": 44,
+          "_native_attention": 88
+        },
+        "fp64": [],
+        "id": "risk-cold-05-2026112002-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-05-2026112002-native-r02/attempt-0/restored/restore.json",
+            "sha256": "73913525d81838d9a103f90f20f45f3afcea996da8654a0b9fac22c6c500696e"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 269,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 5.960464477539063e-08,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-05-2026112002-native-r02/attempt-0/result.json",
+          "sha256": "e9443dbcb9be0395a25bbf9fc570c8c89d7b0eb342da07a7b786c0b50bf5ffaf"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 7.51257437095046,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_MassScaledAttention": 48,
+          "_SingleKeyAttention": 40,
+          "_TiledAttention": 48,
+          "_native_attention": 80
+        },
+        "fp64": [],
+        "id": "risk-cold-06-2026112001-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-06-2026112001-native-r02/attempt-0/restored/restore.json",
+            "sha256": "e679cc4a5d8fbb588f000a4cc49391ffa0dc4ad1afd9147e05ba35174e47e84e"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 387,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 3.725290298461914e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-06-2026112001-native-r02/attempt-0/result.json",
+          "sha256": "93691be4a5135eebf72a4d3943d07c188b1a3ec6dc5ba6767b62f66d4f6e5b24"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 9.442435249686241,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_MassScaledAttention": 48,
+          "_SingleKeyAttention": 40,
+          "_TiledAttention": 48,
+          "_native_attention": 80
+        },
+        "fp64": [],
+        "id": "risk-cold-06-2026112002-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-06-2026112002-native-r02/attempt-0/restored/restore.json",
+            "sha256": "6902d021a4b28437cf833e1e26e3cfd495d248cb1f08d99170b828c30a7a8983"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 387,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 3.725290298461914e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-06-2026112002-native-r02/attempt-0/result.json",
+          "sha256": "8b2a9566af492d95695b929c112ace8902513c3c7098fd1cd5c45f5409e4f4bb"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 8.283689644187689,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_MassScaledAttention": 80,
+          "_SingleKeyAttention": 162,
+          "_TiledAttention": 80,
+          "_native_attention": 104
+        },
+        "fp64": [],
+        "id": "risk-cold-07-2026112001-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-07-2026112001-native-r02/attempt-0/restored/restore.json",
+            "sha256": "613f239b41f9cef5b800c144b981c2b35077e44ff49637e111667bd0e547c0ec"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 936,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 1.862645149230957e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-07-2026112001-native-r02/attempt-0/result.json",
+          "sha256": "efe2fe692830727054048b1d61a098cd71e791a5eba9e7f9b6a36823c04ca10f"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 21.968252632766962,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_MassScaledAttention": 80,
+          "_SingleKeyAttention": 162,
+          "_TiledAttention": 80,
+          "_native_attention": 104
+        },
+        "fp64": [],
+        "id": "risk-cold-07-2026112002-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-07-2026112002-native-r02/attempt-0/restored/restore.json",
+            "sha256": "6df3067a791478de4e2cd816d35259503e892f843ffb827adcd785753e02e570"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 936,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 3.725290298461914e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-07-2026112002-native-r02/attempt-0/result.json",
+          "sha256": "f1ed5388067f55456776d212c7b89977cb255c674c6a5e4890f75664d7ec130f"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 22.558239810168743,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_MassScaledAttention": 80,
+          "_SingleKeyAttention": 162,
+          "_TiledAttention": 80,
+          "_native_attention": 104
+        },
+        "fp64": [],
+        "id": "risk-cold-08-2026112001-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-08-2026112001-native-r02/attempt-0/restored/restore.json",
+            "sha256": "5fccfa7017a0c35ae5dceae4d570eb098cce8307d6e6e87a13aed53e2a4714bc"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 1044,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 7.450580596923828e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-08-2026112001-native-r02/attempt-0/result.json",
+          "sha256": "dff7937ceb2ba3f7eb684d67d8423ed100b32c4bba83b12e03f504aee2318e19"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 22.81758761405945,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_MassScaledAttention": 80,
+          "_SingleKeyAttention": 162,
+          "_TiledAttention": 80,
+          "_native_attention": 104
+        },
+        "fp64": [],
+        "id": "risk-cold-08-2026112002-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-08-2026112002-native-r02/attempt-0/restored/restore.json",
+            "sha256": "30db63e168247ded084cfe6e3e0a0d93d0083771f89ce35d94a377aba990ab27"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 1044,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 1.862645149230957e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-08-2026112002-native-r02/attempt-0/result.json",
+          "sha256": "5fc9d7d0dba64e5281e527d9d02502089e332ecbcb4a8c6a10023393d7a5b2e8"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 22.899773597717285,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_MassScaledAttention": 480,
+          "_SingleKeyAttention": 350,
+          "_TiledAttention": 144,
+          "_native_attention": 304
+        },
+        "fp64": [],
+        "id": "risk-cold-09-2026112001-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-09-2026112001-native-r02/attempt-0/restored/restore.json",
+            "sha256": "7958e149c3603fb32fbf13ee4466db2e244d08a7f5759c97b6b4916a2bc36f72"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 1054,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 3.725290298461914e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-09-2026112001-native-r02/attempt-0/result.json",
+          "sha256": "146b937ca4b4c8a5803908c9478573d58ac667fe8129b6eb543de821147b8a7f"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 79.8151282928884,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_MassScaledAttention": 480,
+          "_SingleKeyAttention": 350,
+          "_TiledAttention": 144,
+          "_native_attention": 304
+        },
+        "fp64": [],
+        "id": "risk-cold-09-2026112002-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-09-2026112002-native-r02/attempt-0/restored/restore.json",
+            "sha256": "705aed86fdc3ee7b1f14ca905564ad30785fe5d0835c6f4c13353b50c2ec0b7c"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 1054,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 3.725290298461914e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-09-2026112002-native-r02/attempt-0/result.json",
+          "sha256": "05f4dc45ea694bbe47fead5ac457e4c362f39cbcf6790b5769a8eda7238b80cb"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 81.47027658298612,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_SingleKeyAttention": 160,
+          "_TiledAttention": 80,
+          "_native_attention": 162
+        },
+        "fp64": [],
+        "id": "risk-cold-10-2026112001-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-10-2026112001-native-r02/attempt-0/restored/restore.json",
+            "sha256": "78c346024804bcebdc393be9fca8634c6edda6dde0740c78034586e0af5933cb"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 939,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 3.725290298461914e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-10-2026112001-native-r02/attempt-0/result.json",
+          "sha256": "736831b67253df0be9617b9ace716ea5b9b2b91fe2121b89e1c5601cdd0ebfcf"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 22.389002911746502,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_SingleKeyAttention": 160,
+          "_TiledAttention": 80,
+          "_native_attention": 162
+        },
+        "fp64": [],
+        "id": "risk-cold-10-2026112002-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-10-2026112002-native-r02/attempt-0/restored/restore.json",
+            "sha256": "5b368d790774073cce209b77d249c675de0eb6baf5ebaa589d3f5b20f327d017"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 939,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 3.725290298461914e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-10-2026112002-native-r02/attempt-0/result.json",
+          "sha256": "e5eafddd6c55166cf2bbd8aa3ca35b18b9a5f928b9a09d03000d1b5c3968e3b0"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 24.53952918574214,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_SingleKeyAttention": 170,
+          "_native_attention": 264
+        },
+        "fp64": [],
+        "id": "risk-cold-11-2026112001-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-11-2026112001-native-r02/attempt-0/restored/restore.json",
+            "sha256": "3c740f00ee6a3f963ac760dbcffe864782384fc73bc310286b86b14964e1f698"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 936,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 1.862645149230957e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-11-2026112001-native-r02/attempt-0/result.json",
+          "sha256": "450d67510e769a06a624c0c877004f475658f08130f120092fde59bc2fa69f0d"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 22.002689257264137,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_SingleKeyAttention": 170,
+          "_native_attention": 264
+        },
+        "fp64": [],
+        "id": "risk-cold-11-2026112002-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-11-2026112002-native-r02/attempt-0/restored/restore.json",
+            "sha256": "78f83eaa26cf33fb58a0c14391caf5ea4ad0c468d636a2c4779c8e2ad5510016"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 936,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 3.725290298461914e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-11-2026112002-native-r02/attempt-0/result.json",
+          "sha256": "868d91a6cc037cd163d81f061b22b5787ad6010bb804e4bd643ff7cc8edc9173"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 22.01059388741851,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_MassScaledAttention": 48,
+          "_SingleKeyAttention": 80,
+          "_TiledAttention": 96,
+          "_native_attention": 98
+        },
+        "fp64": [],
+        "id": "risk-cold-12-2026112001-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-12-2026112001-native-r02/attempt-0/restored/restore.json",
+            "sha256": "6b7ec243daf2c9869ccece34ba778d05c9b811635b828fe90414e7c265f85ce4"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 422,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 1.862645149230957e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-12-2026112001-native-r02/attempt-0/result.json",
+          "sha256": "9f523f31d8e2a525966aed5c6d12bdbeb6a25a6848c2908550ddc7eba0f62bf4"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 8.217450812458992,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_MassScaledAttention": 48,
+          "_SingleKeyAttention": 80,
+          "_TiledAttention": 96,
+          "_native_attention": 98
+        },
+        "fp64": [],
+        "id": "risk-cold-12-2026112002-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-12-2026112002-native-r02/attempt-0/restored/restore.json",
+            "sha256": "644247e57883436383ef35eb6df04c91c6214aa080a59dd3b0c4204dce1131f5"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 422,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 3.725290298461914e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-12-2026112002-native-r02/attempt-0/result.json",
+          "sha256": "4b477d478d9b6ff0f638a20c25be8cfb5a53fc0a8954c9c23d275bf834d831ed"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 8.105833575129509,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_SingleKeyAttention": 98,
+          "_TiledAttention": 144,
+          "_native_attention": 52
+        },
+        "fp64": [],
+        "id": "risk-cold-13-2026112001-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-13-2026112001-native-r02/attempt-0/restored/restore.json",
+            "sha256": "61961321ebbf8e58c753b9f57f2624c7cf19a5b3d1ea37b6b64cb42161a51ebe"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 882,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 3.725290298461914e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-13-2026112001-native-r02/attempt-0/result.json",
+          "sha256": "cd619d43a1a6ecce95cd630548d750a7fb15e89ade8d1346331ae4b6523824d6"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 72.06241240724921,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_SingleKeyAttention": 98,
+          "_TiledAttention": 144,
+          "_native_attention": 52
+        },
+        "fp64": [],
+        "id": "risk-cold-13-2026112002-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-13-2026112002-native-r02/attempt-0/restored/restore.json",
+            "sha256": "4e4134aa233b223ddc5e066ffd5c04435a3aaaf53d375f4a1e7d7de49eed0827"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 882,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 3.725290298461914e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-13-2026112002-native-r02/attempt-0/result.json",
+          "sha256": "a109252eba1b9f324e5d2791ce88a5e79474f6830e266a2810ad4a5ee0d80a5f"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 71.38642331212759,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_SingleKeyAttention": 187,
+          "_native_attention": 240
+        },
+        "fp64": [],
+        "id": "risk-cold-14-2026112001-native-r02",
+        "processed_loss_tokens": 8704,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-14-2026112001-native-r02/attempt-0/restored/restore.json",
+            "sha256": "3ec13896cbf62384ac4d5d7ef891ed84152876f8682fe8391d43d7778ba591c7"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 1012,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 1.862645149230957e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-14-2026112001-native-r02/attempt-0/result.json",
+          "sha256": "f3909d87de39d4d7b5eed648c45111e730f5bc29c0270feaed5d8e5c921b53d8"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 17.108630519360304,
+          "to_steps": 16,
+          "to_tokens": 8192
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_SingleKeyAttention": 190,
+          "_native_attention": 240
+        },
+        "fp64": [],
+        "id": "risk-cold-14-2026112002-native-r02",
+        "processed_loss_tokens": 8704,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-14-2026112002-native-r02/attempt-0/restored/restore.json",
+            "sha256": "1339aa45679bc239ea2c292f24835cbb1feef8cd99632bbb3dd5b7094446e0cd"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 1012,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 3.725290298461914e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-14-2026112002-native-r02/attempt-0/result.json",
+          "sha256": "d72fd9120934f67e908f6357612e30d68c1c035ab95d9487258630707ce72a6a"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 17.373686581850052,
+          "to_steps": 16,
+          "to_tokens": 8192
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_SingleKeyAttention": 21,
+          "_native_attention": 80
+        },
+        "fp64": [],
+        "id": "risk-cold-15-2026112001-native-r02",
+        "processed_loss_tokens": 8704,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-15-2026112001-native-r02/attempt-0/restored/restore.json",
+            "sha256": "50bc5e9c6ce253df5764c66b6ff99aceefd16c3ebb38deadb58329225ac7e8bc"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 297,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 1.862645149230957e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-15-2026112001-native-r02/attempt-0/result.json",
+          "sha256": "00e1215392b9985d837d3ce796ae9a86f76da97fcae7dbb8a8430f022a41c21f"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 2.592383909970522,
+          "to_steps": 16,
+          "to_tokens": 8192
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_SingleKeyAttention": 37,
+          "_native_attention": 80
+        },
+        "fp64": [],
+        "id": "risk-cold-15-2026112002-native-r02",
+        "processed_loss_tokens": 8704,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-15-2026112002-native-r02/attempt-0/restored/restore.json",
+            "sha256": "7b3e7b6ff47b3738e29afe4a6dd2686aead2d682902056559203d627c047c18b"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 297,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 3.725290298461914e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-15-2026112002-native-r02/attempt-0/result.json",
+          "sha256": "745bf04f98a8ca7d4d98abbb83d672e52dc940f9df468b22c8ed3658220c74dd"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 2.697572745382786,
+          "to_steps": 16,
+          "to_tokens": 8192
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {},
+        "fp64": [],
+        "id": "risk-cold-16-2026112001-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-16-2026112001-native-r02/attempt-0/restored/restore.json",
+            "sha256": "19eef8d21a2c4dd24bebf48801a3091535b884e6bda58c495e1d9b6bf91c11cb"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 141,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 1.862645149230957e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-16-2026112001-native-r02/attempt-0/result.json",
+          "sha256": "8138f05fd2acb308a09afb6a246d01ac90269378f2d4e273e6cc7e5237921fb5"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 0.5546834319829941,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {},
+        "fp64": [],
+        "id": "risk-cold-16-2026112002-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-16-2026112002-native-r02/attempt-0/restored/restore.json",
+            "sha256": "b3e49f20eb69d86da54e11a720481c721578ac6fc3b4225d4319f83da2cb052d"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 141,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 1.862645149230957e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-16-2026112002-native-r02/attempt-0/result.json",
+          "sha256": "8c89cb0b8aa76571aa9c4728928bf04865554ed4b20b699f269a6d747ae9da50"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 0.601012647151947,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {},
+        "fp64": [],
+        "id": "risk-cold-17-2026112001-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-17-2026112001-native-r02/attempt-0/restored/restore.json",
+            "sha256": "ab992ece96c8cd970fb3f5aef65a46f3eff7870bc86a66508e7bf757346aa432"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 103,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 1.862645149230957e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-17-2026112001-native-r02/attempt-0/result.json",
+          "sha256": "8e6b769298752528e4250fe80acb0fc947e9a79ffb3992c8c6ac805021be0dd4"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 0.4980868212878704,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {},
+        "fp64": [],
+        "id": "risk-cold-17-2026112002-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-17-2026112002-native-r02/attempt-0/restored/restore.json",
+            "sha256": "17d227691ebcac8b5b6884408008a2bace6386825d5b0fc5a3927852ad1be162"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 103,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 1.862645149230957e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-17-2026112002-native-r02/attempt-0/result.json",
+          "sha256": "6219b038465c5669e1b4f48ccaac9d66f07a445456d16a75dbd7b83744c39bd3"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 0.4836503453552723,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {},
+        "fp64": [],
+        "id": "risk-cold-18-2026112001-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-18-2026112001-native-r02/attempt-0/restored/restore.json",
+            "sha256": "ea1eafbb4e091188426b57a53e0f70b25c88be44213f67e8df6e98f325645661"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 251,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 7.450580596923828e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-18-2026112001-native-r02/attempt-0/result.json",
+          "sha256": "f816499af7cb65a4953ccd788a09ab4151fd02133e76cbfcdf9e5b10180004ca"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 0.9710559211671352,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {},
+        "fp64": [],
+        "id": "risk-cold-18-2026112002-native-r02",
+        "processed_loss_tokens": 4352,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-18-2026112002-native-r02/attempt-0/restored/restore.json",
+            "sha256": "2af3db782e1ed64883fd888d15347bc380724c6a6956ab264fc39c572d05ef1f"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 251,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 7.450580596923828e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-cold-18-2026112002-native-r02/attempt-0/result.json",
+          "sha256": "630019dc5553c5883a57994f1f2b1e04137f8a53ee8f73b388c30f5645e785bf"
+        },
+        "trained": false,
+        "trajectory": {
+          "from_steps": 0,
+          "from_tokens": 0,
+          "seconds_including_precision_checks": 0.9549695178866386,
+          "to_steps": 16,
+          "to_tokens": 4096
+        },
+        "transition": null
+      },
+      {
+        "attention_paths": {
+          "_native_attention": 48
+        },
+        "fp64": [
+          {
+            "execution_device": "npu:0",
+            "fields": {
+              "gradients": {
+                "failed_elements": 0,
+                "max_abs_error": 8.65519433346229e-08,
+                "relative_l2_error": 6.574809907544391e-07
+              },
+              "optimizer": {
+                "failed_elements": 0,
+                "max_abs_error": 5.962401267156636e-09,
+                "relative_l2_error": 1.2599287977736502e-12
+              },
+              "parameter_delta": {
+                "failed_elements": 0,
+                "max_abs_error": 1.6046458028995403e-07,
+                "relative_l2_error": 2.5690311788763583e-05
+              },
+              "parameters": {
+                "failed_elements": 0,
+                "max_abs_error": 1.6046458028995403e-07,
+                "relative_l2_error": 3.585463266954612e-08
+              },
+              "private_state": {
+                "failed_elements": 0,
+                "max_abs_error": 2.837779547348873e-05,
+                "relative_l2_error": 5.912886694201888e-08
+              }
+            },
+            "original_threshold_gate": {
+              "atol": 1e-05,
+              "exact": false,
+              "failed_field_count": 0,
+              "failed_fields": [],
+              "fields": 335,
+              "finite": true,
+              "integer_equal": true,
+              "max_abs": 2.837779547348873e-05,
+              "rtol": 0.0001,
+              "structure_equal": true,
+              "within_tolerance": true
+            },
+            "rng_policy": "same saved CPU RNG; non-CPU updates must consume no CPU/device randomness",
+            "scope": "same implementation promoted to CPU FP64; not an independent model oracle",
+            "step": 8193,
+            "witness": {
+              "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-fc-s-npu-native-r02/attempt-0/precision-0.pt",
+              "sha256": "b9bdc163383eea37e81a28748ffe99ddaf43c738501b0d1223b68122c065d874"
+            }
+          },
+          {
+            "execution_device": "npu:0",
+            "fields": {
+              "gradients": {
+                "failed_elements": 0,
+                "max_abs_error": 8.24048034878122e-08,
+                "relative_l2_error": 7.591917278363726e-07
+              },
+              "optimizer": {
+                "failed_elements": 0,
+                "max_abs_error": 6.700054627927399e-09,
+                "relative_l2_error": 1.4601112713157812e-12
+              },
+              "parameter_delta": {
+                "failed_elements": 0,
+                "max_abs_error": 1.3854931513179736e-07,
+                "relative_l2_error": 2.4929573204347517e-05
+              },
+              "parameters": {
+                "failed_elements": 0,
+                "max_abs_error": 1.3854931513179736e-07,
+                "relative_l2_error": 3.517095298437156e-08
+              },
+              "private_state": {
+                "failed_elements": 0,
+                "max_abs_error": 0.00017275704340136144,
+                "relative_l2_error": 5.1937909445639994e-08
+              }
+            },
+            "original_threshold_gate": {
+              "atol": 1e-05,
+              "exact": false,
+              "failed_field_count": 0,
+              "failed_fields": [],
+              "fields": 335,
+              "finite": true,
+              "integer_equal": true,
+              "max_abs": 0.00017275704340136144,
+              "rtol": 0.0001,
+              "structure_equal": true,
+              "within_tolerance": true
+            },
+            "rng_policy": "same saved CPU RNG; non-CPU updates must consume no CPU/device randomness",
+            "scope": "same implementation promoted to CPU FP64; not an independent model oracle",
+            "step": 8208,
+            "witness": {
+              "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-fc-s-npu-native-r02/attempt-0/precision-15.pt",
+              "sha256": "ac24cb363a64c5eb13dc5172ddd1588286d8fa423f8927169adab3c0ff8b8cda"
+            }
+          }
+        ],
+        "id": "risk-trained-fc-s-npu-native-r02",
+        "processed_loss_tokens": 4864,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-fc-s-npu-native-r02/attempt-0/restored/restore.json",
+            "sha256": "dd99b0e75042b2827ad80364705a27939e469c02686817c1fb4edabdd49dac24"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 296,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 3.725290298461914e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-fc-s-npu-native-r02/attempt-0/result.json",
+          "sha256": "a0735517bca9d55cf6c1aecf140a2a4eebd012846931cee30c508a18118c401e"
+        },
+        "trained": true,
+        "trajectory": {
+          "from_steps": 8192,
+          "from_tokens": 2097152,
+          "seconds_including_precision_checks": 3.2149291783571243,
+          "to_steps": 8208,
+          "to_tokens": 2101248
+        },
+        "transition": {
+          "from_steps": 8192,
+          "from_tokens": 2097152,
+          "load": "exact",
+          "origin_checkpoint": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-s-base-30a947a88a-a3-2026112001-r2/attempt-0/checkpoints/step-000008192-23ccb82195.pt",
+            "sha256": "3f29d1e326ad393217c3c889b6d5dc62ec887916cdf8be1a238cbe17b2ac071e",
+            "size_bytes": 9111597,
+            "state_sha256": "c5aa24e03938b585d5e6898792768bafc593c67e6f52b4e65c29158ad48e6841",
+            "steps": 8192,
+            "tokens": 2097152
+          },
+          "origin_source_identity": {
+            "data_manifest_sha256": "2f4617d73b5dad4f6a343707382714738e8012432fda85d9f7e36f44b26a4e1a",
+            "python_version": "3.12.13",
+            "runtime_packages": {
+              "numpy": "2.5.2",
+              "torch": "2.12.0+cpu",
+              "torch-npu": "2.12.0.post3"
+            },
+            "schema": "pilot-r3-source-v1",
+            "source_files": {
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/__init__.py": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/allocation.py": "004051c7178380b270e2cce020661bd144ed9afd78c98271d9e5c253beb9d65f",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/attention.py": "58602a6211632de9db1632c53cbcbf6b9890360ee4d0266d32bb536b1bec2214",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/checkpoint.py": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/config.py": "2b890c0ae9eac381aa3ab9726eb386339345f62dc7b3e27433ecd5a0b1c0299f",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/ffn_packing.py": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/grouped_linear.py": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/kv.py": "6ce42c759d8bfa9843c006d0bbda31ad1bc0602b0c9584718d73959bc11a3e3b",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/layout.py": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/model.py": "1911afe3b66b199eb7e066ea57c5900fead1e390ebb5894818d423284850255e",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/parameters.py": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/placement.py": "0f77def73da20f467756e5dc1f701f25942565f762e82be5d23218ecee39d05f",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/placement_ownership.py": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/precision.py": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/reception.py": "43f72f3f1a55263b8d1185a41f0bf2711b7e1179cd664710ced08e70563b45c4",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/region.py": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/region_batch.py": "514ee30c5077d416c02cec81380280eb45509f20922a0f812657b93d2d8b7e80",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/region_execution.py": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/region_placement.py": "fd082f035185d04af6bc3ba27b949a8f065ccdf62f8b32a1b442accbfa6f2b6d",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/scaled_arithmetic.py": "21b696170e73ae28a3238a4db7dd9b613d92a2b0eb88610df74a5d01a8006c62",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/ssd.py": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/ssd_memory.py": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/topology.py": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/topology_hb.py": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/foundation/src/tide/weighted_mean.py": "6c993386c66f611c371c75e2e66a52dec7954c4fb9078819aab23f13d6c76d88",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/__init__.py": "8208b80d75d5de0a39089a54db7a24924819bb81a1ed6a61adaac931a2fddf95",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/audit3.py": "9e9d4b4e3daee75ce71e215400faac71783704eed40b328c5df3eff8cca878cb",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/catalog3.py": "5ae4145270d63aaba85bf3f3aa56224d9c642e7bd1b1e75df74100e6f8d5242b",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/data.py": "d327409f049891273c315c654870a6cbdda8b1162307cabe100225c11ddbcbdd",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/data3.py": "da91d2df3a59d840bdafe181721f579ce1a8d8a4203b5872a700a812e2587cbe",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/diagnose_shannon.py": "d81bf90d3d85762f355c71375f47145aceff4e06167b95749f738372fbf3bcea",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/gate3.py": "b0b69bf919c04629c8f38bec075753e9d6775eb74cc50e6ddd272bd705f05dcc",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/inspect3.py": "dacffdb2c7da0e030a67244c66ba31d38a0bb89b912e24afbc5710c4f4634859",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/io.py": "d846049973ea6c7a952353b8a4ed25e2d89e9a67741e3c16e3dd67d39e802170",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/models.py": "42ac16fa4353d47898dc0d40fbb4b689c50856f06007ccf43f887e65cc51becb",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/models3.py": "07f6c919215d1bc79fb433d8120c133e4ff5173b7ac192b018d64819498e9b71",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/plan.py": "680567ef8fed0835f62d890b9696120a1a6e3edb323f0b88437805171c2fc834",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/plan2.py": "a0452bf80628baf4cc6c02601200f2ea22b3b3218f611dfcdfaeb2f909f594b4",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/preflight3.py": "cd8841d99e58605322a80f5e898bf299fce129bacc8c8b42191398aabbbe10a5",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/prepare3.py": "19b9736bbd43e21e4faf8590ff8b4d5033630a35b4dcd9d41f68ec6076f26056",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/prepare_campaign3.py": "fcb5446da851e35b478988b4d325ff3b09bfcc41a0134e3c1635b710418b3bf7",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/report.py": "9b87332e2d4ca021b0adffb44e19d9eb5d477cf27eaf068042730f2ab20f2c00",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/report2.py": "5a5cb8eefe33f5fd92d6e9aaa89b833f631b778a73edb18bb48acc3c686848ce",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/report3.py": "5633f35833da5d62525535f9953d33dc1d6d98499bfe54d3de750b26fe554571",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/round3.py": "50c656b6106487d1d679b72861fc45a1cf0540fe3cf6fd49752d2115f8141458",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/scheduler.py": "dbd209fe22f252bc88aa13f27b616f0cb34bcaf468b03e85751edca6f2b9d7b7",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/scheduler3.py": "ba12bdd1cf439ac07881a6d540a39d7ebe17aab40f3ea41eb330123998a40fef",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/selection.py": "9607cb8ac5f29af0e43a7de92eb36e0a4a0801eac1e493da972aba1df4360787",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/trace_shannon.py": "15e08a2038b9d5270269a46e8cf4acc656868018a9e47cbac99854a9a1faa7ae",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/validate_shannon_capture.py": "d79a79f370babe4302fb7c2976d424425978047d32255d14b595cb6eeb2528ff",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/worker.py": "542b1f5b88389e902f2aedb19eb368321152f1fff012f66d553cfc0cccf349d8",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/source/pilotlab/worker3.py": "a5e9b27350521ef7bcd929f001add25679ed7e26482287c7937340cf30d4f3a8"
+            }
+          },
+          "origin_task": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r01/round/tasks/fc-d64-s-base-30a947a88a-a3-2026112001-r2/task.json",
+            "sha256": "fbac15fcc92520f220cbd184903b0fd01c8cd6184bbcc8725a6d864aa42564e0"
+          },
+          "scope": "diagnostic continuation on repaired source; original trajectory is retained"
+        }
+      },
+      {
+        "attention_paths": {
+          "_SingleKeyAttention": 6,
+          "_TiledAttention": 18,
+          "_native_attention": 366
+        },
+        "fp64": [
+          {
+            "execution_device": "npu:0",
+            "fields": {
+              "gradients": {
+                "failed_elements": 0,
+                "max_abs_error": 6.42018570196079e-07,
+                "relative_l2_error": 3.251439081841847e-06
+              },
+              "optimizer": {
+                "failed_elements": 0,
+                "max_abs_error": 5.481873561401056e-08,
+                "relative_l2_error": 9.973250024956076e-12
+              },
+              "parameter_delta": {
+                "failed_elements": 0,
+                "max_abs_error": 2.391204496909882e-07,
+                "relative_l2_error": 1.7443653832640846e-05
+              },
+              "parameters": {
+                "failed_elements": 0,
+                "max_abs_error": 2.391204496909882e-07,
+                "relative_l2_error": 3.6346832999768274e-08
+              },
+              "private_state": {
+                "failed_elements": 0,
+                "max_abs_error": 0.00019908775607291318,
+                "relative_l2_error": 4.868320922001047e-08
+              }
+            },
+            "original_threshold_gate": {
+              "atol": 1e-05,
+              "exact": false,
+              "failed_field_count": 0,
+              "failed_fields": [],
+              "fields": 1350,
+              "finite": true,
+              "integer_equal": true,
+              "max_abs": 0.00019908775607291318,
+              "rtol": 0.0001,
+              "structure_equal": true,
+              "within_tolerance": true
+            },
+            "rng_policy": "same saved CPU RNG; non-CPU updates must consume no CPU/device randomness",
+            "scope": "same implementation promoted to CPU FP64; not an independent model oracle",
+            "step": 2484,
+            "witness": {
+              "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-settle-sigkill-native-r02/attempt-0/precision-0.pt",
+              "sha256": "1e43147b15a1a01e4f6b047698efbffb1eaf95945d1bdc7d76bbe902715bd6a1"
+            }
+          },
+          {
+            "execution_device": "npu:0",
+            "fields": {
+              "gradients": {
+                "failed_elements": 0,
+                "max_abs_error": 6.323350616472406e-08,
+                "relative_l2_error": 8.221889168893907e-07
+              },
+              "optimizer": {
+                "failed_elements": 0,
+                "max_abs_error": 5.405450205497875e-09,
+                "relative_l2_error": 2.533795880791282e-12
+              },
+              "parameter_delta": {
+                "failed_elements": 0,
+                "max_abs_error": 9.724777559798684e-07,
+                "relative_l2_error": 1.8235652711610198e-05
+              },
+              "parameters": {
+                "failed_elements": 0,
+                "max_abs_error": 9.724777559798684e-07,
+                "relative_l2_error": 3.9389243404700594e-08
+              },
+              "private_state": {
+                "failed_elements": 0,
+                "max_abs_error": 8.564940844735247e-05,
+                "relative_l2_error": 4.796176205591366e-08
+              }
+            },
+            "original_threshold_gate": {
+              "atol": 1e-05,
+              "exact": false,
+              "failed_field_count": 0,
+              "failed_fields": [],
+              "fields": 1350,
+              "finite": true,
+              "integer_equal": true,
+              "max_abs": 8.564940844735247e-05,
+              "rtol": 0.0001,
+              "structure_equal": true,
+              "within_tolerance": true
+            },
+            "rng_policy": "same saved CPU RNG; non-CPU updates must consume no CPU/device randomness",
+            "scope": "same implementation promoted to CPU FP64; not an independent model oracle",
+            "step": 2499,
+            "witness": {
+              "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-settle-sigkill-native-r02/attempt-0/precision-15.pt",
+              "sha256": "70a9673feba955ea28bbf9f7c7da0849bc11f12aca4c5feac6d4e3b79ed11794"
+            }
+          }
+        ],
+        "id": "risk-trained-settle-sigkill-native-r02",
+        "processed_loss_tokens": 4864,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-settle-sigkill-native-r02/attempt-0/restored/restore.json",
+            "sha256": "383eb3d4453010f341a17324a08cf285b3ccca803833f3ee9487d62a0fb5c473"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 1182,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 5.690380930900574e-07,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-settle-sigkill-native-r02/attempt-0/result.json",
+          "sha256": "ec3fac5b95fe3318b62989514862550dda3f6485cbfa6c9ef8f80f0e580c8b16"
+        },
+        "trained": true,
+        "trajectory": {
+          "from_steps": 2483,
+          "from_tokens": 635648,
+          "seconds_including_precision_checks": 28.33937618136406,
+          "to_steps": 2499,
+          "to_tokens": 639744
+        },
+        "transition": {
+          "from_steps": 2483,
+          "from_tokens": 635648,
+          "load": "exact",
+          "origin_checkpoint": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_settle-d64-s-mixed9-9bee809995-a2-2026112002-r2/attempt-0/checkpoints/step-000002483-688d777cf7.pt",
+            "sha256": "5ee31f66d88d31f446d7e5c1cf8dc97e2ac4bad17fe56d8e2e96c72eaeffd4ea",
+            "size_bytes": 21239621,
+            "state_sha256": "99d5be93fe5706fc384bcdd5bc773ddc8e39e3dff434628c075295dddec412df",
+            "steps": 2483,
+            "tokens": 635648
+          },
+          "origin_source_identity": {
+            "data_manifest_sha256": "2f4617d73b5dad4f6a343707382714738e8012432fda85d9f7e36f44b26a4e1a",
+            "python_version": "3.12.13",
+            "runtime_packages": {
+              "numpy": "2.5.2",
+              "torch": "2.12.0+cpu",
+              "torch-npu": "2.12.0.post3"
+            },
+            "schema": "pilot-r3-source-v1",
+            "source_files": {
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/__init__.py": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/allocation.py": "a8e4346837e7db763d3b778126090c82719c8192679606b4b1b508e576a4e74e",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/attention.py": "58602a6211632de9db1632c53cbcbf6b9890360ee4d0266d32bb536b1bec2214",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/checkpoint.py": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/config.py": "2b890c0ae9eac381aa3ab9726eb386339345f62dc7b3e27433ecd5a0b1c0299f",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/ffn_packing.py": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/grouped_linear.py": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/kv.py": "6ce42c759d8bfa9843c006d0bbda31ad1bc0602b0c9584718d73959bc11a3e3b",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/layout.py": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/model.py": "1911afe3b66b199eb7e066ea57c5900fead1e390ebb5894818d423284850255e",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/parameters.py": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/placement.py": "0f77def73da20f467756e5dc1f701f25942565f762e82be5d23218ecee39d05f",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/placement_ownership.py": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/precision.py": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/reception.py": "43f72f3f1a55263b8d1185a41f0bf2711b7e1179cd664710ced08e70563b45c4",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/region.py": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/region_batch.py": "514ee30c5077d416c02cec81380280eb45509f20922a0f812657b93d2d8b7e80",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/region_execution.py": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/region_placement.py": "fd082f035185d04af6bc3ba27b949a8f065ccdf62f8b32a1b442accbfa6f2b6d",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/scaled_arithmetic.py": "21b696170e73ae28a3238a4db7dd9b613d92a2b0eb88610df74a5d01a8006c62",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/ssd.py": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/ssd_memory.py": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/topology.py": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/topology_hb.py": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/weighted_mean.py": "6c993386c66f611c371c75e2e66a52dec7954c4fb9078819aab23f13d6c76d88",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/__init__.py": "8208b80d75d5de0a39089a54db7a24924819bb81a1ed6a61adaac931a2fddf95",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/audit3.py": "b8171de3565ec56e73135fa38350b1827bd6204517929b10a620227c7c694d09",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/calibrate_shared3.py": "e871f5f850337759f26144df21adfe5db79f985e342a587217ca897ae782454f",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/catalog3.py": "db1804150b94b407bfe5f1854c2ae0c283eec71776bddc929b6f6dcb72c26bf6",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/chain_receipt3.py": "ba0849c70da456b0f124686ed5cd74bf977be6eccd1e47123864124466dc195d",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/data.py": "d327409f049891273c315c654870a6cbdda8b1162307cabe100225c11ddbcbdd",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/data3.py": "da91d2df3a59d840bdafe181721f579ce1a8d8a4203b5872a700a812e2587cbe",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/diagnose_shannon.py": "d81bf90d3d85762f355c71375f47145aceff4e06167b95749f738372fbf3bcea",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/diagnose_shannon3.py": "e43ebb2609ee874a495c8b5c2a2c63be4f7ce57721023f91160e13a671449fca",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/gate3.py": "89b2eaa716a068e9c19d62e830e93c181ad5a600eaba7dc722981fbf240deed1",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/inspect3.py": "fa7ffab30189b3e611568841cbe1cfab6d2f351f0816f7a4b1267c251312706b",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/io.py": "d846049973ea6c7a952353b8a4ed25e2d89e9a67741e3c16e3dd67d39e802170",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/lifecycle3.py": "7acb7497a8fe0b807c7f78a1f8a1bed11c23d8f5ff9b27d0359ddf2287af1333",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/models.py": "42ac16fa4353d47898dc0d40fbb4b689c50856f06007ccf43f887e65cc51becb",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/models3.py": "07f6c919215d1bc79fb433d8120c133e4ff5173b7ac192b018d64819498e9b71",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/plan.py": "680567ef8fed0835f62d890b9696120a1a6e3edb323f0b88437805171c2fc834",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/plan2.py": "a0452bf80628baf4cc6c02601200f2ea22b3b3218f611dfcdfaeb2f909f594b4",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/preflight3.py": "cd8841d99e58605322a80f5e898bf299fce129bacc8c8b42191398aabbbe10a5",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/prepare3.py": "19b9736bbd43e21e4faf8590ff8b4d5033630a35b4dcd9d41f68ec6076f26056",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/prepare_campaign3.py": "fcb5446da851e35b478988b4d325ff3b09bfcc41a0134e3c1635b710418b3bf7",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/prepare_revision3.py": "1c4d84d04b6949b7b2c418606bffd60e050a30cdf342243319900999be14d356",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/quad_transfer_probe3.py": "3758df7c482998535674d2077f4324e2d81c403b3815769bc56ad764cc1ea737",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/repair_probe3.py": "b7d81bd0fb9894645bdd7d2b71b5bf871d60d14b65ccb11b495f387edfbdcf87",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/report.py": "9b87332e2d4ca021b0adffb44e19d9eb5d477cf27eaf068042730f2ab20f2c00",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/report2.py": "5a5cb8eefe33f5fd92d6e9aaa89b833f631b778a73edb18bb48acc3c686848ce",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/report3.py": "644833fe0273d2f2944047adf9918563db191a782044f446db088d1c82f75b1e",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/round3.py": "c2cf76eec7138cbcb563d387e22a765ed150cf14a70e7f1b78d01d650bf3edbc",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/scheduler.py": "dbd209fe22f252bc88aa13f27b616f0cb34bcaf468b03e85751edca6f2b9d7b7",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/scheduler3.py": "7b93aadfcd0188241ba833c0a50fa9e752003db3f331b7a40c5d1199132e0ff8",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/scheduler_shared3.py": "d37d6465f6c74718538c4c613b8db46b065204d4042260171d82fef90e674f55",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/selection.py": "9607cb8ac5f29af0e43a7de92eb36e0a4a0801eac1e493da972aba1df4360787",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/shared_npu3.py": "52359afa18b2ff4fc61ac93a828cb9a013cbe8c5f819e37e70b04aabb2470881",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/trace_shannon.py": "15e08a2038b9d5270269a46e8cf4acc656868018a9e47cbac99854a9a1faa7ae",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/transfer3.py": "17f7c3acd6a74e7cb1a1694a71c5d36c3ef5d836f48f1ceb8ad3406063141fe7",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/validate_shannon_capture.py": "d79a79f370babe4302fb7c2976d424425978047d32255d14b595cb6eeb2528ff",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/worker.py": "542b1f5b88389e902f2aedb19eb368321152f1fff012f66d553cfc0cccf349d8",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/worker3.py": "a5e9b27350521ef7bcd929f001add25679ed7e26482287c7937340cf30d4f3a8"
+            }
+          },
+          "origin_task": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_settle-d64-s-mixed9-9bee809995-a2-2026112002-r2/task.json",
+            "sha256": "6ceca53092076a2520f771784941b12d3a3a842190ad2df1f9f7fad5cdedc615"
+          },
+          "scope": "diagnostic continuation on repaired source; original trajectory is retained"
+        }
+      },
+      {
+        "attention_paths": {
+          "_MassScaledAttention": 540,
+          "_SingleKeyAttention": 256,
+          "_TiledAttention": 162,
+          "_native_attention": 236
+        },
+        "fp64": [
+          {
+            "execution_device": "npu:0",
+            "fields": {
+              "gradients": {
+                "failed_elements": 0,
+                "max_abs_error": 5.8176243981911124e-08,
+                "relative_l2_error": 6.412256351850894e-07
+              },
+              "optimizer": {
+                "failed_elements": 0,
+                "max_abs_error": 5.794341332698155e-09,
+                "relative_l2_error": 8.503180805427692e-12
+              },
+              "parameter_delta": {
+                "failed_elements": 0,
+                "max_abs_error": 1.7887986262579703e-06,
+                "relative_l2_error": 1.8828895330871776e-05
+              },
+              "parameters": {
+                "failed_elements": 0,
+                "max_abs_error": 1.7887986262579703e-06,
+                "relative_l2_error": 5.9275532915587927e-08
+              },
+              "private_state": {
+                "failed_elements": 0,
+                "max_abs_error": 8.105665364155357e-05,
+                "relative_l2_error": 1.3231288595522617e-07
+              }
+            },
+            "original_threshold_gate": {
+              "atol": 1e-05,
+              "exact": false,
+              "failed_field_count": 0,
+              "failed_fields": [],
+              "fields": 1163,
+              "finite": true,
+              "integer_equal": true,
+              "max_abs": 8.105665364155357e-05,
+              "rtol": 0.0001,
+              "structure_equal": true,
+              "within_tolerance": true
+            },
+            "rng_policy": "same saved CPU RNG; non-CPU updates must consume no CPU/device randomness",
+            "scope": "same implementation promoted to CPU FP64; not an independent model oracle",
+            "step": 438,
+            "witness": {
+              "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-timed-sigkill-native-r02/attempt-0/precision-0.pt",
+              "sha256": "d5c5cafc7c01afc2b52c7c4c7daaa925fb2f58fff9cd5589c49ec734e8387bad"
+            }
+          },
+          {
+            "execution_device": "npu:0",
+            "fields": {
+              "gradients": {
+                "failed_elements": 0,
+                "max_abs_error": 1.830717317671815e-08,
+                "relative_l2_error": 5.626913596196542e-07
+              },
+              "optimizer": {
+                "failed_elements": 0,
+                "max_abs_error": 1.6444528022283023e-09,
+                "relative_l2_error": 6.083628472172881e-12
+              },
+              "parameter_delta": {
+                "failed_elements": 0,
+                "max_abs_error": 9.673191376097234e-07,
+                "relative_l2_error": 1.7754172628911715e-05
+              },
+              "parameters": {
+                "failed_elements": 0,
+                "max_abs_error": 9.673191376097234e-07,
+                "relative_l2_error": 5.0216989192892344e-08
+              },
+              "private_state": {
+                "failed_elements": 0,
+                "max_abs_error": 4.9572368773453945e-05,
+                "relative_l2_error": 1.88552991109475e-07
+              }
+            },
+            "original_threshold_gate": {
+              "atol": 1e-05,
+              "exact": false,
+              "failed_field_count": 0,
+              "failed_fields": [],
+              "fields": 1163,
+              "finite": true,
+              "integer_equal": true,
+              "max_abs": 4.9572368773453945e-05,
+              "rtol": 0.0001,
+              "structure_equal": true,
+              "within_tolerance": true
+            },
+            "rng_policy": "same saved CPU RNG; non-CPU updates must consume no CPU/device randomness",
+            "scope": "same implementation promoted to CPU FP64; not an independent model oracle",
+            "step": 453,
+            "witness": {
+              "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-timed-sigkill-native-r02/attempt-0/precision-15.pt",
+              "sha256": "03c833489505a783af488cfdc40806134071db4e3426a421e7b87efd3f8ff500"
+            }
+          }
+        ],
+        "id": "risk-trained-timed-sigkill-native-r02",
+        "processed_loss_tokens": 19456,
+        "recovery": {
+          "load": "exact",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-timed-sigkill-native-r02/attempt-0/restored/restore.json",
+            "sha256": "6533cab6fd9bb05dd976eb9644123674f17dfc83d01f3bf0a172a3223d0651ee"
+          },
+          "trajectory": {
+            "atol": 1e-05,
+            "exact": false,
+            "failed_field_count": 0,
+            "failed_fields": [],
+            "fields": 1016,
+            "finite": true,
+            "integer_equal": true,
+            "max_abs": 3.725290298461914e-09,
+            "rtol": 0.0001,
+            "structure_equal": true,
+            "within_tolerance": true
+          }
+        },
+        "result": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/round/tasks/risk-trained-timed-sigkill-native-r02/attempt-0/result.json",
+          "sha256": "7437332473ba71cb8d802d147e561c783d154af0378f3d3a842a0e68799c92f9"
+        },
+        "trained": true,
+        "trajectory": {
+          "from_steps": 437,
+          "from_tokens": 447488,
+          "seconds_including_precision_checks": 60.14158773049712,
+          "to_steps": 453,
+          "to_tokens": 463872
+        },
+        "transition": {
+          "from_steps": 437,
+          "from_tokens": 447488,
+          "load": "exact",
+          "origin_checkpoint": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_timed-d64-x-group5-60bcff17bd-a2-2026112001-r5/attempt-0/checkpoints/step-000000437-39ad2ebaa6.pt",
+            "sha256": "09d71220e791a470912ddfc98455d3eb5deb17df9afa60cde5f6ad13081cd62f",
+            "size_bytes": 57611197,
+            "state_sha256": "2e50677b717e776ba1f293a9d2770700f867e9cc759e89501f202adfee63db7f",
+            "steps": 437,
+            "tokens": 447488
+          },
+          "origin_source_identity": {
+            "data_manifest_sha256": "2f4617d73b5dad4f6a343707382714738e8012432fda85d9f7e36f44b26a4e1a",
+            "python_version": "3.12.13",
+            "runtime_packages": {
+              "numpy": "2.5.2",
+              "torch": "2.12.0+cpu",
+              "torch-npu": "2.12.0.post3"
+            },
+            "schema": "pilot-r3-source-v1",
+            "source_files": {
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/__init__.py": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/allocation.py": "a8e4346837e7db763d3b778126090c82719c8192679606b4b1b508e576a4e74e",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/attention.py": "58602a6211632de9db1632c53cbcbf6b9890360ee4d0266d32bb536b1bec2214",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/checkpoint.py": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/config.py": "2b890c0ae9eac381aa3ab9726eb386339345f62dc7b3e27433ecd5a0b1c0299f",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/ffn_packing.py": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/grouped_linear.py": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/kv.py": "6ce42c759d8bfa9843c006d0bbda31ad1bc0602b0c9584718d73959bc11a3e3b",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/layout.py": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/model.py": "1911afe3b66b199eb7e066ea57c5900fead1e390ebb5894818d423284850255e",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/parameters.py": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/placement.py": "0f77def73da20f467756e5dc1f701f25942565f762e82be5d23218ecee39d05f",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/placement_ownership.py": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/precision.py": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/reception.py": "43f72f3f1a55263b8d1185a41f0bf2711b7e1179cd664710ced08e70563b45c4",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/region.py": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/region_batch.py": "514ee30c5077d416c02cec81380280eb45509f20922a0f812657b93d2d8b7e80",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/region_execution.py": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/region_placement.py": "fd082f035185d04af6bc3ba27b949a8f065ccdf62f8b32a1b442accbfa6f2b6d",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/scaled_arithmetic.py": "21b696170e73ae28a3238a4db7dd9b613d92a2b0eb88610df74a5d01a8006c62",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/ssd.py": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/ssd_memory.py": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/topology.py": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/topology_hb.py": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/foundation/src/tide/weighted_mean.py": "6c993386c66f611c371c75e2e66a52dec7954c4fb9078819aab23f13d6c76d88",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/__init__.py": "8208b80d75d5de0a39089a54db7a24924819bb81a1ed6a61adaac931a2fddf95",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/audit3.py": "b8171de3565ec56e73135fa38350b1827bd6204517929b10a620227c7c694d09",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/calibrate_shared3.py": "e871f5f850337759f26144df21adfe5db79f985e342a587217ca897ae782454f",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/catalog3.py": "db1804150b94b407bfe5f1854c2ae0c283eec71776bddc929b6f6dcb72c26bf6",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/chain_receipt3.py": "ba0849c70da456b0f124686ed5cd74bf977be6eccd1e47123864124466dc195d",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/data.py": "d327409f049891273c315c654870a6cbdda8b1162307cabe100225c11ddbcbdd",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/data3.py": "da91d2df3a59d840bdafe181721f579ce1a8d8a4203b5872a700a812e2587cbe",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/diagnose_shannon.py": "d81bf90d3d85762f355c71375f47145aceff4e06167b95749f738372fbf3bcea",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/diagnose_shannon3.py": "e43ebb2609ee874a495c8b5c2a2c63be4f7ce57721023f91160e13a671449fca",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/gate3.py": "89b2eaa716a068e9c19d62e830e93c181ad5a600eaba7dc722981fbf240deed1",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/inspect3.py": "fa7ffab30189b3e611568841cbe1cfab6d2f351f0816f7a4b1267c251312706b",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/io.py": "d846049973ea6c7a952353b8a4ed25e2d89e9a67741e3c16e3dd67d39e802170",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/lifecycle3.py": "7acb7497a8fe0b807c7f78a1f8a1bed11c23d8f5ff9b27d0359ddf2287af1333",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/models.py": "42ac16fa4353d47898dc0d40fbb4b689c50856f06007ccf43f887e65cc51becb",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/models3.py": "07f6c919215d1bc79fb433d8120c133e4ff5173b7ac192b018d64819498e9b71",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/plan.py": "680567ef8fed0835f62d890b9696120a1a6e3edb323f0b88437805171c2fc834",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/plan2.py": "a0452bf80628baf4cc6c02601200f2ea22b3b3218f611dfcdfaeb2f909f594b4",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/preflight3.py": "cd8841d99e58605322a80f5e898bf299fce129bacc8c8b42191398aabbbe10a5",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/prepare3.py": "19b9736bbd43e21e4faf8590ff8b4d5033630a35b4dcd9d41f68ec6076f26056",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/prepare_campaign3.py": "fcb5446da851e35b478988b4d325ff3b09bfcc41a0134e3c1635b710418b3bf7",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/prepare_revision3.py": "1c4d84d04b6949b7b2c418606bffd60e050a30cdf342243319900999be14d356",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/quad_transfer_probe3.py": "3758df7c482998535674d2077f4324e2d81c403b3815769bc56ad764cc1ea737",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/repair_probe3.py": "b7d81bd0fb9894645bdd7d2b71b5bf871d60d14b65ccb11b495f387edfbdcf87",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/report.py": "9b87332e2d4ca021b0adffb44e19d9eb5d477cf27eaf068042730f2ab20f2c00",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/report2.py": "5a5cb8eefe33f5fd92d6e9aaa89b833f631b778a73edb18bb48acc3c686848ce",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/report3.py": "644833fe0273d2f2944047adf9918563db191a782044f446db088d1c82f75b1e",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/round3.py": "c2cf76eec7138cbcb563d387e22a765ed150cf14a70e7f1b78d01d650bf3edbc",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/scheduler.py": "dbd209fe22f252bc88aa13f27b616f0cb34bcaf468b03e85751edca6f2b9d7b7",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/scheduler3.py": "7b93aadfcd0188241ba833c0a50fa9e752003db3f331b7a40c5d1199132e0ff8",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/scheduler_shared3.py": "d37d6465f6c74718538c4c613b8db46b065204d4042260171d82fef90e674f55",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/selection.py": "9607cb8ac5f29af0e43a7de92eb36e0a4a0801eac1e493da972aba1df4360787",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/shared_npu3.py": "52359afa18b2ff4fc61ac93a828cb9a013cbe8c5f819e37e70b04aabb2470881",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/trace_shannon.py": "15e08a2038b9d5270269a46e8cf4acc656868018a9e47cbac99854a9a1faa7ae",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/transfer3.py": "17f7c3acd6a74e7cb1a1694a71c5d36c3ef5d836f48f1ceb8ad3406063141fe7",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/validate_shannon_capture.py": "d79a79f370babe4302fb7c2976d424425978047d32255d14b595cb6eeb2528ff",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/worker.py": "542b1f5b88389e902f2aedb19eb368321152f1fff012f66d553cfc0cccf349d8",
+              "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/source/pilotlab/worker3.py": "a5e9b27350521ef7bcd929f001add25679ed7e26482287c7937340cf30d4f3a8"
+            }
+          },
+          "origin_task": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r07/round/tasks/multiscale_timed-d64-x-group5-60bcff17bd-a2-2026112001-r5/task.json",
+            "sha256": "45fe542c7427b2fd34de66a998b21e63e8b019d49e0f96d1c4fae7f0b1d29339"
+          },
+          "scope": "diagnostic continuation on repaired source; original trajectory is retained"
+        }
+      }
+    ]
+  },
+  "implementation": [
+    "exact singleton/empty-row normalized first-order VJP in NPU adapter for auto and explicit npu_fusion",
+    "mixed rows suppress analytic-row cotangents before native shared gradient reduction",
+    "FP32 multi-key native values use a detached common origin with finite subtraction range admission",
+    "visible trainable zero-prior right derivatives, weak-prior paths, mass amplitude and connected zero gradients retained"
+  ],
+  "next_a_scope": {
+    "deferred_exposed_subjects": 74,
+    "original_authorized_subjects": 344,
+    "policy": "new-source tuning and matching controls for unstarted subjects; old-source learning and selections retained pending migration review; no B dispatch",
+    "unstarted_subjects": 270
+  },
+  "observed_unix": 1795170883.452209,
+  "performance": {
+    "conditions": "FP32, one NPU, four CPU threads; three d64/B2/L128 fixed-state updates; restoration excluded, full update included",
+    "limits": "new auto versus all tiled is paired; comparison to the prior source benchmark is across runs, not a paired kernel-only overhead estimate",
+    "micro": [
+      {
+        "auto_paths": [
+          {
+            "calls": 1,
+            "implementation": "_SingleKeyAttention",
+            "k_shape": [
+              2,
+              1,
+              1,
+              64
+            ],
+            "q_shape": [
+              2,
+              1,
+              128,
+              64
+            ]
+          }
+        ],
+        "case": {
+          "label": "one-key",
+          "mask": "none",
+          "shape": [
+            2,
+            1,
+            128,
+            1,
+            64
+          ],
+          "trainable_prior": true
+        },
+        "comparison": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 5,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 2.9802322387695312e-08,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "timing": {
+          "forward": {
+            "auto": {
+              "max_seconds": 0.0009449340403079986,
+              "median_seconds": 0.0009233009070158005,
+              "min_seconds": 0.000907919555902481,
+              "samples_seconds": [
+                0.0009449340403079986,
+                0.0009233009070158005,
+                0.0009261958301067352,
+                0.0009080808609724045,
+                0.000907919555902481
+              ]
+            },
+            "tiled": {
+              "max_seconds": 0.002108681946992874,
+              "median_seconds": 0.0020952589809894564,
+              "min_seconds": 0.0019948389381170273,
+              "samples_seconds": [
+                0.0020952589809894564,
+                0.002108681946992874,
+                0.0020957600325345995,
+                0.0020145229995250703,
+                0.0019948389381170273
+              ]
+            },
+            "tiled_over_auto_time": 2.269313248875212
+          },
+          "forward_backward": {
+            "auto": {
+              "max_seconds": 0.0012378498911857605,
+              "median_seconds": 0.0012261070311069488,
+              "min_seconds": 0.0012099113315343856,
+              "samples_seconds": [
+                0.0012261070311069488,
+                0.0012378498911857605,
+                0.0012099113315343856,
+                0.0012375947088003158,
+                0.0012124896049499512
+              ]
+            },
+            "tiled": {
+              "max_seconds": 0.00499153658747673,
+              "median_seconds": 0.004986708611249923,
+              "min_seconds": 0.004951555654406548,
+              "samples_seconds": [
+                0.004986708611249923,
+                0.00499153658747673,
+                0.0049823176115751265,
+                0.004951555654406548,
+                0.004988685622811318
+              ]
+            },
+            "tiled_over_auto_time": 4.067107099734877
+          }
+        }
+      },
+      {
+        "auto_paths": [
+          {
+            "calls": 1,
+            "implementation": "_SingleKeyAttention",
+            "k_shape": [
+              2,
+              1,
+              5,
+              64
+            ],
+            "q_shape": [
+              2,
+              1,
+              128,
+              64
+            ]
+          }
+        ],
+        "case": {
+          "label": "one-visible-of-five",
+          "mask": "singleton",
+          "shape": [
+            2,
+            1,
+            128,
+            5,
+            64
+          ],
+          "trainable_prior": true
+        },
+        "comparison": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 5,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 3.3527612686157227e-08,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "timing": {
+          "forward": {
+            "auto": {
+              "max_seconds": 0.0010566812008619309,
+              "median_seconds": 0.0010531548410654067,
+              "min_seconds": 0.0009624980390071869,
+              "samples_seconds": [
+                0.0010566812008619309,
+                0.0010534033179283142,
+                0.0010531548410654067,
+                0.0009752042591571808,
+                0.0009624980390071869
+              ]
+            },
+            "tiled": {
+              "max_seconds": 0.002797553688287735,
+              "median_seconds": 0.0020178556442260742,
+              "min_seconds": 0.0018658287823200225,
+              "samples_seconds": [
+                0.0020282238721847532,
+                0.0020178556442260742,
+                0.002797553688287735,
+                0.0018912669271230697,
+                0.0018658287823200225
+              ]
+            },
+            "tiled_over_auto_time": 1.9160104151301662
+          },
+          "forward_backward": {
+            "auto": {
+              "max_seconds": 0.0014727301895618439,
+              "median_seconds": 0.001463983952999115,
+              "min_seconds": 0.0014589998871088028,
+              "samples_seconds": [
+                0.001463983952999115,
+                0.0014717180281877517,
+                0.0014589998871088028,
+                0.0014727301895618439,
+                0.0014604486525058747
+              ]
+            },
+            "tiled": {
+              "max_seconds": 0.005274184420704842,
+              "median_seconds": 0.005127089843153953,
+              "min_seconds": 0.005125024914741516,
+              "samples_seconds": [
+                0.005127089843153953,
+                0.005274184420704842,
+                0.005126038938760758,
+                0.005125024914741516,
+                0.005148847028613091
+              ]
+            },
+            "tiled_over_auto_time": 3.5021489358886795
+          }
+        }
+      },
+      {
+        "auto_paths": [
+          {
+            "calls": 1,
+            "implementation": "native",
+            "k_shape": [
+              2,
+              1,
+              5,
+              64
+            ],
+            "q_shape": [
+              2,
+              1,
+              128,
+              64
+            ]
+          }
+        ],
+        "case": {
+          "label": "five-key",
+          "mask": "none",
+          "shape": [
+            2,
+            1,
+            128,
+            5,
+            64
+          ],
+          "trainable_prior": true
+        },
+        "comparison": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 5,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 4.172325134277344e-07,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "timing": {
+          "forward": {
+            "auto": {
+              "max_seconds": 0.0012997284531593323,
+              "median_seconds": 0.0012852504849433898,
+              "min_seconds": 0.0012740500271320343,
+              "samples_seconds": [
+                0.0012997284531593323,
+                0.0012875527143478393,
+                0.0012852504849433898,
+                0.0012740500271320343,
+                0.0012803614139556886
+              ]
+            },
+            "tiled": {
+              "max_seconds": 0.0018631968647241592,
+              "median_seconds": 0.0018513385206460954,
+              "min_seconds": 0.0018161121755838395,
+              "samples_seconds": [
+                0.0018568754196166993,
+                0.0018631968647241592,
+                0.0018513385206460954,
+                0.0018161121755838395,
+                0.0018221504986286163
+              ]
+            },
+            "tiled_over_auto_time": 1.4404495795445191
+          },
+          "forward_backward": {
+            "auto": {
+              "max_seconds": 0.0022568777203559875,
+              "median_seconds": 0.002046091854572296,
+              "min_seconds": 0.0020134080201387405,
+              "samples_seconds": [
+                0.002046091854572296,
+                0.0022568777203559875,
+                0.0020583439618349075,
+                0.00202559232711792,
+                0.0020134080201387405
+              ]
+            },
+            "tiled": {
+              "max_seconds": 0.005148959159851074,
+              "median_seconds": 0.005086035653948784,
+              "min_seconds": 0.005014677718281746,
+              "samples_seconds": [
+                0.005148959159851074,
+                0.005102425068616867,
+                0.005086035653948784,
+                0.005014677718281746,
+                0.0050496537238359455
+              ]
+            },
+            "tiled_over_auto_time": 2.4857318319230304
+          }
+        }
+      },
+      {
+        "auto_paths": [
+          {
+            "calls": 1,
+            "implementation": "native",
+            "k_shape": [
+              8,
+              2,
+              16,
+              64
+            ],
+            "q_shape": [
+              8,
+              2,
+              128,
+              64
+            ]
+          }
+        ],
+        "case": {
+          "label": "sixteen-key",
+          "mask": "none",
+          "shape": [
+            8,
+            2,
+            128,
+            16,
+            64
+          ],
+          "trainable_prior": true
+        },
+        "comparison": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 5,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 5.662441253662109e-07,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "timing": {
+          "forward": {
+            "auto": {
+              "max_seconds": 0.0012743718922138213,
+              "median_seconds": 0.0012617334723472595,
+              "min_seconds": 0.0012572653591632842,
+              "samples_seconds": [
+                0.0012617334723472595,
+                0.0012743718922138213,
+                0.0012660041451454163,
+                0.0012605912983417512,
+                0.0012572653591632842
+              ]
+            },
+            "tiled": {
+              "max_seconds": 0.0018218167126178742,
+              "median_seconds": 0.001807652786374092,
+              "min_seconds": 0.001794332265853882,
+              "samples_seconds": [
+                0.0018135946244001388,
+                0.0018218167126178742,
+                0.001807652786374092,
+                0.001794332265853882,
+                0.0017950572073459625
+              ]
+            },
+            "tiled_over_auto_time": 1.4326740361506256
+          },
+          "forward_backward": {
+            "auto": {
+              "max_seconds": 0.0020422913134098054,
+              "median_seconds": 0.002031349390745163,
+              "min_seconds": 0.0020158231258392335,
+              "samples_seconds": [
+                0.002031349390745163,
+                0.0020422913134098054,
+                0.0020231399685144424,
+                0.0020351063460111616,
+                0.0020158231258392335
+              ]
+            },
+            "tiled": {
+              "max_seconds": 0.0051050115376710895,
+              "median_seconds": 0.005080700665712356,
+              "min_seconds": 0.0050653301179409025,
+              "samples_seconds": [
+                0.005080700665712356,
+                0.005087215453386307,
+                0.0051050115376710895,
+                0.005067491158843041,
+                0.0050653301179409025
+              ]
+            },
+            "tiled_over_auto_time": 2.5011456369150733
+          }
+        }
+      },
+      {
+        "auto_paths": [
+          {
+            "calls": 1,
+            "implementation": "_SingleKeyAttention",
+            "k_shape": [
+              2,
+              2,
+              128,
+              64
+            ],
+            "q_shape": [
+              2,
+              2,
+              128,
+              64
+            ]
+          },
+          {
+            "calls": 1,
+            "implementation": "native",
+            "k_shape": [
+              2,
+              2,
+              128,
+              64
+            ],
+            "q_shape": [
+              2,
+              2,
+              128,
+              64
+            ]
+          }
+        ],
+        "case": {
+          "label": "causal-b2",
+          "mask": "causal",
+          "shape": [
+            2,
+            2,
+            128,
+            128,
+            64
+          ],
+          "trainable_prior": false
+        },
+        "comparison": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 4,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 6.854534149169922e-07,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "timing": {
+          "forward": {
+            "auto": {
+              "max_seconds": 0.0010263942182064056,
+              "median_seconds": 0.00101935975253582,
+              "min_seconds": 0.0010191891342401505,
+              "samples_seconds": [
+                0.0010263942182064056,
+                0.001021403819322586,
+                0.0010191891342401505,
+                0.00101935975253582,
+                0.0010193340480327607
+              ]
+            },
+            "tiled": {
+              "max_seconds": 0.0014343075454235077,
+              "median_seconds": 0.0014246098697185516,
+              "min_seconds": 0.0014092616736888885,
+              "samples_seconds": [
+                0.0014246098697185516,
+                0.0014326367527246475,
+                0.0014343075454235077,
+                0.0014166373759508133,
+                0.0014092616736888885
+              ]
+            },
+            "tiled_over_auto_time": 1.3975535782873587
+          },
+          "forward_backward": {
+            "auto": {
+              "max_seconds": 0.0019045270979404449,
+              "median_seconds": 0.00189678892493248,
+              "min_seconds": 0.001896148920059204,
+              "samples_seconds": [
+                0.00189678892493248,
+                0.001896148920059204,
+                0.0018967259675264359,
+                0.0019045270979404449,
+                0.0019017688930034638
+              ]
+            },
+            "tiled": {
+              "max_seconds": 0.003760744258761406,
+              "median_seconds": 0.0037452477961778642,
+              "min_seconds": 0.0037163566797971726,
+              "samples_seconds": [
+                0.0037163566797971726,
+                0.0037263527512550352,
+                0.00375787653028965,
+                0.0037452477961778642,
+                0.003760744258761406
+              ]
+            },
+            "tiled_over_auto_time": 1.974520067545831
+          }
+        }
+      },
+      {
+        "auto_paths": [
+          {
+            "calls": 1,
+            "implementation": "_SingleKeyAttention",
+            "k_shape": [
+              2,
+              2,
+              128,
+              64
+            ],
+            "q_shape": [
+              2,
+              2,
+              128,
+              64
+            ]
+          },
+          {
+            "calls": 1,
+            "implementation": "native",
+            "k_shape": [
+              2,
+              2,
+              128,
+              64
+            ],
+            "q_shape": [
+              2,
+              2,
+              128,
+              64
+            ]
+          }
+        ],
+        "case": {
+          "label": "weighted-causal-b2",
+          "mask": "causal",
+          "shape": [
+            2,
+            2,
+            128,
+            128,
+            64
+          ],
+          "trainable_prior": true
+        },
+        "comparison": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 5,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 8.270144462585449e-07,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "timing": {
+          "forward": {
+            "auto": {
+              "max_seconds": 0.0015736855566501617,
+              "median_seconds": 0.0015695542097091675,
+              "min_seconds": 0.001561122015118599,
+              "samples_seconds": [
+                0.001561122015118599,
+                0.0015729699283838273,
+                0.0015695542097091675,
+                0.001565128192305565,
+                0.0015736855566501617
+              ]
+            },
+            "tiled": {
+              "max_seconds": 0.0018022943288087845,
+              "median_seconds": 0.0017936784774065019,
+              "min_seconds": 0.0017885778099298478,
+              "samples_seconds": [
+                0.0017885778099298478,
+                0.001796445995569229,
+                0.0017899632453918456,
+                0.0018022943288087845,
+                0.0017936784774065019
+              ]
+            },
+            "tiled_over_auto_time": 1.1427948562151693
+          },
+          "forward_backward": {
+            "auto": {
+              "max_seconds": 0.003017716109752655,
+              "median_seconds": 0.0029051780700683595,
+              "min_seconds": 0.0027831636369228365,
+              "samples_seconds": [
+                0.003017716109752655,
+                0.0027992606163024904,
+                0.0027831636369228365,
+                0.002978210523724556,
+                0.0029051780700683595
+              ]
+            },
+            "tiled": {
+              "max_seconds": 0.005421376973390579,
+              "median_seconds": 0.005113579705357552,
+              "min_seconds": 0.005060069262981415,
+              "samples_seconds": [
+                0.005114474892616272,
+                0.005102663859724998,
+                0.005113579705357552,
+                0.005060069262981415,
+                0.005421376973390579
+              ]
+            },
+            "tiled_over_auto_time": 1.760160507213669
+          }
+        }
+      },
+      {
+        "auto_paths": [
+          {
+            "calls": 1,
+            "implementation": "_SingleKeyAttention",
+            "k_shape": [
+              32,
+              2,
+              128,
+              64
+            ],
+            "q_shape": [
+              32,
+              2,
+              128,
+              64
+            ]
+          },
+          {
+            "calls": 1,
+            "implementation": "native",
+            "k_shape": [
+              32,
+              2,
+              128,
+              64
+            ],
+            "q_shape": [
+              32,
+              2,
+              128,
+              64
+            ]
+          }
+        ],
+        "case": {
+          "label": "weighted-causal-b32",
+          "mask": "causal",
+          "shape": [
+            32,
+            2,
+            128,
+            128,
+            64
+          ],
+          "trainable_prior": true
+        },
+        "comparison": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 5,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 1.1995434761047363e-06,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "timing": {
+          "forward": {
+            "auto": {
+              "max_seconds": 0.0019509322941303254,
+              "median_seconds": 0.0017884157598018647,
+              "min_seconds": 0.0017707768827676773,
+              "samples_seconds": [
+                0.0017884157598018647,
+                0.0018115472048521042,
+                0.0017807140946388244,
+                0.0017707768827676773,
+                0.0019509322941303254
+              ]
+            },
+            "tiled": {
+              "max_seconds": 0.002260346710681915,
+              "median_seconds": 0.0018203932791948318,
+              "min_seconds": 0.0018034163862466813,
+              "samples_seconds": [
+                0.002260346710681915,
+                0.0018203932791948318,
+                0.0018034163862466813,
+                0.0018074672669172287,
+                0.0018433351069688797
+              ]
+            },
+            "tiled_over_auto_time": 1.0178803609941962
+          },
+          "forward_backward": {
+            "auto": {
+              "max_seconds": 0.003087747469544411,
+              "median_seconds": 0.003055157884955406,
+              "min_seconds": 0.0030527152121067047,
+              "samples_seconds": [
+                0.0030590351670980453,
+                0.003087747469544411,
+                0.003053534030914307,
+                0.003055157884955406,
+                0.0030527152121067047
+              ]
+            },
+            "tiled": {
+              "max_seconds": 0.006220779940485954,
+              "median_seconds": 0.006214181333780289,
+              "min_seconds": 0.006170431897044182,
+              "samples_seconds": [
+                0.006170431897044182,
+                0.006214181333780289,
+                0.0062183521687984465,
+                0.0061730191111564634,
+                0.006220779940485954
+              ]
+            },
+            "tiled_over_auto_time": 2.0339967909288568
+          }
+        }
+      }
+    ],
+    "models": [
+      {
+        "activity_comparison": {
+          "atol": 0,
+          "exact": false,
+          "failed_field_count": 2,
+          "failed_fields": [
+            "/health/logits/rms",
+            "/health/logits/max_abs"
+          ],
+          "fields": 36,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 0.0,
+          "rtol": 0,
+          "structure_equal": false,
+          "within_tolerance": false
+        },
+        "label": "FC/K d64",
+        "numerical_comparison": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 253,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 1.9073486328125e-06,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "tiled_over_auto_time": 1.0557607354685847,
+        "timing": {
+          "auto": {
+            "max_seconds": 0.11346234381198883,
+            "median_seconds": 0.10944666340947151,
+            "min_seconds": 0.10908456146717072,
+            "samples_seconds": [
+              0.11213749274611473,
+              0.10980045422911644,
+              0.10908456146717072,
+              0.10919548198580742,
+              0.11346234381198883,
+              0.10944666340947151,
+              0.1092933937907219
+            ],
+            "tokens_per_second": 2339.038870853744
+          },
+          "tiled": {
+            "max_seconds": 0.11726556718349457,
+            "median_seconds": 0.1155494898557663,
+            "min_seconds": 0.11495966836810112,
+            "samples_seconds": [
+              0.1155494898557663,
+              0.1153029091656208,
+              0.11726556718349457,
+              0.11590531468391418,
+              0.11497604474425316,
+              0.11495966836810112,
+              0.11675691232085228
+            ],
+            "tokens_per_second": 2215.5009106448665
+          }
+        }
+      },
+      {
+        "activity_comparison": {
+          "atol": 0,
+          "exact": false,
+          "failed_field_count": 1,
+          "failed_fields": [
+            "/health/logits/max_abs"
+          ],
+          "fields": 36,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 0.0,
+          "rtol": 0,
+          "structure_equal": false,
+          "within_tolerance": false
+        },
+        "label": "Exchange/X pool d64",
+        "numerical_comparison": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 896,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 3.0517578125e-05,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "tiled_over_auto_time": 1.0654878052967631,
+        "timing": {
+          "auto": {
+            "max_seconds": 0.6927380263805389,
+            "median_seconds": 0.6824630610644817,
+            "min_seconds": 0.6793751791119576,
+            "samples_seconds": [
+              0.6927380263805389,
+              0.6820388250052929,
+              0.680754754692316,
+              0.6793751791119576,
+              0.6824630610644817,
+              0.685240875929594,
+              0.6882130652666092
+            ],
+            "tokens_per_second": 375.111877265123
+          },
+          "tiled": {
+            "max_seconds": 0.7354979962110519,
+            "median_seconds": 0.7271560691297054,
+            "min_seconds": 0.7238506637513638,
+            "samples_seconds": [
+              0.7258104309439659,
+              0.7238506637513638,
+              0.7326901480555534,
+              0.7265213802456856,
+              0.727537989616394,
+              0.7271560691297054,
+              0.7354979962110519
+            ],
+            "tokens_per_second": 352.0564715995465
+          }
+        }
+      },
+      {
+        "activity_comparison": {
+          "atol": 0,
+          "exact": true,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 36,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 0.0,
+          "rtol": 0,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "label": "Settle/K singleton7 d64",
+        "numerical_comparison": {
+          "atol": 1e-05,
+          "exact": false,
+          "failed_field_count": 0,
+          "failed_fields": [],
+          "fields": 829,
+          "finite": true,
+          "integer_equal": true,
+          "max_abs": 4.526227712631226e-06,
+          "rtol": 0.0001,
+          "structure_equal": true,
+          "within_tolerance": true
+        },
+        "tiled_over_auto_time": 1.110211896976033,
+        "timing": {
+          "auto": {
+            "max_seconds": 1.3177579827606678,
+            "median_seconds": 1.2015971392393112,
+            "min_seconds": 1.1967644020915031,
+            "samples_seconds": [
+              1.2015971392393112,
+              1.203347336500883,
+              1.2004117108881474,
+              1.1967644020915031,
+              1.3177579827606678,
+              1.198458980768919,
+              1.2022974789142609
+            ],
+            "tokens_per_second": 213.0497748705232
+          },
+          "tiled": {
+            "max_seconds": 1.3403245024383068,
+            "median_seconds": 1.3340274393558502,
+            "min_seconds": 1.328040387481451,
+            "samples_seconds": [
+              1.3340274393558502,
+              1.3403245024383068,
+              1.3281552270054817,
+              1.328040387481451,
+              1.3318602181971073,
+              1.3367421589791775,
+              1.3340879417955875
+            ],
+            "tokens_per_second": 191.90010073826699
+          }
+        }
+      }
+    ],
+    "result": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r02/frozen/round/tasks/attention-performance-paired/attempt-0/result.json",
+      "sha256": "112ec3edc14a386ff00cd5590fa15ed1aa3befcabeba8c277b8eb0ed6b9e5ae9"
+    }
+  },
+  "pre_main_budget_hours": 74.50410594886375,
+  "retained_attempts": {
+    "harness_cpu_only_precision_guard": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r02/frozen/round/tasks/native-support-gate-r02/attempt-0/result.json",
+      "sha256": "64392c89e733e7f9273204211ff071cbe00e3d057db77a85e4fbec9a8f403bf0"
+    },
+    "prior_native_singleton_and_shannon": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-attention-risk-screen.json",
+      "sha256": "f161a48a5d30ef85811a6dc2eedae984ee3530452bc449b29fa6d717c152e9fa"
+    },
+    "singleton_only_cpu_near_constant_failure": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/cpu-first.log",
+      "sha256": "91c19dbf84c3d60a071c29c95b535b5c333509ec3afa498b3848e794c3339525"
+    },
+    "singleton_only_npu_two_update_failures": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/round/tasks/native-support-gate-r01/attempt-0/result.json",
+      "sha256": "fa7144666da291d6b261c7413ddaa6649bf4181315fd17d7d05bffe63671c376"
+    }
+  },
+  "schema": "pilot-r3-native-auto-repair-review-v1",
+  "source": {
+    "attention": {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/src/tide/attention.py",
+      "sha256": "c163d02d95c7e62d6cf9ed83638bfea79cdb354253bcebd7ca104681a954257c"
+    },
+    "frozen_screen_plan": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/risk-screen-r02/frozen/risk-plan.json",
+      "sha256": "a13484630c92cc229ef53463d81c5a17dd0fc2607b21c62364f0dd383893d9b5"
+    }
+  },
+  "stage_b_gate": "closed",
+  "status": "repaired_path_and_finite_screen_passed",
+  "tests": {
+    "controller_tests": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r03/stage-a-controller-tests.log",
+      "sha256": "5bdd8a66fd8f6f3074f98198291577a8589d3abc2752c02eda53a48d5566d37a"
+    },
+    "cpu_distinct_passes": 172,
+    "cpu_logs": [
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/cpu-centered.log",
+        "sha256": "0c5fddf849e372e42064fdde1d466628a9c60ec55031bfe6e9b49118af55159e"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/cpu-extended.log",
+        "sha256": "68d36232b81572784a63b0adfbf3a80219fd50cca098120aec7e91496b490069"
+      }
+    ],
+    "npu_log": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r02/frozen/round/tasks/native-support-gate-r02/attempt-0/qualification.log",
+      "sha256": "0993e9f0ddb417f84237a246d4ab6b3b6e5d7d5d581646eede97b42cad310933"
+    },
+    "npu_passes": 39,
+    "original_xfails": 3,
+    "scope_tests": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r03/stage-a-scope-tests.log",
+      "sha256": "704d54d2279476b018517267a8ebc5993f930e5bbc21c5a90a2ece64846fe69f"
+    }
+  }
+}

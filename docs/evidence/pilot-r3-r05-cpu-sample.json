@@ -1,0 +1,513 @@
+{
+  "endpoints": {
+    "first": {
+      "1815261:2273028871": {
+        "backend": "cpu",
+        "pid": 1815261,
+        "rss_bytes": 3252838400,
+        "start_ticks": 2273028871,
+        "ticks": 41645
+      },
+      "1815265:2273028877": {
+        "backend": "cpu",
+        "pid": 1815265,
+        "rss_bytes": 3114938368,
+        "start_ticks": 2273028877,
+        "ticks": 42864
+      },
+      "1815478:2273028986": {
+        "backend": "cpu",
+        "pid": 1815478,
+        "rss_bytes": 570564608,
+        "start_ticks": 2273028986,
+        "ticks": 35180
+      },
+      "1815481:2273028991": {
+        "backend": "cpu",
+        "pid": 1815481,
+        "rss_bytes": 492511232,
+        "start_ticks": 2273028991,
+        "ticks": 35175
+      },
+      "1815490:2273028995": {
+        "backend": "cpu",
+        "pid": 1815490,
+        "rss_bytes": 563085312,
+        "start_ticks": 2273028995,
+        "ticks": 34955
+      },
+      "1815497:2273028999": {
+        "backend": "cpu",
+        "pid": 1815497,
+        "rss_bytes": 567689216,
+        "start_ticks": 2273028999,
+        "ticks": 35256
+      },
+      "1815500:2273029004": {
+        "backend": "cpu",
+        "pid": 1815500,
+        "rss_bytes": 551243776,
+        "start_ticks": 2273029004,
+        "ticks": 34925
+      },
+      "1815510:2273029009": {
+        "backend": "cpu",
+        "pid": 1815510,
+        "rss_bytes": 552013824,
+        "start_ticks": 2273029009,
+        "ticks": 35048
+      },
+      "1815524:2273029016": {
+        "backend": "cpu",
+        "pid": 1815524,
+        "rss_bytes": 520155136,
+        "start_ticks": 2273029016,
+        "ticks": 34888
+      },
+      "1815526:2273029018": {
+        "backend": "cpu",
+        "pid": 1815526,
+        "rss_bytes": 481914880,
+        "start_ticks": 2273029018,
+        "ticks": 34598
+      },
+      "1815535:2273029022": {
+        "backend": "cpu",
+        "pid": 1815535,
+        "rss_bytes": 510881792,
+        "start_ticks": 2273029022,
+        "ticks": 35547
+      },
+      "1815548:2273029026": {
+        "backend": "cpu",
+        "pid": 1815548,
+        "rss_bytes": 505610240,
+        "start_ticks": 2273029026,
+        "ticks": 35585
+      },
+      "1815572:2273029031": {
+        "backend": "cpu",
+        "pid": 1815572,
+        "rss_bytes": 492580864,
+        "start_ticks": 2273029031,
+        "ticks": 35660
+      },
+      "1817421:2273030551": {
+        "backend": "cpu",
+        "pid": 1817421,
+        "rss_bytes": 498462720,
+        "start_ticks": 2273030551,
+        "ticks": 31065
+      },
+      "1817424:2273030558": {
+        "backend": "cpu",
+        "pid": 1817424,
+        "rss_bytes": 596062208,
+        "start_ticks": 2273030558,
+        "ticks": 33257
+      },
+      "1817442:2273030566": {
+        "backend": "cpu",
+        "pid": 1817442,
+        "rss_bytes": 646725632,
+        "start_ticks": 2273030566,
+        "ticks": 33442
+      },
+      "1817447:2273030574": {
+        "backend": "cpu",
+        "pid": 1817447,
+        "rss_bytes": 634937344,
+        "start_ticks": 2273030574,
+        "ticks": 33620
+      },
+      "1817449:2273030579": {
+        "backend": "cpu",
+        "pid": 1817449,
+        "rss_bytes": 594567168,
+        "start_ticks": 2273030579,
+        "ticks": 33162
+      },
+      "1817455:2273030585": {
+        "backend": "cpu",
+        "pid": 1817455,
+        "rss_bytes": 555376640,
+        "start_ticks": 2273030585,
+        "ticks": 29053
+      },
+      "1817462:2273030592": {
+        "backend": "cpu",
+        "pid": 1817462,
+        "rss_bytes": 523612160,
+        "start_ticks": 2273030592,
+        "ticks": 28974
+      },
+      "1817753:2273030831": {
+        "backend": "cpu",
+        "pid": 1817753,
+        "rss_bytes": 559910912,
+        "start_ticks": 2273030831,
+        "ticks": 28307
+      },
+      "1817758:2273030836": {
+        "backend": "cpu",
+        "pid": 1817758,
+        "rss_bytes": 558182400,
+        "start_ticks": 2273030836,
+        "ticks": 28711
+      },
+      "1817766:2273030842": {
+        "backend": "cpu",
+        "pid": 1817766,
+        "rss_bytes": 489848832,
+        "start_ticks": 2273030842,
+        "ticks": 31867
+      },
+      "1817773:2273030848": {
+        "backend": "cpu",
+        "pid": 1817773,
+        "rss_bytes": 578560000,
+        "start_ticks": 2273030848,
+        "ticks": 32055
+      },
+      "1817780:2273030854": {
+        "backend": "cpu",
+        "pid": 1817780,
+        "rss_bytes": 593543168,
+        "start_ticks": 2273030854,
+        "ticks": 31604
+      },
+      "1817790:2273030860": {
+        "backend": "cpu",
+        "pid": 1817790,
+        "rss_bytes": 577937408,
+        "start_ticks": 2273030860,
+        "ticks": 31583
+      },
+      "1818296:2273031267": {
+        "backend": "npu",
+        "pid": 1818296,
+        "rss_bytes": 2377109504,
+        "start_ticks": 2273031267,
+        "ticks": 12960
+      },
+      "1820278:2273032744": {
+        "backend": "npu",
+        "pid": 1820278,
+        "rss_bytes": 2428170240,
+        "start_ticks": 2273032744,
+        "ticks": 11338
+      },
+      "1821803:2273034025": {
+        "backend": "cpu",
+        "pid": 1821803,
+        "rss_bytes": 546893824,
+        "start_ticks": 2273034025,
+        "ticks": 20560
+      },
+      "1821835:2273034032": {
+        "backend": "cpu",
+        "pid": 1821835,
+        "rss_bytes": 519909376,
+        "start_ticks": 2273034032,
+        "ticks": 20741
+      },
+      "1821874:2273034039": {
+        "backend": "cpu",
+        "pid": 1821874,
+        "rss_bytes": 557891584,
+        "start_ticks": 2273034039,
+        "ticks": 20820
+      },
+      "1821888:2273034047": {
+        "backend": "cpu",
+        "pid": 1821888,
+        "rss_bytes": 496046080,
+        "start_ticks": 2273034047,
+        "ticks": 20657
+      },
+      "1828426:2273039036": {
+        "backend": "npu",
+        "pid": 1828426,
+        "rss_bytes": 2290757632,
+        "start_ticks": 2273039036,
+        "ticks": 3303
+      },
+      "1828997:2273039721": {
+        "backend": "npu",
+        "pid": 1828997,
+        "rss_bytes": 2265112576,
+        "start_ticks": 2273039721,
+        "ticks": 2379
+      },
+      "1829834:2273040441": {
+        "backend": "npu",
+        "pid": 1829834,
+        "rss_bytes": 2255110144,
+        "start_ticks": 2273040441,
+        "ticks": 1308
+      },
+      "1831211:2273041355": {
+        "backend": "npu",
+        "pid": 1831211,
+        "rss_bytes": 323035136,
+        "start_ticks": 2273041355,
+        "ticks": 161
+      }
+    },
+    "last": {
+      "1815265:2273028877": {
+        "backend": "cpu",
+        "pid": 1815265,
+        "rss_bytes": 2849480704,
+        "start_ticks": 2273028877,
+        "ticks": 49723
+      },
+      "1815478:2273028986": {
+        "backend": "cpu",
+        "pid": 1815478,
+        "rss_bytes": 540348416,
+        "start_ticks": 2273028986,
+        "ticks": 40944
+      },
+      "1815481:2273028991": {
+        "backend": "cpu",
+        "pid": 1815481,
+        "rss_bytes": 554004480,
+        "start_ticks": 2273028991,
+        "ticks": 40965
+      },
+      "1815490:2273028995": {
+        "backend": "cpu",
+        "pid": 1815490,
+        "rss_bytes": 529551360,
+        "start_ticks": 2273028995,
+        "ticks": 40627
+      },
+      "1815497:2273028999": {
+        "backend": "cpu",
+        "pid": 1815497,
+        "rss_bytes": 519417856,
+        "start_ticks": 2273028999,
+        "ticks": 40998
+      },
+      "1815500:2273029004": {
+        "backend": "cpu",
+        "pid": 1815500,
+        "rss_bytes": 552189952,
+        "start_ticks": 2273029004,
+        "ticks": 40657
+      },
+      "1815510:2273029009": {
+        "backend": "cpu",
+        "pid": 1815510,
+        "rss_bytes": 554053632,
+        "start_ticks": 2273029009,
+        "ticks": 40816
+      },
+      "1815524:2273029016": {
+        "backend": "cpu",
+        "pid": 1815524,
+        "rss_bytes": 551206912,
+        "start_ticks": 2273029016,
+        "ticks": 40631
+      },
+      "1815526:2273029018": {
+        "backend": "cpu",
+        "pid": 1815526,
+        "rss_bytes": 513228800,
+        "start_ticks": 2273029018,
+        "ticks": 40334
+      },
+      "1815535:2273029022": {
+        "backend": "cpu",
+        "pid": 1815535,
+        "rss_bytes": 556343296,
+        "start_ticks": 2273029022,
+        "ticks": 41422
+      },
+      "1815548:2273029026": {
+        "backend": "cpu",
+        "pid": 1815548,
+        "rss_bytes": 497213440,
+        "start_ticks": 2273029026,
+        "ticks": 41417
+      },
+      "1815572:2273029031": {
+        "backend": "cpu",
+        "pid": 1815572,
+        "rss_bytes": 503906304,
+        "start_ticks": 2273029031,
+        "ticks": 41494
+      },
+      "1817421:2273030551": {
+        "backend": "cpu",
+        "pid": 1817421,
+        "rss_bytes": 500224000,
+        "start_ticks": 2273030551,
+        "ticks": 36911
+      },
+      "1817424:2273030558": {
+        "backend": "cpu",
+        "pid": 1817424,
+        "rss_bytes": 560132096,
+        "start_ticks": 2273030558,
+        "ticks": 39460
+      },
+      "1817442:2273030566": {
+        "backend": "cpu",
+        "pid": 1817442,
+        "rss_bytes": 507400192,
+        "start_ticks": 2273030566,
+        "ticks": 39712
+      },
+      "1817447:2273030574": {
+        "backend": "cpu",
+        "pid": 1817447,
+        "rss_bytes": 639475712,
+        "start_ticks": 2273030574,
+        "ticks": 39925
+      },
+      "1817449:2273030579": {
+        "backend": "cpu",
+        "pid": 1817449,
+        "rss_bytes": 598523904,
+        "start_ticks": 2273030579,
+        "ticks": 39376
+      },
+      "1817455:2273030585": {
+        "backend": "cpu",
+        "pid": 1817455,
+        "rss_bytes": 528576512,
+        "start_ticks": 2273030585,
+        "ticks": 34504
+      },
+      "1817462:2273030592": {
+        "backend": "cpu",
+        "pid": 1817462,
+        "rss_bytes": 522383360,
+        "start_ticks": 2273030592,
+        "ticks": 34402
+      },
+      "1817753:2273030831": {
+        "backend": "cpu",
+        "pid": 1817753,
+        "rss_bytes": 518422528,
+        "start_ticks": 2273030831,
+        "ticks": 33785
+      },
+      "1817758:2273030836": {
+        "backend": "cpu",
+        "pid": 1817758,
+        "rss_bytes": 570744832,
+        "start_ticks": 2273030836,
+        "ticks": 34222
+      },
+      "1817766:2273030842": {
+        "backend": "cpu",
+        "pid": 1817766,
+        "rss_bytes": 506830848,
+        "start_ticks": 2273030842,
+        "ticks": 38029
+      },
+      "1817773:2273030848": {
+        "backend": "cpu",
+        "pid": 1817773,
+        "rss_bytes": 552960000,
+        "start_ticks": 2273030848,
+        "ticks": 38030
+      },
+      "1817780:2273030854": {
+        "backend": "cpu",
+        "pid": 1817780,
+        "rss_bytes": 589336576,
+        "start_ticks": 2273030854,
+        "ticks": 37673
+      },
+      "1817790:2273030860": {
+        "backend": "cpu",
+        "pid": 1817790,
+        "rss_bytes": 554827776,
+        "start_ticks": 2273030860,
+        "ticks": 37695
+      },
+      "1820278:2273032744": {
+        "backend": "npu",
+        "pid": 1820278,
+        "rss_bytes": 2428305408,
+        "start_ticks": 2273032744,
+        "ticks": 14109
+      },
+      "1821803:2273034025": {
+        "backend": "cpu",
+        "pid": 1821803,
+        "rss_bytes": 518193152,
+        "start_ticks": 2273034025,
+        "ticks": 26245
+      },
+      "1821835:2273034032": {
+        "backend": "cpu",
+        "pid": 1821835,
+        "rss_bytes": 567791616,
+        "start_ticks": 2273034032,
+        "ticks": 26488
+      },
+      "1821874:2273034039": {
+        "backend": "cpu",
+        "pid": 1821874,
+        "rss_bytes": 574947328,
+        "start_ticks": 2273034039,
+        "ticks": 26681
+      },
+      "1821888:2273034047": {
+        "backend": "cpu",
+        "pid": 1821888,
+        "rss_bytes": 534626304,
+        "start_ticks": 2273034047,
+        "ticks": 26438
+      },
+      "1829834:2273040441": {
+        "backend": "npu",
+        "pid": 1829834,
+        "rss_bytes": 2320908288,
+        "start_ticks": 2273040441,
+        "ticks": 3922
+      },
+      "1831211:2273041355": {
+        "backend": "npu",
+        "pid": 1831211,
+        "rss_bytes": 2274123776,
+        "start_ticks": 2273041355,
+        "ticks": 2993
+      },
+      "1832279:2273042488": {
+        "backend": "npu",
+        "pid": 1832279,
+        "rss_bytes": 2270892032,
+        "start_ticks": 2273042488,
+        "ticks": 1228
+      }
+    }
+  },
+  "final_workers": {
+    "cpu": 29,
+    "npu": 4
+  },
+  "finished_unix": 1795144264.5900464,
+  "initial_workers": {
+    "cpu": 30,
+    "npu": 6
+  },
+  "persistent_worker_busy_cores": {
+    "cpu": 85.14590188587015,
+    "npu": 4.104807273878348
+  },
+  "persistent_workers": {
+    "cpu": 29,
+    "npu": 3
+  },
+  "round": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r05/round",
+  "schema": "pilot-r3-cpu-worker-sample-v1",
+  "scope": "20-second /proc CPU time delta for workers alive at both endpoints; includes all their threads, excludes exited/new workers and group/controller overhead; not peak CPU utilization or exclusive throughput",
+  "seconds": 20.017992202192545,
+  "started_unix": 1795144244.5720546
+}

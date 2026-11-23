@@ -1,0 +1,1169 @@
+{
+  "accounting": {
+    "device_seconds": 60.423519134521484,
+    "processed_loss_tokens": 15360,
+    "synthetic_micro_cases": 7,
+    "total_campaign_device_hours": 73.93616877296732
+  },
+  "conditions": {
+    "cpu_threads": 4,
+    "device": "Ascend NPU",
+    "micro": {
+      "iterations_per_window": 10,
+      "scope": "public weighted_attention interface including dispatch/prior/mask handling and backward, not bare CANN kernel timing",
+      "warmups_per_mode_backend": 5,
+      "windows_per_mode_backend": 5
+    },
+    "models": {
+      "diagnostic_updates_per_backend": 1,
+      "state_policy": "restore identical saved model/optimizer/private state and benchmark NPU RNG before each update; restoration excluded from timing",
+      "timed_scope": "host input transfer, forward, loss, backward, clipping and Adam; no activation/gradient diagnostic collection in timed samples",
+      "timed_updates_per_backend": 7,
+      "warmups_per_backend": 2
+    },
+    "npu_workers": 1,
+    "paired_order": "alternating auto/tiled and tiled/auto",
+    "physical_visibility": "9",
+    "precision": "fp32",
+    "synchronization": "before and after measured windows"
+  },
+  "micro_results": [
+    {
+      "auto_paths": [
+        {
+          "calls": 1,
+          "implementation": "native",
+          "k_shape": [
+            2,
+            1,
+            1,
+            64
+          ],
+          "q_shape": [
+            2,
+            1,
+            128,
+            64
+          ]
+        }
+      ],
+      "case": {
+        "label": "one-key",
+        "mask": "none",
+        "shape": [
+          2,
+          1,
+          128,
+          1,
+          64
+        ],
+        "trainable_prior": true
+      },
+      "comparison": {
+        "atol": 1e-05,
+        "exact": false,
+        "failed_field_count": 0,
+        "failed_fields": [],
+        "fields": 5,
+        "finite": true,
+        "integer_equal": true,
+        "max_abs": 6.33055421417339e-08,
+        "rtol": 0.0001,
+        "structure_equal": true,
+        "within_tolerance": true
+      },
+      "timing": {
+        "forward": {
+          "auto": {
+            "max_seconds": 0.0011400830000638962,
+            "median_seconds": 0.00113009475171566,
+            "min_seconds": 0.0010894954204559327,
+            "samples_seconds": [
+              0.0011400830000638962,
+              0.0011343516409397126,
+              0.00113009475171566,
+              0.0011007845401763915,
+              0.0010894954204559327
+            ]
+          },
+          "tiled": {
+            "max_seconds": 0.001954500749707222,
+            "median_seconds": 0.0019327152520418167,
+            "min_seconds": 0.0018682047724723817,
+            "samples_seconds": [
+              0.001951570063829422,
+              0.001954500749707222,
+              0.0019327152520418167,
+              0.0018809940665960312,
+              0.0018682047724723817
+            ]
+          },
+          "tiled_over_auto_time": 1.71022407555442
+        },
+        "forward_backward": {
+          "auto": {
+            "max_seconds": 0.0017112605273723602,
+            "median_seconds": 0.0016828879714012146,
+            "min_seconds": 0.0016682937741279602,
+            "samples_seconds": [
+              0.0017015833407640457,
+              0.0017112605273723602,
+              0.0016748789697885514,
+              0.0016828879714012146,
+              0.0016682937741279602
+            ]
+          },
+          "tiled": {
+            "max_seconds": 0.004983894526958466,
+            "median_seconds": 0.004717556014657021,
+            "min_seconds": 0.004709256067872048,
+            "samples_seconds": [
+              0.004717556014657021,
+              0.004983894526958466,
+              0.004709256067872048,
+              0.004711311310529709,
+              0.004742438718676567
+            ]
+          },
+          "tiled_over_auto_time": 2.8032501835098778
+        }
+      }
+    },
+    {
+      "auto_paths": [
+        {
+          "calls": 1,
+          "implementation": "native",
+          "k_shape": [
+            2,
+            1,
+            5,
+            64
+          ],
+          "q_shape": [
+            2,
+            1,
+            128,
+            64
+          ]
+        }
+      ],
+      "case": {
+        "label": "one-visible-of-five",
+        "mask": "singleton",
+        "shape": [
+          2,
+          1,
+          128,
+          5,
+          64
+        ],
+        "trainable_prior": true
+      },
+      "comparison": {
+        "atol": 1e-05,
+        "exact": false,
+        "failed_field_count": 0,
+        "failed_fields": [],
+        "fields": 5,
+        "finite": true,
+        "integer_equal": true,
+        "max_abs": 1.1201137795069371e-07,
+        "rtol": 0.0001,
+        "structure_equal": true,
+        "within_tolerance": true
+      },
+      "timing": {
+        "forward": {
+          "auto": {
+            "max_seconds": 0.0010551493614912033,
+            "median_seconds": 0.0010466601699590683,
+            "min_seconds": 0.0010399628430604936,
+            "samples_seconds": [
+              0.0010399628430604936,
+              0.0010466601699590683,
+              0.0010551493614912033,
+              0.0010481704026460647,
+              0.0010464809834957122
+            ]
+          },
+          "tiled": {
+            "max_seconds": 0.0019003991037607193,
+            "median_seconds": 0.0018913183361291886,
+            "min_seconds": 0.0018867388367652892,
+            "samples_seconds": [
+              0.0019003991037607193,
+              0.0018913183361291886,
+              0.0018867388367652892,
+              0.001890087127685547,
+              0.00189763642847538
+            ]
+          },
+          "tiled_over_auto_time": 1.8070032570391517
+        },
+        "forward_backward": {
+          "auto": {
+            "max_seconds": 0.0017800863832235336,
+            "median_seconds": 0.0016434326767921447,
+            "min_seconds": 0.0016321755945682525,
+            "samples_seconds": [
+              0.0017800863832235336,
+              0.0016434326767921447,
+              0.0016349334269762038,
+              0.001647249609231949,
+              0.0016321755945682525
+            ]
+          },
+          "tiled": {
+            "max_seconds": 0.004812600091099739,
+            "median_seconds": 0.004803023114800453,
+            "min_seconds": 0.00476892851293087,
+            "samples_seconds": [
+              0.004777137562632561,
+              0.00476892851293087,
+              0.004803023114800453,
+              0.004809518903493881,
+              0.004812600091099739
+            ]
+          },
+          "tiled_over_auto_time": 2.9225554430228247
+        }
+      }
+    },
+    {
+      "auto_paths": [
+        {
+          "calls": 1,
+          "implementation": "native",
+          "k_shape": [
+            2,
+            1,
+            5,
+            64
+          ],
+          "q_shape": [
+            2,
+            1,
+            128,
+            64
+          ]
+        }
+      ],
+      "case": {
+        "label": "five-key",
+        "mask": "none",
+        "shape": [
+          2,
+          1,
+          128,
+          5,
+          64
+        ],
+        "trainable_prior": true
+      },
+      "comparison": {
+        "atol": 1e-05,
+        "exact": false,
+        "failed_field_count": 0,
+        "failed_fields": [],
+        "fields": 5,
+        "finite": true,
+        "integer_equal": true,
+        "max_abs": 8.940696716308594e-08,
+        "rtol": 0.0001,
+        "structure_equal": true,
+        "within_tolerance": true
+      },
+      "timing": {
+        "forward": {
+          "auto": {
+            "max_seconds": 0.0011027242988348007,
+            "median_seconds": 0.0010951083153486253,
+            "min_seconds": 0.001090572401881218,
+            "samples_seconds": [
+              0.0011027242988348007,
+              0.0011005356907844543,
+              0.0010909192264080048,
+              0.001090572401881218,
+              0.0010951083153486253
+            ]
+          },
+          "tiled": {
+            "max_seconds": 0.001935354620218277,
+            "median_seconds": 0.0019224483519792556,
+            "min_seconds": 0.0019039660692214966,
+            "samples_seconds": [
+              0.001935354620218277,
+              0.0019224483519792556,
+              0.0019039660692214966,
+              0.001924685388803482,
+              0.001919863373041153
+            ]
+          },
+          "tiled_over_auto_time": 1.7554869459348854
+        },
+        "forward_backward": {
+          "auto": {
+            "max_seconds": 0.0018399588763713837,
+            "median_seconds": 0.0017101630568504334,
+            "min_seconds": 0.0017029564827680589,
+            "samples_seconds": [
+              0.0017029564827680589,
+              0.001723974570631981,
+              0.0017084881663322448,
+              0.0017101630568504334,
+              0.0018399588763713837
+            ]
+          },
+          "tiled": {
+            "max_seconds": 0.004885270819067955,
+            "median_seconds": 0.004867605492472648,
+            "min_seconds": 0.004849920421838761,
+            "samples_seconds": [
+              0.004885270819067955,
+              0.004849920421838761,
+              0.004868441447615624,
+              0.004867605492472648,
+              0.004864947870373726
+            ]
+          },
+          "tiled_over_auto_time": 2.8462815127331784
+        }
+      }
+    },
+    {
+      "auto_paths": [
+        {
+          "calls": 1,
+          "implementation": "native",
+          "k_shape": [
+            8,
+            2,
+            16,
+            64
+          ],
+          "q_shape": [
+            8,
+            2,
+            128,
+            64
+          ]
+        }
+      ],
+      "case": {
+        "label": "sixteen-key",
+        "mask": "none",
+        "shape": [
+          8,
+          2,
+          128,
+          16,
+          64
+        ],
+        "trainable_prior": true
+      },
+      "comparison": {
+        "atol": 1e-05,
+        "exact": false,
+        "failed_field_count": 0,
+        "failed_fields": [],
+        "fields": 5,
+        "finite": true,
+        "integer_equal": true,
+        "max_abs": 4.842877388000488e-08,
+        "rtol": 0.0001,
+        "structure_equal": true,
+        "within_tolerance": true
+      },
+      "timing": {
+        "forward": {
+          "auto": {
+            "max_seconds": 0.0011161144822835923,
+            "median_seconds": 0.0011112876236438751,
+            "min_seconds": 0.0011044934391975403,
+            "samples_seconds": [
+              0.0011112876236438751,
+              0.0011044934391975403,
+              0.0011072754859924316,
+              0.0011124785989522934,
+              0.0011161144822835923
+            ]
+          },
+          "tiled": {
+            "max_seconds": 0.0019492864608764648,
+            "median_seconds": 0.0019329797476530075,
+            "min_seconds": 0.0019137751311063766,
+            "samples_seconds": [
+              0.0019492864608764648,
+              0.0019329797476530075,
+              0.0019247803837060928,
+              0.0019137751311063766,
+              0.0019449777901172638
+            ]
+          },
+          "tiled_over_auto_time": 1.7394054487125765
+        },
+        "forward_backward": {
+          "auto": {
+            "max_seconds": 0.0017121490091085434,
+            "median_seconds": 0.0017079714685678481,
+            "min_seconds": 0.0016971539705991745,
+            "samples_seconds": [
+              0.0017121490091085434,
+              0.0017079714685678481,
+              0.0016971539705991745,
+              0.0017110034823417664,
+              0.0017019275575876236
+            ]
+          },
+          "tiled": {
+            "max_seconds": 0.0051605112850666044,
+            "median_seconds": 0.004855027794837952,
+            "min_seconds": 0.004845787212252617,
+            "samples_seconds": [
+              0.004855478927493095,
+              0.004855027794837952,
+              0.004845787212252617,
+              0.0051605112850666044,
+              0.004847634956240654
+            ]
+          },
+          "tiled_over_auto_time": 2.842569612072585
+        }
+      }
+    },
+    {
+      "auto_paths": [
+        {
+          "calls": 1,
+          "implementation": "native",
+          "k_shape": [
+            2,
+            2,
+            128,
+            64
+          ],
+          "q_shape": [
+            2,
+            2,
+            128,
+            64
+          ]
+        }
+      ],
+      "case": {
+        "label": "causal-b2",
+        "mask": "causal",
+        "shape": [
+          2,
+          2,
+          128,
+          128,
+          64
+        ],
+        "trainable_prior": false
+      },
+      "comparison": {
+        "atol": 1e-05,
+        "exact": false,
+        "failed_field_count": 0,
+        "failed_fields": [],
+        "fields": 4,
+        "finite": true,
+        "integer_equal": true,
+        "max_abs": 1.1175870895385742e-08,
+        "rtol": 0.0001,
+        "structure_equal": true,
+        "within_tolerance": true
+      },
+      "timing": {
+        "forward": {
+          "auto": {
+            "max_seconds": 0.0004198778420686722,
+            "median_seconds": 0.00041659101843833924,
+            "min_seconds": 0.000414000079035759,
+            "samples_seconds": [
+              0.00041636116802692415,
+              0.00041659101843833924,
+              0.000414000079035759,
+              0.0004198778420686722,
+              0.0004170987755060196
+            ]
+          },
+          "tiled": {
+            "max_seconds": 0.0015101287513971328,
+            "median_seconds": 0.0014963332563638688,
+            "min_seconds": 0.0014929704368114472,
+            "samples_seconds": [
+              0.001493549346923828,
+              0.0014929704368114472,
+              0.0014963332563638688,
+              0.0014971211552619935,
+              0.0015101287513971328
+            ]
+          },
+          "tiled_over_auto_time": 3.591851936638296
+        },
+        "forward_backward": {
+          "auto": {
+            "max_seconds": 0.0007467929273843766,
+            "median_seconds": 0.0007444031536579133,
+            "min_seconds": 0.0007307086139917374,
+            "samples_seconds": [
+              0.0007444031536579133,
+              0.0007467929273843766,
+              0.0007316481322050094,
+              0.0007445033639669419,
+              0.0007307086139917374
+            ]
+          },
+          "tiled": {
+            "max_seconds": 0.003532351925969124,
+            "median_seconds": 0.003507067263126373,
+            "min_seconds": 0.0034966565668582915,
+            "samples_seconds": [
+              0.003532351925969124,
+              0.0034966565668582915,
+              0.0035271119326353074,
+              0.003507067263126373,
+              0.003500860556960106
+            ]
+          },
+          "tiled_over_auto_time": 4.711247186276736
+        }
+      }
+    },
+    {
+      "auto_paths": [
+        {
+          "calls": 1,
+          "implementation": "native",
+          "k_shape": [
+            2,
+            2,
+            128,
+            64
+          ],
+          "q_shape": [
+            2,
+            2,
+            128,
+            64
+          ]
+        }
+      ],
+      "case": {
+        "label": "weighted-causal-b2",
+        "mask": "causal",
+        "shape": [
+          2,
+          2,
+          128,
+          128,
+          64
+        ],
+        "trainable_prior": true
+      },
+      "comparison": {
+        "atol": 1e-05,
+        "exact": false,
+        "failed_field_count": 0,
+        "failed_fields": [],
+        "fields": 5,
+        "finite": true,
+        "integer_equal": true,
+        "max_abs": 2.9802322387695312e-08,
+        "rtol": 0.0001,
+        "structure_equal": true,
+        "within_tolerance": true
+      },
+      "timing": {
+        "forward": {
+          "auto": {
+            "max_seconds": 0.0010670050978660583,
+            "median_seconds": 0.0010627832263708115,
+            "min_seconds": 0.0010537348687648773,
+            "samples_seconds": [
+              0.0010627832263708115,
+              0.0010639369487762452,
+              0.0010566346347332001,
+              0.0010670050978660583,
+              0.0010537348687648773
+            ]
+          },
+          "tiled": {
+            "max_seconds": 0.0019463114440441132,
+            "median_seconds": 0.0019423656165599823,
+            "min_seconds": 0.00192827507853508,
+            "samples_seconds": [
+              0.00192827507853508,
+              0.0019455268979072572,
+              0.0019463114440441132,
+              0.001934334635734558,
+              0.0019423656165599823
+            ]
+          },
+          "tiled_over_auto_time": 1.8276216338046336
+        },
+        "forward_backward": {
+          "auto": {
+            "max_seconds": 0.0016652319580316543,
+            "median_seconds": 0.0016506027430295944,
+            "min_seconds": 0.0016434945166110993,
+            "samples_seconds": [
+              0.0016506027430295944,
+              0.0016652319580316543,
+              0.0016434945166110993,
+              0.0016512297093868255,
+              0.0016478877514600754
+            ]
+          },
+          "tiled": {
+            "max_seconds": 0.00494372695684433,
+            "median_seconds": 0.004811684787273407,
+            "min_seconds": 0.00479181669652462,
+            "samples_seconds": [
+              0.00494372695684433,
+              0.00479181669652462,
+              0.004808193072676659,
+              0.004811684787273407,
+              0.004849398881196976
+            ]
+          },
+          "tiled_over_auto_time": 2.915107712981146
+        }
+      }
+    },
+    {
+      "auto_paths": [
+        {
+          "calls": 1,
+          "implementation": "native",
+          "k_shape": [
+            32,
+            2,
+            128,
+            64
+          ],
+          "q_shape": [
+            32,
+            2,
+            128,
+            64
+          ]
+        }
+      ],
+      "case": {
+        "label": "weighted-causal-b32",
+        "mask": "causal",
+        "shape": [
+          32,
+          2,
+          128,
+          128,
+          64
+        ],
+        "trainable_prior": true
+      },
+      "comparison": {
+        "atol": 1e-05,
+        "exact": false,
+        "failed_field_count": 0,
+        "failed_fields": [],
+        "fields": 5,
+        "finite": true,
+        "integer_equal": true,
+        "max_abs": 5.21540641784668e-08,
+        "rtol": 0.0001,
+        "structure_equal": true,
+        "within_tolerance": true
+      },
+      "timing": {
+        "forward": {
+          "auto": {
+            "max_seconds": 0.0010885052382946015,
+            "median_seconds": 0.0010828576982021333,
+            "min_seconds": 0.0010781370103359223,
+            "samples_seconds": [
+              0.0010855194181203843,
+              0.0010828576982021333,
+              0.001079513132572174,
+              0.0010885052382946015,
+              0.0010781370103359223
+            ]
+          },
+          "tiled": {
+            "max_seconds": 0.0019811928272247315,
+            "median_seconds": 0.0019758597016334535,
+            "min_seconds": 0.001971936970949173,
+            "samples_seconds": [
+              0.001972086727619171,
+              0.001971936970949173,
+              0.0019786279648542405,
+              0.0019758597016334535,
+              0.0019811928272247315
+            ]
+          },
+          "tiled_over_auto_time": 1.8246716118969002
+        },
+        "forward_backward": {
+          "auto": {
+            "max_seconds": 0.0016836408525705338,
+            "median_seconds": 0.0016680721193552018,
+            "min_seconds": 0.00166097953915596,
+            "samples_seconds": [
+              0.0016836408525705338,
+              0.0016803700476884843,
+              0.0016633927822113036,
+              0.0016680721193552018,
+              0.00166097953915596
+            ]
+          },
+          "tiled": {
+            "max_seconds": 0.006149585545063019,
+            "median_seconds": 0.006083540990948677,
+            "min_seconds": 0.006073157861828804,
+            "samples_seconds": [
+              0.006149585545063019,
+              0.006083540990948677,
+              0.006081375107169151,
+              0.006117897108197212,
+              0.006073157861828804
+            ]
+          },
+          "tiled_over_auto_time": 3.6470491415564745
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "activity": {
+        "active_ratio": 0.7158157528633774,
+        "always_active_backbone_parameters": 78820,
+        "attribution": "unique parameter elements per external execution slot; Timed ticks unioned",
+        "backbone_total_parameters": 209892,
+        "max_active_backbone_parameters": 177124,
+        "mean_active_backbone_parameters": 150244.0,
+        "mean_active_whole_model_parameters": 674532.0,
+        "measured_external_tokens": 256,
+        "method": "actual-finish-controls-with-explicit-parameter-coverage",
+        "min_active_backbone_parameters": 144356,
+        "padding_policy": "unpublished rectangular/power2 packing rows excluded",
+        "qualified": true,
+        "semantic_full_owner_tick_rows": 558,
+        "tied_vocabulary_counted_once": true,
+        "unique_parameter_tensors": 36,
+        "version": "unique-external-token-parameters-v1",
+        "vocabulary_parameters": 524288,
+        "vocabulary_policy": "excluded from match; tied full output matrix included once in whole-model count",
+        "whole_model_parameters": 734180
+      },
+      "attention_call_shapes_counts_equal": true,
+      "auto_all_observed_attention_calls_native": true,
+      "auto_attention_calls": 4,
+      "batch_size": 2,
+      "d": 64,
+      "full_work_compare_note": "raw work dictionaries also include logits health scalars; their differences were retained in raw result. The activity/discrete/workload fields above exclude only health.",
+      "label": "FC/K d64",
+      "measured_activity_equal": true,
+      "numeric_pair_comparison": {
+        "atol": 1e-05,
+        "exact": false,
+        "failed_field_count": 0,
+        "failed_fields": [],
+        "fields": 253,
+        "finite": true,
+        "integer_equal": true,
+        "max_abs": 5.904585123062134e-07,
+        "rtol": 0.0001,
+        "structure_equal": true,
+        "within_tolerance": true
+      },
+      "sequence_length": 128,
+      "throughput_decrease_percent": 7.4111891157235155,
+      "tiled_over_auto_time": 1.0800441116474269,
+      "time_increase_percent": 8.004411164742686,
+      "timing": {
+        "auto": {
+          "max_seconds": 0.10857557505369186,
+          "median_seconds": 0.10446975752711296,
+          "min_seconds": 0.10376093909144402,
+          "samples_seconds": [
+            0.10624605417251587,
+            0.10857557505369186,
+            0.10376808047294617,
+            0.10448275879025459,
+            0.10376093909144402,
+            0.10446975752711296,
+            0.10392554104328156
+          ],
+          "tokens_per_second": 2450.469935603713
+        },
+        "tiled": {
+          "max_seconds": 0.11541547998785973,
+          "median_seconds": 0.11283194646239281,
+          "min_seconds": 0.11192360892891884,
+          "samples_seconds": [
+            0.11541547998785973,
+            0.11250030621886253,
+            0.11283194646239281,
+            0.11303398758172989,
+            0.11192360892891884,
+            0.11251594498753548,
+            0.11297362670302391
+          ],
+          "tokens_per_second": 2268.860974452173
+        }
+      }
+    },
+    {
+      "activity": {
+        "active_ratio": 1.0,
+        "always_active_backbone_parameters": 270341,
+        "attribution": "unique parameter elements per external execution slot; Timed ticks unioned",
+        "backbone_total_parameters": 489675,
+        "max_active_backbone_parameters": 489675,
+        "mean_active_backbone_parameters": 489675.0,
+        "mean_active_whole_model_parameters": 1013963.0,
+        "measured_external_tokens": 256,
+        "method": "actual-finish-controls-with-explicit-parameter-coverage",
+        "min_active_backbone_parameters": 489675,
+        "padding_policy": "unpublished rectangular/power2 packing rows excluded",
+        "qualified": true,
+        "semantic_full_owner_tick_rows": 4352,
+        "tied_vocabulary_counted_once": true,
+        "unique_parameter_tensors": 131,
+        "version": "unique-external-token-parameters-v1",
+        "vocabulary_parameters": 524288,
+        "vocabulary_policy": "excluded from match; tied full output matrix included once in whole-model count",
+        "whole_model_parameters": 1013963
+      },
+      "attention_call_shapes_counts_equal": true,
+      "auto_all_observed_attention_calls_native": true,
+      "auto_attention_calls": 17,
+      "batch_size": 2,
+      "d": 64,
+      "full_work_compare_note": "raw work dictionaries also include logits health scalars; their differences were retained in raw result. The activity/discrete/workload fields above exclude only health.",
+      "label": "Exchange/X pool d64",
+      "measured_activity_equal": true,
+      "numeric_pair_comparison": {
+        "atol": 1e-05,
+        "exact": false,
+        "failed_field_count": 0,
+        "failed_fields": [],
+        "fields": 896,
+        "finite": true,
+        "integer_equal": true,
+        "max_abs": 1.52587890625e-05,
+        "rtol": 0.0001,
+        "structure_equal": true,
+        "within_tolerance": true
+      },
+      "sequence_length": 128,
+      "throughput_decrease_percent": 6.72399140159542,
+      "tiled_over_auto_time": 1.0720870404151324,
+      "time_increase_percent": 7.208704041513236,
+      "timing": {
+        "auto": {
+          "max_seconds": 0.6880276873707771,
+          "median_seconds": 0.6820847317576408,
+          "min_seconds": 0.6778689436614513,
+          "samples_seconds": [
+            0.6823888160288334,
+            0.6820847317576408,
+            0.6792513057589531,
+            0.6788128726184368,
+            0.6880276873707771,
+            0.6830386631190777,
+            0.6778689436614513
+          ],
+          "tokens_per_second": 375.31993912299185
+        },
+        "tiled": {
+          "max_seconds": 0.7336114384233952,
+          "median_seconds": 0.7312542013823986,
+          "min_seconds": 0.7274607196450233,
+          "samples_seconds": [
+            0.7312542013823986,
+            0.7336114384233952,
+            0.7274607196450233,
+            0.7290628999471664,
+            0.7293754927814007,
+            0.7330065071582794,
+            0.7331155687570572
+          ],
+          "tokens_per_second": 350.0834586878887
+        }
+      }
+    },
+    {
+      "activity": {
+        "active_ratio": 1.0,
+        "always_active_backbone_parameters": 686892,
+        "attribution": "unique parameter elements per external execution slot; Timed ticks unioned",
+        "backbone_total_parameters": 1116460,
+        "max_active_backbone_parameters": 1116460,
+        "mean_active_backbone_parameters": 1116460.0,
+        "mean_active_whole_model_parameters": 1640748.0,
+        "measured_external_tokens": 256,
+        "method": "actual-finish-controls-with-explicit-parameter-coverage",
+        "min_active_backbone_parameters": 1116460,
+        "padding_policy": "unpublished rectangular/power2 packing rows excluded",
+        "qualified": true,
+        "semantic_full_owner_tick_rows": 7424,
+        "tied_vocabulary_counted_once": true,
+        "unique_parameter_tensors": 117,
+        "version": "unique-external-token-parameters-v1",
+        "vocabulary_parameters": 524288,
+        "vocabulary_policy": "excluded from match; tied full output matrix included once in whole-model count",
+        "whole_model_parameters": 1640748
+      },
+      "attention_call_shapes_counts_equal": true,
+      "auto_all_observed_attention_calls_native": true,
+      "auto_attention_calls": 48,
+      "batch_size": 2,
+      "d": 64,
+      "full_work_compare_note": "raw work dictionaries also include logits health scalars; their differences were retained in raw result. The activity/discrete/workload fields above exclude only health.",
+      "label": "Settle/K singleton7 d64",
+      "measured_activity_equal": true,
+      "numeric_pair_comparison": {
+        "atol": 1e-05,
+        "exact": false,
+        "failed_field_count": 0,
+        "failed_fields": [],
+        "fields": 829,
+        "finite": true,
+        "integer_equal": true,
+        "max_abs": 7.3015689849853516e-06,
+        "rtol": 0.0001,
+        "structure_equal": true,
+        "within_tolerance": true
+      },
+      "sequence_length": 128,
+      "throughput_decrease_percent": 10.644551737716146,
+      "tiled_over_auto_time": 1.1191259396569904,
+      "time_increase_percent": 11.912593965699037,
+      "timing": {
+        "auto": {
+          "max_seconds": 1.274804923683405,
+          "median_seconds": 1.167776059359312,
+          "min_seconds": 1.1584060862660408,
+          "samples_seconds": [
+            1.1584060862660408,
+            1.1602614112198353,
+            1.1731424257159233,
+            1.1639417186379433,
+            1.274804923683405,
+            1.1714510917663574,
+            1.167776059359312
+          ],
+          "tokens_per_second": 219.2201132642261
+        },
+        "tiled": {
+          "max_seconds": 1.3116164058446884,
+          "median_seconds": 1.3068884797394276,
+          "min_seconds": 1.3015953414142132,
+          "samples_seconds": [
+            1.3015953414142132,
+            1.302203256636858,
+            1.3057796023786068,
+            1.3116164058446884,
+            1.31142233684659,
+            1.3068884797394276,
+            1.3096529953181744
+          ],
+          "tokens_per_second": 195.88511488833558
+        }
+      }
+    }
+  ],
+  "numerical_limits": {
+    "all_sampled_pair_thresholds_pass": true,
+    "interpretation": "sampled pairwise closeness does not certify native singleton exact-zero identity, independent full-model semantics or learning equivalence",
+    "known_singleton_native_failure_retained": true,
+    "original_thresholds": {
+      "atol": 1e-05,
+      "rtol": 0.0001
+    }
+  },
+  "observations": {
+    "model_update_tiled_time_multiplier": [
+      1.0720870404151324,
+      1.1191259396569904
+    ],
+    "primitive_forward_backward_tiled_time_multiplier": [
+      2.8032501835098778,
+      4.711247186276736
+    ],
+    "primitive_forward_tiled_time_multiplier": [
+      1.71022407555442,
+      3.591851936638296
+    ]
+  },
+  "observed_unix": 1795168238.1195078,
+  "references": {
+    "controller": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/round/performance-report.json",
+      "sha256": "ce4ebe7e883a21a682f2f19c28d71547f4c08f358e905e81d51c0204941fc217"
+    },
+    "hardware_after": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/round/tasks/attention-performance-paired/attempt-0/hardware-after.txt",
+      "sha256": "f19bdf2a8f71aaa3e53482d2e78ed5f672ee2b6be31a7fd54dba5eb8593b3d14"
+    },
+    "hardware_before": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/round/tasks/attention-performance-paired/attempt-0/hardware-before.txt",
+      "sha256": "c3e876f9d151768b617aa351bfd3225f78f70609abebe580f258eeff7bff40ed"
+    },
+    "plan": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/performance-plan.json",
+      "sha256": "9a11c7aacfde6dc2074666d2f6b528bcc42b9bce71c1e9f661919b69197d95e5"
+    },
+    "prepared": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/prepared.json",
+      "sha256": "4504da3ea526eb33957386540a651233b873299235b461de23833c25552621cc"
+    },
+    "queue": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/round/tasks/attention-performance-paired/attempt-0/queue.json",
+      "sha256": "6cdacc73d16a273f845c9ffef1184c8f93829901bec54b68a0b39be5c6e6afd3"
+    },
+    "result": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/round/tasks/attention-performance-paired/attempt-0/result.json",
+      "sha256": "432fc150d40eea9827d0aa32adbfb6852d52b02defdd7cd9e47708438af2056c"
+    },
+    "strict_terminal_audit": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-attention-perf-r01-terminal-audit.json",
+      "sha256": "c71fe77e113abdca004c8e20a98a44afcb14bcf92a05d6acba91f4c97b93ee84"
+    },
+    "submission": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/submission.json",
+      "sha256": "20a86baf18245cf495f063482966849ece2a9707971fe3d56cf1a1a8847cf8a0"
+    }
+  },
+  "release": {
+    "benchmark_artifact_policy": "fixed-state timing samples are discarded, with no continuation checkpoint prescribed or produced; preserve generic training-audit finding rather than fabricate a checkpoint",
+    "cgroup": {
+      "members": [],
+      "path": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-attention-perf-r01.service",
+      "released": true,
+      "status": "absent"
+    },
+    "data_file_count": 14,
+    "processes": {
+      "cgroup_members_unobservable_in_process_snapshot": [],
+      "errors": [],
+      "gone_count": 4,
+      "live_processes": [],
+      "main_pid": 0,
+      "malformed_identities": [],
+      "recorded_identity_count": 4,
+      "released": true,
+      "reused_pids": [],
+      "status": "released",
+      "zombies": []
+    },
+    "queue_released": true,
+    "retained_findings": [
+      {
+        "kind": "checkpoint",
+        "reason": "completed_result_has_no_checkpoint",
+        "status": "missing",
+        "task_id": "attention-performance-paired"
+      }
+    ],
+    "source_file_count": 71,
+    "strict_audit_status": "incomplete"
+  },
+  "schema": "pilot-r3-attention-performance-review-v1",
+  "scope_limits": [
+    "three width64 batch2 sequence128 saved states; not a whole-catalog estimate",
+    "no continuous-training, shared-card concurrency or larger-width whole-model throughput measurement",
+    "full attention replacement was measured; selective singleton fallback overhead has not been measured"
+  ],
+  "source_identity": {
+    "data_manifest_sha256": "2f4617d73b5dad4f6a343707382714738e8012432fda85d9f7e36f44b26a4e1a",
+    "python_version": "3.12.13",
+    "runtime_packages": {
+      "numpy": "2.5.2",
+      "torch": "2.12.0+cpu",
+      "torch-npu": "2.12.0.post3"
+    },
+    "schema": "pilot-r3-source-v1",
+    "source_files": {
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/foundation/src/tide/__init__.py": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/foundation/src/tide/allocation.py": "a8e4346837e7db763d3b778126090c82719c8192679606b4b1b508e576a4e74e",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/foundation/src/tide/attention.py": "93650c3f1b2f0320046319125248f632dde5389da6ac9a1059294f74d6eb3a57",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/foundation/src/tide/checkpoint.py": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/foundation/src/tide/config.py": "01e4be6898e1d5a156ff29c2739509c30b65b372ff65c39584b3b4f1a72d520a",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/foundation/src/tide/ffn_packing.py": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/foundation/src/tide/grouped_linear.py": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/foundation/src/tide/kv.py": "6ce42c759d8bfa9843c006d0bbda31ad1bc0602b0c9584718d73959bc11a3e3b",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/foundation/src/tide/layout.py": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/foundation/src/tide/model.py": "6e38b6d6e0382688cc8b7e01de8f87adff35e8777cbd9d41a87dd705c44e936d",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/foundation/src/tide/parameters.py": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/foundation/src/tide/placement.py": "0f77def73da20f467756e5dc1f701f25942565f762e82be5d23218ecee39d05f",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/foundation/src/tide/placement_ownership.py": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/foundation/src/tide/precision.py": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/foundation/src/tide/reception.py": "43f72f3f1a55263b8d1185a41f0bf2711b7e1179cd664710ced08e70563b45c4",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/foundation/src/tide/region.py": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/foundation/src/tide/region_batch.py": "514ee30c5077d416c02cec81380280eb45509f20922a0f812657b93d2d8b7e80",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/foundation/src/tide/region_execution.py": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/foundation/src/tide/region_placement.py": "fd082f035185d04af6bc3ba27b949a8f065ccdf62f8b32a1b442accbfa6f2b6d",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/foundation/src/tide/scaled_arithmetic.py": "21b696170e73ae28a3238a4db7dd9b613d92a2b0eb88610df74a5d01a8006c62",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/foundation/src/tide/ssd.py": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/foundation/src/tide/ssd_memory.py": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/foundation/src/tide/topology.py": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/foundation/src/tide/topology_hb.py": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/foundation/src/tide/weighted_mean.py": "6c993386c66f611c371c75e2e66a52dec7954c4fb9078819aab23f13d6c76d88",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/__init__.py": "8208b80d75d5de0a39089a54db7a24924819bb81a1ed6a61adaac931a2fddf95",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/attention_perf3.py": "e7d2fa5f8003cd994f8b6c9e3e299d0283a741be5f52fd3d50be8ffb38290c27",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/audit3.py": "f33186397927edc4cd0944a306ed6d5b85c937cf1277c090385aa28de5a44578",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/calibrate_shared3.py": "e871f5f850337759f26144df21adfe5db79f985e342a587217ca897ae782454f",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/catalog3.py": "db1804150b94b407bfe5f1854c2ae0c283eec71776bddc929b6f6dcb72c26bf6",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/chain_receipt3.py": "ba0849c70da456b0f124686ed5cd74bf977be6eccd1e47123864124466dc195d",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/continuation3.py": "88d1d5353ad3efd6a25d7c6a7029a77ca3e5cec1532cf567d89bc942246c7e1d",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/data.py": "d327409f049891273c315c654870a6cbdda8b1162307cabe100225c11ddbcbdd",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/data3.py": "da91d2df3a59d840bdafe181721f579ce1a8d8a4203b5872a700a812e2587cbe",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/diagnose_shannon.py": "d81bf90d3d85762f355c71375f47145aceff4e06167b95749f738372fbf3bcea",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/diagnose_shannon3.py": "e43ebb2609ee874a495c8b5c2a2c63be4f7ce57721023f91160e13a671449fca",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/gate3.py": "cbdd5ba06637a9dffbc5d7f277c7bab80909ebfc1e98dea1d47db7d81847dba9",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/inspect3.py": "aac824be10380b870a3de26890c0a94b9a3d7294f10bebbd763f2524dc737119",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/io.py": "d846049973ea6c7a952353b8a4ed25e2d89e9a67741e3c16e3dd67d39e802170",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/lifecycle3.py": "7acb7497a8fe0b807c7f78a1f8a1bed11c23d8f5ff9b27d0359ddf2287af1333",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/models.py": "42ac16fa4353d47898dc0d40fbb4b689c50856f06007ccf43f887e65cc51becb",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/models3.py": "07f6c919215d1bc79fb433d8120c133e4ff5173b7ac192b018d64819498e9b71",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/plan.py": "680567ef8fed0835f62d890b9696120a1a6e3edb323f0b88437805171c2fc834",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/plan2.py": "a0452bf80628baf4cc6c02601200f2ea22b3b3218f611dfcdfaeb2f909f594b4",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/preflight3.py": "cd8841d99e58605322a80f5e898bf299fce129bacc8c8b42191398aabbbe10a5",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/prepare3.py": "19b9736bbd43e21e4faf8590ff8b4d5033630a35b4dcd9d41f68ec6076f26056",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/prepare_campaign3.py": "fcb5446da851e35b478988b4d325ff3b09bfcc41a0134e3c1635b710418b3bf7",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/prepare_relay3.py": "c8006756956b217026bc985bcd234905f67285e4d587c49b6df2972ef8a45150",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/prepare_resume3.py": "f45906f8aac6b1d73084275cf22dd3806ef890e9e8fd26a3fa731135f59c163e",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/prepare_revision3.py": "17a76a5e6753457392249a69664a4193050d432549dbf38fab9d46a128a87ca6",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/quad_transfer_probe3.py": "3758df7c482998535674d2077f4324e2d81c403b3815769bc56ad764cc1ea737",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/repair_probe3.py": "b7d81bd0fb9894645bdd7d2b71b5bf871d60d14b65ccb11b495f387edfbdcf87",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/report.py": "9b87332e2d4ca021b0adffb44e19d9eb5d477cf27eaf068042730f2ab20f2c00",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/report2.py": "5a5cb8eefe33f5fd92d6e9aaa89b833f631b778a73edb18bb48acc3c686848ce",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/report3.py": "86f3780a3dd6bfd7b0d3be563359f5839fefc40501f4106b551ff8f3f7dc1bbe",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/resume3.py": "4130a8f61143cb891f7b4c2b416697c5542e4005a28db125cbc3eb9c1b507c92",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/resume_adapter3.py": "15102051674cfe53a517a09af917c505e3dcd505dd2433b14328d951a52e5bb7",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/risk_screen3.py": "dd90eeeec0b8a5320f7f158157f3dcd0deab98c703bc48d11d217d4cb6d05b70",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/round3.py": "084e50bedc753a14b901111c2e024377c1bfdfceffbf1e89e3df70d981f5c282",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/scheduler.py": "dbd209fe22f252bc88aa13f27b616f0cb34bcaf468b03e85751edca6f2b9d7b7",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/scheduler3.py": "8c5edc012a7bea52566de11f47cae44d35b6f6e1df50c05aae49dc459b627d91",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/scheduler_dynamic3.py": "3d8e257124aba3d9eaed650b354016ff47991d0b85c45330b7fb2aec239a6008",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/scheduler_shared3.py": "709eb9040ae58678ba9a03e518f8a568dada7847c224e16e484f83ddd863b9da",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/selection.py": "9607cb8ac5f29af0e43a7de92eb36e0a4a0801eac1e493da972aba1df4360787",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/shared_npu3.py": "858706e4e840993ad21a01e977cfdd1252d488dbd1dfa5878fadea38a115994d",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/sharing_policy3.py": "45eee0e710f774583290d1a643cb45233a595c4bfd49b14ab73204a494eaccd3",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/trace_shannon.py": "15e08a2038b9d5270269a46e8cf4acc656868018a9e47cbac99854a9a1faa7ae",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/transfer3.py": "17f7c3acd6a74e7cb1a1694a71c5d36c3ef5d836f48f1ceb8ad3406063141fe7",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/validate_shannon_capture.py": "d79a79f370babe4302fb7c2976d424425978047d32255d14b595cb6eeb2528ff",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/worker.py": "542b1f5b88389e902f2aedb19eb368321152f1fff012f66d553cfc0cccf349d8",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/attention-perf-r01/frozen/source/pilotlab/worker3.py": "a5e9b27350521ef7bcd929f001add25679ed7e26482287c7937340cf30d4f3a8"
+    }
+  },
+  "stage_a_expanded": false,
+  "stage_b_gate": "closed",
+  "status": "completed_timing_only"
+}

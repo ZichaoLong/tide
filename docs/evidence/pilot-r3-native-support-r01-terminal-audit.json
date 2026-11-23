@@ -1,0 +1,793 @@
+{
+  "artifacts": {
+    "files": [
+      {
+        "kind": "task",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/round/tasks/native-support-gate-r01/task.json",
+        "sha256": "289cf4b0195d1372be3b95e531f578057b0e9263e50760e8d19208a9f31a50ed",
+        "status": "passed",
+        "task_id": "native-support-gate-r01"
+      },
+      {
+        "kind": "result",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/round/tasks/native-support-gate-r01/attempt-0/result.json",
+        "sha256": "fa7144666da291d6b261c7413ddaa6649bf4181315fd17d7d05bffe63671c376",
+        "status": "passed",
+        "task_id": "native-support-gate-r01"
+      },
+      {
+        "kind": "checkpoint_index",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/round/tasks/native-support-gate-r01/attempt-0/checkpoint.json",
+        "status": "not_created",
+        "task_id": "native-support-gate-r01"
+      }
+    ],
+    "retirement_manifest": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/round/checkpoint-retirement.json",
+      "status": "not_present"
+    },
+    "scope": "full SHA256/size against recorded generation/result identities; payload decoding and numerical replay are not performed"
+  },
+  "execution": {
+    "blocking_reason": "numerical-risk-screen: worker_exit_1",
+    "counts": {
+      "failed": 1
+    },
+    "scheduler": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/round/scheduler.json",
+      "sha256": "b7fe8c1e7164713e062e92895c8b710e28e96212b0db47893b0bfe31481256da",
+      "status": "passed"
+    },
+    "stage": "numerical-risk-screen",
+    "stage_b_gate": "closed",
+    "status": "a_blocked_needs_repair"
+  },
+  "finding_counts": {},
+  "findings": [],
+  "finished_unix": 1795169646.1033213,
+  "inputs": {
+    "data_files": [
+      {
+        "expected_sha256": "2f4617d73b5dad4f6a343707382714738e8012432fda85d9f7e36f44b26a4e1a",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data/manifest.json",
+        "sha256": "2f4617d73b5dad4f6a343707382714738e8012432fda85d9f7e36f44b26a4e1a",
+        "size_bytes": 3505,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "122f912828ff701de8dd449b75a473fb03082a3ae0bb40dee50d5d90f5f23b1b",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/manifest.json",
+        "sha256": "122f912828ff701de8dd449b75a473fb03082a3ae0bb40dee50d5d90f5f23b1b",
+        "size_bytes": 4778,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "455f8baf28a3d0fe53517d83d96e14c6186122be85298b8811ddc693fb114936",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/tokenizer-training-document-ids.txt",
+        "sha256": "455f8baf28a3d0fe53517d83d96e14c6186122be85298b8811ddc693fb114936",
+        "size_bytes": 64935,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "830de1c70c9bbdcc3e778446f7c2f6f0fa4366874facbf4bcba2521f184ee7b7",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/tokenizer.json",
+        "sha256": "830de1c70c9bbdcc3e778446f7c2f6f0fa4366874facbf4bcba2521f184ee7b7",
+        "size_bytes": 550678,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "563dd9b280201439114c2a5069926a636fd0187ee24f2900731de10675553d22",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/train.documents.jsonl",
+        "sha256": "563dd9b280201439114c2a5069926a636fd0187ee24f2900731de10675553d22",
+        "size_bytes": 5500206,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "c6a3223cd23dc323ff83e80ecb556872e1a8313ee2afa4d27399e7b3bad71f3e",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/train.documents.npy",
+        "sha256": "c6a3223cd23dc323ff83e80ecb556872e1a8313ee2afa4d27399e7b3bad71f3e",
+        "size_bytes": 462016,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "4d71ceecd9c8ab317faa1e4a9f2a6cb546b62a9661571a9bc26063130199256f",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/train.tokens.bin",
+        "sha256": "4d71ceecd9c8ab317faa1e4a9f2a6cb546b62a9661571a9bc26063130199256f",
+        "size_bytes": 266448088,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "1f8b346d1d5b3c0187eb3b3d0be2c442a9b2c02eb65c022bfc8ede3067c1b366",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/validation.documents.jsonl",
+        "sha256": "1f8b346d1d5b3c0187eb3b3d0be2c442a9b2c02eb65c022bfc8ede3067c1b366",
+        "size_bytes": 107576,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "11910e02b71aee5e7812304cdc2c571d20ad46961f65fab783513553ad4322f0",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/validation.documents.npy",
+        "sha256": "11910e02b71aee5e7812304cdc2c571d20ad46961f65fab783513553ad4322f0",
+        "size_bytes": 9344,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "a79732e9bdb5b73697a21e484b03272b288e9a7915c271b33a4614919663fef5",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/data/validation.tokens.bin",
+        "sha256": "a79732e9bdb5b73697a21e484b03272b288e9a7915c271b33a4614919663fef5",
+        "size_bytes": 5451898,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d89e363ea004cf2a7ff10706281aba873443d1864217e20fcaa29fde9f8db24e",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data/selection.documents.npy",
+        "sha256": "d89e363ea004cf2a7ff10706281aba873443d1864217e20fcaa29fde9f8db24e",
+        "size_bytes": 4752,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "863e4d1d145e77d6efc5cb065c193ff6eb8de9f45240fdbc96c912fb48ad4a19",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data/selection.documents.jsonl",
+        "sha256": "863e4d1d145e77d6efc5cb065c193ff6eb8de9f45240fdbc96c912fb48ad4a19",
+        "size_bytes": 53908,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d13cadf05c613403380b3d270945e8e13a9dfe2194fdb244da810206b91a9d71",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data/confirmation.documents.npy",
+        "sha256": "d13cadf05c613403380b3d270945e8e13a9dfe2194fdb244da810206b91a9d71",
+        "size_bytes": 4720,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "a4e6072edd71a7805f338f8d12e2b84df95154f993e075b5f09c3d77154a26b6",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/data/confirmation.documents.jsonl",
+        "sha256": "a4e6072edd71a7805f338f8d12e2b84df95154f993e075b5f09c3d77154a26b6",
+        "size_bytes": 53668,
+        "status": "passed"
+      }
+    ],
+    "scope": "full byte hashes; no data preparation, import of training code, or device initialization",
+    "source_files": [
+      {
+        "expected_sha256": "8208b80d75d5de0a39089a54db7a24924819bb81a1ed6a61adaac931a2fddf95",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/__init__.py",
+        "sha256": "8208b80d75d5de0a39089a54db7a24924819bb81a1ed6a61adaac931a2fddf95",
+        "size_bytes": 51,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "e7d2fa5f8003cd994f8b6c9e3e299d0283a741be5f52fd3d50be8ffb38290c27",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/attention_perf3.py",
+        "sha256": "e7d2fa5f8003cd994f8b6c9e3e299d0283a741be5f52fd3d50be8ffb38290c27",
+        "size_bytes": 14948,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "f33186397927edc4cd0944a306ed6d5b85c937cf1277c090385aa28de5a44578",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/audit3.py",
+        "sha256": "f33186397927edc4cd0944a306ed6d5b85c937cf1277c090385aa28de5a44578",
+        "size_bytes": 56197,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "e871f5f850337759f26144df21adfe5db79f985e342a587217ca897ae782454f",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/calibrate_shared3.py",
+        "sha256": "e871f5f850337759f26144df21adfe5db79f985e342a587217ca897ae782454f",
+        "size_bytes": 3769,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "db1804150b94b407bfe5f1854c2ae0c283eec71776bddc929b6f6dcb72c26bf6",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/catalog3.py",
+        "sha256": "db1804150b94b407bfe5f1854c2ae0c283eec71776bddc929b6f6dcb72c26bf6",
+        "size_bytes": 45958,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "ba0849c70da456b0f124686ed5cd74bf977be6eccd1e47123864124466dc195d",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/chain_receipt3.py",
+        "sha256": "ba0849c70da456b0f124686ed5cd74bf977be6eccd1e47123864124466dc195d",
+        "size_bytes": 12082,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "88d1d5353ad3efd6a25d7c6a7029a77ca3e5cec1532cf567d89bc942246c7e1d",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/continuation3.py",
+        "sha256": "88d1d5353ad3efd6a25d7c6a7029a77ca3e5cec1532cf567d89bc942246c7e1d",
+        "size_bytes": 5740,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d327409f049891273c315c654870a6cbdda8b1162307cabe100225c11ddbcbdd",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/data.py",
+        "sha256": "d327409f049891273c315c654870a6cbdda8b1162307cabe100225c11ddbcbdd",
+        "size_bytes": 16851,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "da91d2df3a59d840bdafe181721f579ce1a8d8a4203b5872a700a812e2587cbe",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/data3.py",
+        "sha256": "da91d2df3a59d840bdafe181721f579ce1a8d8a4203b5872a700a812e2587cbe",
+        "size_bytes": 9913,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d81bf90d3d85762f355c71375f47145aceff4e06167b95749f738372fbf3bcea",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/diagnose_shannon.py",
+        "sha256": "d81bf90d3d85762f355c71375f47145aceff4e06167b95749f738372fbf3bcea",
+        "size_bytes": 7479,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "e43ebb2609ee874a495c8b5c2a2c63be4f7ce57721023f91160e13a671449fca",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/diagnose_shannon3.py",
+        "sha256": "e43ebb2609ee874a495c8b5c2a2c63be4f7ce57721023f91160e13a671449fca",
+        "size_bytes": 12267,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "cbdd5ba06637a9dffbc5d7f277c7bab80909ebfc1e98dea1d47db7d81847dba9",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/gate3.py",
+        "sha256": "cbdd5ba06637a9dffbc5d7f277c7bab80909ebfc1e98dea1d47db7d81847dba9",
+        "size_bytes": 29948,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "aac824be10380b870a3de26890c0a94b9a3d7294f10bebbd763f2524dc737119",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/inspect3.py",
+        "sha256": "aac824be10380b870a3de26890c0a94b9a3d7294f10bebbd763f2524dc737119",
+        "size_bytes": 5610,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d846049973ea6c7a952353b8a4ed25e2d89e9a67741e3c16e3dd67d39e802170",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/io.py",
+        "sha256": "d846049973ea6c7a952353b8a4ed25e2d89e9a67741e3c16e3dd67d39e802170",
+        "size_bytes": 1296,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "7acb7497a8fe0b807c7f78a1f8a1bed11c23d8f5ff9b27d0359ddf2287af1333",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/lifecycle3.py",
+        "sha256": "7acb7497a8fe0b807c7f78a1f8a1bed11c23d8f5ff9b27d0359ddf2287af1333",
+        "size_bytes": 1718,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "42ac16fa4353d47898dc0d40fbb4b689c50856f06007ccf43f887e65cc51becb",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/models.py",
+        "sha256": "42ac16fa4353d47898dc0d40fbb4b689c50856f06007ccf43f887e65cc51becb",
+        "size_bytes": 11109,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "07f6c919215d1bc79fb433d8120c133e4ff5173b7ac192b018d64819498e9b71",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/models3.py",
+        "sha256": "07f6c919215d1bc79fb433d8120c133e4ff5173b7ac192b018d64819498e9b71",
+        "size_bytes": 25379,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "680567ef8fed0835f62d890b9696120a1a6e3edb323f0b88437805171c2fc834",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/plan.py",
+        "sha256": "680567ef8fed0835f62d890b9696120a1a6e3edb323f0b88437805171c2fc834",
+        "size_bytes": 7015,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "a0452bf80628baf4cc6c02601200f2ea22b3b3218f611dfcdfaeb2f909f594b4",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/plan2.py",
+        "sha256": "a0452bf80628baf4cc6c02601200f2ea22b3b3218f611dfcdfaeb2f909f594b4",
+        "size_bytes": 10629,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "cd8841d99e58605322a80f5e898bf299fce129bacc8c8b42191398aabbbe10a5",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/preflight3.py",
+        "sha256": "cd8841d99e58605322a80f5e898bf299fce129bacc8c8b42191398aabbbe10a5",
+        "size_bytes": 22793,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "19b9736bbd43e21e4faf8590ff8b4d5033630a35b4dcd9d41f68ec6076f26056",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/prepare3.py",
+        "sha256": "19b9736bbd43e21e4faf8590ff8b4d5033630a35b4dcd9d41f68ec6076f26056",
+        "size_bytes": 10415,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "fcb5446da851e35b478988b4d325ff3b09bfcc41a0134e3c1635b710418b3bf7",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/prepare_campaign3.py",
+        "sha256": "fcb5446da851e35b478988b4d325ff3b09bfcc41a0134e3c1635b710418b3bf7",
+        "size_bytes": 18709,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "c8006756956b217026bc985bcd234905f67285e4d587c49b6df2972ef8a45150",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/prepare_relay3.py",
+        "sha256": "c8006756956b217026bc985bcd234905f67285e4d587c49b6df2972ef8a45150",
+        "size_bytes": 27652,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "f45906f8aac6b1d73084275cf22dd3806ef890e9e8fd26a3fa731135f59c163e",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/prepare_resume3.py",
+        "sha256": "f45906f8aac6b1d73084275cf22dd3806ef890e9e8fd26a3fa731135f59c163e",
+        "size_bytes": 14470,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "17a76a5e6753457392249a69664a4193050d432549dbf38fab9d46a128a87ca6",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/prepare_revision3.py",
+        "sha256": "17a76a5e6753457392249a69664a4193050d432549dbf38fab9d46a128a87ca6",
+        "size_bytes": 12839,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "3758df7c482998535674d2077f4324e2d81c403b3815769bc56ad764cc1ea737",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/quad_transfer_probe3.py",
+        "sha256": "3758df7c482998535674d2077f4324e2d81c403b3815769bc56ad764cc1ea737",
+        "size_bytes": 30759,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "b7d81bd0fb9894645bdd7d2b71b5bf871d60d14b65ccb11b495f387edfbdcf87",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/repair_probe3.py",
+        "sha256": "b7d81bd0fb9894645bdd7d2b71b5bf871d60d14b65ccb11b495f387edfbdcf87",
+        "size_bytes": 21944,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "9b87332e2d4ca021b0adffb44e19d9eb5d477cf27eaf068042730f2ab20f2c00",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/report.py",
+        "sha256": "9b87332e2d4ca021b0adffb44e19d9eb5d477cf27eaf068042730f2ab20f2c00",
+        "size_bytes": 38257,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "5a5cb8eefe33f5fd92d6e9aaa89b833f631b778a73edb18bb48acc3c686848ce",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/report2.py",
+        "sha256": "5a5cb8eefe33f5fd92d6e9aaa89b833f631b778a73edb18bb48acc3c686848ce",
+        "size_bytes": 53533,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "86f3780a3dd6bfd7b0d3be563359f5839fefc40501f4106b551ff8f3f7dc1bbe",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/report3.py",
+        "sha256": "86f3780a3dd6bfd7b0d3be563359f5839fefc40501f4106b551ff8f3f7dc1bbe",
+        "size_bytes": 52645,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "4130a8f61143cb891f7b4c2b416697c5542e4005a28db125cbc3eb9c1b507c92",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/resume3.py",
+        "sha256": "4130a8f61143cb891f7b4c2b416697c5542e4005a28db125cbc3eb9c1b507c92",
+        "size_bytes": 7071,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "15102051674cfe53a517a09af917c505e3dcd505dd2433b14328d951a52e5bb7",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/resume_adapter3.py",
+        "sha256": "15102051674cfe53a517a09af917c505e3dcd505dd2433b14328d951a52e5bb7",
+        "size_bytes": 21991,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d51bc3930e87912e49b82f21402544cdc7b07e381e3711f75daaceaebb6353a7",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/risk_screen3.py",
+        "sha256": "d51bc3930e87912e49b82f21402544cdc7b07e381e3711f75daaceaebb6353a7",
+        "size_bytes": 21795,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "084e50bedc753a14b901111c2e024377c1bfdfceffbf1e89e3df70d981f5c282",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/round3.py",
+        "sha256": "084e50bedc753a14b901111c2e024377c1bfdfceffbf1e89e3df70d981f5c282",
+        "size_bytes": 49502,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "dbd209fe22f252bc88aa13f27b616f0cb34bcaf468b03e85751edca6f2b9d7b7",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/scheduler.py",
+        "sha256": "dbd209fe22f252bc88aa13f27b616f0cb34bcaf468b03e85751edca6f2b9d7b7",
+        "size_bytes": 64519,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "8c5edc012a7bea52566de11f47cae44d35b6f6e1df50c05aae49dc459b627d91",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/scheduler3.py",
+        "sha256": "8c5edc012a7bea52566de11f47cae44d35b6f6e1df50c05aae49dc459b627d91",
+        "size_bytes": 39549,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "3d8e257124aba3d9eaed650b354016ff47991d0b85c45330b7fb2aec239a6008",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/scheduler_dynamic3.py",
+        "sha256": "3d8e257124aba3d9eaed650b354016ff47991d0b85c45330b7fb2aec239a6008",
+        "size_bytes": 26122,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "709eb9040ae58678ba9a03e518f8a568dada7847c224e16e484f83ddd863b9da",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/scheduler_shared3.py",
+        "sha256": "709eb9040ae58678ba9a03e518f8a568dada7847c224e16e484f83ddd863b9da",
+        "size_bytes": 39552,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "9607cb8ac5f29af0e43a7de92eb36e0a4a0801eac1e493da972aba1df4360787",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/selection.py",
+        "sha256": "9607cb8ac5f29af0e43a7de92eb36e0a4a0801eac1e493da972aba1df4360787",
+        "size_bytes": 6475,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "858706e4e840993ad21a01e977cfdd1252d488dbd1dfa5878fadea38a115994d",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/shared_npu3.py",
+        "sha256": "858706e4e840993ad21a01e977cfdd1252d488dbd1dfa5878fadea38a115994d",
+        "size_bytes": 60130,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "45eee0e710f774583290d1a643cb45233a595c4bfd49b14ab73204a494eaccd3",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/sharing_policy3.py",
+        "sha256": "45eee0e710f774583290d1a643cb45233a595c4bfd49b14ab73204a494eaccd3",
+        "size_bytes": 9409,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "15e08a2038b9d5270269a46e8cf4acc656868018a9e47cbac99854a9a1faa7ae",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/trace_shannon.py",
+        "sha256": "15e08a2038b9d5270269a46e8cf4acc656868018a9e47cbac99854a9a1faa7ae",
+        "size_bytes": 9881,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "17f7c3acd6a74e7cb1a1694a71c5d36c3ef5d836f48f1ceb8ad3406063141fe7",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/transfer3.py",
+        "sha256": "17f7c3acd6a74e7cb1a1694a71c5d36c3ef5d836f48f1ceb8ad3406063141fe7",
+        "size_bytes": 21483,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d79a79f370babe4302fb7c2976d424425978047d32255d14b595cb6eeb2528ff",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/validate_shannon_capture.py",
+        "sha256": "d79a79f370babe4302fb7c2976d424425978047d32255d14b595cb6eeb2528ff",
+        "size_bytes": 11094,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "542b1f5b88389e902f2aedb19eb368321152f1fff012f66d553cfc0cccf349d8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/worker.py",
+        "sha256": "542b1f5b88389e902f2aedb19eb368321152f1fff012f66d553cfc0cccf349d8",
+        "size_bytes": 46804,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "a5e9b27350521ef7bcd929f001add25679ed7e26482287c7937340cf30d4f3a8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/source/pilotlab/worker3.py",
+        "sha256": "a5e9b27350521ef7bcd929f001add25679ed7e26482287c7937340cf30d4f3a8",
+        "size_bytes": 42154,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/foundation/src/tide/__init__.py",
+        "sha256": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195",
+        "size_bytes": 805,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "a8e4346837e7db763d3b778126090c82719c8192679606b4b1b508e576a4e74e",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/foundation/src/tide/allocation.py",
+        "sha256": "a8e4346837e7db763d3b778126090c82719c8192679606b4b1b508e576a4e74e",
+        "size_bytes": 33534,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "a3ac9ca10e0240ae25ddea17c80df274708c81127f116fb9a08453c4313da313",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/foundation/src/tide/attention.py",
+        "sha256": "a3ac9ca10e0240ae25ddea17c80df274708c81127f116fb9a08453c4313da313",
+        "size_bytes": 36809,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/foundation/src/tide/checkpoint.py",
+        "sha256": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+        "size_bytes": 3864,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "01e4be6898e1d5a156ff29c2739509c30b65b372ff65c39584b3b4f1a72d520a",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/foundation/src/tide/config.py",
+        "sha256": "01e4be6898e1d5a156ff29c2739509c30b65b372ff65c39584b3b4f1a72d520a",
+        "size_bytes": 9832,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/foundation/src/tide/ffn_packing.py",
+        "sha256": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449",
+        "size_bytes": 3257,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/foundation/src/tide/grouped_linear.py",
+        "sha256": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1",
+        "size_bytes": 6143,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "6ce42c759d8bfa9843c006d0bbda31ad1bc0602b0c9584718d73959bc11a3e3b",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/foundation/src/tide/kv.py",
+        "sha256": "6ce42c759d8bfa9843c006d0bbda31ad1bc0602b0c9584718d73959bc11a3e3b",
+        "size_bytes": 9397,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/foundation/src/tide/layout.py",
+        "sha256": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+        "size_bytes": 1392,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "6e38b6d6e0382688cc8b7e01de8f87adff35e8777cbd9d41a87dd705c44e936d",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/foundation/src/tide/model.py",
+        "sha256": "6e38b6d6e0382688cc8b7e01de8f87adff35e8777cbd9d41a87dd705c44e936d",
+        "size_bytes": 26288,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/foundation/src/tide/parameters.py",
+        "sha256": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc",
+        "size_bytes": 16680,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "0f77def73da20f467756e5dc1f701f25942565f762e82be5d23218ecee39d05f",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/foundation/src/tide/placement.py",
+        "sha256": "0f77def73da20f467756e5dc1f701f25942565f762e82be5d23218ecee39d05f",
+        "size_bytes": 24247,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/foundation/src/tide/placement_ownership.py",
+        "sha256": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+        "size_bytes": 7434,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/foundation/src/tide/precision.py",
+        "sha256": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+        "size_bytes": 3825,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "43f72f3f1a55263b8d1185a41f0bf2711b7e1179cd664710ced08e70563b45c4",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/foundation/src/tide/reception.py",
+        "sha256": "43f72f3f1a55263b8d1185a41f0bf2711b7e1179cd664710ced08e70563b45c4",
+        "size_bytes": 4893,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/foundation/src/tide/region.py",
+        "sha256": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+        "size_bytes": 3805,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "514ee30c5077d416c02cec81380280eb45509f20922a0f812657b93d2d8b7e80",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/foundation/src/tide/region_batch.py",
+        "sha256": "514ee30c5077d416c02cec81380280eb45509f20922a0f812657b93d2d8b7e80",
+        "size_bytes": 7509,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/foundation/src/tide/region_execution.py",
+        "sha256": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950",
+        "size_bytes": 6144,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "fd082f035185d04af6bc3ba27b949a8f065ccdf62f8b32a1b442accbfa6f2b6d",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/foundation/src/tide/region_placement.py",
+        "sha256": "fd082f035185d04af6bc3ba27b949a8f065ccdf62f8b32a1b442accbfa6f2b6d",
+        "size_bytes": 16586,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "21b696170e73ae28a3238a4db7dd9b613d92a2b0eb88610df74a5d01a8006c62",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/foundation/src/tide/scaled_arithmetic.py",
+        "sha256": "21b696170e73ae28a3238a4db7dd9b613d92a2b0eb88610df74a5d01a8006c62",
+        "size_bytes": 4140,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/foundation/src/tide/ssd.py",
+        "sha256": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+        "size_bytes": 12466,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/foundation/src/tide/ssd_memory.py",
+        "sha256": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2",
+        "size_bytes": 10412,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/foundation/src/tide/topology.py",
+        "sha256": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+        "size_bytes": 11283,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/foundation/src/tide/topology_hb.py",
+        "sha256": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06",
+        "size_bytes": 6204,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "6c993386c66f611c371c75e2e66a52dec7954c4fb9078819aab23f13d6c76d88",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/foundation/src/tide/weighted_mean.py",
+        "sha256": "6c993386c66f611c371c75e2e66a52dec7954c4fb9078819aab23f13d6c76d88",
+        "size_bytes": 8236,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "76739252826a1b59cbf68f4faed8e787d9f436e069934026a2ed23b8401a56eb",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/qualification/test_attention_singleton.py",
+        "sha256": "76739252826a1b59cbf68f4faed8e787d9f436e069934026a2ed23b8401a56eb",
+        "size_bytes": 5070,
+        "status": "passed"
+      },
+      {
+        "expected_sha256": "5d21082c8ade7baaf08dcb75fd2d5e4bb9ce975385313235da75eb2e61ef0f60",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/qualification/test_attention_native_support.py",
+        "sha256": "5d21082c8ade7baaf08dcb75fd2d5e4bb9ce975385313235da75eb2e61ef0f60",
+        "size_bytes": 7745,
+        "status": "passed"
+      }
+    ]
+  },
+  "interpretation": "passed means observed terminal release and recorded file integrity only; execution failure, numerical/discrete validity, recovery trajectory and learning remain separate conclusions",
+  "launch_binding": [
+    {
+      "expected_sha256": "e7f943932b326332fb82ce3a9a1d8db2ab5bb74ca2a78482e95fc8316418a121",
+      "path": ".local/pilot-r3/native-support-r01/frozen/prepared.json",
+      "sha256": "e7f943932b326332fb82ce3a9a1d8db2ab5bb74ca2a78482e95fc8316418a121",
+      "size_bytes": 29559,
+      "status": "passed"
+    },
+    {
+      "expected_sha256": "446c198bcacc88260a00ed8a6757e61da1640c24dc7b2ea517f32625314628ed",
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/risk-launch.sh",
+      "sha256": "446c198bcacc88260a00ed8a6757e61da1640c24dc7b2ea517f32625314628ed",
+      "size_bytes": 894,
+      "status": "passed"
+    },
+    {
+      "expected_sha256": "7bfd41c007878784cfdcc968ddc9c74079a0459ca764b118aa675ef991cf21fd",
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/risk-plan.json",
+      "sha256": "7bfd41c007878784cfdcc968ddc9c74079a0459ca764b118aa675ef991cf21fd",
+      "size_bytes": 35827,
+      "status": "passed"
+    }
+  ],
+  "lifecycle": {
+    "cgroup": {
+      "members": [],
+      "path": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-native-support-r01.service",
+      "released": true,
+      "status": "absent"
+    },
+    "processes": {
+      "cgroup_members_unobservable_in_process_snapshot": [],
+      "errors": [],
+      "gone_count": 4,
+      "live_processes": [],
+      "main_pid": 0,
+      "malformed_identities": [],
+      "recorded_identity_count": 4,
+      "released": true,
+      "reused_pids": [],
+      "status": "released",
+      "zombies": []
+    },
+    "queue": {
+      "attempts": [
+        {
+          "attempt": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/round/tasks/native-support-gate-r01/attempt-0",
+          "device_locks": [
+            {
+              "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+              "owned_by_this_run": false,
+              "owners": [],
+              "path": "/run/user/1003/ascend-device-locks/physical-9.lock",
+              "status": "unlocked"
+            }
+          ],
+          "job_id": "native-support-r01-native-support-gate-r01-0",
+          "job_lock": {
+            "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+            "owners": [],
+            "path": "/run/user/1003/ascend-job-queue/jobs/native-support-r01-native-support-gate-r01-0.lock",
+            "status": "unlocked"
+          },
+          "manifest": {
+            "path": "/run/user/1003/ascend-job-queue/jobs/native-support-r01-native-support-gate-r01-0.json",
+            "status": "missing"
+          },
+          "queue_state": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/round/tasks/native-support-gate-r01/attempt-0/queue.json",
+            "sha256": "0179e23e12f831b6b106d4b4f277d0d797af2e92f2c9d815e462fb66aa011eb0",
+            "status": "passed"
+          },
+          "recorded_status": "failed",
+          "released": true,
+          "scope": "release of this job's cooperative ownership; another job may now hold the physical device",
+          "shared_group": null,
+          "status": "released",
+          "task_id": "native-support-gate-r01"
+        }
+      ],
+      "released": true,
+      "runtime_directory": "/run/user/1003",
+      "status": "released"
+    },
+    "status": "terminal",
+    "systemd": {
+      "expected_cgroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-native-support-r01.service",
+      "expected_cgroup_basis": "observed user slice + exact service unit name",
+      "properties": {
+        "ActiveState": "failed",
+        "ControlGroup": "",
+        "ExecMainCode": "1",
+        "ExecMainStatus": "1",
+        "InvocationID": "14b91bba64ea4ac6b5c05ed4275c4b99",
+        "LoadState": "loaded",
+        "MainPID": "0",
+        "Result": "exit-code",
+        "Slice": "background.slice",
+        "SubState": "failed"
+      },
+      "return_code": 0,
+      "status": "observed",
+      "unit": "tide-pilot-r3-native-support-r01.service"
+    }
+  },
+  "physical_accounting": {
+    "checks": [],
+    "status": "not_applicable"
+  },
+  "prepared": {
+    "path": ".local/pilot-r3/native-support-r01/frozen/prepared.json",
+    "sha256": "e7f943932b326332fb82ce3a9a1d8db2ab5bb74ca2a78482e95fc8316418a121",
+    "status": "passed"
+  },
+  "round": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/native-support-r01/frozen/round",
+  "schema": "pilot-r3-terminal-audit-v1",
+  "selected_references": {
+    "checks": [],
+    "external_reference_count": 0
+  },
+  "shared_groups": {
+    "checks": [],
+    "groups": {},
+    "scheduler_live": false
+  },
+  "started_unix": 1795169645.6682131,
+  "status": "passed",
+  "unit": "tide-pilot-r3-native-support-r01.service"
+}

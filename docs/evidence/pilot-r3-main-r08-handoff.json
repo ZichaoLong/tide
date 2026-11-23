@@ -1,0 +1,59 @@
+{
+  "authorized_subject_count": 344,
+  "budget_device_hours_at_observation": 74.63975305465982,
+  "counts_at_observation": {
+    "completed": 49,
+    "pending": 30,
+    "running": 2
+  },
+  "deferred_exposed_subject_count": 74,
+  "inspect": "python .local/pilot-r3/inspect.py",
+  "main_pid_cgroup": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r08.service\n",
+  "observed_unix": 1795171238.3763325,
+  "old_artifact_policy": "74 exposed subjects, 42 old selections, old checkpoints and all charges retained with original identity; no automatic transfer or B release",
+  "original_deadline_unix": 1797698913.9318287,
+  "plan": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r08/frozen/campaign-plan.json",
+    "sha256": "59564bba74a96f7ba8cb4a0bff20bb67d7309b7d231e7b02c214b739f025a0ba"
+  },
+  "prepared": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r08/frozen/prepared.json",
+    "sha256": "ec2fa5622a6189b66fb30f886cea3623e4727963a99ba3fb356fe752dc788f8a"
+  },
+  "presubmission_review": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-r08-presubmission.json",
+    "sha256": "2c003d15db7174261e019b730cac06eee98bd60b646c442ea886a5ae699bae2e"
+  },
+  "repair_review": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-native-auto-repair.json",
+    "sha256": "080511a25da98148cad47245fdb0d84018c188efb86dfebd7dc02b849a406159"
+  },
+  "resources": {
+    "exclusive_capacity_probes": 2,
+    "max_cpu_compute_threads": 160,
+    "max_npu_devices": 8,
+    "max_rss_bytes": 1000000000000,
+    "max_total_host_threads": 320,
+    "npu_workers_per_device_ceiling": 16
+  },
+  "schema": "pilot-r3-main-r08-handoff-v1",
+  "source_verified_file_count": 72,
+  "stage_at_observation": "stage-a-training-pipeline",
+  "stage_b_gate": "closed",
+  "status": "running",
+  "stop": "systemctl --user stop tide-pilot-r3-campaign-r08.service",
+  "subject_count": 270,
+  "submission": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r08/frozen/submission.json",
+    "sha256": "1815ef62ff6691977a72344ec24176ad51ddf08d89a57b30ab9cec1000453e76"
+  },
+  "systemd": {
+    "ActiveState": "active",
+    "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r08.service",
+    "MainPID": "3325609",
+    "MemoryMax": "1000000000000",
+    "Slice": "background.slice",
+    "SubState": "running"
+  },
+  "unit": "tide-pilot-r3-campaign-r08.service"
+}

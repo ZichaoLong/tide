@@ -1,0 +1,1117 @@
+{
+  "actual_npu_workers": 15,
+  "calibrations": {
+    "exchange-d256-k-independent-7ec4f58bca": {
+      "cpu": {
+        "evidence": {
+          "result_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r20/round/tasks/exchange-d256-k-independent-7ec4f58bca-preflight-2026112021-dispatch-cpu/attempt-0/result.json",
+          "result_sha256": "206cbac4b77c4c1d97ae02cc03ecee42a9b65415f73d45c08d03614cbfa40269",
+          "task_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r20/round/tasks/exchange-d256-k-independent-7ec4f58bca-preflight-2026112021-dispatch-cpu/task.json",
+          "task_sha256": "ab2bfa7eef219211d1870976e07da2fcfd9186acb7654776b32a666d7628b64c"
+        },
+        "origin": "r20",
+        "steps": 16,
+        "tokens": 4096,
+        "tokens_per_second": 235.97665665305146
+      },
+      "npu:0": {
+        "evidence": {
+          "result_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r20/round/tasks/exchange-d256-k-independent-7ec4f58bca-preflight-2026112021-dispatch-npu/attempt-0/result.json",
+          "result_sha256": "1abf5f748446a55c94e80aeb46e41cf84fab7c4a86b098fff2df8b34796a8f22",
+          "task_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r20/round/tasks/exchange-d256-k-independent-7ec4f58bca-preflight-2026112021-dispatch-npu/task.json",
+          "task_sha256": "3015a3b9795840b6a03f6009d01204dd83c04a4f792e267b534d663d012ab0c4"
+        },
+        "origin": "r20",
+        "steps": 16,
+        "tokens": 4096,
+        "tokens_per_second": 317.2105501026773
+      }
+    },
+    "exchange-d256-s-capacity-171c8b98d0": {
+      "cpu": {
+        "evidence": {
+          "result_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r20/round/tasks/exchange-d256-s-capacity-171c8b98d0-preflight-2026112021-dispatch-cpu/attempt-0/result.json",
+          "result_sha256": "fde46db3ce158ce58648ebeb1760d55db09b310de7c79f8b44d376137032ddc4",
+          "task_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r20/round/tasks/exchange-d256-s-capacity-171c8b98d0-preflight-2026112021-dispatch-cpu/task.json",
+          "task_sha256": "4496cf28ada5259e939ef716486a50b4082d55e130c8e9542ae0b5c18f6169b2"
+        },
+        "origin": "r20",
+        "steps": 16,
+        "tokens": 4096,
+        "tokens_per_second": 162.0610833562344
+      },
+      "npu:0": {
+        "evidence": {
+          "result_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r20/round/tasks/exchange-d256-s-capacity-171c8b98d0-preflight-2026112021-dispatch-npu/attempt-0/result.json",
+          "result_sha256": "f69cc80bb958c67a1326ed158e6fe38c476fac1feabf5fa0d861cb4415ebfb4b",
+          "task_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r20/round/tasks/exchange-d256-s-capacity-171c8b98d0-preflight-2026112021-dispatch-npu/task.json",
+          "task_sha256": "d28995203744ccd0bcadb158db5f714a203c104765366d8eee9840108a289261"
+        },
+        "origin": "r20",
+        "steps": 16,
+        "tokens": 4096,
+        "tokens_per_second": 228.3022968947402
+      }
+    },
+    "exchange-d256-s-narrowwide-d1af418efa": {
+      "cpu": {
+        "evidence": {
+          "result_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r20/round/tasks/exchange-d256-s-narrowwide-d1af418efa-preflight-2026112021-dispatch-cpu/attempt-0/result.json",
+          "result_sha256": "01223cede40865f27e03c33c3c168ec84f2d296c1c4232a69061d7e5d5b4f8e3",
+          "task_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r20/round/tasks/exchange-d256-s-narrowwide-d1af418efa-preflight-2026112021-dispatch-cpu/task.json",
+          "task_sha256": "dd5d3fe7c1c3f43c60ce4a5441c072e65652219634c979f55a99e36c6c1b781a"
+        },
+        "origin": "r20",
+        "steps": 16,
+        "tokens": 4096,
+        "tokens_per_second": 173.0277369185854
+      },
+      "npu:0": {
+        "evidence": {
+          "result_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r17/round/tasks/exchange-d256-s-narrowwide-d1af418efa-preflight-2026112021-capacity-small/attempt-0/result.json",
+          "result_sha256": "c83c1b72c1ade1098c319c9e94cacc7894ce04697819788880899bc320e178a9",
+          "task_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r17/round/tasks/exchange-d256-s-narrowwide-d1af418efa-preflight-2026112021-capacity-small/task.json",
+          "task_sha256": "540665a819342ec8d029135f22128528ef0efef8f858bf828df14b3d2e146f6d"
+        },
+        "origin": "reused",
+        "steps": 16,
+        "tokens": 4096,
+        "tokens_per_second": 276.47729860246363
+      }
+    },
+    "multiscale_settle-d256-k-mixed9-0fad868c8b": {
+      "cpu": {
+        "evidence": {
+          "result_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r20/round/tasks/multiscale_settle-d256-k-mixed9-0fad868c8b-preflight-2026112021-dispatch-cpu/attempt-0/result.json",
+          "result_sha256": "7840535d7d1b0ebc9cea5ec6f5de42251fcd442108a3ec77a80dda02e5eeee05",
+          "task_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r20/round/tasks/multiscale_settle-d256-k-mixed9-0fad868c8b-preflight-2026112021-dispatch-cpu/task.json",
+          "task_sha256": "ca42bad64ad599c8ffa88af4ef3913246442413fd56a5afcbb8818d67ee62d19"
+        },
+        "origin": "r20",
+        "steps": 16,
+        "tokens": 4096,
+        "tokens_per_second": 93.98080404143401
+      },
+      "npu:0": {
+        "evidence": {
+          "result_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r20/round/tasks/multiscale_settle-d256-k-mixed9-0fad868c8b-preflight-2026112021-dispatch-npu/attempt-0/result.json",
+          "result_sha256": "039d53a999e7260e1acd8577d4d259df1557f982e3b6bb3da8c25ae7ef91966d",
+          "task_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r20/round/tasks/multiscale_settle-d256-k-mixed9-0fad868c8b-preflight-2026112021-dispatch-npu/task.json",
+          "task_sha256": "f53039e01f3ddc6af9e9f1c80a49c2cfab15cac93f76a3aac52e175cffafce94"
+        },
+        "origin": "r20",
+        "steps": 16,
+        "tokens": 4096,
+        "tokens_per_second": 141.26684270887614
+      }
+    },
+    "multiscale_timed-d256-k-mixed9-fa94f99487": {
+      "cpu": {
+        "evidence": {
+          "result_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r20/round/tasks/multiscale_timed-d256-k-mixed9-fa94f99487-preflight-2026112021-dispatch-cpu/attempt-0/result.json",
+          "result_sha256": "05468da5cea40fd0fbf633bc529aa015b73330f7ee2bae8659fe24e9fa28452d",
+          "task_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r20/round/tasks/multiscale_timed-d256-k-mixed9-fa94f99487-preflight-2026112021-dispatch-cpu/task.json",
+          "task_sha256": "4d93f547224d6932ee750c492deee2afbf495ff20d095846a40d3be4a2c5520e"
+        },
+        "origin": "r20",
+        "steps": 16,
+        "tokens": 4096,
+        "tokens_per_second": 10.465359299109092
+      },
+      "npu:0": {
+        "evidence": {
+          "result_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r20/round/tasks/multiscale_timed-d256-k-mixed9-fa94f99487-preflight-2026112021-dispatch-npu/attempt-0/result.json",
+          "result_sha256": "be9d4e32d8c2c9bca05a3abde35e6e09a384828a3397185455bd0f6e05f74982",
+          "task_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r20/round/tasks/multiscale_timed-d256-k-mixed9-fa94f99487-preflight-2026112021-dispatch-npu/task.json",
+          "task_sha256": "115e836570376a5267ef68ee08c2827db7366377510f52ae9a1ffd6a6906f8e5"
+        },
+        "origin": "r20",
+        "steps": 16,
+        "tokens": 4096,
+        "tokens_per_second": 28.486866548369104
+      }
+    },
+    "multiscale_timed-d256-k-singleton7-ffd4b110ac": {
+      "cpu": {
+        "evidence": {
+          "result_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r20/round/tasks/multiscale_timed-d256-k-singleton7-ffd4b110ac-preflight-2026112021-dispatch-cpu/attempt-0/result.json",
+          "result_sha256": "85e032003572121b84bdf4a846f69455ecc03899f216c7213f078947af3c3e80",
+          "task_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r20/round/tasks/multiscale_timed-d256-k-singleton7-ffd4b110ac-preflight-2026112021-dispatch-cpu/task.json",
+          "task_sha256": "4c504b5ff3320b6ddfc666a725a4d4cde3040e3699b46d3e466a2f5004b3a504"
+        },
+        "origin": "r20",
+        "steps": 16,
+        "tokens": 4096,
+        "tokens_per_second": 18.062392765759586
+      },
+      "npu:0": {
+        "evidence": {
+          "result_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r20/round/tasks/multiscale_timed-d256-k-singleton7-ffd4b110ac-preflight-2026112021-dispatch-npu/attempt-0/result.json",
+          "result_sha256": "111917c59e9c9866a500c03a2cd1bd9bbd9ef45ae69c0607954c66ea2e5ebf49",
+          "task_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r20/round/tasks/multiscale_timed-d256-k-singleton7-ffd4b110ac-preflight-2026112021-dispatch-npu/task.json",
+          "task_sha256": "315837465957b3ae76c968dac53e35b24bd8b7a04cbe899174fdfecfdd34b060"
+        },
+        "origin": "r20",
+        "steps": 16,
+        "tokens": 4096,
+        "tokens_per_second": 41.867050979857105
+      }
+    }
+  },
+  "checkpoint_progress": [
+    {
+      "checkpoint_tokens": 1549056,
+      "observed_tokens": 1569792,
+      "task": "multiscale_timed-d128-k-mixed9-b193254132-a3-2026112001-r5"
+    },
+    {
+      "checkpoint_tokens": 1564416,
+      "observed_tokens": 1583872,
+      "task": "multiscale_timed-d128-k-mixed9-b193254132-a3-2026112002-r5"
+    },
+    {
+      "checkpoint_tokens": 31232,
+      "observed_tokens": 59392,
+      "task": "multiscale_timed-d256-k-singleton7-ffd4b110ac-a1-2026112001-r3"
+    },
+    {
+      "checkpoint_tokens": 30720,
+      "observed_tokens": 57856,
+      "task": "multiscale_timed-d256-k-singleton7-ffd4b110ac-a1-2026112002-r3"
+    },
+    {
+      "checkpoint_tokens": 29184,
+      "observed_tokens": 52736,
+      "task": "multiscale_timed-d256-k-singleton7-ffd4b110ac-a1-2026112001-r4"
+    },
+    {
+      "checkpoint_tokens": 25600,
+      "observed_tokens": 52224,
+      "task": "multiscale_timed-d256-k-singleton7-ffd4b110ac-a1-2026112002-r4"
+    },
+    {
+      "checkpoint_tokens": 17408,
+      "observed_tokens": 62464,
+      "task": "multiscale_timed-d256-k-singleton7-ffd4b110ac-a1-2026112001-r5"
+    },
+    {
+      "checkpoint_tokens": 1536,
+      "observed_tokens": 47104,
+      "task": "multiscale_timed-d256-k-singleton7-ffd4b110ac-a1-2026112002-r5"
+    },
+    {
+      "checkpoint_tokens": 55808,
+      "observed_tokens": 57088,
+      "task": "exchange-d256-s-capacity-171c8b98d0-a1-2026112001-r0"
+    },
+    {
+      "checkpoint_tokens": 837632,
+      "observed_tokens": 1048576,
+      "task": "exchange-d256-x-base-ae3f147d0b-a2-2026112001-r1"
+    },
+    {
+      "checkpoint_tokens": 840192,
+      "observed_tokens": 1048576,
+      "task": "exchange-d256-x-base-ae3f147d0b-a2-2026112002-r1"
+    },
+    {
+      "checkpoint_tokens": 756224,
+      "observed_tokens": 991744,
+      "task": "exchange-d256-x-base-ae3f147d0b-a2-2026112001-r2"
+    },
+    {
+      "checkpoint_tokens": 687616,
+      "observed_tokens": 913408,
+      "task": "exchange-d256-x-base-ae3f147d0b-a2-2026112002-r2"
+    },
+    {
+      "checkpoint_tokens": 697856,
+      "observed_tokens": 917760,
+      "task": "exchange-d256-x-pool-c5f24ae509-a2-2026112001-r1"
+    },
+    {
+      "checkpoint_tokens": 653568,
+      "observed_tokens": 868608,
+      "task": "exchange-d256-x-pool-c5f24ae509-a2-2026112002-r1"
+    },
+    {
+      "checkpoint_tokens": 633344,
+      "observed_tokens": 833280,
+      "task": "exchange-d256-x-pool-c5f24ae509-a2-2026112001-r2"
+    },
+    {
+      "checkpoint_tokens": 587264,
+      "observed_tokens": 779776,
+      "task": "exchange-d256-x-pool-c5f24ae509-a2-2026112002-r2"
+    },
+    {
+      "checkpoint_tokens": 962048,
+      "observed_tokens": 1048576,
+      "task": "exchange-d256-x-independent-83ef74944b-a2-2026112001-r1"
+    },
+    {
+      "checkpoint_tokens": 928512,
+      "observed_tokens": 1048576,
+      "task": "exchange-d256-x-independent-83ef74944b-a2-2026112002-r1"
+    },
+    {
+      "checkpoint_tokens": 904960,
+      "observed_tokens": 926208,
+      "task": "exchange-d256-x-independent-83ef74944b-a2-2026112001-r2"
+    }
+  ],
+  "checkpoint_reserved_bytes": 25758997348,
+  "claims": {
+    "exchange-d256-s-narrowwide-d1af418efa": {
+      "claimed_unix": 1795327249.7584472,
+      "device": "cpu",
+      "forecasts": {
+        "cpu": {
+          "active": 8,
+          "expected_followup_seconds": 2535.5225915393485,
+          "expected_seconds": 4531.358711833549,
+          "group_finish_seconds": 1995.8361202942,
+          "lanes": 12,
+          "offer": {
+            "limit": 12,
+            "workers": 8
+          },
+          "pending": 1,
+          "predictable_wait": false,
+          "rate_basis": "calibration",
+          "tokens_per_second": 173.0277369185854
+        },
+        "npu:0": {
+          "active": 14,
+          "expected_followup_seconds": 1583.513762254889,
+          "expected_seconds": 22230.563013621297,
+          "group_finish_seconds": 20647.049251366407,
+          "held_cards": 8,
+          "lanes": 26,
+          "offer": null,
+          "pending": 248,
+          "predictable_wait": true,
+          "rate_basis": "calibration",
+          "tokens_per_second": 276.47729860246363
+        }
+      },
+      "offer": {
+        "limit": 12,
+        "workers": 8
+      },
+      "progressed": [
+        {
+          "id": "exchange-d256-s-narrowwide-d1af418efa-a1-2026112001-r0",
+          "steps": 7,
+          "tokens": 1792
+        }
+      ],
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r21/round/decisions/exchange-d256-s-narrowwide-d1af418efa-a1-batch2-dispatch.json",
+        "sha256": "142dae2d4f093ce6f838c0d5f7648d7cf04991ef6178e62a3451fc1bd6c51483"
+      },
+      "states": {
+        "pending": 5,
+        "running": 1
+      },
+      "verified_intents": 6
+    }
+  },
+  "config": {
+    "budget_ledger": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/budget.json",
+    "deadline_unix": 1797698913.9318287,
+    "max_cpu_task_threads": 160,
+    "max_cpu_workers": 40,
+    "max_inflight_checkpoint_bytes": 25769803776,
+    "max_rss_bytes": 1000000000000,
+    "npu_workers_per_device": 16,
+    "storage_reserve_bytes": 25769803776,
+    "target_npu_devices": 8,
+    "worker_foundation": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r17/foundation",
+    "worker_source": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r17/source"
+  },
+  "counts": {
+    "completed": 4,
+    "pending": 277,
+    "running": 23
+  },
+  "cpu_admission": {
+    "affinity_idle_cores": 119.40860783406532,
+    "comparable_npu_workers": 12,
+    "cpu_workers": 8,
+    "limit": 12,
+    "median_npu_rate_ratio": 0.996352562367609,
+    "observed_unix": 1795327287.0423074,
+    "policy": "stage-a-measured-turnaround-v1"
+  },
+  "dispatch_queue": {
+    "awaiting_calibration": [],
+    "forecasts": {
+      "exchange-d256-k-independent-7ec4f58bca": {
+        "cpu": {
+          "active": 8,
+          "expected_followup_seconds": 1863.516325423494,
+          "expected_seconds": 4211.663722759113,
+          "group_finish_seconds": 2348.1473973356187,
+          "lanes": 12,
+          "offer": null,
+          "pending": 6,
+          "predictable_wait": false,
+          "rate_basis": "calibration",
+          "tokens_per_second": 235.97665665305146
+        },
+        "npu:0": {
+          "active": 15,
+          "expected_followup_seconds": 1380.8674687612804,
+          "expected_seconds": 21885.462395070506,
+          "group_finish_seconds": 20504.594926309226,
+          "held_cards": 8,
+          "lanes": 26,
+          "offer": null,
+          "pending": 247,
+          "predictable_wait": true,
+          "rate_basis": "calibration",
+          "tokens_per_second": 317.2105501026773
+        }
+      },
+      "multiscale_settle-d256-k-mixed9-0fad868c8b": {
+        "cpu": {
+          "active": 8,
+          "expected_followup_seconds": 4661.268165491521,
+          "expected_seconds": 8689.912312664092,
+          "group_finish_seconds": 4028.6441471725702,
+          "lanes": 12,
+          "offer": null,
+          "pending": 6,
+          "predictable_wait": false,
+          "rate_basis": "calibration",
+          "tokens_per_second": 93.98080404143401
+        },
+        "npu:0": {
+          "active": 15,
+          "expected_followup_seconds": 3097.0085471930606,
+          "expected_seconds": 24630.86514146913,
+          "group_finish_seconds": 21533.85659427607,
+          "held_cards": 8,
+          "lanes": 26,
+          "offer": null,
+          "pending": 247,
+          "predictable_wait": true,
+          "rate_basis": "calibration",
+          "tokens_per_second": 141.26684270887614
+        }
+      },
+      "multiscale_timed-d256-k-mixed9-fa94f99487": {
+        "cpu": {
+          "active": 8,
+          "expected_followup_seconds": 41763.036227125056,
+          "expected_seconds": 68067.70402754037,
+          "group_finish_seconds": 26304.667800415307,
+          "lanes": 12,
+          "offer": null,
+          "pending": 6,
+          "predictable_wait": false,
+          "rate_basis": "calibration",
+          "tokens_per_second": 10.465359299109092
+        },
+        "npu:0": {
+          "active": 15,
+          "expected_followup_seconds": 15346.165788366148,
+          "expected_seconds": 44226.63263406891,
+          "group_finish_seconds": 28880.466845702766,
+          "held_cards": 8,
+          "lanes": 26,
+          "offer": null,
+          "pending": 247,
+          "predictable_wait": true,
+          "rate_basis": "calibration",
+          "tokens_per_second": 28.486866548369104
+        }
+      },
+      "multiscale_timed-d256-k-singleton7-ffd4b110ac": {
+        "cpu": {
+          "active": 8,
+          "expected_followup_seconds": 24203.00987775624,
+          "expected_seconds": 39966.88533203304,
+          "group_finish_seconds": 15763.8754542768,
+          "lanes": 12,
+          "offer": null,
+          "pending": 6,
+          "predictable_wait": false,
+          "rate_basis": "calibration",
+          "tokens_per_second": 18.062392765759586
+        },
+        "npu:0": {
+          "active": 15,
+          "expected_followup_seconds": 10442.236699761203,
+          "expected_seconds": 36381.77163685649,
+          "group_finish_seconds": 25939.534937095283,
+          "held_cards": 8,
+          "lanes": 26,
+          "offer": null,
+          "pending": 247,
+          "predictable_wait": true,
+          "rate_basis": "calibration",
+          "tokens_per_second": 41.867050979857105
+        }
+      }
+    },
+    "observed_unix": 1795327287.055463,
+    "policy": "stage-a-live-dispatch-v2",
+    "unbound_groups": 4
+  },
+  "driver_owned_pids_by_physical_device": {
+    "4": [
+      2483822,
+      2486113
+    ],
+    "5": [
+      2482987,
+      2485341
+    ],
+    "7": [
+      2482683,
+      2484853
+    ],
+    "8": [
+      2484739
+    ],
+    "9": [
+      2482091,
+      2483605,
+      2521924
+    ],
+    "10": [
+      2483284,
+      2485720
+    ],
+    "11": [
+      2482334,
+      2484230
+    ],
+    "14": [
+      2485141
+    ]
+  },
+  "first_wave": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/dispatch-r21-release/preview/first-wave.json",
+    "sha256": "65fb77552ea01b1336ca65aa60177b213225c6e15ec3cbf4e76f905b58b4d1ac"
+  },
+  "inherited": {
+    "additional_evaluation_reserved_tokens": 4961344,
+    "carry_checkpoint": 68,
+    "completed": 2341,
+    "not_started": 196,
+    "restart_stage": 1,
+    "signal": 39
+  },
+  "inspect": "python .local/pilot-r3/inspect.py",
+  "inspection_tests": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/dispatch-r20-release/inspection-tests.log",
+    "sha256": "0b5936f95089ed7dbd60218feeca6860432abf8fab5f7280d3e9d95079039d99"
+  },
+  "live_cpu_workers": [
+    {
+      "model_id": "exchange-d256-s-narrowwide-d1af418efa",
+      "phase": "a1",
+      "pid": 2521181,
+      "status": "training",
+      "steps": 7,
+      "task": "exchange-d256-s-narrowwide-d1af418efa-a1-2026112001-r0",
+      "tokens": 1792
+    },
+    {
+      "model_id": "exchange-d256-x-base-ae3f147d0b",
+      "phase": "a2",
+      "pid": 2481352,
+      "status": "training",
+      "steps": 3876,
+      "task": "exchange-d256-x-base-ae3f147d0b-a2-2026112001-r2",
+      "tokens": 992256
+    },
+    {
+      "model_id": "exchange-d256-x-base-ae3f147d0b",
+      "phase": "a2",
+      "pid": 2481368,
+      "status": "training",
+      "steps": 3570,
+      "task": "exchange-d256-x-base-ae3f147d0b-a2-2026112002-r2",
+      "tokens": 913920
+    },
+    {
+      "model_id": "exchange-d256-x-pool-c5f24ae509",
+      "phase": "a2",
+      "pid": 2481378,
+      "status": "training",
+      "steps": 3587,
+      "task": "exchange-d256-x-pool-c5f24ae509-a2-2026112001-r1",
+      "tokens": 918272
+    },
+    {
+      "model_id": "exchange-d256-x-pool-c5f24ae509",
+      "phase": "a2",
+      "pid": 2481407,
+      "status": "training",
+      "steps": 3395,
+      "task": "exchange-d256-x-pool-c5f24ae509-a2-2026112002-r1",
+      "tokens": 869120
+    },
+    {
+      "model_id": "exchange-d256-x-pool-c5f24ae509",
+      "phase": "a2",
+      "pid": 2483534,
+      "status": "training",
+      "steps": 3257,
+      "task": "exchange-d256-x-pool-c5f24ae509-a2-2026112001-r2",
+      "tokens": 833792
+    },
+    {
+      "model_id": "exchange-d256-x-pool-c5f24ae509",
+      "phase": "a2",
+      "pid": 2483535,
+      "status": "training",
+      "steps": 3047,
+      "task": "exchange-d256-x-pool-c5f24ae509-a2-2026112002-r2",
+      "tokens": 780032
+    },
+    {
+      "model_id": "exchange-d256-x-independent-83ef74944b",
+      "phase": "a2",
+      "pid": 2519235,
+      "status": "training",
+      "steps": 3620,
+      "task": "exchange-d256-x-independent-83ef74944b-a2-2026112001-r2",
+      "tokens": 926720
+    }
+  ],
+  "observed_local": "2026-11-22T14:01:31+08:00",
+  "observed_unix": 1795327291.2342036,
+  "prep_budget_before_submission": {
+    "budget_ledger": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/budget.json",
+    "deadline_unix": 1797698913.9318287,
+    "max_device_seconds": 25920000,
+    "observed_unix": 1795326457.1315784,
+    "remaining_device_seconds": 25041564.995015524,
+    "remaining_preparation_device_seconds": 147183.1097449474,
+    "remaining_preparation_processed_tokens": 45589600,
+    "remaining_wall_seconds": 2372456.800250292,
+    "started_unix": 1795106913.9318287
+  },
+  "preparation_reserved_tokens": 0,
+  "previous_launch": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r21/previous-launch.json",
+    "sha256": "a19a68f0a764fdc3bc901b23ad3a520492f84b51bfd736dbc8ce7784a54cee34"
+  },
+  "queue_samples": [
+    {
+      "calibrations": 11,
+      "checkpoint_reserved_bytes": 18515127664,
+      "claims": {},
+      "forecast": {
+        "awaiting_calibration": [],
+        "forecasts": {
+          "exchange-d256-k-independent-7ec4f58bca": {
+            "cpu": {
+              "active": 6,
+              "expected_followup_seconds": 1853.5025343478967,
+              "expected_seconds": 5739.694412078101,
+              "group_finish_seconds": 3886.191877730204,
+              "lanes": 6,
+              "offer": null,
+              "pending": 6,
+              "predictable_wait": true,
+              "rate_basis": "calibration",
+              "tokens_per_second": 235.97665665305146
+            },
+            "npu:0": {
+              "active": 11,
+              "expected_followup_seconds": 1380.8674687612804,
+              "expected_seconds": 335299.8368714716,
+              "group_finish_seconds": 333918.9694027103,
+              "held_cards": 2,
+              "lanes": 2,
+              "offer": null,
+              "pending": 251,
+              "predictable_wait": true,
+              "rate_basis": "calibration",
+              "tokens_per_second": 317.2105501026773
+            }
+          },
+          "exchange-d256-s-narrowwide-d1af418efa": {
+            "cpu": {
+              "active": 6,
+              "expected_followup_seconds": 2527.171224728848,
+              "expected_seconds": 6863.417528371177,
+              "group_finish_seconds": 4336.246303642329,
+              "lanes": 6,
+              "offer": null,
+              "pending": 6,
+              "predictable_wait": true,
+              "rate_basis": "calibration",
+              "tokens_per_second": 173.0277369185854
+            },
+            "npu:0": {
+              "active": 11,
+              "expected_followup_seconds": 1583.513762254889,
+              "expected_seconds": 335867.74403971346,
+              "group_finish_seconds": 334284.23027745856,
+              "held_cards": 2,
+              "lanes": 2,
+              "offer": null,
+              "pending": 251,
+              "predictable_wait": true,
+              "rate_basis": "calibration",
+              "tokens_per_second": 276.47729860246363
+            }
+          },
+          "multiscale_settle-d256-k-mixed9-0fad868c8b": {
+            "cpu": {
+              "active": 6,
+              "expected_followup_seconds": 4651.9379469330115,
+              "expected_seconds": 10264.362130150981,
+              "group_finish_seconds": 5612.424183217969,
+              "lanes": 6,
+              "offer": null,
+              "pending": 6,
+              "predictable_wait": true,
+              "rate_basis": "calibration",
+              "tokens_per_second": 93.98080404143401
+            },
+            "npu:0": {
+              "active": 11,
+              "expected_followup_seconds": 3097.0085471930606,
+              "expected_seconds": 340103.76295380393,
+              "group_finish_seconds": 337006.75440661085,
+              "held_cards": 2,
+              "lanes": 2,
+              "offer": null,
+              "pending": 251,
+              "predictable_wait": true,
+              "rate_basis": "calibration",
+              "tokens_per_second": 141.26684270887614
+            }
+          },
+          "multiscale_timed-d256-k-mixed9-fa94f99487": {
+            "cpu": {
+              "active": 6,
+              "expected_followup_seconds": 41759.24779236752,
+              "expected_seconds": 69647.69562882822,
+              "group_finish_seconds": 27888.447836460706,
+              "lanes": 6,
+              "offer": null,
+              "pending": 6,
+              "predictable_wait": true,
+              "rate_basis": "calibration",
+              "tokens_per_second": 10.465359299109092
+            },
+            "npu:0": {
+              "active": 11,
+              "expected_followup_seconds": 15346.165788366148,
+              "expected_seconds": 374392.7509492571,
+              "group_finish_seconds": 359046.58516089094,
+              "held_cards": 2,
+              "lanes": 2,
+              "offer": null,
+              "pending": 251,
+              "predictable_wait": true,
+              "rate_basis": "calibration",
+              "tokens_per_second": 28.486866548369104
+            }
+          },
+          "multiscale_timed-d256-k-singleton7-ffd4b110ac": {
+            "cpu": {
+              "active": 6,
+              "expected_followup_seconds": 24197.45235539973,
+              "expected_seconds": 41545.10784572193,
+              "group_finish_seconds": 17347.6554903222,
+              "lanes": 6,
+              "offer": null,
+              "pending": 6,
+              "predictable_wait": true,
+              "rate_basis": "calibration",
+              "tokens_per_second": 18.062392765759586
+            },
+            "npu:0": {
+              "active": 11,
+              "expected_followup_seconds": 10442.236699761203,
+              "expected_seconds": 360666.0261348297,
+              "group_finish_seconds": 350223.7894350685,
+              "held_cards": 2,
+              "lanes": 2,
+              "offer": null,
+              "pending": 251,
+              "predictable_wait": true,
+              "rate_basis": "calibration",
+              "tokens_per_second": 41.867050979857105
+            }
+          }
+        },
+        "observed_unix": 1795326487.2096043,
+        "policy": "stage-a-live-dispatch-v2",
+        "unbound_groups": 5
+      },
+      "observed_unix": 1795326490.0617166,
+      "scheduler_unix": 1795326487.2112942,
+      "unbound_tasks": 30
+    },
+    {
+      "calibrations": 11,
+      "checkpoint_reserved_bytes": 25700663790,
+      "claims": {},
+      "forecast": {
+        "awaiting_calibration": [],
+        "forecasts": {
+          "exchange-d256-k-independent-7ec4f58bca": {
+            "cpu": {
+              "active": 9,
+              "expected_followup_seconds": 1853.5025343478967,
+              "expected_seconds": 3715.5679422044504,
+              "group_finish_seconds": 1862.065407856554,
+              "lanes": 12,
+              "offer": null,
+              "pending": 3,
+              "predictable_wait": false,
+              "rate_basis": "calibration",
+              "tokens_per_second": 235.97665665305146
+            },
+            "npu:0": {
+              "active": 14,
+              "expected_followup_seconds": 1380.8674687612804,
+              "expected_seconds": 26881.812249781913,
+              "group_finish_seconds": 25500.944781020633,
+              "held_cards": 8,
+              "lanes": 22,
+              "offer": null,
+              "pending": 248,
+              "predictable_wait": true,
+              "rate_basis": "calibration",
+              "tokens_per_second": 317.2105501026773
+            }
+          },
+          "exchange-d256-s-narrowwide-d1af418efa": {
+            "cpu": {
+              "active": 9,
+              "expected_followup_seconds": 2527.171224728848,
+              "expected_seconds": 4793.555502846713,
+              "group_finish_seconds": 2266.3842781178655,
+              "lanes": 12,
+              "offer": null,
+              "pending": 3,
+              "predictable_wait": false,
+              "rate_basis": "calibration",
+              "tokens_per_second": 173.0277369185854
+            },
+            "npu:0": {
+              "active": 14,
+              "expected_followup_seconds": 1583.513762254889,
+              "expected_seconds": 27206.2121681916,
+              "group_finish_seconds": 25622.69840593671,
+              "held_cards": 8,
+              "lanes": 22,
+              "offer": null,
+              "pending": 248,
+              "predictable_wait": true,
+              "rate_basis": "calibration",
+              "tokens_per_second": 276.47729860246363
+            }
+          },
+          "multiscale_settle-d256-k-mixed9-0fad868c8b": {
+            "cpu": {
+              "active": 9,
+              "expected_followup_seconds": 4651.9379469330115,
+              "expected_seconds": 8194.500104626517,
+              "group_finish_seconds": 3542.5621576935055,
+              "lanes": 12,
+              "offer": null,
+              "pending": 3,
+              "predictable_wait": false,
+              "rate_basis": "calibration",
+              "tokens_per_second": 93.98080404143401
+            },
+            "npu:0": {
+              "active": 14,
+              "expected_followup_seconds": 3097.0085471930606,
+              "expected_seconds": 29627.214996180537,
+              "group_finish_seconds": 26530.206448987476,
+              "held_cards": 8,
+              "lanes": 22,
+              "offer": null,
+              "pending": 248,
+              "predictable_wait": true,
+              "rate_basis": "calibration",
+              "tokens_per_second": 141.26684270887614
+            }
+          },
+          "multiscale_timed-d256-k-mixed9-fa94f99487": {
+            "cpu": {
+              "active": 9,
+              "expected_followup_seconds": 41759.24779236752,
+              "expected_seconds": 67577.83360330376,
+              "group_finish_seconds": 25818.58581093624,
+              "lanes": 12,
+              "offer": null,
+              "pending": 3,
+              "predictable_wait": false,
+              "rate_basis": "calibration",
+              "tokens_per_second": 10.465359299109092
+            },
+            "npu:0": {
+              "active": 14,
+              "expected_followup_seconds": 15346.165788366148,
+              "expected_seconds": 49222.98248878032,
+              "group_finish_seconds": 33876.81670041417,
+              "held_cards": 8,
+              "lanes": 22,
+              "offer": null,
+              "pending": 248,
+              "predictable_wait": true,
+              "rate_basis": "calibration",
+              "tokens_per_second": 28.486866548369104
+            }
+          },
+          "multiscale_timed-d256-k-singleton7-ffd4b110ac": {
+            "cpu": {
+              "active": 9,
+              "expected_followup_seconds": 24197.45235539973,
+              "expected_seconds": 39475.245820197466,
+              "group_finish_seconds": 15277.793464797734,
+              "lanes": 12,
+              "offer": null,
+              "pending": 3,
+              "predictable_wait": false,
+              "rate_basis": "calibration",
+              "tokens_per_second": 18.062392765759586
+            },
+            "npu:0": {
+              "active": 14,
+              "expected_followup_seconds": 10442.236699761203,
+              "expected_seconds": 41378.121491567894,
+              "group_finish_seconds": 30935.88479180669,
+              "held_cards": 8,
+              "lanes": 22,
+              "offer": null,
+              "pending": 248,
+              "predictable_wait": true,
+              "rate_basis": "calibration",
+              "tokens_per_second": 41.867050979857105
+            }
+          }
+        },
+        "observed_unix": 1795326624.430022,
+        "policy": "stage-a-live-dispatch-v2",
+        "unbound_groups": 5
+      },
+      "observed_unix": 1795326628.912515,
+      "scheduler_unix": 1795326624.43145,
+      "unbound_tasks": 30
+    },
+    {
+      "calibrations": 11,
+      "checkpoint_reserved_bytes": 25758997348,
+      "claims": {
+        "exchange-d256-s-narrowwide-d1af418efa": "cpu"
+      },
+      "forecast": {
+        "awaiting_calibration": [],
+        "forecasts": {
+          "exchange-d256-k-independent-7ec4f58bca": {
+            "cpu": {
+              "active": 8,
+              "expected_followup_seconds": 1863.516325423494,
+              "expected_seconds": 4211.663722759113,
+              "group_finish_seconds": 2348.1473973356187,
+              "lanes": 12,
+              "offer": null,
+              "pending": 6,
+              "predictable_wait": false,
+              "rate_basis": "calibration",
+              "tokens_per_second": 235.97665665305146
+            },
+            "npu:0": {
+              "active": 15,
+              "expected_followup_seconds": 1380.8674687612804,
+              "expected_seconds": 21885.462395070506,
+              "group_finish_seconds": 20504.594926309226,
+              "held_cards": 8,
+              "lanes": 26,
+              "offer": null,
+              "pending": 247,
+              "predictable_wait": true,
+              "rate_basis": "calibration",
+              "tokens_per_second": 317.2105501026773
+            }
+          },
+          "multiscale_settle-d256-k-mixed9-0fad868c8b": {
+            "cpu": {
+              "active": 8,
+              "expected_followup_seconds": 4661.268165491521,
+              "expected_seconds": 8689.912312664092,
+              "group_finish_seconds": 4028.6441471725702,
+              "lanes": 12,
+              "offer": null,
+              "pending": 6,
+              "predictable_wait": false,
+              "rate_basis": "calibration",
+              "tokens_per_second": 93.98080404143401
+            },
+            "npu:0": {
+              "active": 15,
+              "expected_followup_seconds": 3097.0085471930606,
+              "expected_seconds": 24630.86514146913,
+              "group_finish_seconds": 21533.85659427607,
+              "held_cards": 8,
+              "lanes": 26,
+              "offer": null,
+              "pending": 247,
+              "predictable_wait": true,
+              "rate_basis": "calibration",
+              "tokens_per_second": 141.26684270887614
+            }
+          },
+          "multiscale_timed-d256-k-mixed9-fa94f99487": {
+            "cpu": {
+              "active": 8,
+              "expected_followup_seconds": 41763.036227125056,
+              "expected_seconds": 68067.70402754037,
+              "group_finish_seconds": 26304.667800415307,
+              "lanes": 12,
+              "offer": null,
+              "pending": 6,
+              "predictable_wait": false,
+              "rate_basis": "calibration",
+              "tokens_per_second": 10.465359299109092
+            },
+            "npu:0": {
+              "active": 15,
+              "expected_followup_seconds": 15346.165788366148,
+              "expected_seconds": 44226.63263406891,
+              "group_finish_seconds": 28880.466845702766,
+              "held_cards": 8,
+              "lanes": 26,
+              "offer": null,
+              "pending": 247,
+              "predictable_wait": true,
+              "rate_basis": "calibration",
+              "tokens_per_second": 28.486866548369104
+            }
+          },
+          "multiscale_timed-d256-k-singleton7-ffd4b110ac": {
+            "cpu": {
+              "active": 8,
+              "expected_followup_seconds": 24203.00987775624,
+              "expected_seconds": 39966.88533203304,
+              "group_finish_seconds": 15763.8754542768,
+              "lanes": 12,
+              "offer": null,
+              "pending": 6,
+              "predictable_wait": false,
+              "rate_basis": "calibration",
+              "tokens_per_second": 18.062392765759586
+            },
+            "npu:0": {
+              "active": 15,
+              "expected_followup_seconds": 10442.236699761203,
+              "expected_seconds": 36381.77163685649,
+              "group_finish_seconds": 25939.534937095283,
+              "held_cards": 8,
+              "lanes": 26,
+              "offer": null,
+              "pending": 247,
+              "predictable_wait": true,
+              "rate_basis": "calibration",
+              "tokens_per_second": 41.867050979857105
+            }
+          }
+        },
+        "observed_unix": 1795327287.055463,
+        "policy": "stage-a-live-dispatch-v2",
+        "unbound_groups": 4
+      },
+      "observed_unix": 1795327291.2342036,
+      "scheduler_unix": 1795327287.056996,
+      "unbound_tasks": 24
+    }
+  ],
+  "r20_remeasured_probes": 11,
+  "readiness": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-r21-dispatch-readiness.json",
+    "sha256": "6e3d0f6c6b6e9a439255872959dd5deac35925c713548210c03f719f3af1ec89"
+  },
+  "resources": {
+    "available_storage_bytes": 356243812352,
+    "filesystem_free_bytes": 1185248342016,
+    "observed_unix": 1795327272.487472,
+    "quota": {
+      "filesystem": "/dev/mapper/ascend_data-data",
+      "grace_epoch": 1795920929,
+      "hard_bytes": 751619276800,
+      "soft_bytes": 322122547200,
+      "used_bytes": 395375464448
+    },
+    "quota_limit_basis": "hard",
+    "rss_bytes": 48205910016
+  },
+  "schema": "pilot-r3-live-dispatch-handoff-v1",
+  "scope": 270,
+  "selected": 66,
+  "service": {
+    "ActiveState": "active",
+    "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r21.service",
+    "ExecMainCode": "0",
+    "ExecMainStatus": "0",
+    "InvocationID": "9d59608c85b744e8a38418ab5837412c",
+    "LoadState": "loaded",
+    "MainPID": "2481002",
+    "Result": "success",
+    "Slice": "background.slice",
+    "SubState": "running"
+  },
+  "shared_budget_replay": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/dispatch-r21-release/live-replay.json",
+    "sha256": "f744ebe86775f9ba9f96a27dc2774b2681d29c9a9d11d4ca2b9da4aa941f0796"
+  },
+  "stage": "stage-a-training-pipeline",
+  "stage_b_gate": "closed",
+  "stop": "systemctl --user stop tide-pilot-r3-campaign-r21.service",
+  "stop_tests": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/dispatch-r21-release/stop-tests.log",
+    "sha256": "52b9517d619898c96412feb74b35b078480187f6d44e55a991236e592d587595"
+  },
+  "submission": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r21/submission.json",
+    "sha256": "e0e74f8ae9e23792cd314a76a12f12a8b07b9554d5d50f1489ac72c4db80cde4"
+  },
+  "supplemental_probes_this_launch": 0,
+  "unbound": {
+    "exchange-d256-k-independent-7ec4f58bca-a1-2026112001-r0": "exchange-d256-k-independent-7ec4f58bca",
+    "exchange-d256-k-independent-7ec4f58bca-a1-2026112001-r1": "exchange-d256-k-independent-7ec4f58bca",
+    "exchange-d256-k-independent-7ec4f58bca-a1-2026112001-r2": "exchange-d256-k-independent-7ec4f58bca",
+    "exchange-d256-k-independent-7ec4f58bca-a1-2026112002-r0": "exchange-d256-k-independent-7ec4f58bca",
+    "exchange-d256-k-independent-7ec4f58bca-a1-2026112002-r1": "exchange-d256-k-independent-7ec4f58bca",
+    "exchange-d256-k-independent-7ec4f58bca-a1-2026112002-r2": "exchange-d256-k-independent-7ec4f58bca",
+    "multiscale_settle-d256-k-mixed9-0fad868c8b-a1-2026112001-r0": "multiscale_settle-d256-k-mixed9-0fad868c8b",
+    "multiscale_settle-d256-k-mixed9-0fad868c8b-a1-2026112001-r1": "multiscale_settle-d256-k-mixed9-0fad868c8b",
+    "multiscale_settle-d256-k-mixed9-0fad868c8b-a1-2026112001-r2": "multiscale_settle-d256-k-mixed9-0fad868c8b",
+    "multiscale_settle-d256-k-mixed9-0fad868c8b-a1-2026112002-r0": "multiscale_settle-d256-k-mixed9-0fad868c8b",
+    "multiscale_settle-d256-k-mixed9-0fad868c8b-a1-2026112002-r1": "multiscale_settle-d256-k-mixed9-0fad868c8b",
+    "multiscale_settle-d256-k-mixed9-0fad868c8b-a1-2026112002-r2": "multiscale_settle-d256-k-mixed9-0fad868c8b",
+    "multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112001-r3": "multiscale_timed-d256-k-mixed9-fa94f99487",
+    "multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112001-r4": "multiscale_timed-d256-k-mixed9-fa94f99487",
+    "multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112001-r5": "multiscale_timed-d256-k-mixed9-fa94f99487",
+    "multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112002-r3": "multiscale_timed-d256-k-mixed9-fa94f99487",
+    "multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112002-r4": "multiscale_timed-d256-k-mixed9-fa94f99487",
+    "multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112002-r5": "multiscale_timed-d256-k-mixed9-fa94f99487",
+    "multiscale_timed-d256-k-singleton7-ffd4b110ac-a1-2026112001-r0": "multiscale_timed-d256-k-singleton7-ffd4b110ac",
+    "multiscale_timed-d256-k-singleton7-ffd4b110ac-a1-2026112001-r1": "multiscale_timed-d256-k-singleton7-ffd4b110ac",
+    "multiscale_timed-d256-k-singleton7-ffd4b110ac-a1-2026112001-r2": "multiscale_timed-d256-k-singleton7-ffd4b110ac",
+    "multiscale_timed-d256-k-singleton7-ffd4b110ac-a1-2026112002-r0": "multiscale_timed-d256-k-singleton7-ffd4b110ac",
+    "multiscale_timed-d256-k-singleton7-ffd4b110ac-a1-2026112002-r1": "multiscale_timed-d256-k-singleton7-ffd4b110ac",
+    "multiscale_timed-d256-k-singleton7-ffd4b110ac-a1-2026112002-r2": "multiscale_timed-d256-k-singleton7-ffd4b110ac"
+  },
+  "unit": "tide-pilot-r3-campaign-r21.service",
+  "validated_tests": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/dispatch-r21-release/validated-tests.log",
+    "sha256": "a3ce459131b3d448de8968a7d4b0c9e01227d157aafb1fe0a90cd46f94527a46"
+  },
+  "worker_foundation_commit": "b93eeae761b5e691f5786cf8098dc23cb714b8bb"
+}

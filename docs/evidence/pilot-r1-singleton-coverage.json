@@ -1,0 +1,293 @@
+{
+  "created_at": "2026-11-19T12:15:04.891541+00:00",
+  "foundation_commit": "bef26abb2458cfff003c84f376f93bc18a0b4106",
+  "frozen_sources": [
+    {
+      "locations": [
+        {
+          "end_line": 73,
+          "relevance": "Singleton H regions use fixed control; X assigns K to ordinary nodes and S to H nodes",
+          "start_line": 68
+        },
+        {
+          "end_line": 91,
+          "relevance": "Fixed-region nodes are excluded from description parameter ownership",
+          "start_line": 89
+        },
+        {
+          "end_line": 289,
+          "relevance": "Memory descriptions are prepared, but fixed regions bypass describe and regional score allocation",
+          "start_line": 276
+        },
+        {
+          "end_line": 296,
+          "relevance": "Memory finish consumes context and fixed control",
+          "start_line": 295
+        }
+      ],
+      "path": ".local/pilot-r1/foundation/src/tide/model.py",
+      "sha256": "1911afe3b66b199eb7e066ea57c5900fead1e390ebb5894818d423284850255e"
+    },
+    {
+      "locations": [
+        {
+          "end_line": 124,
+          "relevance": "summary projection computes description features",
+          "start_line": 124
+        },
+        {
+          "end_line": 143,
+          "relevance": "Summary recurrence and read projection feed the returned description",
+          "start_line": 139
+        },
+        {
+          "end_line": 164,
+          "relevance": "Summary state is saved, while finish context contains u, times, owners, SSD reads, values and gate",
+          "start_line": 157
+        },
+        {
+          "end_line": 177,
+          "relevance": "Full content uses SSD reads/values/gate, output projection and FFN, not summary/read description projections",
+          "start_line": 170
+        }
+      ],
+      "path": ".local/pilot-r1/foundation/src/tide/ssd_memory.py",
+      "sha256": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2"
+    },
+    {
+      "locations": [
+        {
+          "end_line": 150,
+          "relevance": "NodeLinear weight/left/right are ordinary nn.Parameters, with no explicit freezing here",
+          "start_line": 143
+        }
+      ],
+      "path": ".local/pilot-r1/foundation/src/tide/parameters.py",
+      "sha256": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc"
+    },
+    {
+      "locations": [
+        {
+          "end_line": 41,
+          "relevance": "Default local clock resolution from graph period and timing",
+          "start_line": 36
+        }
+      ],
+      "path": ".local/pilot-r1/foundation/src/tide/config.py",
+      "sha256": "2b890c0ae9eac381aa3ab9726eb386339345f62dc7b3e27433ecd5a0b1c0299f"
+    },
+    {
+      "locations": [
+        {
+          "end_line": 221,
+          "relevance": "Document-contiguous blocks contain stream_chunks windows and reset at block boundaries",
+          "start_line": 210
+        },
+        {
+          "end_line": 252,
+          "relevance": "No module freezing; zero gradients to None, backward, clipping, AdamW, then detach private state",
+          "start_line": 232
+        },
+        {
+          "end_line": 483,
+          "relevance": "Only changed tensor counts and final-step None-gradient names are recorded; changed/unchanged names are not saved",
+          "start_line": 479
+        }
+      ],
+      "path": ".local/pilot-r1/frozen/source/pilotlab/worker.py",
+      "sha256": "4cd05ffe1fc63b9a58a3fad7777844d258a00b6f7abf6c8ebdad55925b033b66"
+    }
+  ],
+  "limitations": [
+    "The result stores changed tensor counts but no per-parameter changed/unchanged names or initial hashes; do not present the identity of all six unchanged tensors as an independently recorded per-parameter difference.",
+    "The named None-gradient list describes only the final training update. No per-step parameter-gradient history was recorded.",
+    "The exact-match private-state recovery checks state preservation, not causal usefulness of each saved component.",
+    "A parameter tensor changing under AdamW can include weight decay; it does not establish useful learning or nonzero loss gradient for every element.",
+    "This static coverage explanation does not establish an architecture-wide trainability defect or an implementation error.",
+    "Clock values and structural loss disconnection are source-derived inferences; no new runtime capture or intervention was performed."
+  ],
+  "next_round_checks": [
+    "Compare fixed singleton H control with a configuration that consumes H descriptions, using targeted loss-gradient and output-contribution checks.",
+    "Record named per-parameter initial/final differences and gradient coverage separately from training completion.",
+    "Verify SSD content-state contribution separately from the summary/read description branch and from recovery correctness."
+  ],
+  "observations": {
+    "batch_size": 8,
+    "last_training_step_none_gradient_parameters": [
+      "core.memories.S.summary.weight",
+      "core.memories.S.summary.left",
+      "core.memories.S.summary.right",
+      "core.memories.S.read.weight",
+      "core.memories.S.read.left",
+      "core.memories.S.read.right"
+    ],
+    "last_training_step_state_reset": true,
+    "parameter_tensor_counts": {
+      "changed_by_component": {
+        "blocks.": 0,
+        "core.": 150,
+        "embedding.": 1,
+        "output_norm.": 1
+      },
+      "changed_tensor_count": 152,
+      "none_gradient_parameters": [
+        "core.memories.S.summary.weight",
+        "core.memories.S.summary.left",
+        "core.memories.S.summary.right",
+        "core.memories.S.read.weight",
+        "core.memories.S.read.left",
+        "core.memories.S.read.right"
+      ],
+      "total_tensor_count": 158
+    },
+    "recovery_continued_private_state": true,
+    "recovery_from_step": 193,
+    "recovery_private_state_comparison": {
+      "atol": 1e-05,
+      "exact": true,
+      "failed_field_count": 0,
+      "failed_fields": [],
+      "fields": 353,
+      "finite": true,
+      "integer_equal": true,
+      "max_abs": 0.0,
+      "rtol": 0.0001,
+      "structure_equal": true,
+      "within_tolerance": true
+    },
+    "recovery_status": "within_tolerance",
+    "recovery_to_step": 194,
+    "requested_model_config": {
+      "adapter_rank": 8,
+      "aggregation": "source_residual",
+      "allocation": "quad",
+      "attention_backend": "auto",
+      "attention_chunk": 128,
+      "budget": 1,
+      "checkpoint_reception": false,
+      "checkpoint_regions": false,
+      "clock": {
+        "kv_window": null,
+        "position_origin": "binding",
+        "position_period": null,
+        "short_decay": null,
+        "ssd_stride": null
+      },
+      "d": 64,
+      "ffn_packing": "rectangular",
+      "ffn_weight_access": "gather",
+      "ffn_width": null,
+      "hub_allocation": "bounded",
+      "input_dim": null,
+      "kv_width": null,
+      "local_attention_backend": null,
+      "memory": "X",
+      "memory_sharing": null,
+      "parameter_indexing": "gather",
+      "reception_mask_padding": false,
+      "reception_qkv_backend": "separate",
+      "region_batch_size": 1,
+      "sharing": "region_shared",
+      "ssd_scan_backend": "block",
+      "ssd_summary_backend": "block",
+      "topology": {
+        "depth": null,
+        "hub_mask": "all",
+        "hubs": 4,
+        "kind": "multiscale",
+        "layers": null,
+        "n": 8,
+        "partition": "singleton",
+        "period": null,
+        "probes": null,
+        "profile": "compact-7",
+        "rounds": null,
+        "terminal_hubs": false,
+        "timing": "timed"
+      }
+    },
+    "sequence_length": 64,
+    "state_continuation_steps": 144,
+    "state_reset_steps": 49,
+    "stream_chunks": 4,
+    "task_status": "completed",
+    "train_steps": 193,
+    "train_tokens": 98816,
+    "unchanged_parameter_tensor_count": 6,
+    "validation_final": {
+      "nll": 7.371397256851196,
+      "perplexity": 1589.8536657369878,
+      "seconds": 1.8892483338713646,
+      "split": "pilot_article_holdout",
+      "tokens": 512
+    },
+    "validation_initial": {
+      "nll": 9.027087688446045,
+      "perplexity": 8325.577555231668,
+      "seconds": 1.9209062829613686,
+      "split": "pilot_article_holdout",
+      "tokens": 512
+    },
+    "work_final": {
+      "candidate_slots": 29696,
+      "candidates": 17564,
+      "empty_logical_output_slots": 2,
+      "empty_output_positions": 0,
+      "family": "tide",
+      "full": 10547,
+      "input_positions": 64,
+      "logical_ticks": 256,
+      "output_positions": 64,
+      "period": 4,
+      "positive_messages": 45940,
+      "readout_policy": "timed_last_tick_before_next_external_input"
+    },
+    "work_initial": {
+      "candidate_slots": 29696,
+      "candidates": 17813,
+      "empty_logical_output_slots": 2,
+      "empty_output_positions": 0,
+      "family": "tide",
+      "full": 10928,
+      "input_positions": 64,
+      "logical_ticks": 256,
+      "output_positions": 64,
+      "period": 4,
+      "positive_messages": 48464,
+      "readout_policy": "timed_last_tick_before_next_external_input"
+    }
+  },
+  "result": {
+    "path": ".local/pilot-r1/round/tasks/npu-timed-x-singleton/result.json",
+    "sha256": "6eaf6475a16eb992a62256bf40e4782a07ca941e79263e0d5b3e8af01eb8cf62"
+  },
+  "review_scope": "Read-only review of terminal result, step records and frozen source; no model execution or numerical diagnosis",
+  "schema": "pilot-r1-singleton-coverage-review-v1",
+  "static_inferences": [
+    {
+      "basis": "model.py:68-73,281-289; ssd_memory.py:124,139-143,159-177",
+      "claim": "For this X-singleton configuration, every S-memory node is an H node whose regional control is fixed; S summary/read description projections therefore have no path to the language loss through regional allocation."
+    },
+    {
+      "basis": "parameter update observations and frozen forward dataflow; no per-parameter initial/final hash comparison is available",
+      "claim": "The six final-step None-gradient parameters are structurally bypassed description projections, consistent with the six tensors that did not change over the run. This is not evidence that the SSD recurrent matrix/output/FFN paths failed to train."
+    },
+    {
+      "basis": "parameters.py:143-150; model.py:281-289; worker.py:232-252",
+      "claim": "No explicit requires_grad freezing is present in the reviewed parameter construction or pilot training path. The structural disconnection remains when extending the same singleton recipe or TBPTT horizon."
+    },
+    {
+      "basis": "config.py:36-41; task and work records; worker StreamBatch and train_update",
+      "claim": "With observed period=4 and default clock fields, position_period=4, kv_window=512 logical ticks, short_decay=ln(2)/32, and ssd_stride=1. Each L64 update spans 256 Timed ticks; four contiguous windows span 256 input tokens / 1024 ticks before reset, with gradients detached between updates."
+    }
+  ],
+  "step_records": {
+    "path": ".local/pilot-r1/round/tasks/npu-timed-x-singleton/steps.jsonl",
+    "sha256": "72949e4e1f35b5d26425b48c9c4d2292792a86a9ed445206d4f065ec63a00980"
+  },
+  "task": {
+    "path": ".local/pilot-r1/round/tasks/npu-timed-x-singleton/task.json",
+    "sha256": "fd22261647c12fc75012df5d43c706139133d2c5755d8a33e9be7cf9d1af61b2"
+  },
+  "task_id": "npu-timed-x-singleton"
+}

@@ -1,0 +1,131 @@
+{
+  "concurrency": {
+    "accounting_complete": true,
+    "allocation_window_seconds": 292.08490085601807,
+    "any_device_allocated_seconds": 274.0246937274933,
+    "attempted_npu_jobs": 28,
+    "complete_intervals": 28,
+    "device_hours": 0.12097826990816328,
+    "device_seconds": 435.5217716693878,
+    "ledger_device_seconds": 435.5217716693878,
+    "mean_over_allocation_window": 1.4910793758698138,
+    "method": "queue acquire/release events; no polling-peak substitution",
+    "peak": 3,
+    "scheduler_polled_peak": 3,
+    "verified_live_open_allocations": 0
+  },
+  "execution": {
+    "completed": 28,
+    "device_seconds": 435.5217716693878,
+    "evaluation_loss_tokens": 28672,
+    "planned": 28,
+    "training_loss_tokens": 186880
+  },
+  "lifecycle": {
+    "all_gone": true,
+    "cgroup_released": true,
+    "input_checkpoint_integrity": "passed",
+    "queue_released": true,
+    "recorded_processes": 65
+  },
+  "performance": {
+    "aggregate_npu_loss_tokens_per_allocation_window_second": 639.8139700214139,
+    "aggregate_scope": "observed NPU loss-token computation over first acquire to last release/current live observation",
+    "sum_training_seconds": 144.68118461966515,
+    "training_loss_tokens_per_second": 1291.6676103479952,
+    "training_scope": "worker transfer/forward/backward/update/synchronization and sampled diagnostics; excludes evaluation/checkpoint",
+    "training_timing_complete": true
+  },
+  "protocol_decision": {
+    "batch": "per-model finite calibration including larger batch subject to HBM and checkpoint storage; no universal B1 default",
+    "cpu_threads": 4,
+    "deterministic": false,
+    "precision": "fp32",
+    "sequence_length": 128
+  },
+  "raw_report": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/preparation-r02/round/preflight-report.json",
+  "raw_report_sha256": "cc3b38d8fa1b5024e9b87e769efffcf7bb73f129e32381d4f4eaf9affbb5964e",
+  "recovery": {
+    "pf-resume-exchange_x": {
+      "numeric_trajectory": {
+        "atol": 1e-05,
+        "rtol": 0.0001,
+        "status": "not_tested"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "7e43da68a459ae4e12a338e265438f32f75488c5a115c5a21d88b3d8caa90fc5",
+        "fallback_used": false,
+        "from_steps": 6,
+        "from_tokens": 768,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/preparation-r02/round/tasks/pf-exchange_x/attempt-0/checkpoints/step-000000006-e5421b029e.pt",
+        "rejected_generations": [],
+        "runtime_override": false,
+        "sha256": "53a1ccc0f944ec4dd9f3a4afd1daee8e66aefd9613d245cf811b6a622f936683",
+        "source_task_id": "pf-exchange_x",
+        "state_reused": true,
+        "state_sha256": "e29d5a2062fdf10684a09b4f5f3108d6edd4d7e7f132361486ca51874c4bfbd0"
+      }
+    },
+    "pf-resume-moe": {
+      "numeric_trajectory": {
+        "atol": 1e-05,
+        "rtol": 0.0001,
+        "status": "not_tested"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "36ff8523cb76c1fb181aeed87073bedb7cb3df36da8207feb61d4e0e304c4eca",
+        "fallback_used": false,
+        "from_steps": 6,
+        "from_tokens": 768,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/preparation-r02/round/tasks/pf-moe/attempt-0/checkpoints/step-000000006-5a044715a2.pt",
+        "rejected_generations": [],
+        "runtime_override": false,
+        "sha256": "e7492585be93a0ac15cec7428239a8e1e0387df676a257ca9e468281ec34a8ac",
+        "source_task_id": "pf-moe",
+        "state_reused": true,
+        "state_sha256": "a885387d3e5a0fc20a204ab86bf2eab68416b9491663761920b9f43fcfe41c97"
+      }
+    },
+    "pf-resume-transformer": {
+      "numeric_trajectory": {
+        "atol": 1e-05,
+        "rtol": 0.0001,
+        "status": "not_tested"
+      },
+      "resume": {
+        "checkpoint_load": {
+          "scope": "actual device model/optimizer/private/RNG/stream before continuation",
+          "status": "exact"
+        },
+        "contract_sha256": "2487ee3e992d8817e3d76e6a77c4ca2c4cbe623ab1df0c34cfaf0eed3022c397",
+        "fallback_used": false,
+        "from_steps": 6,
+        "from_tokens": 768,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/preparation-r02/round/tasks/pf-transformer/attempt-0/checkpoints/step-000000006-d08d3dad6b.pt",
+        "rejected_generations": [],
+        "runtime_override": false,
+        "sha256": "9edfb153c0ba90fea332fbb2e1947d27ad18b3959cebd6f7770797e6bcf9943f",
+        "source_task_id": "pf-transformer",
+        "state_reused": true,
+        "state_sha256": "3c5154ae9527c1f114927a97ff974a0caf2f248fe050bcec44bc19b18a2de755"
+      }
+    }
+  },
+  "remaining_limits": {
+    "learning": "admission probes do not establish architecture ranking or formal exposure",
+    "length256": "selected paths tested only; common protocol remains128",
+    "matched_controls": "global reuse under unchanged10%/.02 limits; actual A3 activity must qualify",
+    "strict_numeric_trajectory": "not_tested; original Shannon and R2 failures retained"
+  },
+  "schema": "pilot-r3-preflight-review-v1",
+  "status": "preparation_admitted",
+  "terminal_audit": "docs/evidence/pilot-r3-preparation-r02-terminal-audit.json"
+}

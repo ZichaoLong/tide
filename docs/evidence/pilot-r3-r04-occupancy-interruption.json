@@ -1,0 +1,69 @@
+{
+  "cpu_measurement": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-cpu-occupancy-20261120-102936.json",
+    "sha256": "b7137673419800a1cec86b61738b372acd50279052260b00006960c86b345f58"
+  },
+  "execution": {
+    "actual_cpu_workers": 0,
+    "actual_npu_workers": 0,
+    "counts": {
+      "completed": 126,
+      "failed": 18
+    },
+    "stage_b_gate": "closed",
+    "status": "a_blocked_needs_repair"
+  },
+  "external_occupant_observed": {
+    "belongs_to_this_campaign": false,
+    "evidence_scope": "observed by npu-smi on physical 4 after the guard fired; trigger-time rejected PID list was not persisted",
+    "pid": 1652565,
+    "start_ticks": 2272794608,
+    "started_beijing": "2026-11-20 10:29:35.08",
+    "uid": 1013
+  },
+  "frozen_input_checks": {
+    "data": {
+      "passed": 14
+    },
+    "source": {
+      "passed": 62
+    }
+  },
+  "observed_unix": 1795142146.1406155,
+  "physical_id": 4,
+  "reason": "a1: shared_group_not_completed:GroupBlocked: unknown_device_occupant",
+  "recommendation": {
+    "cpu_initial_compute_thread_budget": 160,
+    "priority": "allow each model to advance through A when its own dependencies are complete; fill free slots from the authorized finite catalog; keep the whole-stage A/B gate",
+    "resume_prerequisites": [
+      "resolve incomplete group/result publication and conservative accounting mismatches",
+      "bind existing task/checkpoint identities and already spent evaluation/token budgets",
+      "use a new immutable execution snapshot, do not modify r04 inputs"
+    ],
+    "suggested_workers_at_four_threads": 40,
+    "validation": "measure aggregate token throughput and NPU host contention; a thread budget is not measured occupied cores"
+  },
+  "release": {
+    "cgroup": true,
+    "processes": true,
+    "queue": true
+  },
+  "scheduler": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/round/scheduler.json",
+    "sha256": "8fa2601725a9fd81be8ccad87a3f23830199904226fa31401489c1a302c0990c"
+  },
+  "schema": "pilot-r3-occupancy-interruption-review-v1",
+  "status": "review_required_before_resume",
+  "terminal_audit": {
+    "finding_counts": {
+      "mismatch": 13,
+      "unknown": 2
+    },
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-campaign-r04-terminal-audit.json",
+    "sha256": "c837890b6e8cb7f59b69db543aef31b2e2ccda9389cd3ae4c8deabccc3c0cbbf",
+    "status": "incomplete"
+  },
+  "trigger_group": "group-000072",
+  "unit": "tide-pilot-r3-campaign-r04.service",
+  "work_performed": "read-only process/resource diagnostics and terminal integrity audit; no new training submission or runtime mutation"
+}

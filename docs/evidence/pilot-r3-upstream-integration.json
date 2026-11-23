@@ -1,0 +1,27 @@
+{
+  "after": {
+    "passed": 248,
+    "seconds": 10.66,
+    "xfailed": 3
+  },
+  "before": {
+    "deselected": 30,
+    "failed": 2,
+    "passed": 2
+  },
+  "changed_files": [
+    "src/tide/allocation.py",
+    "tests/test_shannon_cap.py"
+  ],
+  "command": "timeout 180s env TORCH_DEVICE_BACKEND_AUTOLOAD=0 TIDE_STABLE_DEVICE=cpu OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 .venv-instances/bin/python -m pytest -q -p no:cacheprovider tests/test_shannon_cap.py tests/test_allocation.py tests/test_allocation_face.py tests/test_allocation_range.py tests/test_stable_reception.py tests/test_mass_scaled_attention.py tests/test_ordinary_attention_range.py tests/test_binary_parts.py",
+  "commit": "049ecdcbc39c80297b37a99591906acbefa1bc13",
+  "device_scope": "CPU FP32/FP64; downstream/NPU acceptance pending",
+  "observed_unix": 1795105160.3419333,
+  "pushed": false,
+  "repository": "/mi/data2T/zlong/home/llm/graph-execution-foundation",
+  "retained_failures": "three pre-existing mass-scaled attention weak gradient residual xfails; original thresholds unchanged",
+  "schema": "pilot-r3-upstream-integration-v1",
+  "scope": "exact cap selection in Shannon response and independent boundary/KKT/VJP tests",
+  "src_tide_tree": "d95ade7b6ba3ddcbfaf8110c86a83149db2776e1",
+  "verification_owner": "delegated upstream_numeric_review; original tool output fda8b9"
+}
