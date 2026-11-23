@@ -1,10 +1,10 @@
 # Working on tide-learning-lab
 
-这是 `ZichaoLong/tide` 的独立实验分支。保留用户修改，只在 `tide-learning-lab` 提交；不得强推。
+这是 `ZichaoLong/tide` 的独立实验分支。实验改动直接提交到 `tide-learning-lab`。基座工作树维护自己的 `graph-execution-foundation` 分支，基座改动按当次授权直接提交到该分支。保留用户修改，不得强推。
 
 ## 起点
 
-运行 `git status --short --branch`，核对当前分支和修改，然后从本线程用户指令起步。
+运行 `git status --short --branch`，核对当前分支和修改，然后从本线程用户指令起步。各项目沿用自己的维护分支，不为线程、任务或子代理新建分支。
 没有必须先读的其他文档、接续模板或预置研究阶段；资料只按当前任务需要读取。
 
 | 用户任务 | 从哪里接手 |
