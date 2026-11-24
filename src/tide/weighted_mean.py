@@ -16,14 +16,15 @@ the raw negative-mass clamp remains outside this helper.
 import torch
 from torch.autograd.function import once_differentiable
 
-from .scaled_arithmetic import binary_parts, restore_binary_scale
+from .scaled_arithmetic import GradientRangeError, binary_parts, restore_binary_scale
 
 
 def _finite(label, *values):
     # Deliberately explicit, including on accelerators. Device qualification
     # and the synchronization cost of these guards are separate observations.
     if not all(bool(torch.isfinite(value).all()) for value in values):
-        raise ArithmeticError(f"reception weighted mean {label} exceeds the requested dtype range")
+        error_type = GradientRangeError if label == "VJP" else ArithmeticError
+        raise error_type(f"reception weighted mean {label} exceeds the requested dtype range")
 
 
 def _parts(value):

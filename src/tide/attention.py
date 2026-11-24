@@ -15,7 +15,7 @@ from torch import Tensor
 from torch.autograd.function import once_differentiable
 from torch.nn import functional as F
 
-from .scaled_arithmetic import binary_parts, restore_binary_scale
+from .scaled_arithmetic import GradientRangeError, binary_parts, restore_binary_scale
 
 
 def _without_autocast(function):
@@ -342,9 +342,9 @@ def _signed_exp_product(log_scale, value):
     return torch.where(ordinary, safe_scale*value, combined)
 
 
-def _finite_mass_attention(*values):
+def _finite_mass_attention(*values, error_type=ArithmeticError):
     if not bool(torch.stack([torch.isfinite(value).all() for value in values]).all()):
-        raise ArithmeticError("mass-scaled attention exceeds the arithmetic range; no clipping is applied")
+        raise error_type("mass-scaled attention exceeds the arithmetic range; no clipping is applied")
 
 
 def _log_ratio(numerator, denominator):
@@ -559,7 +559,7 @@ class _MassScaledAttention(torch.autograd.Function):
                     target.add_(contribution.sum_to_size(target.shape))
         result = tuple(value.to(source.dtype) if value is not None else None
                        for value, source in zip((dq, dk, dv, dw), (q, k, v, weights)))
-        _finite_mass_attention(*(value for value in result if value is not None))
+        _finite_mass_attention(*(value for value in result if value is not None), error_type=GradientRangeError)
         return (*result, None, None, None, None)
 
 

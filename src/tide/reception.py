@@ -96,6 +96,11 @@ class Reception(nn.Module):
             y = y + self.o(read,owners)
         hidden = self.a(norm(y),owners) + self.embedding(owners,classes)[:,None,None]
         value = y + self.b(torch.nn.functional.silu(hidden),owners)
-        aggregate = stable_weighted_mean(mass, value,
-                                         None if edge_mask is None else edge_mask[:, None, None])
+        mean_mask = None if edge_mask is None else edge_mask[:, None, None]
+        if constant_zero is not None:
+            # The routed proof removes only an exactly zero, locally fixed root.
+            # Independent zero masses still have their one-sided derivative.
+            movable = ~(constant_zero & (mass == 0))
+            mean_mask = movable if mean_mask is None else mean_mask & movable
+        aggregate = stable_weighted_mean(mass, value, mean_mask)
         return total, aggregate

@@ -312,3 +312,23 @@ def test_derived_sender_only_uses_real_proven_inputs_and_follows_attached_tail(t
     assert restored.routing_face() is None
     tail.strengths = tail.strengths.detach().requires_grad_()
     assert tail.routing_face() is None
+
+
+def test_mean_distinguishes_fixed_and_movable_zero_from_padding(device):
+    from tide.reception import Reception
+    recv = Reception([{"ext"}], 64, "source_residual").to(device)
+    with torch.no_grad():
+        for p in recv.parameters():
+            p.zero_()
+    owners = torch.tensor([0], device=device)
+    classes = torch.zeros(1, 4, dtype=torch.long, device=device)
+    content = torch.zeros(1, 1, 1, 4, 64, device=device)
+    content[..., 0] = content.new_tensor([1., 2., 4., 8.])
+    mass = content.new_tensor([0., 0., 2.**-100, 0.]).view(1, 1, 1, 4).requires_grad_()
+    membership = torch.tensor([[True, True, True, False]], device=device)
+    # A stale proof on the tiny *positive* sender must not remove its value.
+    fixed = torch.tensor([True, False, True, False], device=device).reshape_as(mass)
+    _, value = recv(content, mass, classes, owners, membership, fixed)
+    grad, = torch.autograd.grad(value[..., 0].sum(), mass)
+    assert value[..., 0].item() == 4.
+    torch.testing.assert_close(grad.flatten(), mass.new_tensor([0., -2.**101, 0., 0.]))

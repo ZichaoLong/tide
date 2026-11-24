@@ -105,3 +105,9 @@ TIDE_STABLE_DEVICE=cpu TORCH_DEVICE_BACKEND_AUTOLOAD=0 python -m pytest -q \
 **保留的有限超差。** 早期 Shannon 恢复、CPU 以 FP64 对照的私有 KV 状态，以及弱质量样本中一个很小的 V 梯度，均有超出原容差的记录。弱质量用例的 seed 为 773，超差坐标为 `dV[1,0,4,26]`，原判据为 `atol=1e-35, rtol=1e-5`。math、tiled、auto 各自保留一个 strict xfail。[弱质量记录](evidence/stable-mass-20261119.md) · [恢复与私有状态记录](attention-native-support-repair.md)
 
 **待验证的边界。** RMS 平方在极端输入下的溢出、SSD 极端参数下的扫描乘积，以及共享参数在后续汇合时的消减或范围问题，可在选用相应机制时构造独立见证。NPU BF16 多键的精度与 CUDA 硬件路径仍需各自的实测依据。[算术范围](positive-chain.md) · [设备与精度范围](precision.md)
+
+### 真正超出 FP32 的质量梯度与恒零边
+
+在接收均值中，路由已证明恒为零的真实边只对该质量的可达切向量贡献零。其余真实零质量仍保留单侧导数。例如总质量为 `2^-148` 时，先为五条恒零边计算独立的质量导数会得到约 `−9.4e38`。先将恒零证明与结构掩码合并，再形成均值的质量余切。极小的正质量仍参与归一化。[接收回归](../tests/test_reception_padding.py)
+
+正先验的真实导数也可能超出本地范围。一次接收自注意力的质量梯度为 `1.646e39`，一次 KV 已写权重的多次读端求和为 `4.251e38`。稳定的代数不能把这两个独立导数装进 FP32。公开算子在最终 VJP 的可表示性检查抛出 `GradientRangeError`。训练端可从相同批次、状态和 RNG，以二次幂缩小损失余切；真实参数梯度还原后才进行有限性检查、裁剪和更新。梯度根过大或缩放导致的小梯度下溢仍需单独检查。[注意力实现](../src/tide/attention.py) · [训练封装](../../tide-learning-lab/pilotlab/worker3.py)

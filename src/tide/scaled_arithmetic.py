@@ -11,6 +11,10 @@ is used; callers retain their own checks for genuinely unrepresentable results.
 import torch
 
 
+class GradientRangeError(ArithmeticError):
+    """A first-order output adjoint exceeded the input tensor's dtype range."""
+
+
 def two_sum(a, b):
     """Head and rounding tail of a bounded floating-point addition."""
     total = a + b
