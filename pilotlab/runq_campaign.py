@@ -93,11 +93,15 @@ class QueueSupervisor(SharedSupervisor):
         key = f'{self.config["run_id"]}/{task["id"]}/{index}'
         if key in self.registered:
             return self.registered[key]
-        existing = self.db.execute("SELECT id,spec FROM jobs WHERE job_key=?", (key,)).fetchone()
+        move = row.get("queue_relocation")
+        target = f'npu:{move["to"]}' if move and move["next_attempt"] == index else "auto"
+        existing = self.db.execute("SELECT id,spec,target FROM jobs WHERE job_key=?", (key,)).fetchone()
         if existing:
             spec = json.loads(existing["spec"])
             if spec["owner"] != self.owner or spec["task_id"] != task["id"]:
                 raise Blocked("queue request identity changed")
+            if target != "auto" and existing["target"] != target:
+                raise Blocked("relocation queue target changed")
             ident = existing["id"]
         else:
             allowed = ["npu","cpu"] if task["device"] == "unbound" else ["npu" if task["device"]=="npu:0" else "cpu"]
@@ -107,7 +111,7 @@ class QueueSupervisor(SharedSupervisor):
             spec = dict(owner=self.owner,task_id=task["id"],allowed=allowed,ram=ram,
                         hbm=task.get("reserved_hbm_bytes",8*2**30),deadline=self.config["deadline_unix"],
                         binding=self.owner+"/"+members[0] if members else None,preparation=row.get("preparation",False))
-            ident = submit(self.db,key,spec)
+            ident = submit(self.db,key,spec,target)
         self.registered[key] = ident
         return ident
 
@@ -120,6 +124,33 @@ class QueueSupervisor(SharedSupervisor):
             if job["command"] and job["command"] != value:
                 raise Blocked("queue worker command changed")
             self.db.execute("UPDATE jobs SET command=? WHERE id=? AND command IS NULL",(value,ident))
+
+    def reserve_task(self, task, record):
+        move = record.get("queue_relocation")
+        if not move:
+            return super().reserve_task(task, record)
+        from .resume3 import bound
+        from .resume_adapter3 import build_relay_receipt
+        attempts = record["attempts"]
+        if not attempts or len(attempts) != move["next_attempt"]:
+            raise Blocked("relocation predecessor changed")
+        previous = attempts[-1]
+        if (previous.get("runq_id") != move["previous_job"] or previous.get("physical_id") != move["from"]
+                or previous.get("status") != "stopped_budget" or previous.get("reason") != "signal"):
+            raise Blocked("relocation predecessor changed")
+        job = lookup(self.db, record["runq_id"])
+        card = self.db.execute("SELECT card FROM leases WHERE id=?", (job["lease"],)).fetchone()
+        if not card or card[0] != move["to"] or job["target"] != f'npu:{move["to"]}':
+            raise Blocked("relocation reserved on the wrong card")
+        task_ref = {"path": record["task_path"], "sha256": sha256(record["task_path"])}
+        results = []
+        for attempt in attempts:
+            path = Path(attempt["path"]) / "result.json"
+            results.append({"path": str(path), "sha256": sha256(path)})
+        receipt = bound(record["resume_receipt"])
+        if receipt != build_relay_receipt(task_ref, results, record.get("evaluation_reserved_tokens", 0)):
+            raise Blocked("relocation receipt does not match the interrupted attempts")
+        super().reserve_task(task, record, evaluation_increment=receipt["evaluation_additional_reservation_tokens"])
 
     def start_ready_tasks(self, tasks, slots):
         pending = {t["id"]:t for t in tasks if self.state["tasks"][t["id"]]["status"]=="pending"}
@@ -210,6 +241,18 @@ class QueueSupervisor(SharedSupervisor):
         Supervisor.verify_completed(self,task,record)
         from .resume3 import verify_adapter_result
         result = read(record["result_path"])
+        move = record.get("queue_relocation")
+        if move:
+            from .continuation3 import continuation_origin
+            adapter = result.get("execution_adapter", {})
+            if (record["attempts"][-1].get("physical_id") != move["to"]
+                    or adapter.get("schema") != "pilot-r3-execution-adapter-v1"
+                    or adapter.get("receipt") != record["resume_receipt"]
+                    or adapter.get("adapter") != self.config["resume_adapter"]):
+                raise Blocked("relocated result does not match its physical card and resume receipt")
+            # Follow the interrupted attempt through any earlier source migration.
+            continuation_origin(task, result)
+            return
         verify_adapter_result(self.config,task,record,result)
         if task.get("stage_a_migration"):
             from .source_migration3 import migration_origin

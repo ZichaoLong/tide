@@ -96,6 +96,8 @@ class Placement:
         self.db, self.root, self.samples, self.available, self.now = db, root, samples, available, now
         self.cards = samples[-1]["cards"] if samples else {}
         self.limits = setting(db, "limits", {"cards": 8, "cpu": 40})
+        ids = self.limits.get("auto_card_ids")
+        self.auto_cards = set(map(int, self.cards)) if ids is None else set(ids)
         self.leases = {r["card"]: dict(r) for r in db.execute("SELECT * FROM leases WHERE state IN ('opening','held','closing')")}
         self.by_card = defaultdict(list)
         self.scoped = defaultdict(int)
@@ -148,6 +150,9 @@ class Placement:
         return sum(l["role"] == "auto" and l["state"] != "closing" for l in self.leases.values())
 
     def maintain(self):
+        for lease in self.leases.values():
+            if lease["role"] == "auto" and self.limits.get("auto_card_ids") is not None and lease["card"] not in self.auto_cards:
+                self.lease_role(lease, "drain")
         for lease in sorted(self.leases.values(), key=lambda x: x["id"]):
             current = self.by_card[lease["id"]]
             card = self.cards.get(str(lease["card"]))
@@ -161,7 +166,7 @@ class Placement:
                     continue
             if lease["role"] == "manual":
                 self.lease_role(lease, "drain")
-            if (lease["role"] == "drain" and card and not external(card, {j["unit"] for j in current})
+            if (lease["role"] == "drain" and lease["card"] in self.auto_cards and card and not external(card, {j["unit"] for j in current})
                     and self.regular() < self.limits["cards"]):
                 self.lease_role(lease, "auto")
 
@@ -190,7 +195,7 @@ class Placement:
         spec = job["data"]
         if any(l["state"] == "opening" and l["trigger_job"] == job["id"] for l in self.leases.values()):
             return True, "acquiring cooperative device lease"
-        cards = [pin] if pin is not None else sorted(map(int, self.cards), key=self.order_card)
+        cards = [pin] if pin is not None else sorted((int(key) for key in self.cards if int(key) in self.auto_cards), key=self.order_card)
         reason = "waiting for an admissible NPU"
         for card in cards:
             lease = self.leases.get(card)
@@ -239,7 +244,7 @@ class Placement:
             "SELECT * FROM jobs WHERE state='queued' ORDER BY manual DESC, requested,id")]
         wanted = {j["data"]["binding"]: device(j["target"]) for j in queued if j["manual"] and j["data"].get("binding")}
         empty_held = any(l["state"]=="held" and l["role"]=="auto" and not self.by_card[l["id"]] for l in self.leases.values())
-        free_card = any(int(k) not in self.leases and c["health"]=="OK" and not c["processes"]
+        free_card = any(int(k) in self.auto_cards and int(k) not in self.leases and c["health"]=="OK" and not c["processes"]
                         and c["used"]<=4096*2**20 and c["core"]<=5 for k,c in self.cards.items())
         spreading = empty_held or free_card and self.regular()<self.limits["cards"]
         # Fixed trajectories take their own backend first. Under a tight host

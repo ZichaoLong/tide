@@ -27,6 +27,50 @@ def relay_receipt(sample, results=None, reservation=None):
         evaluation_bound(sample["task"]) if reservation is None else reservation)
 
 
+def test_queue_relocation_reuses_pinned_job_and_charges_checkpoint_increment(tmp_path, interrupted):
+    from pilotlab.runq_campaign import QueueSupervisor
+    from pilotlab.runq_store import connect, submit
+    from pilotlab.scheduler3 import Blocked
+
+    task = dict(interrupted["task"], id="relocated", evaluation_budget_key="model", evaluation_token_limit=96)
+    _, _, old_output = run_worker(tmp_path, interrupted["data"], task, interrupt=True)
+    sample = dict(interrupted, task=task, task_path=tmp_path/"relocated.json", output=old_output)
+    receipt = relay_receipt(sample)
+    args = arguments(tmp_path, sample, receipt)
+    queue = QueueSupervisor.__new__(QueueSupervisor)
+    queue.registered, queue.owner = {}, "test-campaign"
+    queue.config = {"run_id": "batch", "resume_adapter": ref(adapter.__file__)}
+    queue.db = connect(tmp_path/"queue")
+    previous = {"runq_id": 99, "physical_id": 9, "reason": "signal", "status": "stopped_budget", "path": str(old_output)}
+    row = {"attempts": [previous], "task_path": str(sample["task_path"]), "resume_receipt": ref(args.receipt),
+           "queue_relocation": {"from": 9, "to": 7, "previous_job": 99, "next_attempt": 1},
+           "evaluation_budget_key": "model", "evaluation_reserved_tokens": evaluation_bound(task)}
+    queue.state = {"tasks": {task["id"]: row}}
+    spec = {"owner": queue.owner, "task_id": task["id"], "allowed": ["npu"], "hbm": 10, "ram": {"npu": 10}}
+    job = submit(queue.db, "batch/relocated/1", spec, "npu:7")
+    assert queue.register_job(task, row) == job
+    row["runq_id"] = job
+    lease = queue.db.execute("""INSERT INTO leases(card,role,state,trigger_job,grant,created)
+                                VALUES(9,'manual','held',?,'null',0)""", (job,)).lastrowid
+    queue.db.execute("UPDATE jobs SET state='reserved',lease=? WHERE id=?", (lease, job))
+    with pytest.raises(Blocked, match="wrong card"):
+        queue.reserve_task(task, row)
+    queue.db.execute("UPDATE leases SET card=7 WHERE id=?", (lease,))
+    queue.reserve_task(task, row)
+    assert row["evaluation_reserved_tokens"] == evaluation_bound(task) + 32 == task["evaluation_token_limit"]
+
+    run = run_adapter(args)
+    assert run.returncode == 0, run.stderr
+    result = ref(args.output/"result.json")
+    row.update(result_path=result["path"], result_sha256=result["sha256"])
+    row["attempts"].append({"runq_id": job, "physical_id": 7, "path": str(args.output), "return_code": 0})
+    queue.verify_completed(task, row)
+    row["attempts"][-1]["physical_id"] = 9
+    with pytest.raises(Blocked, match="physical card"):
+        queue.verify_completed(task, row)
+    queue.db.close()
+
+
 def test_resume_after_an_abandoned_attempt_never_recovers_its_evaluation_reservation(tmp_path, interrupted):
     from pilotlab import prepare_relay3 as relay
     old=copy.deepcopy(interrupted["result"])

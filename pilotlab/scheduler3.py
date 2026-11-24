@@ -282,7 +282,7 @@ class Supervisor:
             return "process_tree_rss_limit"
         return None
 
-    def reserve_task(self, task, record):
+    def reserve_task(self, task, record, *, evaluation_increment=None):
         if (record.get("attempts") and record["attempts"][-1].get("status") == "not_started"
                 and record["attempts"][-1].get("reason") == "hbm_admission_deferred"):
             # The verified pre-launch deferral consumed no evaluation or
@@ -291,7 +291,11 @@ class Supervisor:
         evaluation_key = task.get("evaluation_budget_key")
         if evaluation_key:
             reserve = evaluation_bound(task)
-            if record.get("imported_from") and not record.get("attempts"):
+            if evaluation_increment is not None:
+                if type(evaluation_increment) is not int or evaluation_increment < 0:
+                    raise Blocked("invalid_additional_evaluation_reservation")
+                reserve = evaluation_increment
+            elif record.get("imported_from") and not record.get("attempts"):
                 from .resume3 import resume_reservation
                 reserve = resume_reservation(self.config, task, record)
             elif not record.get("attempts") and task["id"] in self.config.get("migration_evaluation_reservations", {}):

@@ -49,6 +49,30 @@ def test_cpu_idempotent_manual_extra_and_refill(tmp_path):
     assert lookup(db,second)["state"]=="reserved"
 
 
+def test_auto_card_filter_replaces_one_lease_and_never_reclaims_it(tmp_path):
+    db = connect(tmp_path)
+    put(db, "limits", {"cards": 2, "cpu": 40, "auto_card_ids": [1, 3]})
+    old = submit(db, "old", spec())
+    retained = submit(db, "retained", spec())
+    moved = submit(db, "moved", spec(), "npu:1")
+    old_lease = held(db, 0, old)
+    retained_lease = held(db, 3, retained)
+    run(db, old, old_lease)
+    run(db, retained, retained_lease)
+    snap = samples(count=4)
+    place(db, tmp_path, snap)
+    assert dict(db.execute("SELECT card,role FROM leases")) == {0: "drain", 1: "manual", 3: "auto"}
+    assert lookup(db, old)["state"] == "running"
+    db.execute("UPDATE jobs SET state='completed' WHERE id=?", (old,))
+    db.execute("UPDATE leases SET state='released' WHERE id=?", (old_lease,))
+    db.execute("UPDATE leases SET state='held',acquired=? WHERE card=1", (time.time(),))
+    extra = submit(db, "extra", spec())
+    place(db, tmp_path, snap)
+    assert lookup(db, moved)["state"] == "reserved"
+    assert lookup(db, extra)["lease"] == retained_lease
+    assert {row[0] for row in db.execute("SELECT card FROM leases WHERE state!='released'")} == {1, 3}
+
+
 def test_targeted_priority_and_atomic_reservations(tmp_path):
     db=connect(tmp_path)
     put(db,"limits",dict(cards=2,cpu=0))

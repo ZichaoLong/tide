@@ -212,6 +212,10 @@ def main(argv=None):
     p=sub.add_parser("limits")
     p.add_argument("--cards",type=int)
     p.add_argument("--cpu",type=int)
+    group = p.add_mutually_exclusive_group()
+    group.add_argument("--auto-card-ids", nargs="+", type=int, metavar="ID",
+                       help="restrict automatic placement to these physical NPU IDs")
+    group.add_argument("--all-card-ids", action="store_true", help="clear the automatic physical card filter")
     p=sub.add_parser("submit")
     p.add_argument("--key",required=True)
     p.add_argument("--target",default="auto",help="auto, cpu or npu:PHYSICAL_ID")
@@ -253,6 +257,12 @@ def main(argv=None):
                     if value < 0:
                         raise ValueError("automatic targets must be nonnegative")
                     limits[k] = value
+            if args.auto_card_ids is not None:
+                if min(args.auto_card_ids) < 0:
+                    raise ValueError("physical card IDs must be nonnegative")
+                limits["auto_card_ids"] = sorted(set(args.auto_card_ids))
+            elif args.all_card_ids:
+                limits.pop("auto_card_ids", None)
             put(db,"limits",limits)
         wake(root)
         print(packed(limits))
