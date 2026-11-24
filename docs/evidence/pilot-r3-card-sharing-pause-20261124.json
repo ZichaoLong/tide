@@ -1,0 +1,161 @@
+{
+  "accepted_receipt": {
+    "path": ".local/pilot-r3/benchmarks/card-sharing-20261124/timed-1/accepted.json",
+    "sha256": "ab409bb772760f37de409caa869b37ade90db2f479eb28fe05edb3d228e6ff66"
+  },
+  "accepted_workers": 4,
+  "device_6_sample": {
+    "aicore_percent": 0,
+    "aicpu_percent": 0,
+    "hbm_total_bytes": 68719476736,
+    "hbm_used_bytes": 3374317568,
+    "health": "OK",
+    "physical_card": 6,
+    "pids": [],
+    "sample_unix": 1795518882.4213574,
+    "utilization_unix": 1795518883.2523289
+  },
+  "excluded_attempts": [
+    {
+      "card": 3,
+      "last_steps": {
+        "job-01": 3,
+        "job-02": 3
+      },
+      "reason": "device 3: health=OK, additional PIDs=[2091281]",
+      "receipt": {
+        "path": ".local/pilot-r3/benchmarks/card-sharing-20261124/timed-2/try-01/excluded.json",
+        "sha256": "95742214717fe2df99e42ffa7cd51b05309b256cc4b94701e04f2843a42878a2"
+      }
+    },
+    {
+      "card": 1,
+      "last_steps": {
+        "job-01": 9,
+        "job-02": 9
+      },
+      "reason": "benchmark stopped or deadline reached",
+      "receipt": {
+        "path": ".local/pilot-r3/benchmarks/card-sharing-20261124/timed-2/try-02/excluded.json",
+        "sha256": "11b58b8010d3123d982432fa9ea37f9e45dfa964d1a1a892a4db2d2d316b8ef7"
+      }
+    },
+    {
+      "card": 1,
+      "last_steps": {
+        "job-01": 0,
+        "job-02": 0,
+        "job-03": 0,
+        "job-04": 0,
+        "job-05": 0,
+        "job-06": 0,
+        "job-07": 0
+      },
+      "reason": "benchmark stopped or deadline reached",
+      "receipt": {
+        "path": ".local/pilot-r3/benchmarks/card-sharing-20261124/device-01/settle-1/try-01/excluded.json",
+        "sha256": "6b74e68069a5387dd862a6a9918d346a021c7ccd55d634d4718be0e97db9ac26"
+      }
+    }
+  ],
+  "experiment_on_device_6_submitted": false,
+  "live_benchmark_workers": 0,
+  "measured": [
+    {
+      "aicore_all_mean": 0.5769230769230769,
+      "aicore_training_median": 0,
+      "aicpu_all_mean": 49.00961538461539,
+      "aicpu_training_median": 54,
+      "aivector_training_median": 12,
+      "allocator_peak_per_worker_gib": 16.6875,
+      "block": "timed-1",
+      "card": 1,
+      "cohort": "timed",
+      "first_result_ratio": 1.0,
+      "first_result_s": 517.562372803688,
+      "full_width_training_samples": 197,
+      "host_cpu_mean_cores": 0.5850149984896907,
+      "jobs": 2,
+      "makespan_s": 1047.591658372432,
+      "paired_speedup": 1.0,
+      "samples": 208,
+      "total_worker_hbm_peak_gib": 16.9287109375,
+      "total_worker_ram_peak_gib": 2.6717147827148438,
+      "width": 1
+    },
+    {
+      "aicore_all_mean": 0.5241379310344828,
+      "aicore_training_median": 0,
+      "aicpu_all_mean": 72.02068965517242,
+      "aicpu_training_median": 77,
+      "aivector_training_median": 15,
+      "allocator_peak_per_worker_gib": 16.689453125,
+      "block": "timed-1",
+      "card": 1,
+      "cohort": "timed",
+      "first_result_ratio": 1.3933291563421608,
+      "first_result_s": 721.1347442530096,
+      "full_width_training_samples": 137,
+      "host_cpu_mean_cores": 0.9474826391199851,
+      "jobs": 2,
+      "makespan_s": 732.0038822554052,
+      "paired_speedup": 1.431128555144622,
+      "samples": 145,
+      "total_worker_hbm_peak_gib": 33.640625,
+      "total_worker_ram_peak_gib": 5.256134033203125,
+      "width": 2
+    }
+  ],
+  "observed_at": "2026-11-24T19:16:11+08:00",
+  "observed_worker_identities": 15,
+  "proposed_next_device": 6,
+  "sampled_work_profiles_per_seed": {
+    "2026112002": 2,
+    "2026112003": 2
+  },
+  "seed_nll_ranges": {
+    "2026112002": [
+      8.566387176513672,
+      8.579293251037598
+    ],
+    "2026112003": [
+      8.635653495788574,
+      8.685018539428711
+    ]
+  },
+  "state": "paused_by_user",
+  "stopped_units": [
+    {
+      "ActiveState": "failed",
+      "ControlGroup": "",
+      "MainPID": "0",
+      "Restart": "no",
+      "cgroup_processes": [],
+      "unit": "tide-card-sharing-20261124.service"
+    },
+    {
+      "ActiveState": "inactive",
+      "ControlGroup": "",
+      "MainPID": "0",
+      "Restart": "no",
+      "cgroup_processes": [],
+      "unit": "tide-card-sharing-report-20261124.service"
+    },
+    {
+      "ActiveState": "failed",
+      "ControlGroup": "",
+      "MainPID": "0",
+      "Restart": "no",
+      "cgroup_processes": [],
+      "unit": "tide-card-sharing-dev01-20261124.service"
+    },
+    {
+      "ActiveState": "inactive",
+      "ControlGroup": "",
+      "MainPID": "0",
+      "Restart": "no",
+      "cgroup_processes": [],
+      "unit": "tide-card-sharing-dev01-report-20261124.service"
+    }
+  ]
+}

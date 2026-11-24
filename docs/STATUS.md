@@ -6,7 +6,7 @@
 
 卡 10 的任务 654 在首个训练步前触发 AICPU `IndexPut` 错误 `507018`，内核失败的根因仍未确定。正式补跑 909 在卡 7 使用同一冻结任务和初始参数完成了 64 步，通过健康与因果检查。该模型的三个初始化种子已通过门禁，12 个 A1 作业已登记。[补跑验收与原始失败](evidence/pilot-r3-indexput-retry-20261124.json)
 
-单卡共享测试在正式队列外按组选择空闲卡。Timed 对同一对 64 步作业比较串行与双路，共三轮。Settle singleton 对同一批七份作业比较 1、2、4、7 路，共两轮。报告随每组成对结果更新，记录整批完工和首份结果用时、实际物理卡与资源占用。[本机测试报告](../.local/pilot-r3/benchmarks/card-sharing-20261124/report.md) · [冻结计划](../.local/pilot-r3/benchmarks/card-sharing-20261124/plan.json)
+单卡共享测试已按用户指示暂停。19:16 核对时，两套测试及报告服务的控制组均为空。唯一完整配对来自物理卡 1 上的两份 Timed 作业，每份训练 64 步。串行整批用时 17 分 28 秒、首份 8 分 38 秒，双路整批 12 分 12 秒、首份 12 分 01 秒。Settle 七路在首个训练步前暂停。下一次拟仅在物理卡 6 上做限时比较，待用户确认方案。[暂停核对与逐档读数](evidence/pilot-r3-card-sharing-pause-20261124.json) · [本机测试报告](../.local/pilot-r3/benchmarks/card-sharing-20261124/report.md)
 
 此前让出六张卡时暂停的 45 个任务均保留 `stopped_budget` 状态。45 份最终检查点已用冻结的 worker 和基座在 CPU 上解码，核对了文件和训练状态摘要、原 NPU 配置、训练步数、token 数与数据游标。接续清单按任务保存了检查点、原始结果、阶段起点评估来源和本轮已预约的评估预算。收到恢复指示后按该清单开新尝试。[六张卡的交接记录](evidence/pilot-r3-six-card-pause-20261124.json) · [本机逐任务接续清单](../.local/pilot-r3/resource-handoffs/six-card-pause-20261124T153341+0800/handoff.json)
 
