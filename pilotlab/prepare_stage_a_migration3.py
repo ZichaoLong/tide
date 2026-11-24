@@ -12,6 +12,7 @@ from . import audit3, prepare3
 from .adapter_recovery3 import VERIFIER_CONTINUATION
 from .cutover_review3 import (CONTROLLER_CONTINUATIONS, HBM_CONTINUATION, OWNER_EXIT_CONTINUATION, RESOURCE_MEMORY_CONTINUATION,
                               STALE_GROUP_REASON, reviewed_storage_settings)
+from .occupied_npu3 import apply_reviewed_policy
 from .prepare_campaign3 import CORE_FILES, budget_remaining, source_inventory, storage_observation
 from .prepare_relay3 import write_campaign_draft
 from .prepare_resume3 import reference
@@ -115,6 +116,7 @@ def prepare(repo, foundation, output, readiness):
     old_round = Path(refs["scheduler"]["path"]).parent
     config = copy.deepcopy(old["config"])
     config.update(reviewed_storage_settings(review))
+    apply_reviewed_policy(config, review, "r3-" + output.name)
     from .resource_placement3 import POLICY as direct_policy, split_calibrations
     placement = review.get("stage_a_cpu_placement", old.get("stage_a_cpu_placement")) or {}
     direct = placement.get("policy") == direct_policy

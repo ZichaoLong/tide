@@ -449,18 +449,30 @@ def test_owner_target_never_admits_more_than_sixteen_workers(owner):
     assert len(supervisor.state["shared_groups"]) == 1
 
 
-def test_resource_based_pool_fills_eight_cards_and_the_cpu_pool(owner):
+@pytest.mark.parametrize("cards", [8, 9])
+def test_resource_based_pool_fills_authorized_cards_and_the_cpu_pool(owner, cards):
     supervisor, _, first = owner
     supervisor.config.update(shared_execution=True, max_workers=None, max_cpu_threads=None)
+    if cards == 9:
+        from pilotlab.occupied_npu3 import boot_id, resident_identity
+        import os
+        scope = {"run_id": supervisor.config["run_id"], "candidate_ids": [2, 4, 5, 7, 8, 11, 12, 13, 14],
+                 "shared_ids": [12, 13], "resident": resident_identity(os.getpid()),
+                 "boot_id": boot_id(), "expires_unix": supervisor.config["deadline_unix"]}
+        supervisor.config.update(max_npu_devices=cards, temporary_npu=scope, external_occupant_policy="continue_running")
     owner_ids = [first]
-    for index in range(1, 8):
+    for index in range(1, cards):
         task = add_task(supervisor, f"seed-card-{index}")
-        owner_ids.append(supervisor.start_group([task], "npu"))
+        key = supervisor.start_group([task], "npu")
+        owner_ids.append(key)
+        if cards == 9:
+            manifest = read(supervisor.state["shared_groups"][key]["manifest_path"])
+            assert manifest["temporary_npu"] == scope and manifest["candidate_ids"] == scope["candidate_ids"]
     for key in owner_ids:
         observe(supervisor, key, target=16)
 
     cpu = [add_task(supervisor, f"cpu-{n}", device="cpu") for n in range(42)]
-    npu = [add_task(supervisor, f"npu-{n}") for n in range(130)]
+    npu = [add_task(supervisor, f"npu-{n}") for n in range(cards * 16 + 2)]
     limit = dynamic.worker_limit(supervisor.config)
     supervisor.start_ready_tasks(cpu + npu, limit - len(owner_ids))
 
@@ -469,8 +481,8 @@ def test_resource_based_pool_fills_eight_cards_and_the_cpu_pool(owner):
     assert len(active_cpu) == 40 and sum(row["cpu_threads"] for row in active_cpu) == 160
     for key in owner_ids:
         assert len(supervisor.state["shared_groups"][key]["task_ids"]) == 16
-    assert sum(row["status"] == "running" for row in records) == limit == 168
-    assert sum(row["status"] == "pending" for row in records) == 12
+    assert sum(row["status"] == "running" for row in records) == limit == 40 + cards * 16
+    assert sum(row["status"] == "pending" for row in records) == len(cpu) + len(npu) + cards - limit
 
 
 def test_terminal_owner_cache_is_finite_and_stage_boundary_does_not_use_it(owner, monkeypatch):

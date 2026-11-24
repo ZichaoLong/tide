@@ -81,7 +81,13 @@ class DynamicAdmission:
                       if entry.get("dynamic_admission") and not entry.get("release_verified")
                       and not entry.get("launch_aborted_before_spawn"))
         owner_limit = self.config.get("max_npu_devices", 8)
-        if type(owner_limit) is not int or not 1 <= owner_limit <= 8:
+        policy = self.config.get("temporary_npu")
+        if policy:
+            from .occupied_npu3 import validate_policy
+            validate_policy(policy, self.config["run_id"], self.config["deadline_unix"])
+            if type(owner_limit) is not int or owner_limit != len(policy["candidate_ids"]):
+                raise Blocked("dynamic_owner_limit_differs_from_authorized_pool")
+        elif type(owner_limit) is not int or not 1 <= owner_limit <= 8:
             raise Blocked("dynamic_owner_limit_must_be_at_most_eight")
         if len(owners) > owner_limit:
             raise Blocked("dynamic_existing_owner_limit_exceeded")

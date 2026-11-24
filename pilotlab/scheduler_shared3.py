@@ -452,6 +452,11 @@ class SharedSupervisor(DynamicAdmission, Supervisor):
             "workers": workers, "resource_interval_seconds": 5., "stop_grace_seconds": 45.}
         if backend == "npu" and exclusive_limit is not None:
             manifest.update(exclusive_hbm=exclusive, release_on_idle_hbm_wait=True)
+        if backend == "npu" and self.config.get("temporary_npu"):
+            policy = self.config["temporary_npu"]
+            manifest["candidate_ids"] = policy["candidate_ids"]
+            if dynamic:
+                manifest["temporary_npu"] = policy
         if backend == "cpu" and self.config.get("resource_dispatch"):
             manifest["max_rss_bytes"] = self.config["max_rss_bytes"]
         if dynamic:

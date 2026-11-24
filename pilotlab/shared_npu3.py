@@ -2,8 +2,8 @@
 
 The published queue helper is loaded read-only and owns the usual FIFO,
 two-sample admission and whole-device locks. Initial admission requires an
-empty device. An explicit policy permits external occupants arriving later;
-they are observed, never adopted into this group's ownership or cleanup.
+empty device unless a frozen grant binds a particular resident and card.
+External occupants are observed outside the group's ownership and cleanup.
 CPU groups use the same supervision without importing the NPU helper.
 """
 from __future__ import annotations
@@ -24,6 +24,7 @@ import threading
 import time
 
 from .io import atomic_json, sha256
+from .occupied_npu3 import bind_queue_admission, validate_lease, worker_wait_reason
 from .scheduler import QUEUE_HELPER, child_subreaper, family_members, proc_identity, process_table
 from .sharing_policy3 import SharingPolicy
 
@@ -75,6 +76,8 @@ def validate_manifest(value):
     if candidates is not None and (not isinstance(candidates, list) or not candidates
             or any(type(item) is not int or item < 0 for item in candidates)):
         raise ValueError("candidate_ids must contain nonnegative physical device ids")
+    if "temporary_npu" in value:
+        validate_lease(value)
     for key, default in (("admission_max_hbm_mib", 4096), ("admission_max_aicore_percent", 5)):
         if type(value.get(key, default)) is not int or value.get(key, default) < 0:
             raise ValueError("admission thresholds must be nonnegative integers")
@@ -303,6 +306,7 @@ class QueueLease:
     def __init__(self, manifest, output, stop):
         self.manifest, self.output, self.stop = manifest, output, stop
         self.helper = load_queue_helper()
+        self.admission_samples = bind_queue_admission(self.helper, manifest) if "temporary_npu" in manifest else {}
         self.helper_identity = {"path": str(QUEUE_HELPER), "sha256": sha256(QUEUE_HELPER)}
         runtime = Path(os.environ.get("XDG_RUNTIME_DIR", f"/run/user/{os.getuid()}"))
         self.queue_dir, self.device_dir = runtime / "ascend-job-queue", runtime / "ascend-device-locks"
@@ -334,6 +338,7 @@ class QueueLease:
             if time.time() >= self.manifest["deadline_unix"]:
                 raise GroupBlocked("deadline_while_queued")
             before_unix, before_mono = time.time(), time.monotonic()
+            self.admission_samples.clear()
             decision = self.helper.attempt_schedule(queue_dir=self.queue_dir, device_lock_dir=self.device_dir,
                 job_id=self.manifest["job_id"], mapping=self.mapping, candidate_ids=candidates, npu_count=1,
                 max_hbm_mib=self.manifest.get("admission_max_hbm_mib", 4096),
@@ -347,6 +352,8 @@ class QueueLease:
                 self.acquired_unix, self.acquired_monotonic = before_unix, before_mono
                 self.emit("running", physical_ids=[self.physical_id], physical_id=self.physical_id,
                           accounting_started_unix=self.acquired_unix,
+                          **({"admission_samples": self.admission_samples[self.physical_id]}
+                             if self.physical_id in self.admission_samples else {}),
                           accounting_scope="one device; includes complete successful admission attempt")
                 return
             self.emit("queued", reason=decision.reason, queue_position=decision.queue_position,
@@ -356,7 +363,7 @@ class QueueLease:
 
     def snapshot(self):
         status = self.helper.snapshot(self.mapping)[self.physical_id]
-        return {"physical_id": status.physical_id, "health": status.health,
+        return {"physical_id": status.physical_id, "health": status.health, "aicore_percent": status.aicore_percent,
                 "used_bytes": status.hbm_used_mib * 2**20, "total_bytes": status.hbm_total_mib * 2**20,
                 "process_ids": list(status.process_ids)}
 
@@ -397,6 +404,10 @@ def admission_reason(manifest, worker, active, owned, device, *, owner_rss=0):
             raise GroupBlocked("group_hbm_budget_exceeded")
     if worker is None:
         return None
+    if device is not None:
+        reason = worker_wait_reason(manifest, device, active)
+        if reason:
+            return reason
     if sum(item["cpu_threads"] for item in active) + worker["cpu_threads"] > manifest["max_cpu_threads"]:
         return "cpu_thread_reservations_full"
     projected_rss = max(rss, owner_rss + sum(item["reserved_rss_bytes"] for item in active)) + worker["reserved_rss_bytes"]
@@ -677,7 +688,8 @@ class GroupRunner:
         if self.policy:
             self.policy.resource_wait(reason, self.processes)
         if (not active and self.manifest.get("release_on_idle_hbm_wait") and reason in
-                {"hbm_reservations_full", "exclusive_hbm_requires_empty_card", "exclusive_hbm_requires_64_gib"}):
+                {"hbm_reservations_full", "exclusive_hbm_requires_empty_card", "exclusive_hbm_requires_64_gib",
+                 "resident_permission_changed", "resident_pressure"}):
             self.state["capacity_deferral"] = {"task_id": worker["id"], "reason": reason,
                 "device": self.state["resources"]["device"], "observed_unix": time.time()}
             return
@@ -885,6 +897,9 @@ class GroupRunner:
                     return self.state
                 self.state.update(allocation_acquired_unix=self.lease.acquired_unix, physical_id=self.lease.physical_id,
                                   queue_helper=getattr(self.lease, "helper_identity", None))
+                samples = getattr(self.lease, "admission_samples", {}).get(self.lease.physical_id)
+                if samples:
+                    self.state["lease_admission_samples"] = samples
             self.state["status"] = "running"
             self.save()
             while True:

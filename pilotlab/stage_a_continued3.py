@@ -3,6 +3,7 @@ from pathlib import Path
 
 from .adapter_recovery3 import VERIFIER_CONTINUATION
 from .cutover_review3 import CONTROLLER_CONTINUATIONS, HBM_CONTINUATION, reviewed_storage_settings
+from .occupied_npu3 import apply_reviewed_policy
 from .prepare_resume3 import reference
 from .round3 import Campaign
 from .resource_placement3 import POLICY as DIRECT_POLICY, ResourcePlacement
@@ -17,6 +18,7 @@ def verify_scope(plan):
     acceptance = read_bound(batch["qualification"])
     config = plan["config"]
     prior = {**old["config"], **reviewed_storage_settings(review)}
+    apply_reviewed_policy(prior, review, config["run_id"])
     placement = review.get("stage_a_cpu_placement", old.get("stage_a_cpu_placement")) or {}
     if placement.get("policy") == DIRECT_POLICY:
         prior["resource_dispatch"] = True
