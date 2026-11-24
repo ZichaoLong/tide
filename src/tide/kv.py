@@ -72,6 +72,7 @@ class KVMemory(nn.Module):
             raise ValueError("kv_width must be a positive multiple of 32 <= d")
         self.heads = self.kv_width // 32
         self.unit_weights = False
+        self.weak_log = False
         self.position_period = period if position_period is None else position_period
         self.window = 128 * period if window is None else window
         self.short_decay = math.log(2)/(8*period) if short_decay is None else short_decay
@@ -90,7 +91,8 @@ class KVMemory(nn.Module):
         # No reception means no write, including at the first-order boundary.
         # A padding slot must not become a differentiable key prior in a whole
         # window while disappearing from the saved continuation state.
-        mass = torch.where(mass>0,mass,torch.zeros_like(mass)).to(accumulation_dtype)
+        present = mass != 0 if self.weak_log else mass > 0
+        mass = torch.where(present,mass,torch.zeros_like(mass)).to(accumulation_dtype)
         normal = norm(u)
         keys, values = self.kv(normal, owners).split(self.kv_width, -1)
         # BF16 projection is genuine; recurrent weighted sums retain FP32.
@@ -107,16 +109,27 @@ class KVMemory(nn.Module):
             lo, hi = max(0, old+start-self.slots), old+end
             delta = times[:, :, start:end, None] - bank.times[:, :, None, lo:hi]
             visible = (delta >= 0) & (delta < self.window)
-            weight = bank.weight[:, :, None, lo:hi] * visible
+            codes = bank.weight[:, :, None, lo:hi]
+            extended = self.weak_log and bool((codes < 0).any())
+            features_tile = bank.features[:, :, lo:hi]
+            if extended:
+                from .weak_mass import decode, wide
+                weight = decode(wide(codes)) * visible.cpu()
+                features_tile = wide(features_tile)
+            else:
+                weight = codes * visible
             decay = torch.exp(delta.clamp_min(0).to(accumulation_dtype) * -self.short_decay)
+            if extended:
+                decay = decay.to(weight)
             for weights, outputs, amounts in ((weight, long, wl), (weight*decay, short, ws)):
                 amount = weights.sum(-1)
                 denominator = torch.where(amount <= 1, torch.ones_like(amount), amount)
                 with torch.autocast(u.device.type, enabled=False):
-                    outputs.append(torch.matmul(weights, bank.features[:, :, lo:hi]) / denominator[..., None])
-                amounts.append(amount)
-        last = torch.where(bank.weight > 0, bank.times, torch.zeros_like(bank.times)).amax(2, keepdim=True)
-        keep = (bank.weight > 0) & ((last-bank.times) < self.window)
+                    outputs.append((torch.matmul(weights, features_tile) / denominator[..., None]).to(features))
+                amounts.append(amount.to(features))
+        written = bank.weight != 0 if self.weak_log else bank.weight > 0
+        last = torch.where(written, bank.times, torch.zeros_like(bank.times)).amax(2, keepdim=True)
+        keep = written & ((last-bank.times) < self.window)
         order = cache_order(keep, bank.times)
         order = order[:, :, -min(self.slots, order.shape[2]):]
         newstate = KVState(_take(bank.times, order), _take(bank.weight*keep, order),
@@ -158,11 +171,11 @@ class KVMemory(nn.Module):
         w = bank.weight[packed.nodes, :, lo:hi]
         if not self.unit_weights:
             # An unwritten slot has no key, including in the prior VJP.
-            visible = visible & (w[:, :, None, :] > 0)
+            visible = visible & ((w != 0 if self.weak_log else w > 0)[:, :, None, :])
         read = weighted_attention(queries, keys, values,
                                   weights=None if self.unit_weights else w,
                                   mask=visible[:, :, None], backend=self.backend,
-                                  mass_scaled=not self.unit_weights)
+                                  mass_scaled=not self.unit_weights, _weak_log=self.weak_log)
         read = read.transpose(2,3).reshape(n,b,qlen,self.kv_width)
         if self.unit_weights:
             amount = (visible*w[:, :, None]).sum(-1).clamp(max=1)

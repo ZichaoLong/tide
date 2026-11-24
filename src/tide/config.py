@@ -128,10 +128,10 @@ class ModelConfig:
         if self.pool_support_policy not in ("strict", "positive-floor-v1") or (
                 self.pool_support_policy != "strict" and self.allocation != "pool"):
             raise ValueError("positive-floor-v1 pool policy requires pool allocation")
-        if self.shannon_support_policy not in ("strict", "positive-floor-v1"):
+        if self.shannon_support_policy not in ("strict", "positive-floor-v1", "weak-log-v1"):
             raise ValueError("unknown Shannon support policy")
         if self.shannon_support_policy != "strict" and self.allocation != "shannon":
-            raise ValueError("positive-floor-v1 requires Shannon allocation")
+            raise ValueError("a Shannon support policy requires Shannon allocation")
         if self.sharing not in ("independent", "region_shared", "layer_shared"):
             raise ValueError("unknown sharing profile")
         if self.memory_sharing not in (None, "region_shared"):

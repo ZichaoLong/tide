@@ -48,6 +48,7 @@ class SSDMemory(nn.Module):
             self.stride = conv_stride
         self.short_decay = math.log(2)/(8*period) if short_decay is None else short_decay
         self.backend = backend
+        self.weak_log = False
         if summary_backend not in ("block", "prefix"):
             raise ValueError("summary_backend must be block or prefix")
         self.summary_backend = summary_backend
@@ -76,12 +77,13 @@ class SSDMemory(nn.Module):
                         base.new_zeros((n, b)), base.new_zeros((n, b)),
                         ConvState(times[..., :0], base.new_zeros((n, b, 0, self.d+64))))
 
-    def _summaries(self, features, weight, times, state):
+    def _summaries(self, features, weight, times, state, weighted_features=None):
         previous = torch.cat((state.times[..., None], times[..., :-1]), dim=-1)
         elapsed = (times - previous).clamp_min(0).to(features.dtype)
         short_decay = torch.exp(elapsed * -self.short_decay)
         decay = torch.stack((short_decay, torch.ones_like(short_decay)), dim=-1)
-        writes = torch.cat((features * weight[..., None], weight[..., None]), dim=-1)
+        weighted = features * weight[..., None] if weighted_features is None else weighted_features
+        writes = torch.cat((weighted, weight[..., None]), dim=-1)
         writes = writes.unsqueeze(-2).expand(*writes.shape[:-1], 2, writes.shape[-1])
         initial = torch.stack((torch.cat((state.short, state.short_weight[..., None]), -1),
                                torch.cat((state.long, state.long_weight[..., None]), -1)), -2)
@@ -116,9 +118,17 @@ class SSDMemory(nn.Module):
         if length == 0:
             empty = u[..., :d//4]
             return (empty, empty, empty, mass, mass), (u, times, owners, u, u, u), state
-        positive = mass > 0
+        extended = self.weak_log and bool((mass < 0).any())
+        positive = mass != 0 if extended else mass > 0
         dtype = torch.float64 if u.dtype == torch.float64 else torch.float32
-        weight = mass.to(dtype).clamp(max=1).masked_fill(~positive, 0)
+        if extended:
+            from .weak_mass import decode, wide
+            wide_weight = torch.where(positive.cpu(), decode(wide(mass)).clamp(max=1), 0)
+            weight = wide_weight.to(device=u.device, dtype=dtype)
+            def weighted(value):
+                return (wide_weight[..., None] * wide(value)).to(device=u.device, dtype=dtype)
+        else:
+            weight = mass.to(dtype).clamp(max=1).masked_fill(~positive, 0)
         normalized = norm(u)
         gate, projected, dt_raw = self.input(normalized, owners).split((d, d+64, self.heads), -1)
         features = self.summary(normalized, owners)
@@ -126,9 +136,11 @@ class SSDMemory(nn.Module):
             kernel = self.conv_kernel(owners).to(dtype).reshape(n, 1, 4, d+64)
             bias = self.conv_bias(owners).to(dtype)[:, None, :]
             convolved, cache = logical_conv(projected.to(dtype), weight, times, kernel, bias,
-                                            state.conv, stride=self.stride)
+                                            state.conv, stride=self.stride, positive=positive,
+                                            weighted_writes=weighted(projected) if extended else None)
             values, B, C = F.silu(convolved).split((d, 32, 32), -1)
-            dt = weight[..., None] * F.softplus(dt_raw.to(dtype) + self.dt_bias(owners).to(dtype)[:, None, None, :])
+            rate = F.softplus(dt_raw.to(dtype) + self.dt_bias(owners).to(dtype)[:, None, None, :])
+            dt = weighted(rate) if extended else weight[..., None] * rate
             decay = torch.exp(-self.a_log(owners).to(dtype)[:, None, None, :].exp() * dt)
             write = dt[..., None] * values.reshape(n, b, length, self.heads, 32)
             B = B[..., None, :].expand(n, b, length, self.heads, 32)
@@ -136,7 +148,7 @@ class SSDMemory(nn.Module):
             reads, matrix = ssd_scan(decay, write, B, C, state.matrix, chunk_size=self.chunk,
                                      backend=self.scan_backend)
             reads = reads.reshape(n, b, length, d)
-            summaries = self._summaries(features.to(dtype), weight, times, state)
+            summaries = self._summaries(features.to(dtype), weight, times, state, weighted(features) if extended else None)
         short, long = summaries[..., 0, :-1], summaries[..., 1, :-1]
         ws, wl = summaries[..., 0, -1], summaries[..., 1, -1]
         denominator = torch.where(ws <= 1, torch.ones_like(ws), ws)

@@ -38,6 +38,7 @@ class RegionNetwork(nn.Module):
     def __init__(self,d,backend="auto"):
         super().__init__()
         self.heads, self.backend = d//64, backend
+        self.weak_log = False
         width = d//2
         self.q = nn.Linear(width,width,bias=False)
         self.k = nn.Linear(width,width,bias=False)
@@ -55,7 +56,7 @@ class RegionNetwork(nn.Module):
         def project(layer):
             return layer(x).reshape(*shape,self.heads,32).transpose(-3,-2)
         read = weighted_attention(project(self.q),project(self.k),project(self.v),
-                                  weights=w.movedim(0,-1),backend=self.backend,
+                                  weights=w.movedim(0,-1),backend=self.backend, _weak_log=self.weak_log,
                                   _constant_zero_prior=None if constant_zero is None else constant_zero.movedim(0,-1))
         delta = self.o(read.transpose(-3,-2).flatten(-2))
         hidden = torch.nn.functional.silu(self.first(norm(x+delta)))
@@ -67,13 +68,17 @@ class RegionNetwork(nn.Module):
             correction = delta.to(self.readout.dtype) @ self.readout
             correction = correction + hidden.to(self.readout.dtype) @ (self.second.weight.T @ self.readout)
             correction = correction + self.second.bias @ self.readout
-        return score + torch.where(w>0,correction.permute(2,0,1),torch.zeros_like(score))
+        return score + torch.where(w!=0,correction.permute(2,0,1),torch.zeros_like(score))
 
 
 def region_control(score, received, roles, budget, profile, partition, support_policy="strict",
                    *, return_constant_zero=False):
     if score.dtype in (torch.float16,torch.bfloat16):
         score = score.float()
+    if support_policy == "weak-log-v1":
+        from .weak_mass import control
+        result = control(score, received, roles, budget, profile, partition)
+        return (result, None) if return_constant_zero else result
     received = received.to(score.dtype)
     w = torch.where(received>=1,torch.ones_like(received),received.clamp_min(0))
     mu = torch.where(received>=0.5,torch.ones_like(received),2*received.clamp_min(0))

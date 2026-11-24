@@ -69,7 +69,7 @@ def regional_scores(networks, z, score, weight, constant_zero=None):
         return linear(x, name).reshape(r, b, length, n, heads, 32).transpose(-3, -2)
 
     read = weighted_attention(project("q"), project("k"), project("v"),
-                              weights=weight.movedim(1, -1), backend=networks[0].backend,
+                              weights=weight.movedim(1, -1), backend=networks[0].backend, _weak_log=networks[0].weak_log,
                               _constant_zero_prior=None if constant_zero is None else constant_zero.movedim(1, -1))
     delta = linear(read.transpose(-3, -2).flatten(-2), "o")
     hidden = torch.nn.functional.silu(linear(norm(x + delta), "first"))
@@ -82,7 +82,7 @@ def regional_scores(networks, z, score, weight, constant_zero=None):
         correction = correction + torch.bmm(hidden.to(readout.dtype).reshape(r, -1, hidden.shape[-1]), projected)
         correction = correction + (bias * readout).sum(-1)[:, None, None]
     correction = correction.reshape(r, b, length, n).permute(0, 3, 1, 2)
-    return score + torch.where(weight > 0, correction, torch.zeros_like(score))
+    return score + torch.where(weight != 0, correction, torch.zeros_like(score))
 
 
 def evaluate_regions(model, regions, contents, masses, classes, time, old=None, record_work=False, constant_zero=None):
@@ -92,8 +92,7 @@ def evaluate_regions(model, regions, contents, masses, classes, time, old=None, 
     owners = model._owners(members, device)
     membership = model._reception_mask(regions, device)
     received, u = model._receive(contents, masses, classes, owners, membership, constant_zero)
-    mass = (torch.ones_like(received) if model.graph.config.kind == "fc" else
-            torch.where(received >= 1, torch.ones_like(received), received.clamp_min(0)))
+    mass = model._memory_mass(received)
     times = time[None, None].expand(len(members), b, length)
     desc = [u.new_zeros((len(members), b, length, model.config.d//4)) for _ in range(3)]
     desc += [u.new_zeros((len(members), b, length)) for _ in range(2)]
@@ -114,11 +113,11 @@ def evaluate_regions(model, regions, contents, masses, classes, time, old=None, 
     roles = torch.tensor([model.graph.nodes[v].role == "H" for v in model.graph.regions[regions[0]]], device=device)
     face = None
     if model.region_group[regions[0]] < 0:
-        control = torch.where(received >= 0.5, torch.ones_like(received), 2*received)
+        control = model._fixed_control(received)
     else:
         possible = tuple(model.description_ids[v] for v in members)
         d_owners = model._owners(possible, device)
-        z, score = model.describe(u, received, desc, d_owners)
+        z, score = model.describe(u, model._description_input(received), desc, d_owners)
         prior_face = all_real_inputs_constant_zero(constant_zero, membership)
         score = model._score_regions(regions, z.reshape(r, n, b, length, -1),
                                      score.reshape(r, n, b, length), mass.reshape(r, n, b, length),
@@ -135,10 +134,10 @@ def evaluate_regions(model, regions, contents, masses, classes, time, old=None, 
         control = control.reshape(n, r, b, length).permute(1, 0, 2, 3).reshape(r*n, b, length)
     full = torch.zeros_like(u)
     for kind, (sub, context) in contexts.items():
-        full = full.index_copy(0, sub, model.memories[kind].finish(context, control[sub]).to(full.dtype))
+        full = full.index_copy(0, sub, model.memories[kind].finish(context, control[sub].abs() if model.weak_log else control[sub]).to(full.dtype))
     measured = None
     if record_work:
-        measured = torch.stack(((received > 0).sum(), (control > 0).sum(), (masses > 0).sum(),
+        measured = torch.stack(((received != 0).sum(), (control != 0).sum(), (masses != 0).sum(),
                                 torch.as_tensor(received.numel(), device=device)))
     faces = (None,) * r if face is None else face.split(n, 0)
     return full.split(n, 0), control.split(n, 0), saved, measured, faces

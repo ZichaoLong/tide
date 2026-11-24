@@ -428,7 +428,6 @@ def place_state(model, state):
     if model._placement_spec["kind"] == "hb-region-shards-1":
         from .region_placement import place_region_state
         return place_region_state(model, state)
-    from .model import ModelState
     memories = tuple(move_tensors(memory, model._placement_devices[
         model._layer_partitions[model.graph.nodes[model.graph.regions[region][0]].layer]],
         model._placement_spec.get("transport", "direct"))
@@ -436,7 +435,7 @@ def place_state(model, state):
     pending = tuple(move_tensors(layer, model._placement_devices[model._layer_partitions[index]],
                                  model._placement_spec.get("transport", "direct"))
                     for index, layer in enumerate(state.pending))
-    return ModelState(state.position, memories, pending)
+    return type(state)(state.position, memories, pending)
 
 
 def placement_report(model):
@@ -466,7 +465,6 @@ def canonical_state(model, state, *, device="cpu"):
     if state is None:
         return None
     from .region_placement import RegionLayerOutput, gather_region_bank
-    from .model import ModelState
     pending = tuple(gather_region_bank(bank, device) if isinstance(bank, RegionLayerOutput)
                     else move_tensors(bank, device) for bank in state.pending)
-    return ModelState(state.position, move_tensors(state.memories, device), pending)
+    return type(state)(state.position, move_tensors(state.memories, device), pending)

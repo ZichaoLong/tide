@@ -162,6 +162,8 @@ def logical_conv(
     state: ConvState | None = None,
     *,
     stride: int = 1,
+    positive=None,
+    weighted_writes=None,
 ) -> tuple[Tensor, ConvState]:
     """Convolve a complete window on its original integer logical clock.
 
@@ -214,7 +216,9 @@ def logical_conv(
     history_times = torch.cat((state.times, times), dim=-1)
     # The declared boundary VJP follows the no-write branch at mass=0. This
     # also preserves gradients when that slot lies on a continuation boundary.
-    writes = (mass.unsqueeze(-1) * projected).masked_fill((mass <= 0).unsqueeze(-1), 0)
+    positive = mass > 0 if positive is None else positive
+    writes = mass.unsqueeze(-1) * projected if weighted_writes is None else weighted_writes
+    writes = writes.masked_fill(~positive.unsqueeze(-1), 0)
     history = torch.cat((state.values, writes), dim=-2)
     result = projected * kernel[..., 0, :].unsqueeze(-2) + bias.unsqueeze(-2)
     if taps > 1:
@@ -228,7 +232,6 @@ def logical_conv(
         saved = saved.reshape(*batch, times.shape[-1], taps - 1, channels)
         result = result + (saved * kernel[..., 1:, :].unsqueeze(-3)).sum(-2)
 
-    positive = mass > 0
     last = times.masked_fill(~positive, -1).amax(-1)
     horizon = (taps - 1) * stride
     valid = torch.cat((state.times >= 0, positive), dim=-1)

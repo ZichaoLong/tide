@@ -115,6 +115,11 @@ class ModelState:
 
 
 @dataclass
+class WeakLogState(ModelState):
+    """Pending strengths and KV weights use weak-log-v1 coordinates."""
+
+
+@dataclass
 class Result:
     values: torch.Tensor  # [output node, B, position/logical tick, d]
     strengths: torch.Tensor
@@ -128,10 +133,26 @@ class Result:
         return (self.values*self.strengths[...,None]).sum(0)/denominator[...,None]
 
 
+@dataclass
+class WeakLogResult(Result):
+    strength_coordinates: torch.Tensor | None = None
+
+    def readout(self):
+        from .weak_mass import decode, weak, wide
+        code = self.strength_coordinates
+        if not bool(weak(code).any()):
+            return super().readout()
+        mass = decode(wide(code))
+        total = mass.sum(0)
+        denominator = torch.where(total > 1, total, 1.)
+        return ((wide(self.values)*mass[..., None]).sum(0)/denominator[..., None]).to(self.values)
+
+
 class TideModel(nn.Module):
     def __init__(self,config:ModelConfig):
         super().__init__()
         self.config = config
+        self.weak_log = config.shannon_support_policy == "weak-log-v1"
         self._pool_counts = PoolSupportCounts() if config.pool_support_policy != "strict" else None
         self.graph = graph = build_topology(config.topology)
         n,d = len(graph.nodes),config.d
@@ -198,6 +219,9 @@ class TideModel(nn.Module):
         iterator = iter(labels)
         self.region_group = [-1 if skip else next(iterator) for skip in fixed]
         self.regional = nn.ModuleList(RegionNetwork(d,local_backend) for _ in set(labels))
+        self.receive.weak_log = self.weak_log
+        for module in (*self.regional, *self.memories.values()):
+            module.weak_log = self.weak_log
         self.inputs = nn.ModuleDict({role:nn.Linear(config.input_dim or d,d,bias=False)
                                     for role in sorted(set(graph.nodes[v].role for v in graph.input_nodes))})
         self.layer_nodes = [tuple(v.id for v in graph.nodes if v.layer==l) for l in range(len(graph.widths))]
@@ -343,6 +367,24 @@ class TideModel(nn.Module):
                 self._reception_masks[key] = None if bool(mask.all()) else mask.to(device)
         return self._reception_masks[key]
 
+    def _memory_mass(self, received):
+        if self.graph.config.kind == "fc":
+            return torch.ones_like(received)
+        lower = received if self.weak_log else received.clamp_min(0)
+        return torch.where(received >= 1, torch.ones_like(received), lower)
+
+    def _fixed_control(self, received):
+        if self.weak_log:
+            from .weak_mass import twice_capped
+            return twice_capped(received)
+        return torch.where(received >= .5, torch.ones_like(received), 2*received)
+
+    def _description_input(self, received):
+        if self.weak_log:
+            from .weak_mass import physical
+            return physical(received)
+        return received
+
     def _receive(self, contents, masses, classes, owners, edge_mask=None, constant_zero=None):
         # The whole-region policy already recomputes reception. Avoid nested
         # checkpointing while keeping the independently selectable cheap stage.
@@ -377,8 +419,7 @@ class TideModel(nn.Module):
         received,u = self._receive(contents,masses,classes,owners,membership,constant_zero)
         # Unit FC ingress and the received lower budget imply every
         # node writes unit weight. Use that exact reachable-state identity.
-        mass = (torch.ones_like(received) if self.graph.config.kind=="fc" else
-                torch.where(received>=1,torch.ones_like(received),received.clamp_min(0)))
+        mass = self._memory_mass(received)
         times = time[None,None].expand(len(members),b,length)
         desc = [u.new_zeros((len(members),b,length,self.config.d//4)) for _ in range(3)]
         desc += [u.new_zeros((len(members),b,length)) for _ in range(2)]
@@ -398,11 +439,11 @@ class TideModel(nn.Module):
         roles = torch.tensor([self.graph.nodes[v].role=="H" for v in members],device=device)
         face = None
         if self.fixed_regions[region]:
-            control = torch.where(received>=0.5,torch.ones_like(received),2*received)
+            control = self._fixed_control(received)
         else:
             possible = tuple(self.description_ids[v] for v in members)
             description_owners = self._owners(possible,device)
-            z,score = self.describe(u,received,desc,description_owners)
+            z,score = self.describe(u,self._description_input(received),desc,description_owners)
             prior_face = all_real_inputs_constant_zero(constant_zero, membership)
             score = self.regional[self.region_group[region]](z,score,mass,prior_face)
             control,face = region_control(score,received,roles,self.config.budget or max(1,self.graph.config.n//32),
@@ -411,10 +452,10 @@ class TideModel(nn.Module):
         full = torch.zeros_like(u)
         measured = None
         if record_work:
-            measured = torch.stack(((received>0).sum(),(control>0).sum(),(masses>0).sum(),
+            measured = torch.stack(((received!=0).sum(),(control!=0).sum(),(masses!=0).sum(),
                                     torch.as_tensor(received.numel(),device=device)))
         for kind,(sub,context) in contexts.items():
-            full = full.index_copy(0,sub,self.memories[kind].finish(context,control[sub]).to(full.dtype))
+            full = full.index_copy(0,sub,self.memories[kind].finish(context,control[sub].abs() if self.weak_log else control[sub]).to(full.dtype))
         return full, control, saved, measured, face
 
     def _score_regions(self, regions, z, score, mass, constant_zero=None):
@@ -458,6 +499,17 @@ class TideModel(nn.Module):
         return self._run(x,state,record_work=record_work,inject=False)
 
     def _run(self,x,state=None,*,record_work=False,inject=True):
+        if isinstance(state, WeakLogState) and not self.weak_log:
+            raise ValueError("weak-log private state requires its matching mass policy")
+        result = self._run_window(x, state, record_work=record_work, inject=inject)
+        if not self.weak_log:
+            return result
+        from .weak_mass import physical
+        state = result.state
+        return WeakLogResult(result.values, physical(result.strengths), result.times,
+                             WeakLogState(state.position, state.memories, state.pending), result.work, result.strengths)
+
+    def _run_window(self,x,state=None,*,record_work=False,inject=True):
         if x.dtype not in (torch.float32,torch.float64):
             raise TypeError("models use FP32; FP64 is available for accuracy verification")
         if x.ndim!=3 or x.shape[-1]!=(self.config.input_dim or self.config.d) or x.shape[1]==0:

@@ -37,6 +37,7 @@ class Reception(nn.Module):
         n = len(sources)
         self.profile, self.backend = profile, backend
         self.qkv_backend = qkv_backend
+        self.weak_log = False
         hidden = d if profile == "incoming_wide" else d//8
         self.a = NodeLinear(n,d,hidden,groups,rank)
         self.b = NodeLinear(n,hidden,d,groups,rank)
@@ -78,7 +79,8 @@ class Reception(nn.Module):
             mass = mass.float()
         if edge_mask is not None:
             mass = mass.masked_fill(~edge_mask[:, None, None], 0)
-        mass = mass.clamp_min(0)
+        if not self.weak_log:
+            mass = mass.clamp_min(0)
         total = mass.sum(-1)
         y = content
         if self.profile != "source_residual":
@@ -91,7 +93,7 @@ class Reception(nn.Module):
             q,k,v = (value.reshape(*shape,self.heads,32).transpose(-3,-2) for value in projections)
             key_mask = None if edge_mask is None else edge_mask[:,None,None,None,None,:]
             read = weighted_attention(q,k,v,weights=mass,mask=key_mask,backend=self.backend,
-                                      _constant_zero_prior=constant_zero)
+                                      _constant_zero_prior=constant_zero, _weak_log=self.weak_log)
             read = read.transpose(-3,-2).flatten(-2)
             y = y + self.o(read,owners)
         hidden = self.a(norm(y),owners) + self.embedding(owners,classes)[:,None,None]
@@ -102,5 +104,9 @@ class Reception(nn.Module):
             # Independent zero masses still have their one-sided derivative.
             movable = ~(constant_zero & (mass == 0))
             mean_mask = movable if mean_mask is None else mean_mask & movable
+        if self.weak_log:
+            from . import weak_mass
+            if bool(weak_mass.weak(mass).any()):
+                return weak_mass.reception_mean(mass, value, mean_mask)
         aggregate = stable_weighted_mean(mass, value, mean_mask)
         return total, aggregate

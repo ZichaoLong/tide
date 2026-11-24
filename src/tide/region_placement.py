@@ -70,7 +70,7 @@ def place_region_state(model, state):
         pending.append(RegionLayerOutput(tuple(
             move_tensors(chunk, model._placement_devices[model._region_partitions[region]], transport)
             for region, chunk in zip(model.layer_regions[layer], bank.regions))))
-    return ModelState(state.position, memories, tuple(pending))
+    return type(state)(state.position, memories, tuple(pending))
 
 
 def build_region_transfer_plan(model):
