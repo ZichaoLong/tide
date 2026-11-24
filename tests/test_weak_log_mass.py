@@ -93,19 +93,25 @@ def test_readout_gradient_when_a_weak_sender_takes_the_total_above_one(device):
     assert abs(grad[0].item()) < 1e-30
 
 
-@pytest.mark.parametrize("batch_regions", [1, 4])
-def test_timed_kv_pending_and_checkpoint_preserve_weak_support(tmp_path, device, batch_regions):
-    from tide.model import WeakLogState
+def timed_weak_model(device, batch_regions=1):
     torch.manual_seed(18)
     topology = TopologyConfig(kind="multiscale", profile="compact-7", n=2, hubs=1,
                               partition="singleton", timing="timed", period=1)
     model = TideModel(ModelConfig(topology=topology,d=64,memory="K",allocation="shannon",budget=1,
                                   shannon_support_policy=POLICY,region_batch_size=batch_regions)).to(device)
     with torch.no_grad():
-        for region, members in enumerate(model.graph.regions):
+        for members in model.graph.regions:
             if len(members) == 2 and all(v in model.description_ids for v in members):
                 owner = model.description_ids[members[0]]
                 model.describe.offset.value[owner] = -115.
+    return model
+
+
+@pytest.mark.parametrize("batch_regions", [1, 4])
+def test_timed_kv_pending_and_checkpoint_preserve_weak_support(tmp_path, device, batch_regions):
+    from tide.model import WeakLogState
+    model = timed_weak_model(device, batch_regions)
+    with torch.no_grad():
         x = torch.randn(1,12,64,device=device)
         full = model(x)
         a = model(x[:,:8])
@@ -119,3 +125,20 @@ def test_timed_kv_pending_and_checkpoint_preserve_weak_support(tmp_path, device,
         b = restored(x[:,8:],state)
         assert torch.equal(b.strength_coordinates!=0,full.strength_coordinates[:,:,8:]!=0)
         torch.testing.assert_close(b.readout(),full.readout()[:,8:],rtol=3e-4,atol=3e-5)
+
+
+def test_cpu_weak_log_adamw_restores_the_next_update(tmp_path):
+    from benchmarks.continuous import checkpoint_resume
+
+    model = timed_weak_model("cpu")
+    optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4, foreach=False)
+    prefix = model(torch.randn(1, 12, 64))
+    assert any((bank.strengths < 0).any() for bank in prefix.state.pending)
+    prefix.readout().square().mean().backward()
+    optimizer.step()
+    assert optimizer.state
+    check = checkpoint_resume(model, optimizer, prefix.state, torch.randn(1, 4, 64),
+                              "fp32", tmp_path / "weak-adamw.pt")
+    assert check["saved_data"]["exact"]
+    assert check["next_forward"]["exact"] and check["next_state"]["exact"]
+    assert check["next_flush_result"]["exact"] and check["state"] == "within_threshold"
