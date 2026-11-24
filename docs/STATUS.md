@@ -8,6 +8,8 @@
 
 物理卡 6 的 16 步并发测试已于北京时间 2026-11-24 19:50:25 完成并释放卡。六档共 32 份作业均通过验收。Settle 同样七份作业，串行、四路、七路的整批用时分别为 349.2、149.7、126.6 秒，首份分别为 49.1、78.3、123.1 秒。四路到七路的满并发训练吞吐增加 6.7%。Timed 同样两份作业，双路使整批用时从 296.7 秒降至 201.3 秒，首份从 146.5 秒推迟至 194.2 秒。每档测量一次，每份 8,192 个训练 token。[逐档结果与原始记录](evidence/pilot-r3-card-sharing-dev6-short-results-20261124.json) · [本机测试报告](../.local/pilot-r3/benchmarks/card-sharing-dev6-16step-20261124/report.md)
 
+Timed 三路与双路的补测于北京时间 2026-11-24 20:24:54 完成并释放物理卡 6。每档运行同样六份 16 步作业，两个种子各占三份，12 份均通过验收。三路比双路把整批用时从 599.4 秒降至 516.4 秒，节省 13.8%，首份结果推迟 56.5 秒。满并发训练吞吐从 90.8 升至 102.9 token/s。三路 worker 合计 HBM 采样峰值为 50.25 GiB，整卡最低可用 10.76 GiB。每档各测一次。[复核数据](evidence/pilot-r3-dev6-timed-three-workers-20261124.json) · [本机对照报告](../.local/pilot-r3/benchmarks/timed-dev6-three-workers-20261124/report.md)
+
 此前 64 步版本在物理卡 1 上完成了一组 Timed 配对。串行整批用时 17 分 28 秒、首份 8 分 38 秒，双路整批 12 分 12 秒、首份 12 分 01 秒。[64 步配对与暂停记录](evidence/pilot-r3-card-sharing-pause-20261124.json)
 
 此前让出六张卡时暂停的 45 个任务均保留 `stopped_budget` 状态。45 份最终检查点已用冻结的 worker 和基座在 CPU 上解码，核对了文件和训练状态摘要、原 NPU 配置、训练步数、token 数与数据游标。接续清单按任务保存了检查点、原始结果、阶段起点评估来源和本轮已预约的评估预算。收到恢复指示后按该清单开新尝试。[六张卡的交接记录](evidence/pilot-r3-six-card-pause-20261124.json) · [本机逐任务接续清单](../.local/pilot-r3/resource-handoffs/six-card-pause-20261124T153341+0800/handoff.json)

@@ -1,0 +1,176 @@
+{
+  "accepted_arms": 2,
+  "accepted_jobs": 12,
+  "arm_order": [
+    3,
+    2
+  ],
+  "card": 6,
+  "completed_at": "2026-11-24T20:24:54+08:00",
+  "cpu_threads_per_job": 4,
+  "device_hbm_total_gib": 64.0,
+  "elapsed_s": 1153.8314900398254,
+  "eval_tokens_per_job": 512,
+  "full_width_window": "Completed tokens in the common wall-clock intervals after step 2 through the completion of step 15, at the target width.",
+  "hbm_free_before_submission_gib": 60.8564453125,
+  "hbm_reservation_per_worker_gib": 18.0,
+  "live_observed_workers": 0,
+  "local_report": ".local/pilot-r3/benchmarks/timed-dev6-three-workers-20261124/report.md",
+  "observed_worker_identities": 12,
+  "queue_release": "completed",
+  "references": [
+    {
+      "path": ".local/pilot-r3/benchmarks/timed-dev6-three-workers-20261124/plan.json",
+      "sha256": "326170befcb6a392792aca81901fa6c80acb22baff59d06a174e176f138aedfd"
+    },
+    {
+      "path": ".local/pilot-r3/benchmarks/timed-dev6-three-workers-20261124/launch.json",
+      "sha256": "5b92971bfcfec50ed760eac8b6f5a9bb2086cb11cf1db85c48c54e021024391f"
+    },
+    {
+      "path": ".local/pilot-r3/benchmarks/timed-dev6-three-workers-20261124/summary.json",
+      "sha256": "d595ad299fadf8085d35a9c67b0ba8551bffc32235acff98f015787381537f93"
+    },
+    {
+      "path": ".local/pilot-r3/benchmarks/timed-dev6-three-workers-20261124/queue.json",
+      "sha256": "31ac6b936bc30c9a5b5132cdddfb0a112d39362cf262971ca23e0597176bf985"
+    },
+    {
+      "path": ".local/pilot-r3/benchmarks/timed-dev6-three-workers-20261124/telemetry.jsonl",
+      "sha256": "56c06bc33be7ceb710435b3312a39a04ed00cfb284e108ea221b4178228c80fc"
+    }
+  ],
+  "repetitions_per_arm": 1,
+  "results": [
+    {
+      "aicore_pct": 0,
+      "aicpu_pct": 80,
+      "completed_result_times_s": [
+        199.62220871448517,
+        200.46770488843322,
+        399.13528142124414,
+        401.7897805310786,
+        598.7777213826776,
+        599.3826130591333
+      ],
+      "first_result_s": 199.62220871448517,
+      "full_width_seconds": 422.67662143707275,
+      "full_width_tokens": 38400,
+      "full_width_train_tokens_per_s": 90.84959529922077,
+      "full_width_util_samples": 83,
+      "hbm_card_min_free_gib": 27.623046875,
+      "hbm_card_peak_gib": 36.376953125,
+      "hbm_max_allocator_per_worker_gib": 16.677734375,
+      "hbm_worker_peak_gib": 33.3359375,
+      "jobs": 6,
+      "makespan_s": 599.3826130591333,
+      "mean_host_cpu_cores": 0.9629627606030293,
+      "per_job_training_s": [
+        175.08705861121416,
+        175.27400687336922,
+        176.87139554694295,
+        175.48492530360818,
+        176.7274794727564,
+        173.43944701179862
+      ],
+      "ram_worker_rss_peak_gib": 5.2772216796875,
+      "samples": 119,
+      "timing_sha256": "4dc489314c144044a08f7b9610fcaf650ba67b42efef7f8620da30b9eaee85de",
+      "width": 2
+    },
+    {
+      "aicore_pct": 0.0,
+      "aicpu_pct": 87.0,
+      "completed_result_times_s": [
+        256.1246998012066,
+        259.01576417312026,
+        261.42433436587453,
+        503.33598325401545,
+        511.50488033890724,
+        516.4304503053427
+      ],
+      "first_result_s": 256.1246998012066,
+      "full_width_seconds": 358.1067910194397,
+      "full_width_tokens": 36864,
+      "full_width_train_tokens_per_s": 102.9413597409239,
+      "full_width_util_samples": 70,
+      "hbm_card_min_free_gib": 10.759765625,
+      "hbm_card_peak_gib": 53.240234375,
+      "hbm_max_allocator_per_worker_gib": 16.677734375,
+      "hbm_worker_peak_gib": 50.2509765625,
+      "jobs": 6,
+      "makespan_s": 516.4304503053427,
+      "mean_host_cpu_cores": 1.2202446807057978,
+      "per_job_training_s": [
+        232.67071498557925,
+        231.49640679359436,
+        233.17859046906233,
+        223.1309823654592,
+        227.52655988186598,
+        227.62650588527322
+      ],
+      "ram_worker_rss_peak_gib": 7.864635467529297,
+      "samples": 102,
+      "timing_sha256": "d389918734c4433a5ebc9350d5a91c84bcdc50f258a20f8e1f93680d6e44e1cf",
+      "width": 3
+    }
+  ],
+  "samples_with_external_pids": 0,
+  "scope": "Timed on Device 6, matched six-job makespan, two versus three workers",
+  "seeds_per_arm": [
+    2026112002,
+    2026112003,
+    2026112002,
+    2026112003,
+    2026112002,
+    2026112003
+  ],
+  "steady_window_sensitivity": [
+    {
+      "after_step": 2,
+      "three_vs_two_percent_gain": 13.309651409979196,
+      "through_step": 15
+    },
+    {
+      "after_step": 3,
+      "three_vs_two_percent_gain": 13.591202650928658,
+      "through_step": 14
+    },
+    {
+      "after_step": 4,
+      "three_vs_two_percent_gain": 13.43813077039606,
+      "through_step": 13
+    }
+  ],
+  "steps_per_job": 16,
+  "submitted_at": "2026-11-24T20:05:40+08:00",
+  "telemetry_samples": 228,
+  "three_vs_two": {
+    "first_delay_s": 56.50249108672142,
+    "full_width_train_percent_gain": 13.309651409979196,
+    "makespan_percent_saved": 13.839601107282506,
+    "makespan_s_saved": 82.95216275379062,
+    "makespan_speedup": 1.16062601015247,
+    "within_5pct_makespan": false
+  },
+  "tokens_per_job": 8192,
+  "total_eval_tokens": 6144,
+  "total_training_tokens": 98304,
+  "unit": "tide-card-sharing-dev6-timed-3-20261124.service",
+  "unit_after_completion": {
+    "ActiveState": "inactive",
+    "ControlGroup": "",
+    "MainPID": "0"
+  },
+  "verification": "All frozen sources and task identities matched. Each worker completed its 16 expected optimizer updates and 512 evaluation tokens. Health, causality and exact checkpoint reload passed. No observed external process.",
+  "within_seed_final_nll_ranges": {
+    "2026112002": [
+      9.004905700683594,
+      9.004968643188477
+    ],
+    "2026112003": [
+      9.024998664855957,
+      9.02500057220459
+    ]
+  }
+}
