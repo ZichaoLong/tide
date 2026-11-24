@@ -18,8 +18,8 @@ import threading
 import time
 import traceback
 
-from .runq_devices import observe, process_unit
-from .runq_place import place
+from .runq_devices import external, free_bytes, observe, process_unit
+from .runq_place import Placement, estimated_spec, place, ram_available
 from .runq_runtime import change, defer, hold_card, run_job, service, state_of
 from .runq_store import (command_env, connect, default_root, device, event, lookup, manual_grant, packed,
                          pin, prefix, put, setting, sockpath, submit, unit, wake, write)
@@ -175,6 +175,29 @@ def rows_for_status(db, state=None):
     return [dict(r) for r in rows]
 
 
+def status_resources(db, root):
+    samples = setting(db,"samples",[])
+    with db:
+        view = Placement(db,root,samples,ram_available(),time.time())
+    by_backend = Counter((j["backend"],bool(j["manual"])) for j in view.active.values() if j["state"]=="running")
+    workers = {b:{"auto":by_backend[b,False],"manual":by_backend[b,True]} for b in ("npu","cpu")}
+    cards = []
+    for number,lease in sorted(view.leases.items()):
+        card = view.cards.get(str(number))
+        jobs = view.by_card[lease["id"]]
+        info = {k:lease[k] for k in ("id","card","role","state","reason")}
+        info["running_workers"] = sum(j["state"]=="running" for j in jobs)
+        if card:
+            info.update(hbm_free_bytes=card["total"]-card["used"],hbm_after_reservations_bytes=free_bytes(card,jobs),
+                        aicore_percent=card["core"],external_pids=[p["pid"] if p else None
+                        for p in external(card,{j["unit"] for j in jobs})])
+        cards.append(info)
+    reasons = {row[0] or "awaiting placement":row[1] for row in db.execute(
+        "SELECT reason,COUNT(*) FROM jobs WHERE state='queued' GROUP BY reason ORDER BY COUNT(*) DESC")}
+    return dict(workers=workers,leases=cards,wait_reasons=reasons,
+                reserved_host_bytes_by_owner={str(k):v for k,v in view.scoped.items() if v})
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root",type=Path,default=default_root(),help="state directory (default RUNQ_HOME or account state)")
@@ -255,6 +278,11 @@ def main(argv=None):
         spec = {"allowed":allowed,"ram":{k:args.ram_mib*2**20 for k in allowed},"hbm":args.hbm_mib*2**20,
                 "submitted":origin,"deadline":origin+args.timeout if args.timeout else None,
                 "command":{"argv":[os.path.abspath(exe),*cmd[1:]],"cwd":os.getcwd(),"env":command_env()}}
+        if not submitted:
+            from .prepare_campaign3 import storage_observation
+            storage_observation(root,reserve=0,snapshot_bytes=0)
+            if Path.cwd().stat().st_dev != root.stat().st_dev:
+                storage_observation(Path.cwd(),reserve=0,snapshot_bytes=0)
         grant = manual_grant(db,root,args.target,spec["deadline"] or time.time()+86400) if not submitted else None
         print(submit(db,args.key,spec,args.target,args.allow_auto_share,grant))
         start(root)
@@ -276,21 +304,31 @@ def main(argv=None):
         row = lookup(db,args.id)
         for k in ("spec","command","grant","original"):
             row[k] = json.loads(row[k]) if row[k] else None
+        effective = estimated_spec(row["spec"])
+        row["placement_host_bytes"] = effective["ram"]
+        row["prior_host_measurement"] = effective.get("prior_host_measurement")
+        row["worker_unit"] = unit(root,"job",row["id"],row["generation"]) if row["generation"] else None
         row["events"] = [dict(r) for r in db.execute("SELECT at,event,detail FROM events WHERE job=? ORDER BY id",(row["id"],))]
         print(json.dumps(row,indent=2))
     else:
         rows = rows_for_status(db,args.state)
         info = dict(dispatcher=state_of(dispatcher_unit(root)),limits=setting(db,"limits",{"cards":8,"cpu":40}),
                     counts=dict(Counter(r["state"] for r in rows)), measured_at=time.time(),
-                    leases=[dict(r) for r in db.execute("SELECT id,card,role,state,reason FROM leases WHERE state IN ('opening','held','closing') ORDER BY card")],
+                    **status_resources(db,root),
                     sample_error=setting(db,"sample_error"), sample_at=(setting(db,"samples",[]) or [{}])[-1].get("at"))
         if args.json:
             print(json.dumps({**info,"jobs":rows},indent=2,ensure_ascii=False))
         else:
             print(f"dispatcher {info['dispatcher']}   auto targets {info['limits']['cards']} NPU / {info['limits']['cpu']} CPU")
             print("jobs", dict(Counter(r["state"] for r in rows)))
+            for backend, counts in info["workers"].items():
+                print(f"{backend.upper()} workers  {counts['auto']} automatic + {counts['manual']} manual")
             for lease in info["leases"]:
-                print(f"NPU {lease['card']:2}   {lease['role']:6}  {lease['state']}")
+                free = lease.get("hbm_after_reservations_bytes")
+                capacity = f", {free/2**30:.1f} GiB after reservations" if free is not None else ""
+                print(f"NPU {lease['card']:2}   {lease['role']:6}  {lease['state']}   {lease['running_workers']} workers{capacity}")
+            for reason,count in info["wait_reasons"].items():
+                print(f"waiting  {count:4}   {reason}")
             if info["sample_error"]:
                 print("NPU measurement:", info["sample_error"])
             if args.jobs or args.state:

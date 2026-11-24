@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from contextlib import contextmanager
+import fcntl
 import hashlib
 import json
 import os
@@ -45,8 +46,11 @@ def connect(root):
     db.row_factory = sqlite3.Row
     db.execute("PRAGMA foreign_keys=ON")
     if not db.execute("SELECT 1 FROM sqlite_master WHERE name='events'").fetchone():
-        db.execute("PRAGMA journal_mode=WAL")
-        db.executescript(SCHEMA)
+        with (root/"initialize.lock").open("a+") as lock:
+            fcntl.flock(lock,fcntl.LOCK_EX)
+            if not db.execute("SELECT 1 FROM sqlite_master WHERE name='events'").fetchone():
+                db.execute("PRAGMA journal_mode=WAL")
+                db.executescript(SCHEMA)
     return db
 
 

@@ -146,3 +146,86 @@ def test_physical_time_on_mixed_lease(tmp_path):
         db.execute("UPDATE jobs SET lease=?,assigned=?,finished=?,state='completed' WHERE id=?",(lease,begin,end,key))
     assert device_cost(db,"round",42)==21
     assert device_cost(db,"other",42)==10
+
+
+def test_eight_regular_cards_ninth_manual_and_promotion(tmp_path):
+    db=connect(tmp_path)
+    put(db,"limits",dict(cards=8,cpu=0))
+    sample=samples(count=10)
+    regular=[]
+    for card in range(8):
+        job=submit(db,f"ordinary-{card}",spec(95))
+        lease=held(db,card,job)
+        run(db,job,lease)
+        regular.append(lease)
+    extra=submit(db,"extra",spec(30),"npu:9")
+    borrowed=submit(db,"borrowed",spec(40))
+    place(db,tmp_path,sample)
+    extra_lease=db.execute("SELECT id FROM leases WHERE card=9").fetchone()[0]
+    assert db.execute("SELECT COUNT(*) FROM leases").fetchone()[0]==9
+    assert lookup(db,borrowed)["state"]=="queued"
+    db.execute("UPDATE leases SET state='held',acquired=? WHERE id=?",(time.time(),extra_lease))
+    place(db,tmp_path,sample)
+    run(db,extra,extra_lease)
+    place(db,tmp_path,sample)
+    assert lookup(db,borrowed)["lease"]==extra_lease
+    db.execute("UPDATE jobs SET state='completed' WHERE id=?",(extra,))
+    place(db,tmp_path,sample)
+    assert db.execute("SELECT role FROM leases WHERE id=?",(extra_lease,)).fetchone()[0]=="drain"
+    db.execute("UPDATE leases SET state='released' WHERE id=?",(regular[0],))
+    db.execute("UPDATE jobs SET state='completed' WHERE lease=?",(regular[0],))
+    place(db,tmp_path,sample)
+    assert db.execute("SELECT role FROM leases WHERE id=?",(extra_lease,)).fetchone()[0]=="auto"
+
+
+def test_opening_ticket_reserves_host_memory(tmp_path,monkeypatch):
+    db=connect(tmp_path)
+    put(db,"limits",dict(cards=2,cpu=40))
+    npu=submit(db,"accelerator",spec())
+    cpu=submit(db,"host",spec(allowed=("cpu",)))
+    monkeypatch.setattr("pilotlab.runq_place.ram_available",lambda:15)
+    place(db,tmp_path,samples())
+    place(db,tmp_path,samples())
+    assert db.execute("SELECT trigger_job FROM leases WHERE state='opening'").fetchone()[0]==npu
+    assert lookup(db,cpu)["state"]=="queued"
+
+
+def test_live_cpu_estimate_uses_real_step_and_frozen_task(tmp_path,monkeypatch):
+    import os
+    from pilotlab.runq_place import active_peak
+    from pilotlab.scheduler import proc_identity
+    gib=2**30
+    task=tmp_path/"task.json"
+    task.write_text(json.dumps(dict(id="worker",device="cpu",checkpoint_reservation_bytes=gib)))
+    job=dict(pid=os.getpid(),backend="cpu",command=json.dumps(dict(argv=["worker","--task",str(task)])),
+             data=dict(owner="round",task_id="worker",ram={"cpu":35*gib},hbm=30*gib))
+    rss=proc_identity(os.getpid())["rss_bytes"]
+    assert active_peak(job,rss)==35*gib
+    job["first_step"]=time.time()
+    assert 5*gib <= active_peak(job,rss) < 35*gib
+    assert active_peak(job,37*gib)==37*gib
+
+
+@pytest.mark.parametrize("tamper",[False,True])
+def test_cpu_reservation_uses_only_bound_previous_trajectory(tmp_path,tamper):
+    from pilotlab.prepare_resume3 import reference
+    from pilotlab.runq_place import estimated_spec
+    gib=2**30
+    tid="continuing"
+    original=dict(id=tid,device="cpu",batch_size=32,model={"family":"tide"},source_identity={"source":"same"})
+    old=tmp_path/"previous.json"
+    old.write_text(json.dumps(original))
+    result={k:original[k] for k in ("id","device","source_identity")}
+    result.update(task_sha256=reference(old)["sha256"],training=dict(segment_steps=30),device_memory=dict(cpu_rss_peak_bytes=3*gib))
+    measured=tmp_path/"result.json"
+    measured.write_text(json.dumps(result))
+    receipt=tmp_path/"receipt.json"
+    receipt.write_text(json.dumps(dict(original_task=reference(old),result=reference(measured),mode="signal",task_id=tid)))
+    task=tmp_path/"tasks"/tid/"task.json"
+    task.parent.mkdir(parents=True)
+    task.write_text(json.dumps(dict(original,checkpoint_reservation_bytes=gib,stage_a_migration=reference(receipt))))
+    if tamper:
+        measured.write_text(json.dumps(dict(result,id="different")))
+    requested=dict(allowed=["cpu"],ram={"cpu":30*gib},owner=str(tmp_path),task_id=tid)
+    adjusted=estimated_spec(requested)
+    assert adjusted["ram"]["cpu"]==(30*gib if tamper else 5*gib+3*gib//4)

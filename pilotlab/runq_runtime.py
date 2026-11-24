@@ -14,7 +14,7 @@ import threading
 import time
 
 from .io import atomic_json
-from .runq_devices import admission, install_predicate, process_unit
+from .runq_devices import admission, external, install_predicate, process_unit
 from .runq_place import decoded
 from .runq_store import connect, event, lookup, packed, prefix, setting, sockpath, unit, wake, write
 from .scheduler import child_subreaper, proc_identity
@@ -65,7 +65,14 @@ def allowed(db, root, job, lease):
         j["permission"] for j in others if j["manual"] and j["fill"] and j["state"] == "running"]
     if not job["manual"] and lease["role"] != "auto" and not any(j["manual"] and j["state"] == "running" for j in others):
         return "manual device is draining"
-    return admission(setting(db, "samples", []), lease["card"], others, json.loads(job["spec"])["hbm"], permits)
+    samples = setting(db,"samples",[])
+    reason = admission(samples, lease["card"], others, json.loads(job["spec"])["hbm"], permits)
+    if not reason:
+        card = samples[-1]["cards"][str(lease["card"])]
+        event(db,job["id"],"device_admitted",packed({"card":lease["card"],"lease":lease["id"],
+              "sample_times":[s["at"] for s in samples[-2:]],"used_bytes":card["used"],
+              "external":external(card,{j["unit"] for j in others})}))
+    return reason
 
 
 def serve_fd(db, root, lease_id, listener, resource):
@@ -110,6 +117,10 @@ def hold_card(root, ident):
     lease = QueueLease(manifest, directory, end)
     helper = lease.helper
     samples = install_predicate(helper, row["card"], json.loads(row["grant"]), json.loads(job["spec"])["hbm"], bool(job["manual"]))
+    def emit(state, **fields):
+        helper.emit(state,directory/"queue.json",job_id=manifest["job_id"],project="runq",
+                    priority=0,npu_count=1,helper=lease.helper_identity,**fields)
+
     reason = None
     path = Path(sockpath(root, "lease-"+str(ident)))
     try:
@@ -133,7 +144,7 @@ def hold_card(root, ident):
                 lease.device_locks, lease.physical_id = decision.device_locks, decision.physical_ids[0]
                 break
             reason = decision.reason
-            lease.emit("queued", reason=reason, queue_position=decision.queue_position, head_job_id=decision.head_job_id)
+            emit("queued", reason=reason, queue_position=decision.queue_position, head_job_id=decision.head_job_id)
             if reason != "waiting_turn":
                 break
             end.wait(1)
@@ -148,7 +159,7 @@ def hold_card(root, ident):
             with write(db):
                 db.execute("UPDATE leases SET state='held',acquired=?,pid=?,ticks=?,reason=NULL WHERE id=?",
                            (before, os.getpid(),proc_identity(os.getpid())["start_ticks"],ident))
-            lease.emit("running", physical_ids=[row["card"]], accounting_started_unix=before, admission_samples=samples)
+            emit("running", physical_ids=[row["card"]], accounting_started_unix=before, admission_samples=samples)
             wake(root)
             while True:
                 current = db.execute("SELECT state FROM leases WHERE id=?", (ident,)).fetchone()[0]
@@ -178,7 +189,7 @@ def hold_card(root, ident):
             if lease.device_locks and end.is_set():
                 status = "lost"
             db.execute("UPDATE leases SET state=?,released=?,reason=? WHERE id=?", (status,time.time(),reason,ident))
-        lease.emit(status, physical_ids=[row["card"]] if lease.device_locks else [], reason=reason)
+        emit(status, physical_ids=[row["card"]] if lease.device_locks else [], reason=reason)
         wake(root)
 
 

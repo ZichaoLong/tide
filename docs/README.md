@@ -40,7 +40,7 @@
   --ram-mib "$peak_ram" --timeout "$seconds" -- "$python" "$worker" --device cpu
 ```
 
-自动提交使用 `--target auto --backend npu|cpu|either`。同一键与同一份命令和环境重复提交会返回同一 ID。任务列表、等待原因、提交/派发/启动时间、PID、终态都保存在 `~/.local/state/tide-runq/`，可用 `show` 核对。实验 worker 的首个真实优化步从其 `steps.jsonl` 记录。新卡需要等待账号协作队列与两次驱动采样。已有租约上的派发由唤醒通知触发。指定的主存与显存为峰值，新增预订会扣除已运行进程尚未使用的峰值余量。[设备测量](../pilotlab/runq_devices.py) · [进程与设备锁](../pilotlab/runq_runtime.py)
+自动提交使用 `--target auto --backend npu|cpu|either`。同一键与同一份命令和环境重复提交会返回同一 ID。任务列表、等待原因、提交/派发/启动时间、PID、终态都保存在 `~/.local/state/tide-runq/`，可用 `show` 核对。实验 worker 的首个真实优化步从其 `steps.jsonl` 记录。新卡需要等待账号协作队列与两次驱动采样。已有租约上的派发由唤醒通知触发。指定的主存与显存为峰值，新增预订会扣除已运行进程尚未使用的峰值余量。Stage A 优先采用同一条冻结轨迹已发表的主存峰值。CPU 真正完成首个优化步后，调度器结合该进程的内核高水位、检查点写入开销以及任务的冷启动估算更新预记，所有 worker 共用原批次 1 TB 上限。[设备测量](../pilotlab/runq_devices.py) · [进程与设备锁](../pilotlab/runq_runtime.py)
 
 接续 Stage A 时，队列沿用冻结的任务和检查点。未绑定的成对种子共用一次后端决定，已有轨迹保持原后端。收尾跨设备迁移需逐条核验检查点兼容性与预计节时。单条通用任务可用 `runq cancel ID` 停止。调度器升级用 `runq restart`，它加载新的调度源码快照。实验依赖控制器的 unit、冻结计划与账本记录在本机启动指针中。[Stage A 接口](../pilotlab/runq_campaign.py) · [启动指针说明](#接续同一批)
 
