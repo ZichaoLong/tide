@@ -58,8 +58,8 @@ Record actual dtype, operator/device, timing boundary, workload and memory.
 
 Long work uses frozen inputs, detached `background.slice` services, finite resource
 and time bounds, and durable logs per [execution](docs/execution-flows.md).
-Available CPUs/memory/idle NPUs may be used fully with coordination. Shared NPU use
-requires current-conversation authorization, not a repository default.
+Use available CPU, memory and NPUs within the authorized workload. The formal
+shared-device benchmark adapter uses a placement-specific sharing policy.
 
 For formal submissions through the account scheduler, use the installed
 `use-runq` skill and `~/.local/bin/runq submit --help`. Declare host CPU threads,

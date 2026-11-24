@@ -12,8 +12,12 @@ LibTorch/custom kernels are used for demonstrated scheduling/operator benefit.
 Historical mixed-a/b/c and resident frameworks impose no layer or delivery duty.
 Training includes preparation, forward, loss, backward, optimizer and sync.
 
-Use all available CPU/memory/idle NPUs as useful without self-contention. Shared
-NPU admission follows conversation authorization. Long work uses frozen inputs,
+For a short development measurement, use the account `use-local-ascend`
+instructions to select a physical card with enough available HBM and host RAM.
+Formal account queue submissions use `use-runq` with a thread count, host RAM
+per permitted backend and HBM per assigned NPU. Jobs may attach measurements.
+The benchmark-specific shared-device adapter below has its own admission policy.
+Long work uses frozen inputs,
 a detached background.slice systemd user service, bounded runtime/memory, logs
 and checked terminal status. Never alter an active job's source.
 
