@@ -62,7 +62,7 @@ class ResourcePlacement:
                     or decision["intents"][tid] != reference(intent) or decision["device"] not in DEVICES):
                 raise ValueError("direct placement differs from its frozen intent: " + tid)
             task["device"] = decision["device"]
-        path = freeze_json(directory / "task.json", task)
+        path = freeze_json(row["qualified_task"]["path"] if row.get("qualified_task") else directory / "task.json", task)
         row.update(task_path=str(path), device=task["device"])
 
     def bind(self, task, device, pending):

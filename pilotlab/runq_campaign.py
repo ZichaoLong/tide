@@ -126,6 +126,11 @@ class QueueSupervisor(SharedSupervisor):
             self.db.execute("UPDATE jobs SET command=? WHERE id=? AND command IS NULL",(value,ident))
 
     def reserve_task(self, task, record):
+        if record.get("qualified_task"):
+            from .source_migration3 import read_bound
+            receipt = read_bound(task["stage_a_migration"])
+            return super().reserve_task(task, record,
+                evaluation_increment=receipt["evaluation_additional_reservation_tokens"])
         move = record.get("queue_relocation")
         if not move:
             return super().reserve_task(task, record)

@@ -362,14 +362,15 @@ class SharedSupervisor(DynamicAdmission, Supervisor):
     def worker_plans(self, tasks, backend):
         workers, plans = [], []
         originals = {task["id"]: copy.deepcopy(self.state["tasks"][task["id"]]) for task in tasks}
-        worker_source = self.config.get("worker_source", self.config["source"])
-        worker_foundation = self.config.get("worker_foundation", self.config["foundation"])
         for task in tasks:
+            runtime = getattr(self, "worker_runtimes", {}).get(task["id"], {})
+            worker_source = runtime.get("source", self.config.get("worker_source", self.config["source"]))
+            worker_foundation = runtime.get("foundation", self.config.get("worker_foundation", self.config["foundation"]))
             record = self.state["tasks"][task["id"]]
             if record["status"] != "pending":
                 raise Blocked("shared_group_task_is_not_pending")
             attempt = self.output / "tasks" / task["id"] / f'attempt-{len(record["attempts"])}'
-            task_path = attempt.parent / "task.json"
+            task_path = Path(record["qualified_task"]["path"]) if record.get("qualified_task") else attempt.parent / "task.json"
             command = [self.config["python"], "-u", "-m", self.config.get("worker_module", "pilotlab.worker3"),
                 "--task", str(task_path), "--output", str(attempt), "--data", self.config["data"],
                 "--device", task.get("device", "npu:0"), "--deadline-unix", str(self.config["deadline_unix"])]
@@ -380,7 +381,7 @@ class SharedSupervisor(DynamicAdmission, Supervisor):
                 command += ["--resume-checkpoint", record["retry_checkpoint"]]
             if record.get("resume_receipt"):
                 from .resume3 import bound
-                adapter = self.config["resume_adapter"]
+                adapter = runtime.get("adapter", self.config["resume_adapter"])
                 if sha256(adapter["path"]) != adapter["sha256"]:
                     raise Blocked("resume_adapter_changed_before_launch")
                 receipt = bound(record["resume_receipt"])
@@ -394,7 +395,7 @@ class SharedSupervisor(DynamicAdmission, Supervisor):
                 from .resume3 import bound
                 ref = task["stage_a_migration"]
                 receipt = bound(ref)
-                adapter = self.config["resume_adapter"]
+                adapter = runtime.get("adapter", self.config["resume_adapter"])
                 if receipt["task_id"] != task["id"] or sha256(adapter["path"]) != adapter["sha256"]:
                     raise Blocked("stage_a_migration_command_binding_changed")
                 command = [self.config["python"], "-u", adapter["path"], *command[4:],

@@ -296,7 +296,23 @@ def migration_inputs(task, receipt):
                 raise ValueError("unclosed worker has no bound stage-start evaluation")
             initial = prior["initial_evaluation"]
     else:
-        if receipt["mode"] == "shannon_repair":
+        if receipt["mode"] == "backward_range_repair":
+            proof = read_bound(receipt["qualification"])
+            fault = previous["training"]["steps"] + 1
+            if (proof.get("schema") != "pilot-r3-backward-range-qualification-v1"
+                    or proof.get("original_task") != receipt["original_task"]
+                    or proof.get("old_result") != receipt["result"] or proof.get("official_checkpoint") != cp
+                    or proof.get("failure_input") != previous.get("failure_capture")
+                    or proof.get("new_source_digest") != receipt["new_source_digest"]
+                    or previous.get("status") != "failed" or previous.get("stop_reason") != "ArithmeticError"
+                    or old["device"] != "cpu" or proof.get("device") != old["device"]
+                    or not cp["steps"] < fault or proof.get("fault_step") != fault
+                    or proof.get("fault_owners_exact") is not True or proof.get("fault_batch_exact") is not True
+                    or proof.get("fault_divisor") not in (8,16) or proof.get("saved", {}).get("steps") != fault
+                    or proof.get("restored_step") != fault + 1 or proof.get("successor_state_exact") is not True
+                    or proof.get("status") != "passed"):
+                raise ValueError("backward range repair lacks a qualified checkpoint, optimizer update or successor")
+        elif receipt["mode"] == "shannon_repair":
             acceptance = read_bound(receipt["qualification"])
             qualified = acceptance["qualification"]["npu"]["direct"]
             if (acceptance["original_task"]["sha256"] != receipt["original_task"]["sha256"]

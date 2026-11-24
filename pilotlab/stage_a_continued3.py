@@ -117,6 +117,34 @@ class MigrationCampaign(Campaign):
         self.migration = read_bound(plan["stage_a_migration"])
         self.pool_floor = any(row["model"].get("config", {}).get("pool_support_policy") == POLICY for row in plan["subjects"])
         super().__init__(plan, output)
+        self.repaired_tasks = {}
+        self.supervisor.worker_runtimes = {}
+        for tid, ref in plan.get("qualified_attempts", {}).items():
+            from .source_migration3 import migration_inputs
+            task = read_bound(ref)
+            receipt = read_bound(task["stage_a_migration"])
+            original, _ = migration_inputs(task, receipt)
+            record = self.supervisor.state["tasks"][tid]
+            if (task["phase"] != "a2" or tid != task["id"] or receipt["mode"] != "backward_range_repair"
+                    or original["source_identity"] != self.identity or not plan["config"].get("runq_root")):
+                raise ValueError("unbound repaired Stage A request")
+            if record.get("qualified_task") != ref:
+                if (record["status"] != "failed" or record.get("observation_error")
+                        or reference(record["result_path"]) != receipt["result"]
+                        or reference(record["task_path"]) != receipt["original_task"]):
+                    raise ValueError("repair no longer matches the failed queue attempt")
+                record.update(status="pending", reason=None, qualified_task=ref, task_path=ref["path"])
+            self.repaired_tasks[tid] = task
+            files = task["source_identity"]["source_files"]
+            def root_for(ending):
+                path, = (Path(name) for name in files if Path(name).parts[-len(ending):] == ending)
+                return path
+            worker = root_for(("pilotlab","worker3.py")).parents[1]
+            foundation = root_for(("src","tide","attention.py")).parents[2]
+            runtime = {"source":str(worker), "foundation":str(foundation),
+                       "adapter":reference(worker/"pilotlab"/"resume_adapter3.py")}
+            for phase_id in (tid, tid.replace("-a2-", "-a3-")):
+                self.supervisor.worker_runtimes[phase_id] = runtime
         self.cpu_placement = None
         self.resource_placement = None
         if plan.get("stage_a_cpu_placement", {}).get("policy") == DIRECT_POLICY:
@@ -272,6 +300,20 @@ class MigrationCampaign(Campaign):
         tid = task["id"]
         task.pop("stage_a_migration", None)
         task.update(source_identity=self.identity, model=revised_model(task["model"], pool_floor=self.pool_floor))
+        repaired = getattr(self, "repaired_tasks", {})
+        if tid in repaired:
+            verify_recipe(repaired[tid], task)
+            task.update(repaired[tid])
+            return None
+        if task["phase"] == "a3" and (parent_id := tid.replace("-a3-", "-a2-")) in repaired:
+            parent = self.supervisor.state["tasks"][parent_id]
+            cp = read(parent["result_path"])["checkpoint"]
+            if (parent["status"] != "completed" or cp["path"] != task["resume_checkpoint"]
+                    or cp["sha256"] != task["resume_checkpoint_sha256"]):
+                raise ValueError("A3 did not select the repaired parent's checkpoint")
+            task["source_identity"] = repaired[parent_id]["source_identity"]
+            verify_recipe(repaired[parent_id], task, parent=True)
+            return None
         if getattr(self, "resource_placement", None):
             self.resource_placement.prepare_task(task)
         old_row = self.migration["completed"].get(tid)

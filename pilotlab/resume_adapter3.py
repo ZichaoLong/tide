@@ -407,6 +407,11 @@ def finish_result_metadata(result, task, receipt, previous, *, inherited, task_r
         result["execution_adapter"].update(schema=ADAPTER, migration_mode=receipt["mode"],
             new_task=task_ref,
             source_identity_scope="old state and stage-start evidence retained under their source; updates use the new frozen source")
+        if receipt["mode"] == "backward_range_repair":
+            from pilotlab.source_migration3 import prior_evaluation_tokens
+            prior = prior_evaluation_tokens(receipt)
+            result["evaluation"].update(prior_attempt_tokens=prior,
+                cumulative_task_observed_tokens=prior + result["evaluation"]["tokens"])
         if receipt["mode"] == "stage_parent":
             result["evaluation"].pop("prior_attempt_tokens", None)
             result["evaluation"]["cumulative_task_observed_tokens"] = result["evaluation"]["tokens"]
