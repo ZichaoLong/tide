@@ -20,6 +20,7 @@ from pathlib import Path
 import torch
 
 from .models3 import ACTIVITY_VERSION, TIMED_LAST_NONEMPTY, build_model, parameter_counts, resolve_readout_policy
+from .shannon_recipes3 import new_config
 
 
 CATALOG_VERSION = "round3-tide-216-capacity-v2"
@@ -141,7 +142,7 @@ def generate_subjects() -> list[dict]:
         config = dict(topology=topology, d=d, memory=memory, budget=1, ffn_width=d,
                       aggregation="source_residual", allocation="quad", sharing="independent")
         config.update(changes or {})
-        config = ModelConfig.from_dict(config).to_dict()
+        config = ModelConfig.from_dict(new_config(config)).to_dict()
         spec = {"family": "tide", "config": config}
         if group == "multiscale_timed":
             spec["readout_policy"] = TIMED_LAST_NONEMPTY
@@ -309,7 +310,7 @@ def generate_supplemental_subjects() -> list[dict]:
                 spec["config"]["budget"] = budget
                 # Check the upstream instance contract and fully preserve its
                 # defaults, local clocks and versioned LM readout policy.
-                spec["config"] = ModelConfig.from_dict(spec["config"]).to_dict()
+                spec["config"] = ModelConfig.from_dict(new_config(spec["config"])).to_dict()
                 key = model_key(spec)
                 pair = f"low-activity-ms-{variant}-k{budget}" if group.startswith("multiscale_") else None
                 rows.append({"id": f"low-activity-{group}-{variant}-n16-d128-k{budget}-{key[:10]}",

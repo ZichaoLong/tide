@@ -115,7 +115,11 @@ def test_supplemental_single_axis_controls_and_primary_baselines(subjects, suppl
         assert reference["group"] == row["group"] and reference["coverage_variant"] == "base"
         assert reference["model"]["config"]["budget"] == row["model"]["config"]["budget"]
         before = _flatten_spec(reference["model"])
-        assert {key for key in before.keys() | current.keys() if before.get(key) != current.get(key)} == {axis}
+        expected = {axis}
+        if current.get("config.allocation") == "shannon" and axis == "config.allocation":
+            assert current["config.shannon_support_policy"] == "weak-log-v1"
+            expected.add("config.shannon_support_policy")
+        assert {key for key in before.keys() | current.keys() if before.get(key) != current.get(key)} == expected
         assert (comparison["reference_value"], comparison["variant_value"]) == (before[axis], current[axis])
 
 
@@ -322,6 +326,8 @@ def test_capacity_changes_preserve_declared_single_axis_comparisons(subjects):
                 baseline = flatten(rows["base"]["model"]["config"])
                 for variant, axis in comparisons.items():
                     changed = flatten(rows[variant]["model"]["config"])
+                    if variant == "shannon":
+                        assert changed["shannon_support_policy"] == "weak-log-v1"
                     assert {key for key in baseline if baseline[key] != changed[key]} == {axis}
 
 
@@ -398,8 +404,18 @@ def global_catalog(global_inputs):
     return match_control_catalog(*global_inputs)
 
 
-def test_global_catalog_preserves_the_entire_preparation_subject_specification(subjects):
-    payload = [{"id": row["id"], "model": row["model"], "model_key": row["model_key"]} for row in subjects]
+def test_new_shannon_recipes_preserve_all_other_preparation_fields(subjects):
+    from tide import ModelConfig
+
+    payload = [{"id": row["id"], "model": copy.deepcopy(row["model"]), "model_key": row["model_key"]} for row in subjects]
+    for row in payload:
+        config = row["model"]["config"]
+        if config["allocation"] == "shannon":
+            assert config.pop("shannon_support_policy") == "weak-log-v1"
+        # The original preparation fingerprint predates the foundation's
+        # independent default change for the reception padding kernel.
+        assert config["reception_mask_padding"] == ModelConfig().reception_mask_padding
+        config["reception_mask_padding"] = False
     digest = hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()).hexdigest()
     assert digest == "0ab7d9a027ac25590c72ed98c75f69c36adb32078c656d32d92b321e4d2e5371"
 

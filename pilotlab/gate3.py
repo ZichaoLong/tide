@@ -192,6 +192,7 @@ def audit_stage_a(manifest, selected, matches, *, remaining_resources_ok):
     blockers, evidence, eligible_models, measured_activity = [], [], [], {}
     chain_receipts, retired_checkpoint_count = {}, 0
     transferred_identities = {}
+    fresh_identities = {}
     transfer = None
     try:
         subject_limit, control_limit = catalog_limits(manifest)
@@ -205,6 +206,19 @@ def audit_stage_a(manifest, selected, matches, *, remaining_resources_ok):
             transferred_identities = transfer["model_source_identities"]
         except (KeyError, ValueError, OSError, TypeError, SyntaxError) as exc:
             blockers.append(f"stage_a_transfer_evidence_error:{type(exc).__name__}:{exc}")
+    if "fresh_shannon" in manifest:
+        from .shannon_recipes3 import cohort_subjects, verify_cohort
+        from .source_migration3 import read_bound
+        try:
+            rollout = read_bound(manifest["fresh_shannon"])
+            if cohort_subjects(manifest["subjects"], rollout) != manifest["subjects"]:
+                raise ValueError("declared Shannon model and cohort disagree")
+            fresh = verify_cohort(rollout, identity)
+            if set(rollout["model_ids"]) & set(transferred_identities):
+                raise ValueError("a fresh seed group also claims transferred evidence")
+            fresh_identities = dict.fromkeys(rollout["model_ids"], fresh)
+        except (KeyError, ValueError, OSError, TypeError) as exc:
+            blockers.append(f"fresh_shannon_evidence_error:{type(exc).__name__}:{exc}")
     for label, seeds, count in (("tuning", expected_seeds, 2), ("diagnostic", expected_diag, 3)):
         if len(seeds) != count or len(set(seeds)) != count or any(type(s) is not int or s < 0 for s in seeds):
             blockers.append(f"invalid_{label}_seed_contract")
@@ -226,7 +240,7 @@ def audit_stage_a(manifest, selected, matches, *, remaining_resources_ok):
         choice = selected.get(model_id)
         if choice is None:
             continue
-        stage_a_identity = transferred_identities.get(model_id, identity)
+        stage_a_identity = fresh_identities.get(model_id, transferred_identities.get(model_id, identity))
         local = []
         retired_checkpoints = {}
         if "chain_receipt" in choice:

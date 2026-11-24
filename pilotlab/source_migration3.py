@@ -38,7 +38,8 @@ def digest(value):
 
 def revised_model(spec, *, pool_floor=False):
     value = copy.deepcopy(spec)
-    if value.get("family") == "tide" and value["config"]["allocation"] == "shannon":
+    if (value.get("family") == "tide" and value["config"]["allocation"] == "shannon"
+            and value["config"].get("shannon_support_policy", "strict") == "strict"):
         value["config"]["shannon_support_policy"] = POLICY
     if pool_floor and value.get("family") == "tide" and value["config"]["allocation"] == "pool":
         value["config"]["pool_support_policy"] = POLICY

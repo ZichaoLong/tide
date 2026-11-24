@@ -479,13 +479,13 @@ class Campaign:
             if self.plan.get("retire_consumed_a_parents"):
                 self.retire_selected_parents(model)
 
-    def retire_selected_parents(self, model):
+    def retire_selected_parents(self, model, *, source_identity=None):
         """Seal independent chain verification before retiring consumed A1/A2."""
         from .chain_receipt3 import write_model_chain_receipt, retire_consumed_parents
         mid = model["id"]
         choice = self.selected[mid]
         reference = write_model_chain_receipt(self.output/"decisions"/(mid+"-chain-receipt.json"),
-            model=model, choice=choice, source_identity=self.identity,
+            model=model, choice=choice, source_identity=source_identity or self.identity,
             tuning_seeds=TUNING_SEEDS, diagnostic_seeds=DIAGNOSTIC_SEEDS)
         choice["chain_receipt"] = reference
         atomic_json(self.output/"selected.json", self.selected)
@@ -545,6 +545,7 @@ class Campaign:
 
     def manifest(self):
         return {"schema": "pilot-r3-resolved-model-manifest-v1", "source_identity": self.identity,
+                **({"fresh_shannon": self.plan["fresh_shannon"]} if "fresh_shannon" in self.plan else {}),
                 **({"catalog_contract": self.plan["catalog_contract"]} if "catalog_contract" in self.plan else {}),
                 **({"stage_a_transfer": self.plan["stage_a_transfer"]} if "stage_a_transfer" in self.plan else {}),
                 "subjects": self.subjects, "models": self.models, "tuning_seeds": TUNING_SEEDS,

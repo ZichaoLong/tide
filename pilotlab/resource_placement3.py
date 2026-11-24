@@ -10,7 +10,8 @@ POLICY = "stage-a-available-resources-v1"
 
 def members(task):
     if task["phase"] == "a1":
-        return [f'{task["model_id"]}-a1-{seed}-{task["recipe_id"]}' for seed in TUNING_SEEDS]
+        prefix = task["id"].rsplit("-a1-", 1)[0]
+        return [f'{prefix}-a1-{seed}-{task["recipe_id"]}' for seed in TUNING_SEEDS]
     return [task["id"]]
 
 

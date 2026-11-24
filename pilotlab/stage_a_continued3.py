@@ -8,6 +8,7 @@ from .prepare_resume3 import reference
 from .round3 import Campaign
 from .resource_placement3 import POLICY as DIRECT_POLICY, ResourcePlacement
 from .scheduler3 import freeze_json, read
+from .shannon_recipes3 import DEFAULT_POLICY, cohort_runtime, cohort_subjects, verify_cohort
 from .source_migration3 import ACTIVITY_CONTINUATION, POLICY, POOL_ACCEPTANCE, QUAD_TOTAL_ACCEPTANCE, REGIONAL_PRIOR_ACCEPTANCE, RECEIPT, digest, read_bound, revised_model, verify_recipe
 
 
@@ -29,7 +30,11 @@ def verify_scope(plan):
             raise ValueError("direct resource placement requires calibration-free admission")
     pool_floor = acceptance.get("schema") == POOL_ACCEPTANCE
     expected = [{**row, "model":revised_model(row["model"], pool_floor=pool_floor)} for row in old["subjects"]]
-    if (batch["schema"] != "pilot-r3-stage-a-migration-plan-v1" or expected != plan["subjects"]
+    rollout = read_bound(plan["fresh_shannon"]) if "fresh_shannon" in plan else None
+    if rollout:
+        verify_cohort(rollout, plan["source_identity"])
+    planned = cohort_subjects(expected, rollout) if rollout else expected
+    if (batch["schema"] != "pilot-r3-stage-a-migration-plan-v1" or planned != plan["subjects"]
             or digest(expected) != review["stage_a_scope"]["prospective_recipe_check"]["canonical_prospective_subjects_sha256"]
             or review["inputs"]["campaign_plan"]["sha256"] != batch["old_plan"]["sha256"]
             or review["inputs"]["foundation_acceptance"]["sha256"] != batch["qualification"]["sha256"]
@@ -59,7 +64,7 @@ def verify_scope(plan):
         # A controller-only restart can use a new immutable code directory while the
         # same live workers, task configuration and budget still own their records.
         controller_source = plan.get("controller_source", config["source"])
-        source_inventory({"source":controller_source, "foundation":config["foundation"],
+        source_inventory({"source":controller_source, "foundation":rollout["foundation"] if rollout else config["foundation"],
                           "source_identity":plan["controller_source_identity"]})
         placement = plan.get("stage_a_cpu_placement")
         if placement != review.get("stage_a_cpu_placement", old.get("stage_a_cpu_placement")):
@@ -119,6 +124,12 @@ class MigrationCampaign(Campaign):
         super().__init__(plan, output)
         self.repaired_tasks = {}
         self.supervisor.worker_runtimes = {}
+        self.fresh_ids = set()
+        if "fresh_shannon" in plan:
+            rollout = read_bound(plan["fresh_shannon"])
+            self.fresh_ids = set(rollout["model_ids"])
+            self.fresh_identity = read_bound(rollout["worker_identity"])
+            self.fresh_runtime = cohort_runtime(rollout)
         for tid, ref in plan.get("qualified_attempts", {}).items():
             from .source_migration3 import migration_inputs
             task = read_bound(ref)
@@ -202,8 +213,17 @@ class MigrationCampaign(Campaign):
         super().prune([t for t in tasks if t["id"] not in self.migration["completed"]], **kwargs)
 
     def retire_selected_parents(self, model):
-        if model["id"] not in self.migration["exposed_subject_ids"]:
+        if model["id"] in self.fresh_ids:
+            super().retire_selected_parents(model, source_identity=self.fresh_identity)
+        elif model["id"] not in self.migration["exposed_subject_ids"]:
             super().retire_selected_parents(model)
+
+    def task(self, model, phase, seed, **kwargs):
+        task = super().task(model, phase, seed, **kwargs)
+        if model["id"] in self.fresh_ids:
+            task["id"] = f'{model["id"]}-{DEFAULT_POLICY}' + task["id"][len(model["id"]):]
+            task["source_identity"] = self.fresh_identity
+        return task
 
     def review_source_chains(self, report):
         """Independently verify mixed A evidence; the full formal gate stays closed."""
@@ -298,6 +318,14 @@ class MigrationCampaign(Campaign):
     def resolve_task(self, task):
         """Resolve each rung after its actual parent is known, before freezing."""
         tid = task["id"]
+        if task["model_id"] in getattr(self, "fresh_ids", ()):
+            if (task["model"]["config"]["shannon_support_policy"] != DEFAULT_POLICY
+                    or task["source_identity"] != self.fresh_identity or task.get("stage_a_migration")
+                    or not tid.startswith(f'{task["model_id"]}-{DEFAULT_POLICY}-')):
+                raise ValueError("fresh Shannon task crossed recipe or source boundaries")
+            self.supervisor.worker_runtimes[tid] = self.fresh_runtime
+            self.resource_placement.prepare_task(task)
+            return None
         task.pop("stage_a_migration", None)
         task.update(source_identity=self.identity, model=revised_model(task["model"], pool_floor=self.pool_floor))
         repaired = getattr(self, "repaired_tasks", {})

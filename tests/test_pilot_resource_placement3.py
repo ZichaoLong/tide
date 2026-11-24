@@ -53,6 +53,36 @@ def test_direct_dispatch_fills_both_pools_without_samples(owner):
         assert task == expected
 
 
+def test_fresh_shannon_seed_pair_uses_its_own_placement_and_source(owner):
+    from pilotlab.shannon_recipes3 import cohort_subjects, new_config
+
+    supervisor, _, _ = owner
+    placement = placement_for(supervisor)
+    old = {"allocation": "shannon", "shannon_support_policy": "positive-floor-v1"}
+    assert new_config(old) == old
+    model = {"id": "model", "model": {"family": "tide", "config": old}}
+    revised, = cohort_subjects([model], {"policy": "weak-log-v1", "model_ids": ["model"]})
+    campaign = object.__new__(MigrationCampaign)
+    campaign.supervisor = supervisor
+    supervisor.worker_runtimes = {}
+    campaign.resource_placement = placement
+    campaign.fresh_ids = {"model"}
+    campaign.fresh_identity = {"source": "qualified"}
+    campaign.fresh_runtime = {"source": "/qualified"}
+    campaign.identity = {"source": "prior"}
+    campaign.protocol = dict(precision="fp32", deterministic=False, sequence_length=128, cpu_threads=4)
+    campaign.resources = {}
+    pair = [campaign.task(revised, "a1", seed, recipe={"recipe_id": "r0"}, suffix="-r0")
+            for seed in TUNING_SEEDS]
+    for task in pair:
+        assert campaign.resolve_task(task) is None and task["device"] == "unbound"
+        assert task["source_identity"] == campaign.fresh_identity
+        assert task["model"]["config"]["shannon_support_policy"] == "weak-log-v1"
+        assert placement.groups[task["id"]] == [t["id"] for t in pair]
+        assert supervisor.worker_runtimes[task["id"]] == campaign.fresh_runtime
+    assert model["model"]["config"] == old
+
+
 def test_unplaced_pair_waits_for_real_resources(owner):
     supervisor, _, key = owner
     supervisor.config.update(resource_dispatch=True, max_npu_devices=1, max_cpu_workers=0)
