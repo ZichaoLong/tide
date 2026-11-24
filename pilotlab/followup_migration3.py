@@ -151,6 +151,10 @@ def prior_tasks(root, state, review, refs, identity, destination):
     outstanding, extra, decodes = {}, {}, defaultdict(list)
     prior = Counter(state["config"].get("prior_evaluation_reservations",{}))
     activity_repair = schema == ACTIVITY_CONTINUATION
+    replays = review.get("stage_start_replays", {})
+    if replays and schema not in {ACTIVITY_CONTINUATION, PLANNED_CONTROLLER_CONTINUATION}:
+        raise ValueError("stage-start replay requires a reviewed interruption")
+    used_replays = set()
     fault = None if scheduling or recovered or activity_repair else review["worker_and_checkpoint_review"]["fault_task_id"]
     for tid, record in state["tasks"].items():
         task_ref = reference(record.get("task_path") or root/"tasks"/tid/"task.json")
@@ -192,14 +196,15 @@ def prior_tasks(root, state, review, refs, identity, destination):
             increment = remaining_evaluation(task, receipt)
         else:
             attempt = Path(record["attempts"][-1]["path"])
-            replay = review.get("stage_start_replays", {}).get(tid) if activity_repair else None
+            replay = replays.get(tid)
             mode,receipt,annotation = resume_interruption(task_ref,attempt,record,refs,findings,fault,
                 verified_signal=reconciled.get("signal_results", {}).get(tid),
-                recover_prefix=activity_repair, initial_replay=replay)
+                recover_prefix=activity_repair or bool(replay), initial_replay=replay)
             if replay:
                 if not key or mode != "checkpoint_only" or receipt.get("initial_replay") != replay:
                     raise ValueError("stage-start replay is not bound to its interrupted task")
                 prior[key] += read_bound(replay)["evaluation"]["tokens"] + 32
+                used_replays.add(tid)
             # Previously reserved work covers the last attempt's original bound.
             # Only extra evaluations/probes are charged. For missing terminal
             # counts, retain the prior reservation and reserve the replacement.
@@ -231,6 +236,8 @@ def prior_tasks(root, state, review, refs, identity, destination):
         source = next(p.parents[1] for p in files if p.name=="worker3.py")
         base = next(p.parents[2] for p in files if p.name=="kv.py" and p.parent.name=="tide")
         decodes[(str(source),str(base))].append({"disposition":"resume","task":original_ref,"checkpoint":cp})
+    if used_replays != set(replays):
+        raise ValueError("stage-start replay has no matching interrupted trajectory")
     for (source,base),entries in decodes.items():
         verify_resume_payloads({**state["config"],"worker_source":source,"worker_foundation":base},entries)
     projected = prior.copy()
