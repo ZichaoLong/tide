@@ -5,7 +5,8 @@ import time
 
 import pytest
 
-from pilotlab.runq_campaign import device_cost
+from pilotlab.io import atomic_json, sha256
+from pilotlab.runq_campaign import QueueSupervisor, device_cost, hbm_shape
 from pilotlab.runq_devices import admission, free_bytes, grant_for
 from pilotlab.runq_place import place
 from pilotlab.runq_store import connect, lookup, pin, put, submit, write
@@ -29,6 +30,68 @@ def held(db, card, job, role="auto"):
 
 def run(db, job, lease):
     db.execute("UPDATE jobs SET state='running',backend='npu',lease=?,generation=1 WHERE id=?",(lease,job))
+
+
+def test_campaign_reserves_measured_shape_on_registration(tmp_path):
+    s = QueueSupervisor.__new__(QueueSupervisor)
+    s.db, s.owner, s.registered = connect(tmp_path), str(tmp_path), {}
+    s.config = {"run_id": "round", "deadline_unix": time.time() + 300}
+    s.worker_reservations = lambda task: {"reserved_rss_bytes": 11}
+    base = dict(model={"family": "timed"}, source_identity={"code": "v1"}, sequence_length=128,
+                stream_chunks=4, batch_size=2, precision="fp32", device="unbound", reserved_hbm_bytes=8)
+    put(s.db, "hbm_floors." + s.owner, {hbm_shape(base): 14})
+    for i, (change, want) in enumerate([({}, 14), ({"seed": 27, "phase": "a2"}, 14),
+            ({"reserved_hbm_bytes": 25}, 25), ({"batch_size": 4}, 8),
+            ({"source_identity": {"code": "v2"}}, 8), ({"device": "cpu"}, 8)]):
+        task = {**base, "id": str(i), **change}
+        job = s.register_job(task, {"attempts": []})
+        assert json.loads(lookup(s.db, job)["spec"])["hbm"] == want
+        assert s.register_job(task, {"attempts": []}) == job
+        assert task["reserved_hbm_bytes"] == change.get("reserved_hbm_bytes", 8)
+
+
+@pytest.mark.parametrize("steps", [0, 1])
+def test_reviewed_first_npu_oom_retries_once_with_its_original_progress(tmp_path, steps):
+    s = QueueSupervisor.__new__(QueueSupervisor)
+    s.db, s.owner = connect(tmp_path), str(tmp_path)
+    source = {"code": "v1"}
+    task = {"id": "timed", "model": {"family": "timed"}, "source_identity": source, "device": "npu:0",
+            "batch_size": 2, "reserved_hbm_bytes": 8}
+    path = tmp_path / "task.json"
+    atomic_json(path, task)
+    spec0 = {**spec(size=8), "owner": s.owner, "task_id": task["id"]}
+    job = submit(s.db, "round/timed/0", spec0)
+    s.db.execute("UPDATE jobs SET state='failed',backend='npu',rc=1,pid=2147483647,ticks=1 WHERE id=?", (job,))
+    attempt = {"runq_id": job, "path": str(tmp_path), "status": "failed"}
+    checkpoint = None
+    if steps:
+        cp = tmp_path / "step.pt"
+        cp.write_bytes(b"preserved worker state")
+        checkpoint = {"path": str(cp), "sha256": sha256(cp), "steps": steps, "tokens": 256 * steps}
+        atomic_json(tmp_path / "checkpoint.json", {"current": checkpoint})
+    result = {"id": "timed", "device": "npu:0", "source_identity": source, "task_sha256": sha256(path),
+              "status": "failed", "failure_class": "capacity_error", "error": "NPU out of memory. Tried to allocate",
+              "checkpoint": checkpoint, "training": {"steps": steps, "tokens": 256 * steps}}
+    output = tmp_path / "result.json"
+    atomic_json(output, result)
+    row = dict(status="failed", runq_id=job, attempts=[attempt], task_path=str(path), result_path=str(output),
+               result_sha256=sha256(output), evaluation_reserved_tokens=32800)
+    s.capacity_retry_jobs = set()
+    assert not s.retry_transient(task, row, result)
+    s.capacity_retry_jobs.add(job)
+    assert not s.retry_transient(task, row, result)
+    put(s.db, "hbm_floors." + s.owner, {hbm_shape(task): 14})
+    assert not s.retry_transient(task, row, {**result, "failure_class": "numerical_error"})
+    if checkpoint:
+        cp.write_bytes(b"changed")
+        assert not s.retry_transient(task, row, result)
+        cp.write_bytes(b"preserved worker state")
+    assert s.retry_transient(task, row, result) and row["status"] == "pending"
+    assert row["evaluation_reserved_tokens"] == 32800 and row["attempts"] == [attempt]
+    assert row["capacity_retry"]["result"] == {"path": str(output), "sha256": sha256(output)}
+    assert row.get("retry_checkpoint_sha256") == (checkpoint["sha256"] if steps else None)
+    row.update(status="failed", attempts=[attempt, {"runq_id": job + 1}])
+    assert not s.retry_transient(task, row, result)
 
 
 def test_cpu_idempotent_manual_extra_and_refill(tmp_path):

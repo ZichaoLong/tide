@@ -9,9 +9,24 @@ import time
 
 from .io import atomic_json, sha256
 from .runq import start
-from .runq_store import command_env, connect, lookup, packed, put, submit, unit, wake, write
-from .scheduler3 import Blocked, Supervisor, evaluate_outcome, evaluation_bound, freeze_json, read
+from .runq_store import command_env, connect, lookup, packed, put, setting, submit, unit, wake, write
+from .scheduler3 import Blocked, Supervisor, evaluate_outcome, evaluation_bound, freeze_json, live, read
 from .scheduler_shared3 import SharedSupervisor
+from .source_migration3 import digest
+
+
+def hbm_shape(task):
+    """Match a measured worker implementation, model and input shape across seeds and rungs."""
+    return digest({key: task.get(key) for key in (
+        "source_identity", "model", "precision", "deterministic", "sequence_length", "stream_chunks", "batch_size")})
+
+
+def queue_hbm(db, owner, task, allowed):
+    declared = task.get("reserved_hbm_bytes", 8 * 2**30)
+    floors = setting(db, "hbm_floors." + owner, {}) if "npu" in allowed else {}
+    if not floors:
+        return declared
+    return max(declared, floors.get(hbm_shape(task), 0))
 
 
 def device_cost(db, owner, now, preparation=False):
@@ -64,6 +79,13 @@ class QueueSupervisor(SharedSupervisor):
         self.owner = str(Path(output).resolve())
         self.registered = {}
         super().__init__(config, output)
+        self.capacity_retry_jobs = set(setting(self.db, "hbm_retry_jobs." + self.owner, []))
+        recovered = False
+        for row in self.state["tasks"].values():
+            if row["status"] == "failed" and row.get("runq_id") in self.capacity_retry_jobs:
+                recovered |= self.retry_capacity(read(row["task_path"]), row, read(row["result_path"]))
+        if recovered:
+            self._save()
         start(self.root)
 
     def device_seconds(self):
@@ -109,7 +131,7 @@ class QueueSupervisor(SharedSupervisor):
             group = getattr(self, "resource_placement", None)
             members = group.groups.get(task["id"]) if group else None
             spec = dict(owner=self.owner,task_id=task["id"],allowed=allowed,ram=ram,
-                        hbm=task.get("reserved_hbm_bytes",8*2**30),deadline=self.config["deadline_unix"],
+                        hbm=queue_hbm(self.db,self.owner,task,allowed),deadline=self.config["deadline_unix"],
                         binding=self.owner+"/"+members[0] if members else None,preparation=row.get("preparation",False))
             ident = submit(self.db,key,spec,target)
         self.registered[key] = ident
@@ -124,6 +146,52 @@ class QueueSupervisor(SharedSupervisor):
             if job["command"] and job["command"] != value:
                 raise Blocked("queue worker command changed")
             self.db.execute("UPDATE jobs SET command=? WHERE id=? AND command IS NULL",(value,ident))
+
+    def retry_capacity(self, task, row, result):
+        """Reopen a reviewed first attempt after an increase in its physical HBM reservation."""
+        ident = row.get("runq_id")
+        if (ident not in self.capacity_retry_jobs or row["status"] != "failed" or row.get("observation_error")
+                or len(row["attempts"]) != 1 or row.get("resume_receipt") or row.get("qualified_task")
+                or not task or task.get("device") != "npu:0" or task.get("resume_checkpoint") or task.get("stage_a_migration")
+                or not result or result.get("failure_class") != "capacity_error"
+                or not result.get("error", "").lower().startswith("npu out of memory")):
+            return False
+        attempt = row["attempts"][0]
+        job = lookup(self.db, ident)
+        original = json.loads(job["original"])[0]
+        floor = queue_hbm(self.db, self.owner, task, ["npu"])
+        path = Path(attempt["path"]) / "result.json"
+        if (attempt.get("runq_id") != ident or original.get("owner") != self.owner or original["task_id"] != task["id"]
+                or job["state"] != "failed" or job["backend"] != "npu" or job["rc"] != 1 or not job["pid"]
+                or original["hbm"] >= floor
+                or live({"pid": job["pid"], "start_ticks": job["ticks"]}) or result.get("status") != "failed"
+                or result.get("id") != task["id"] or not task.get("source_identity")
+                or result.get("source_identity") != task["source_identity"] or result.get("device") != "npu:0"
+                or result.get("task_sha256") != sha256(row["task_path"]) or str(path) != row.get("result_path")
+                or sha256(path) != row.get("result_sha256")):
+            return False
+        progress = result.get("training", {})
+        if any(type(progress.get(k)) is not int or progress[k] < 0 for k in ("steps", "tokens")):
+            return False
+        checkpoint = result.get("checkpoint")
+        if progress["steps"] or progress["tokens"]:
+            if (not checkpoint or checkpoint != read(path.parent / "checkpoint.json", {}).get("current")
+                    or any(checkpoint.get(k) != progress[k] for k in ("steps", "tokens"))
+                    or not checkpoint.get("path") or not Path(checkpoint["path"]).is_file()
+                    or sha256(checkpoint["path"]) != checkpoint.get("sha256")):
+                return False
+            row.update(retry_checkpoint=checkpoint["path"], retry_checkpoint_sha256=checkpoint["sha256"])
+        elif checkpoint:
+            return False
+        row["capacity_retry"] = dict(job=ident, result={"path": str(path), "sha256": row["result_sha256"]},
+                                     previous_hbm=original["hbm"], reserved_hbm=floor, checkpoint=checkpoint)
+        for key in ("result_path", "result_sha256", "heartbeat", "queue", "process"):
+            row.pop(key, None)
+        row.update(status="pending", reason=None)
+        return True
+
+    def retry_transient(self, task, record, result):
+        return super().retry_transient(task, record, result) or self.retry_capacity(task, record, result)
 
     def reserve_task(self, task, record):
         if record.get("qualified_task"):
