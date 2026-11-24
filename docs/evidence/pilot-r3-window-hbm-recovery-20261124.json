@@ -1,0 +1,478 @@
+{
+  "checkpoint_cpu_decode": {
+    "job": 894,
+    "steps": 1,
+    "tokens": 256,
+    "verified": true
+  },
+  "controller": {
+    "commit": "00be2e476a4ccdd87e183cb51c84661cd526e376",
+    "pid": 2933411,
+    "preserved_workers": {
+      "same_pid": 138
+    },
+    "unit": "tide-pilot-r3-window-hbm-20261124.service"
+  },
+  "failed_attempts_and_retries": [
+    {
+      "batch": 2,
+      "checkpoint_sha256": null,
+      "eval_reservation_on_admission": 32800,
+      "failure_result_sha256": "b2dbd570cbc871e0b47058b51b756f87b2d2e4e26332075a7d6e3d68b87613a7",
+      "first_update_unix": null,
+      "original_task_sha256": "0193deffa8d94fb9326716e8d5d672147e7db4116c72eb79a93c4f2f9e6cb1e8",
+      "physical_card_at_failure": 5,
+      "previous": 881,
+      "previous_eval_tokens": 16384,
+      "previous_reserved_hbm_gib": 8,
+      "previous_steps": 0,
+      "queue_reason": "waiting for peak HBM",
+      "retry": 1032,
+      "retry_hbm_gib": 14,
+      "retry_state": "queued"
+    },
+    {
+      "batch": 2,
+      "checkpoint_sha256": null,
+      "eval_reservation_on_admission": 32800,
+      "failure_result_sha256": "f110bedb40e15bdba82f0e82afcc40218d6677aa52016736038e7673aa66c3c1",
+      "first_update_unix": null,
+      "original_task_sha256": "d9b63ff934fd2ee87b7f4978c34bf56d601a9116fb03bfc8de36433e4fc51a43",
+      "physical_card_at_failure": 5,
+      "previous": 882,
+      "previous_eval_tokens": 16384,
+      "previous_reserved_hbm_gib": 8,
+      "previous_steps": 0,
+      "queue_reason": "waiting for peak HBM",
+      "retry": 1033,
+      "retry_hbm_gib": 14,
+      "retry_state": "queued"
+    },
+    {
+      "batch": 2,
+      "checkpoint_sha256": null,
+      "eval_reservation_on_admission": 32800,
+      "failure_result_sha256": "094f62388643451587cdc2c6d7675cd8c580678e3625c0ce448d26b77d9d6a9b",
+      "first_update_unix": null,
+      "original_task_sha256": "17d14911cbc1b3bba52e19eab68ff67774bf24badf6bf7eabb9b0ac4ca27adb9",
+      "physical_card_at_failure": 0,
+      "previous": 890,
+      "previous_eval_tokens": 16384,
+      "previous_reserved_hbm_gib": 8,
+      "previous_steps": 0,
+      "queue_reason": "waiting for peak HBM",
+      "retry": 1027,
+      "retry_hbm_gib": 14,
+      "retry_state": "queued"
+    },
+    {
+      "batch": 2,
+      "checkpoint_sha256": null,
+      "eval_reservation_on_admission": 32800,
+      "failure_result_sha256": "c4b8caa5ecbbe0ff9c8f9601e82cf60d634bb5c57065193d8da987f044778e56",
+      "first_update_unix": null,
+      "original_task_sha256": "5fc2ec14dc2303a241852c8d5e4ba858b91b24f431f40aec026ee0da52651402",
+      "physical_card_at_failure": 0,
+      "previous": 891,
+      "previous_eval_tokens": 16384,
+      "previous_reserved_hbm_gib": 8,
+      "previous_steps": 0,
+      "queue_reason": "waiting for peak HBM",
+      "retry": 1028,
+      "retry_hbm_gib": 14,
+      "retry_state": "queued"
+    },
+    {
+      "batch": 2,
+      "checkpoint_sha256": null,
+      "eval_reservation_on_admission": 32800,
+      "failure_result_sha256": "189d9c4c5f23ecf8d34913afbeec1d466a395ab5ebeca40366262fb5b073ef18",
+      "first_update_unix": null,
+      "original_task_sha256": "cec06c80a9f095a596884bd00910116552884561b3f402516b60e56d72fa8ed0",
+      "physical_card_at_failure": 12,
+      "previous": 892,
+      "previous_eval_tokens": 16384,
+      "previous_reserved_hbm_gib": 8,
+      "previous_steps": 0,
+      "queue_reason": "waiting for peak HBM",
+      "retry": 1029,
+      "retry_hbm_gib": 14,
+      "retry_state": "queued"
+    },
+    {
+      "batch": 2,
+      "checkpoint_sha256": null,
+      "eval_reservation_on_admission": 32800,
+      "failure_result_sha256": "f7e75137240a686fdc3d7d2f17cf8786991cca5d1ea57cc337fdeff9bc3fc316",
+      "first_update_unix": null,
+      "original_task_sha256": "27bcdaf9b8eb8624ec0e3bef6d08db70b8ee799e60b4136501602cf2b78cbf94",
+      "physical_card_at_failure": 12,
+      "previous": 893,
+      "previous_eval_tokens": 16384,
+      "previous_reserved_hbm_gib": 8,
+      "previous_steps": 0,
+      "queue_reason": "waiting for peak HBM",
+      "retry": 1030,
+      "retry_hbm_gib": 14,
+      "retry_state": "queued"
+    },
+    {
+      "batch": 2,
+      "checkpoint_sha256": "60e0593b2f35f3c239f22de798d220435861c5fa5342a26b2ae9bf74d03086ab",
+      "eval_reservation_on_admission": 32800,
+      "failure_result_sha256": "bbb4c162ed14628554ce6818f45eb21e3bb7939290c816b78af53bc57d547b1f",
+      "first_update_unix": null,
+      "original_task_sha256": "abefae30c38cddac1fe0c8e7e88d708a6ddc303c3d3851ad7255d12cbf25f68c",
+      "physical_card_at_failure": 12,
+      "previous": 894,
+      "previous_eval_tokens": 16384,
+      "previous_reserved_hbm_gib": 8,
+      "previous_steps": 1,
+      "queue_reason": "waiting for peak HBM",
+      "retry": 1031,
+      "retry_hbm_gib": 14,
+      "retry_state": "queued"
+    },
+    {
+      "batch": 2,
+      "checkpoint_sha256": null,
+      "eval_reservation_on_admission": 32800,
+      "failure_result_sha256": "1b55fc37ef68aa150f5651ad3754a3c53441d7b1c5bfe468351c24124d5eb82b",
+      "first_update_unix": null,
+      "original_task_sha256": "6bfc40d9b75f60541065ae9c542187254d7d094722736b145d206726a820fe75",
+      "physical_card_at_failure": 13,
+      "previous": 910,
+      "previous_eval_tokens": 16384,
+      "previous_reserved_hbm_gib": 8,
+      "previous_steps": 0,
+      "queue_reason": "waiting for peak HBM",
+      "retry": 1034,
+      "retry_hbm_gib": 14,
+      "retry_state": "queued"
+    },
+    {
+      "batch": 2,
+      "checkpoint_sha256": null,
+      "eval_reservation_on_admission": 32800,
+      "failure_result_sha256": "15c5a187be76c2437ab1c1af1c451ca98d9753c007d75a2b4e51d8772dcfd9b4",
+      "first_update_unix": null,
+      "original_task_sha256": "a88c8f81ea8ae49a01478368c6efd9c0d58bfbb96453483126c3a38d22733304",
+      "physical_card_at_failure": 13,
+      "previous": 912,
+      "previous_eval_tokens": 16384,
+      "previous_reserved_hbm_gib": 8,
+      "previous_steps": 0,
+      "queue_reason": "waiting for peak HBM",
+      "retry": 1035,
+      "retry_hbm_gib": 14,
+      "retry_state": "queued"
+    },
+    {
+      "batch": 4,
+      "checkpoint_sha256": null,
+      "eval_reservation_on_admission": 32800,
+      "failure_result_sha256": "f67bcfc08a96e5482bb879d63234bea2667c4a60b00f1503d1b2575a4f8662b1",
+      "first_update_unix": null,
+      "original_task_sha256": "5f451e03c35e28cb04f07c6467055824607c3fb52bd725e141783761c47fa43e",
+      "physical_card_at_failure": 10,
+      "previous": 917,
+      "previous_eval_tokens": 16384,
+      "previous_reserved_hbm_gib": 8,
+      "previous_steps": 0,
+      "queue_reason": "waiting for peak HBM",
+      "retry": 1036,
+      "retry_hbm_gib": 27,
+      "retry_state": "queued"
+    }
+  ],
+  "failed_eval_tokens_observed": 163840,
+  "fresh_shannon": {
+    "models": 7,
+    "policy": "weak-log-v1",
+    "registered": [
+      {
+        "id": 1011,
+        "state": "queued"
+      },
+      {
+        "id": 1012,
+        "state": "queued"
+      },
+      {
+        "id": 1013,
+        "state": "queued"
+      },
+      {
+        "id": 1014,
+        "state": "queued"
+      },
+      {
+        "id": 1015,
+        "state": "queued"
+      },
+      {
+        "id": 1016,
+        "state": "queued"
+      },
+      {
+        "id": 1017,
+        "state": "queued"
+      },
+      {
+        "id": 1018,
+        "state": "queued"
+      },
+      {
+        "id": 1019,
+        "state": "queued"
+      }
+    ]
+  },
+  "local_records": {
+    "controller-handoff.json": {
+      "path": ".local/pilot-r3/resource-handoffs/window-hbm-20261124/controller-handoff.json",
+      "sha256": "8444ed595ff9738d9326f4417c298b5ea41c7cbc28344a3e2206462255489d9a"
+    },
+    "decoded-894.json": {
+      "path": ".local/pilot-r3/resource-handoffs/window-hbm-20261124/decoded-894.json",
+      "sha256": "eea05704079a482acb88f4071e9f7c8cc0796f451d808ab066c7abaa83dac6b3"
+    },
+    "floor-activation.json": {
+      "path": ".local/pilot-r3/resource-handoffs/window-hbm-20261124/floor-activation.json",
+      "sha256": "da13c5c1235eddbe25c86b3868e068e31ba44c9ffb31c8d40bbe01287ea23f43"
+    },
+    "live-status.json": {
+      "path": ".local/pilot-r3/resource-handoffs/window-hbm-20261124/live-status.json",
+      "sha256": "f997e545b242269616be70b8f8370b85cf6a80796126b55b57a2596e1999b8b9"
+    },
+    "measurements.json": {
+      "path": ".local/pilot-r3/resource-handoffs/window-hbm-20261124/measurements.json",
+      "sha256": "2331fea1bb125203693613ac33bc16ba4a5bf30b5a02971539f0d6f3223fcf2e"
+    },
+    "reviewed-wave.json": {
+      "path": ".local/pilot-r3/resource-handoffs/window-hbm-20261124/reviewed-wave.json",
+      "sha256": "33756c1649be15d174cc91c70fb93ee807359a69aaac6d63d17455108c6dc767"
+    }
+  },
+  "reservations": {
+    "affected": "low-activity multiscale Timed n16 d128, quad, FP32, allocation budgets k=1/2/4/8, sequence length 128, stream chunks 4",
+    "allocator_peak_reserved_gib_of_completed_batch4": [
+      16.625,
+      16.789,
+      16.258,
+      16.324,
+      16.689
+    ],
+    "driver_peak_gib_by_batch": {
+      "2": 8.536,
+      "4": 17.11
+    },
+    "hbm_reservation_gib_by_batch": {
+      "2": 14,
+      "4": 27
+    },
+    "hot_applied_by_queue_state": {
+      "queued": 2,
+      "running": 35
+    },
+    "prior_requests_eligible_for_one_retry": 30,
+    "selection": "For each batch take the larger observed per-worker driver footprint and completed allocator peak, apply 1.5x plus 0.5 GiB, round up to GiB.",
+    "window_apply_at": "2026-11-24T22:41:21+08:00"
+  },
+  "resources": {
+    "card_target": 16,
+    "cards": {
+      "0": {
+        "matched_driver_workers": 5,
+        "queue_running": 5,
+        "workers_with_update": 5
+      },
+      "1": {
+        "matched_driver_workers": 7,
+        "queue_running": 7,
+        "workers_with_update": 7
+      },
+      "10": {
+        "matched_driver_workers": 5,
+        "queue_running": 5,
+        "workers_with_update": 5
+      },
+      "11": {
+        "matched_driver_workers": 7,
+        "queue_running": 7,
+        "workers_with_update": 7
+      },
+      "12": {
+        "matched_driver_workers": 4,
+        "queue_running": 4,
+        "workers_with_update": 4
+      },
+      "13": {
+        "matched_driver_workers": 5,
+        "queue_running": 5,
+        "workers_with_update": 5
+      },
+      "14": {
+        "matched_driver_workers": 7,
+        "queue_running": 7,
+        "workers_with_update": 7
+      },
+      "15": {
+        "matched_driver_workers": 4,
+        "queue_running": 4,
+        "workers_with_update": 4
+      },
+      "2": {
+        "matched_driver_workers": 7,
+        "queue_running": 7,
+        "workers_with_update": 7
+      },
+      "3": {
+        "matched_driver_workers": 7,
+        "queue_running": 7,
+        "workers_with_update": 7
+      },
+      "4": {
+        "matched_driver_workers": 7,
+        "queue_running": 7,
+        "workers_with_update": 7
+      },
+      "5": {
+        "matched_driver_workers": 5,
+        "queue_running": 5,
+        "workers_with_update": 5
+      },
+      "6": {
+        "matched_driver_workers": 7,
+        "queue_running": 7,
+        "workers_with_update": 7
+      },
+      "7": {
+        "matched_driver_workers": 6,
+        "queue_running": 6,
+        "workers_with_update": 6
+      },
+      "8": {
+        "matched_driver_workers": 7,
+        "queue_running": 7,
+        "workers_with_update": 7
+      },
+      "9": {
+        "matched_driver_workers": 6,
+        "queue_running": 6,
+        "workers_with_update": 6
+      }
+    },
+    "cpu_automatic": 40,
+    "cpu_automatic_target": 40,
+    "cpu_manual": 2,
+    "cpu_running": 42,
+    "npu_running": 96,
+    "queue": "project ~/.local/state/tide-runq",
+    "storage_headroom_gib": 179.94
+  },
+  "sample_at": "2026-11-24T22:49:19+08:00",
+  "schema": "pilot-r3-card-window-hbm-recovery-v1",
+  "stage_a": {
+    "authorized": 270,
+    "counts": {
+      "completed": 702,
+      "pending": 124,
+      "running": 138,
+      "stopped_budget": 45,
+      "superseded": 8
+    },
+    "deferred_for_review": 74,
+    "observer_errors": [],
+    "selected": 165,
+    "stage_b": "closed",
+    "verified_completed": 702
+  },
+  "status_observed_at": "2026-11-24T14:49:22.234380+00:00",
+  "tests": {
+    "foundation": "e9bd1483",
+    "queue_window_scheduler_worktree_passed": 121
+  },
+  "time_estimates": {
+    "cpu": {
+      "967": {
+        "estimated_remaining_training_hours": 8.85,
+        "last_update": "2026-11-24T22:49:05+08:00",
+        "sample_seconds": 1799,
+        "sample_updates": 56,
+        "seconds_per_step": 32.13,
+        "step": 3105,
+        "target": 4096
+      },
+      "968": {
+        "estimated_remaining_training_hours": 66.65,
+        "last_update": "2026-11-24T22:48:36+08:00",
+        "sample_seconds": 1779,
+        "sample_updates": 17,
+        "seconds_per_step": 104.64,
+        "step": 1803,
+        "target": 4096
+      }
+    },
+    "scope": "Extrapolation from elapsed wall time between optimizer updates in the most recent 30 minutes of each running worker. Requires at least 5 minutes and 3 update intervals, latest update within 210 seconds. Excludes future queue wait, final evaluation and checkpoint writes; shared load varies.",
+    "stage_samples": {
+      "a1": {
+        "remaining_hours_max": 6.47,
+        "remaining_hours_median": 2.04,
+        "remaining_hours_min": 0.0,
+        "workers_with_sample": 60
+      },
+      "a2": {
+        "remaining_hours_max": 66.65,
+        "remaining_hours_median": 3.98,
+        "remaining_hours_min": 0.04,
+        "workers_with_sample": 53
+      },
+      "a3": {
+        "remaining_hours_max": 10.09,
+        "remaining_hours_median": 3.62,
+        "remaining_hours_min": 0.38,
+        "workers_with_sample": 22
+      },
+      "init": {
+        "remaining_hours_max": 0.56,
+        "remaining_hours_median": 0.32,
+        "remaining_hours_min": 0.07,
+        "workers_with_sample": 2
+      }
+    }
+  },
+  "window": {
+    "base_cards": [
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      14,
+      15
+    ],
+    "deadline": "2026-11-25T08:28:59+08:00",
+    "seconds": 36000.0,
+    "started": "2026-11-24T22:28:59+08:00",
+    "temporary_cards": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      12,
+      13
+    ],
+    "temporary_workers": 47,
+    "timer": {
+      "AccuracyUSec": "1ms",
+      "ActiveState": "active",
+      "NextElapseUSecRealtime": "Wed 2026-11-25 08:28:59 CST",
+      "SubState": "waiting"
+    },
+    "timer_unit": "tide-pilot-r3-extra-card-release-20261125.timer"
+  }
+}
