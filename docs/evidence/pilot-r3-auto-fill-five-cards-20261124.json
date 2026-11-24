@@ -1,0 +1,124 @@
+{
+  "added_physical_cards": [
+    8,
+    9,
+    10,
+    11,
+    15
+  ],
+  "automatic_card_target": 7,
+  "automatic_physical_cards": [
+    7,
+    8,
+    9,
+    10,
+    11,
+    14,
+    15
+  ],
+  "card_resources": {
+    "10": {
+      "external_processes": 1,
+      "hbm_free_after_outstanding_reservations_gib": -3.67,
+      "hbm_free_gib": 15.12,
+      "matching_driver_pids": 5,
+      "running": 5,
+      "workers_with_training_steps": 5
+    },
+    "11": {
+      "external_processes": 0,
+      "hbm_free_after_outstanding_reservations_gib": 5.59,
+      "hbm_free_gib": 48.71,
+      "matching_driver_pids": 7,
+      "running": 7,
+      "workers_with_training_steps": 7
+    },
+    "14": {
+      "external_processes": 0,
+      "hbm_free_after_outstanding_reservations_gib": 4.99,
+      "hbm_free_gib": 48.25,
+      "matching_driver_pids": 7,
+      "running": 7,
+      "workers_with_training_steps": 7
+    },
+    "15": {
+      "external_processes": 2,
+      "hbm_free_after_outstanding_reservations_gib": 3.75,
+      "hbm_free_gib": 26.38,
+      "matching_driver_pids": 4,
+      "running": 4,
+      "workers_with_training_steps": 4
+    },
+    "7": {
+      "external_processes": 0,
+      "hbm_free_after_outstanding_reservations_gib": 5.56,
+      "hbm_free_gib": 51.43,
+      "matching_driver_pids": 7,
+      "running": 7,
+      "workers_with_training_steps": 7
+    },
+    "8": {
+      "external_processes": 0,
+      "hbm_free_after_outstanding_reservations_gib": 5.06,
+      "hbm_free_gib": 48.44,
+      "matching_driver_pids": 7,
+      "running": 7,
+      "workers_with_training_steps": 7
+    },
+    "9": {
+      "external_processes": 0,
+      "hbm_free_after_outstanding_reservations_gib": 5.57,
+      "hbm_free_gib": 48.48,
+      "matching_driver_pids": 7,
+      "running": 7,
+      "workers_with_training_steps": 7
+    }
+  },
+  "cpu_target": 40,
+  "driver_sample_at": "2026-11-24T17:16:57+08:00",
+  "failed_new_jobs": {
+    "654": {
+      "card": 10,
+      "diagnostic": "AICPU IndexPut, 507018",
+      "reason": "RuntimeError",
+      "result": {
+        "path": ".local/pilot-r3/campaign-runq/round/tasks/low-activity-multiscale_timed-base-n16-d128-k1-8ff51cae18-init-2026112001/attempt-0/result.json",
+        "sha256": "daa1352141bb5b76d14cdbe5b635a3fade44f9863081c4ff7d250931257f767e"
+      },
+      "steps": 0
+    }
+  },
+  "local_verification": {
+    "path": ".local/pilot-r3/resource-handoffs/auto-fill-8-9-10-11-15-20261124T170858+0800/verified.json",
+    "sha256": "e436dbe138dca280a729a038aadcddf8bdb1794dc6d8b8cf51031059bca59580"
+  },
+  "original_worker_status": {
+    "completed": 2,
+    "same_live_process": 52
+  },
+  "queue": "~/.local/state/tide-runq",
+  "scheduler": {
+    "authorized_subjects": 270,
+    "counts": {
+      "completed": 438,
+      "failed": 2,
+      "pending": 325,
+      "running": 84,
+      "stopped_budget": 45
+    },
+    "cpu_workers": 40,
+    "npu_workers": 44,
+    "observation_time": "2026-11-24T17:17:00+08:00",
+    "paused_unchanged": 45,
+    "selected_subjects": 164,
+    "stage": "stage-a-training-pipeline",
+    "stage_b_gate": "closed"
+  },
+  "schema": "pilot-r3-automatic-card-fill-review-v1",
+  "shared_until": "2026-12-20T00:48:33+08:00",
+  "shared_with_observed_external_processes": {
+    "10": 1,
+    "15": 2
+  },
+  "verified_at": "2026-11-24T17:17:01+08:00"
+}

@@ -148,6 +148,40 @@ def test_identity_change_and_peak_bytes():
     assert free_bytes(card,[dict(unit="our",data=spec(30))])==100-25-(30-12)
 
 
+def test_auto_share_fills_and_refills_without_a_manual_job(tmp_path):
+    from pilotlab.runq import main
+    from pilotlab.runq_runtime import allowed
+
+    db = connect(tmp_path)
+    resident = dict(pid=44, identity=dict(pid=44, uid=3, start_ticks=8), unit="other", bytes=25)
+    snap = samples([resident], used=25)
+    put(db, "limits", dict(cards=1, cpu=0, auto_card_ids=[1]))
+    put(db, "samples", snap)
+    args = ["--root", str(tmp_path), "auto-share", "1"]
+    main([*args, "--until-unix", str(int(time.time())+60)])
+    jobs = [submit(db, name, spec(35)) for name in ("first", "second", "next")]
+    place(db, tmp_path, snap)
+    lease = db.execute("SELECT * FROM leases").fetchone()
+    assert lease["role"] == "auto" and lease["card"] == 1
+    assert json.loads(lease["grant"])["residents"] == [resident["identity"]]
+    db.execute("UPDATE leases SET state='held',acquired=? WHERE id=?", (time.time(), lease["id"]))
+    place(db, tmp_path, snap)
+    assert [lookup(db, j)["state"] for j in jobs] == ["reserved","reserved","queued"]
+    run(db, jobs[1], lease["id"])
+    db.execute("UPDATE jobs SET state='completed' WHERE id=?", (jobs[0],))
+    place(db, tmp_path, snap)
+    job = lookup(db, jobs[2])
+    assert job["state"] == "reserved" and not job["manual"]
+    assert not allowed(db, tmp_path, job, lease)
+    changed = dict(resident, identity=dict(resident["identity"], start_ticks=9))
+    put(db, "samples", samples([changed], used=25))
+    assert allowed(db, tmp_path, job, lease)
+    put(db, "samples", snap)
+    main([*args, "--clear"])
+    assert allowed(db, tmp_path, job, lease)
+    assert lookup(db, jobs[1])["state"] == "running"
+
+
 def test_binding_survives_pin_and_restart(tmp_path):
     db=connect(tmp_path)
     template=spec(20,("npu","cpu"),"seeds")
@@ -255,7 +289,8 @@ def test_cpu_reservation_uses_only_bound_previous_trajectory(tmp_path,tamper):
     assert adjusted["ram"]["cpu"]==(30*gib if tamper else 5*gib+3*gib//4)
 
 
-def test_shared_cooperative_second_sample_checks_identity_and_hbm(monkeypatch):
+@pytest.mark.parametrize("manual", [True, False])
+def test_shared_cooperative_second_sample_checks_identity_and_hbm(monkeypatch, manual):
     from pilotlab import runq_devices
     from pilotlab.shared_npu3 import load_queue_helper
     helper=load_queue_helper()
@@ -263,7 +298,7 @@ def test_shared_cooperative_second_sample_checks_identity_and_hbm(monkeypatch):
     monkeypatch.setattr(runq_devices,"resident_identity",lambda pid: dict(occupant,pid=pid))
     monkeypatch.setattr(runq_devices,"boot_id",lambda: "sample-boot")
     grant=dict(card=3,boot="sample-boot",until=time.time()+60,residents=[dict(occupant)])
-    samples=runq_devices.install_predicate(helper,3,grant,32*2**20,True)
+    samples=runq_devices.install_predicate(helper,3,grant,32*2**20,manual)
     kwargs=dict(max_hbm_mib=4096,max_aicore_percent=5)
     def card(used=30):
         return helper.DeviceStatus(board_id=1,chip_id=1,physical_id=3,health="OK",

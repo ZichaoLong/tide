@@ -63,8 +63,14 @@ def allowed(db, root, job, lease):
     # Its own wrapper has no driver allocation until it receives the lock.
     permits = [json.loads(job["grant"] or "null")] if job["manual"] else [
         j["permission"] for j in others if j["manual"] and j["fill"] and j["state"] == "running"]
-    if not job["manual"] and lease["role"] != "auto" and not any(j["manual"] and j["state"] == "running" for j in others):
-        return "manual device is draining"
+    if not job["manual"]:
+        limits = setting(db, "limits", {})
+        ids = limits.get("auto_card_ids")
+        if ids is not None and lease["card"] not in ids:
+            return "device removed from automatic placement"
+        if lease["role"] != "auto" and not any(j["manual"] and j["state"] == "running" for j in others):
+            return "manual device is draining"
+        permits.append(limits.get("auto_share_grants", {}).get(str(lease["card"])))
     samples = setting(db,"samples",[])
     reason = admission(samples, lease["card"], others, json.loads(job["spec"])["hbm"], permits)
     if not reason:
@@ -116,7 +122,8 @@ def hold_card(root, ident):
                     deadline_unix=json.loads(job["spec"]).get("deadline") or time.time()+86400)
     lease = QueueLease(manifest, directory, end)
     helper = lease.helper
-    samples = install_predicate(helper, row["card"], json.loads(row["grant"]), json.loads(job["spec"])["hbm"], bool(job["manual"]))
+    grant = json.loads(row["grant"])
+    samples = install_predicate(helper, row["card"], grant, json.loads(job["spec"])["hbm"], bool(job["manual"]))
     def emit(state, **fields):
         helper.emit(state,directory/"queue.json",job_id=manifest["job_id"],project="runq",
                     priority=0,npu_count=1,helper=lease.helper_identity,**fields)
@@ -135,6 +142,11 @@ def hold_card(root, ident):
                     or trigger["manual"] != job["manual"] or trigger["grant"] != job["grant"]):
                 reason = "trigger changed"
                 break
+            if not job["manual"] and grant:
+                current_grant = setting(db, "limits", {}).get("auto_share_grants", {}).get(str(row["card"]))
+                if current_grant != grant or time.time() >= grant["until"]:
+                    reason = "automatic sharing grant changed or expired"
+                    break
             samples.clear()
             before = time.time()
             decision = helper.attempt_schedule(queue_dir=lease.queue_dir, device_lock_dir=lease.device_dir,

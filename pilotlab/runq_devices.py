@@ -88,13 +88,13 @@ def admission(samples, card_id, jobs, size, grants, *, opening=False, manual=Fal
         if not card or card["health"] != "OK":
             return "device absent or unhealthy"
         others = external(card, names)
-        if (others and sample is samples[-1] and not opening and
+        if (others and sample is samples[-1] and (not opening or not manual) and
                 (previous != others or len(samples)<2 or now-samples[-2]["at"] > FRESH_SECONDS)):
             return "waiting for two stable shared-device samples"
         previous = others
         if others:
             if not any(covers(g, others, card_id, sample["boot"], now) for g in grants):
-                return "external occupants need a matching manual grant"
+                return "external occupants need a matching sharing grant"
         elif opening and not manual and (card["core"] > 5 or card["used"] > 4096*MIB):
             return "waiting for an idle cooperative device"
     if free_bytes(samples[-1]["cards"][key], jobs) < size:
@@ -122,7 +122,7 @@ def install_predicate(helper, card_id, grant, size, manual):
             evidence.append(dict(at=time.time(), residents=residents, used_mib=self.hbm_used_mib, core=self.aicore_percent))
             if residents != evidence[0]["residents"]:
                 return False
-            if manual:
+            if manual or (residents and grant):
                 return not residents or covers(grant, residents, card_id, boot_id(), time.time())
             return super().is_free(max_hbm_mib=max_hbm_mib, max_aicore_percent=max_aicore_percent)
 

@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 import time
 
-from .runq_devices import admission, external
+from .runq_devices import admission, covers, external
 from .runq_store import device, event, packed, setting, unit, write
 from .scheduler import proc_identity
 from .source_migration3 import read_bound
@@ -98,6 +98,7 @@ class Placement:
         self.limits = setting(db, "limits", {"cards": 8, "cpu": 40})
         ids = self.limits.get("auto_card_ids")
         self.auto_cards = set(map(int, self.cards)) if ids is None else set(ids)
+        self.auto_grants = self.limits.get("auto_share_grants", {})
         self.leases = {r["card"]: dict(r) for r in db.execute("SELECT * FROM leases WHERE state IN ('opening','held','closing')")}
         self.by_card = defaultdict(list)
         self.scoped = defaultdict(int)
@@ -166,9 +167,12 @@ class Placement:
                     continue
             if lease["role"] == "manual":
                 self.lease_role(lease, "drain")
-            if (lease["role"] == "drain" and lease["card"] in self.auto_cards and card and not external(card, {j["unit"] for j in current})
+            if (lease["role"] == "drain" and lease["card"] in self.auto_cards and card
                     and self.regular() < self.limits["cards"]):
-                self.lease_role(lease, "auto")
+                residents = external(card, {j["unit"] for j in current})
+                if not residents or covers(self.auto_grants.get(str(lease["card"])), residents,
+                                          lease["card"], self.samples[-1]["boot"], self.now):
+                    self.lease_role(lease, "auto")
 
     def host_reason(self, spec, backend):
         peak = spec["ram"][backend]
@@ -207,8 +211,10 @@ class Placement:
                 continue
             current = self.by_card[lease["id"]] if lease else []
             primaries = [j for j in current if j["manual"] and j["state"] == "running"]
-            grants = [job["permission"]] if job["manual"] else [j["permission"] for j in primaries if j["fill"]]
+            grant = job["permission"] if job["manual"] else self.auto_grants.get(str(card))
+            grants = [grant]
             if pin is None:
+                grants.extend(j["permission"] for j in primaries if j["fill"])
                 if not lease and self.regular() >= self.limits["cards"]:
                     continue
                 if lease and lease["role"] != "auto" and not primaries:
@@ -222,8 +228,9 @@ class Placement:
                 self.reserve(job, "npu", lease["id"])
                 return True, None
             role = "manual" if pin is not None else "auto"
+            lease_grant = grant if pin is not None or self.cards[str(card)]["processes"] else None
             ident = self.db.execute("""INSERT INTO leases(card,role,state,trigger_job,grant,created)
-                VALUES(?,?,'opening',?,?,?)""", (card, role, job["id"], packed(job["permission"]), self.now)).lastrowid
+                VALUES(?,?,'opening',?,?,?)""", (card, role, job["id"], packed(lease_grant), self.now)).lastrowid
             self.leases[card] = dict(id=ident, state="opening", role=role, trigger_job=job["id"], card=card)
             self.hold_host(job["id"],spec)
             event(self.db, job["id"], "lease_requested", str(card))
@@ -244,8 +251,9 @@ class Placement:
             "SELECT * FROM jobs WHERE state='queued' ORDER BY manual DESC, requested,id")]
         wanted = {j["data"]["binding"]: device(j["target"]) for j in queued if j["manual"] and j["data"].get("binding")}
         empty_held = any(l["state"]=="held" and l["role"]=="auto" and not self.by_card[l["id"]] for l in self.leases.values())
-        free_card = any(int(k) in self.auto_cards and int(k) not in self.leases and c["health"]=="OK" and not c["processes"]
-                        and c["used"]<=4096*2**20 and c["core"]<=5 for k,c in self.cards.items())
+        free_card = any(int(k) in self.auto_cards and int(k) not in self.leases and
+                        admission(self.samples, int(k), [], 1, [self.auto_grants.get(k)], opening=True, now=self.now) is None
+                        for k in self.cards)
         spreading = empty_held or free_card and self.regular()<self.limits["cards"]
         # Fixed trajectories take their own backend first. Under a tight host
         # ceiling, smaller automatic CPU requests can fill otherwise idle cores.

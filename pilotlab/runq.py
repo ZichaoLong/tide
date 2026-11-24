@@ -216,6 +216,11 @@ def main(argv=None):
     group.add_argument("--auto-card-ids", nargs="+", type=int, metavar="ID",
                        help="restrict automatic placement to these physical NPU IDs")
     group.add_argument("--all-card-ids", action="store_true", help="clear the automatic physical card filter")
+    p = sub.add_parser("auto-share", help="allow automatic refill beside the currently observed NPU residents")
+    p.add_argument("cards", nargs="+", type=int, metavar="ID")
+    group = p.add_mutually_exclusive_group(required=True)
+    group.add_argument("--until-unix", type=int, help="expire this card's observed-resident grant at this Unix time")
+    group.add_argument("--clear", action="store_true", help="withdraw the grants for these physical cards")
     p=sub.add_parser("submit")
     p.add_argument("--key",required=True)
     p.add_argument("--target",default="auto",help="auto, cpu or npu:PHYSICAL_ID")
@@ -261,11 +266,30 @@ def main(argv=None):
                 if min(args.auto_card_ids) < 0:
                     raise ValueError("physical card IDs must be nonnegative")
                 limits["auto_card_ids"] = sorted(set(args.auto_card_ids))
+                if "auto_share_grants" in limits:
+                    limits["auto_share_grants"] = {k:v for k,v in limits["auto_share_grants"].items()
+                                                   if int(k) in limits["auto_card_ids"]}
             elif args.all_card_ids:
                 limits.pop("auto_card_ids", None)
             put(db,"limits",limits)
         wake(root)
         print(packed(limits))
+    elif args.action == "auto-share":
+        if min(args.cards) < 0 or (not args.clear and args.until_unix <= time.time()):
+            parser.error("expected nonnegative physical card IDs and a future expiry for a grant")
+        observed = {} if args.clear else {
+            str(card): manual_grant(db, root, f"npu:{card}", args.until_unix) for card in sorted(set(args.cards))}
+        with write(db):
+            limits = setting(db, "limits", {"cards":8, "cpu":40})
+            if observed and not set(args.cards) <= set(limits.get("auto_card_ids", args.cards)):
+                parser.error("the requested cards must be eligible for automatic placement")
+            grants = limits.setdefault("auto_share_grants", {})
+            for card in args.cards:
+                grants.pop(str(card), None)
+            grants.update(observed)
+            put(db, "limits", limits)
+        wake(root)
+        print(packed(grants))
     elif args.action == "pin":
         row = lookup(db,args.id)
         deadline = json.loads(row["spec"]).get("deadline") or time.time()+86400

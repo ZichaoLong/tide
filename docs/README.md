@@ -32,6 +32,8 @@
 
 已冻结 Stage A 作业通过 `python scripts/status.py` 和启动指针中的 `runq_root` 查看，其独立工作服务使用原有的项目状态目录。项目队列的低层检查入口是 `python -m pilotlab.runq --root ~/.local/state/tide-runq status`。[项目状态](#查状态)
 
+项目旧队列的 `limits --cards N --auto-card-ids ID ...` 热调自动使用的物理卡。已有外部进程的卡可用 `auto-share ID ... --until-unix TIMESTAMP` 登记当前进程身份和许可截止时间。后续任务沿用这份许可，出现新的外部进程时队列会等待。`auto-share ID ... --clear` 撤回这些卡的自动共享许可。
+
 ## 恢复已归档的检查点
 
 2026-11-23 清理的 R1、R2、R3 冷检查点保存在本账号的私有 SFS 目录。恢复清单按原仓库相对路径记录大小、SHA-256、权限和修改时间。原轮次的任务、结果及终态审计仍按原路径引用这些文件。需要重跑某轮的全文件审计时，先在仓库根目录按该轮恢复，再运行原审计命令。[清理和恢复实测](evidence/pilot-r3-r30-storage-cleanup.json) · [恢复程序](../scripts/restore_checkpoint_archive.py)
