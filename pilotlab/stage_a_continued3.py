@@ -18,7 +18,7 @@ def verify_scope(plan):
     acceptance = read_bound(batch["qualification"])
     config = plan["config"]
     prior = {**old["config"], **reviewed_storage_settings(review)}
-    apply_reviewed_policy(prior, review, config["run_id"])
+    apply_reviewed_policy(prior, review, config.get("run_id"))
     placement = review.get("stage_a_cpu_placement", old.get("stage_a_cpu_placement")) or {}
     if placement.get("policy") == DIRECT_POLICY:
         prior["resource_dispatch"] = True
