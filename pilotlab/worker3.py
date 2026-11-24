@@ -147,6 +147,8 @@ def validate_task(task: dict) -> None:
         raise ValueError("target_tokens must be an exact multiple of one optimizer update")
     if task.get("gradient_accumulation", 1) != 1:
         raise ValueError("this stream contract requires one independent batch per update")
+    if type(task.get("backward_range_retry", True)) is not bool:
+        raise ValueError("backward_range_retry must be boolean")
     if type(task["seed"]) is not int or task["seed"] < 0:
         raise ValueError("seed must be a nonnegative integer")
     if task.get("precision", "fp32") not in ("fp32", "bf16"):
@@ -277,26 +279,57 @@ def train_update(model, optimizer, inputs, targets, state, device, task, tokens,
     import torch
     from .models import detach_state
     from tide.precision import precision_context
+    try:
+        from tide.scaled_arithmetic import GradientRangeError
+        range_errors = (GradientRangeError,)
+    except ImportError:
+        # Older frozen instances have no typed retryable error.
+        range_errors = ()
     model.train()
-    optimizer.zero_grad(set_to_none=True)
     after = tokens + targets.numel()
     lr = learning_rate(task, after)
     for group in optimizer.param_groups:
         group["lr"] = lr
     before = {name: parameter.detach().clone() for name, parameter in model.named_parameters()} if sample else {}
-    activation = ActivationSample(model) if sample else None
-    try:
-        with precision_context(device, task.get("precision", "fp32")):
-            output = model(inputs.to(device), state, record_work=sample)
-            nll = torch.nn.functional.cross_entropy(output.logits.float().flatten(0, 1), targets.to(device).flatten())
-            auxiliary = getattr(output, "auxiliary_loss", None)
-            objective = nll if auxiliary is None else nll + task.get("auxiliary_loss_weight", 1.0) * auxiliary
-        if not bool(torch.isfinite(objective)):
-            raise ArithmeticError("nonfinite training objective")
-        objective.backward()
-    finally:
-        if activation is not None:
-            activation.close()
+    divisors = (1, 8, 16) if range_errors and task.get("backward_range_retry", True) else (1,)
+    # Each supported model takes its recurrent state as a functional input.
+    # The stream has already delivered this batch. Replay the same RNG and
+    # observations; no optimizer update takes place until backward succeeds.
+    saved_rng = rng_state(device) if len(divisors) > 1 else None
+    counters = getattr(getattr(model, "core", None), "_pool_counts", None)
+    saved_counts = vars(counters).copy() if counters is not None else {}
+    for divisor in divisors:
+        optimizer.zero_grad(set_to_none=True)
+        activation = ActivationSample(model) if sample else None
+        try:
+            with precision_context(device, task.get("precision", "fp32")):
+                output = model(inputs.to(device), state, record_work=sample)
+                nll = torch.nn.functional.cross_entropy(output.logits.float().flatten(0, 1), targets.to(device).flatten())
+                auxiliary = getattr(output, "auxiliary_loss", None)
+                objective = nll if auxiliary is None else nll + task.get("auxiliary_loss_weight", 1.0) * auxiliary
+            if not bool(torch.isfinite(objective)):
+                raise ArithmeticError("nonfinite training objective")
+            try:
+                (objective if divisor == 1 else objective / divisor).backward()
+            except range_errors:
+                optimizer.zero_grad(set_to_none=True)
+                if saved_rng is not None:
+                    restore_rng(saved_rng, device)
+                    if counters is not None:
+                        vars(counters).update(saved_counts)
+                if divisor == divisors[-1]:
+                    raise
+                del output, objective, auxiliary, nll
+                continue
+            break
+        finally:
+            if activation is not None:
+                activation.close()
+    if divisor != 1:
+        with torch.no_grad():
+            for parameter in model.parameters():
+                if parameter.grad is not None:
+                    parameter.grad.mul_(divisor)
     gradients = ({name: None if p.grad is None else tensor_stats(p.grad)
                   for name, p in model.named_parameters()} if sample else {})
     norm = torch.nn.utils.clip_grad_norm_(model.parameters(), task.get("grad_clip", 1.0),
@@ -323,6 +356,7 @@ def train_update(model, optimizer, inputs, targets, state, device, task, tokens,
         if not health["observed_finite"]:
             raise ArithmeticError("nonfinite sampled activation, parameter, update, or private state")
     return {"loss": float(nll.detach()), "objective": float(objective.detach()), "grad_norm": float(norm),
+            "backward_divisor": divisor,
             "lr": lr, "state": detach_state(output.state), "health": health, "work": output.work}
 
 
@@ -638,6 +672,8 @@ def execute(args):
             row = {"step": steps, "tokens": tokens, "loss": update["loss"], "objective": update["objective"],
                    "grad_norm": update["grad_norm"], "lr": update["lr"], "state_reset": reset,
                    "seconds": elapsed, "sampled_diagnostics": sample, "time_unix": time.time()}
+            if update["backward_divisor"] != 1:
+                row["backward_divisor"] = update["backward_divisor"]
             if before_rng is not None:
                 row.update(input_sha256=digest_tree((inputs, targets)), rng_before_sha256=before_rng,
                            rng_after_sha256=digest_tree(rng_state(device)))

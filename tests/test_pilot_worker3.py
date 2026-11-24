@@ -209,3 +209,55 @@ def test_memory_observation_records_device_free_instead_of_subtracting_local_all
     assert observed_devices == [device]
     assert result["npu_total_memory_bytes"] == 1000 and result["npu_free_memory_bytes"] == 333
     assert result["npu_reserved_bytes"] == 100
+
+
+@pytest.mark.parametrize("failure,expected", [("retry", 8), ("unrelated", None), ("exhaust", None)])
+def test_backward_range_replay_restores_one_optimizer_update(failure, expected):
+    import random
+    from types import SimpleNamespace
+    import numpy as np
+    from tide.scaled_arithmetic import GradientRangeError
+    from pilotlab.worker3 import train_update
+
+    class Model(torch.nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.weight = torch.nn.Parameter(torch.tensor(0.))
+            self.core = SimpleNamespace(_pool_counts=SimpleNamespace(rows=0))
+            self.samples = []
+
+        def forward(self, x, state, record_work=False):
+            self.core._pool_counts.rows += 1
+            self.samples.append((x.tolist(), state, random.random(), np.random.random(), torch.rand(()).item()))
+            def threshold(g):
+                if failure == "unrelated":
+                    raise ArithmeticError("unrelated")
+                if failure == "exhaust" or abs(g.item()) > 0.2:
+                    # Simulate a parameter that AccumulateGrad visited before this failure.
+                    self.weight.grad = torch.full_like(self.weight, 123.)
+                    raise GradientRangeError("range")
+                return g
+
+            y = self.weight * 8
+            y.register_hook(threshold)
+            return SimpleNamespace(logits=torch.stack((y, -y)).view(1, 1, 2),
+                                   auxiliary_loss=None, work=None, state=None)
+
+    model = Model()
+    opt = torch.optim.SGD(model.parameters(), lr=1.)
+    task = dict(lr=1., warmup_tokens=0, schedule_tokens=10, lr_floor_ratio=1., grad_clip=1.)
+    args = (model, opt, torch.zeros(1, 1, dtype=torch.long), torch.zeros(1, 1, dtype=torch.long),
+            42, torch.device("cpu"), task, 0)
+    if expected:
+        result = train_update(*args, sample=False)
+        assert result["backward_divisor"] == expected and result["grad_norm"] == 8.
+        assert model.weight.item() == pytest.approx(1., abs=2e-6)
+        assert len(model.samples) == 2 and model.samples[0] == model.samples[1]
+        assert model.core._pool_counts.rows == 1
+    else:
+        with pytest.raises(ArithmeticError, match="unrelated" if failure == "unrelated" else "range"):
+            train_update(*args, sample=False)
+        assert model.weight.item() == 0.
+        assert len(model.samples) == (1 if failure == "unrelated" else 3)
+        if failure == "exhaust":
+            assert model.weight.grad is None and model.core._pool_counts.rows == 0
