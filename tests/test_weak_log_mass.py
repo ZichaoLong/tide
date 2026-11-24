@@ -61,6 +61,38 @@ def test_real_zero_right_derivative_amplitude_and_padding(device):
     torch.testing.assert_close(torch.autograd.grad(mean.sum(),parts)[0],q.new_tensor([[-3*p*(1-p),3*p*(1-p)]]))
 
 
+def test_log_total_projects_absent_roots_and_preserves_a_movable_zero(device):
+    from tide.scaled_arithmetic import GradientRangeError
+
+    mass = torch.tensor([[-110., 0., 0.]], device=device, requires_grad=True)
+    values = torch.ones(1, 3, 1, device=device)
+    fixed = torch.tensor([[True, False, False]], device=device)
+    total, _ = reception_mean(mass, values, fixed)
+    assert total.item() == -110.
+    torch.testing.assert_close(torch.autograd.grad(total.sum(), mass)[0], mass.new_tensor([[1., 0., 0.]]))
+
+    movable = torch.tensor([[True, True, False]], device=device)
+    total, _ = reception_mean(mass, values, movable)
+    scale = 2. ** -40
+    expected = mass.new_tensor([[scale, scale * math.exp(110.), 0.]])
+    torch.testing.assert_close(torch.autograd.grad(total.sum() * scale, mass, retain_graph=True)[0], expected)
+    with pytest.raises(GradientRangeError):
+        torch.autograd.grad(total.sum(), mass)
+
+
+def test_readout_gradient_when_a_weak_sender_takes_the_total_above_one(device):
+    from tide.model import WeakLogResult
+    from tide.weak_mass import physical
+
+    code = torch.tensor([1., -100.], device=device).reshape(2, 1, 1).requires_grad_()
+    values = torch.tensor([2., 4.], device=device).reshape(2, 1, 1, 1)
+    result = WeakLogResult(values, physical(code), torch.arange(1, device=device), None,
+                           strength_coordinates=code)
+    grad, = torch.autograd.grad(result.readout().sum(), code)
+    assert result.readout().item() == 2.
+    assert abs(grad[0].item()) < 1e-30
+
+
 @pytest.mark.parametrize("batch_regions", [1, 4])
 def test_timed_kv_pending_and_checkpoint_preserve_weak_support(tmp_path, device, batch_regions):
     from tide.model import WeakLogState

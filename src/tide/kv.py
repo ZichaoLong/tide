@@ -113,7 +113,7 @@ class KVMemory(nn.Module):
             extended = self.weak_log and bool((codes < 0).any())
             features_tile = bank.features[:, :, lo:hi]
             if extended:
-                from .weak_mass import decode, wide
+                from .weak_mass import above_one, decode, wide
                 weight = decode(wide(codes)) * visible.cpu()
                 features_tile = wide(features_tile)
             else:
@@ -123,7 +123,8 @@ class KVMemory(nn.Module):
                 decay = decay.to(weight)
             for weights, outputs, amounts in ((weight, long, wl), (weight*decay, short, ws)):
                 amount = weights.sum(-1)
-                denominator = torch.where(amount <= 1, torch.ones_like(amount), amount)
+                normalized = above_one(weights) if extended else amount > 1
+                denominator = torch.where(normalized, amount, torch.ones_like(amount))
                 with torch.autocast(u.device.type, enabled=False):
                     outputs.append((torch.matmul(weights, features_tile) / denominator[..., None]).to(features))
                 amounts.append(amount.to(features))

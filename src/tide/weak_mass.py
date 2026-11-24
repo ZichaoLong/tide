@@ -60,6 +60,13 @@ def physical(x):
     return decode(wide(x)).to(x) if bool((x < 0).any()) else x
 
 
+@torch.no_grad()
+def above_one(weights):
+    # Exactly one plus a weak positive can round to one even in binary64.
+    head, tail = compensated_sum(weights)
+    return ((head > 1) | ((head == 1) & (tail > 0))).squeeze(-1)
+
+
 def twice_capped(x):
     if not bool(weak(x).any()):
         return torch.where(x >= .5, 1., 2*x)
@@ -101,7 +108,7 @@ def reception_mean(mass, values, mask):
     payload = values.reshape(weights.shape + (values.shape[-1],))
     table = None if mask is None else mask.expand_as(mass).reshape_as(weights)
     flagged = weak(weights).any(-1)
-    total = mass.sum(-1).reshape(-1)
+    total = (weights if table is None else weights.masked_fill(~table, 0)).sum(-1)
     result = values.new_zeros((weights.shape[0], values.shape[-1]), dtype=torch.promote_types(mass.dtype, values.dtype))
     for exceptional, indices in ((False, (~flagged).nonzero().flatten()), (True, flagged.nonzero().flatten())):
         if not indices.numel():
@@ -110,8 +117,12 @@ def reception_mean(mass, values, mask):
         membership = None if table is None else table[indices]
         if exceptional:
             m = decode(wide(m))
-            total = total.index_copy(0, indices, encode(m.sum(-1), mass))
-            mean = stable_weighted_mean(m, wide(v), None if membership is None else membership.cpu())
+            membership = None if membership is None else membership.cpu()
+            # A log-total has physical derivative 1/sum(m). Project absent
+            # roots here, before that derivative returns to the source dtype.
+            present = m if membership is None else m.masked_fill(~membership, 0)
+            total = total.index_copy(0, indices, encode(present.sum(-1), mass))
+            mean = stable_weighted_mean(m, wide(v), membership)
         else:
             mean = stable_weighted_mean(m, v, membership)
         result = result.index_copy(0, indices, mean.to(result))
@@ -148,10 +159,7 @@ def attention(q, k, v, weights, mask, backend, constant_zero, mass_scaled):
         if mass_scaled:
             used = torch.where(visible, queries(raw), 0.)
             total = used.sum(-1, keepdim=True)
-            with torch.no_grad():
-                head, tail = compensated_sum(used.detach())
-                capped = (head > 1) | ((head == 1) & (tail > 0))
-            read = read * torch.where(capped, 1., total)
+            read = read * torch.where(above_one(used)[..., None], 1., total)
         rows.append(read)
     result = torch.cat(rows, -2)
     dtype = torch.promote_types(q.dtype, torch.float32) if mass_scaled else q.dtype

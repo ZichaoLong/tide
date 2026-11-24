@@ -622,17 +622,21 @@ def weighted_attention(q: Tensor, k: Tensor, v: Tensor, weights: Tensor | None =
     elif weights.device != q.device or not (weights.dtype == q.dtype or
             q.dtype == torch.bfloat16 and weights.dtype == torch.float32):
         raise ValueError("weights must share q's dtype/device, or be FP32 with BF16 q/k/v")
-    if _weak_log and not unit_prior and q.shape[-2] and k.shape[-2]:
-        from . import weak_mass
-        if bool(weak_mass.weak(weights).any()):
-            return weak_mass.attention(q, k, v, weights, mask, backend, _constant_zero_prior, mass_scaled)
-    if not unit_prior and bool((~torch.isfinite(weights) | (weights < 0)).any()):
-        raise ValueError("weights must be finite and nonnegative")
+    if not unit_prior:
+        invalid = ~torch.isfinite(weights)
+        if not _weak_log:
+            invalid = invalid | (weights < 0)
+        if bool(invalid.any()):
+            raise ValueError("invalid weak-log coordinate" if _weak_log else "weights must be finite and nonnegative")
     if mask is None:
         mask = torch.ones((), dtype=torch.bool, device=q.device)
     elif mask.dtype != torch.bool or mask.device != q.device:
         raise ValueError("mask must be boolean and on q's device")
     weights, mask = _auxiliary(weights, shape, True), _auxiliary(mask, shape, False)
+    if _weak_log and not unit_prior and q.shape[-2] and k.shape[-2]:
+        from .weak_mass import attention as weak_attention, weak
+        if bool(weak(weights).any()):
+            return weak_attention(q, k, v, weights, mask, backend, _constant_zero_prior, mass_scaled)
     weak_mass = False
     if not unit_prior:
         accumulation_dtype = torch.float64 if q.dtype == torch.float64 else torch.float32

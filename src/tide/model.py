@@ -138,13 +138,13 @@ class WeakLogResult(Result):
     strength_coordinates: torch.Tensor | None = None
 
     def readout(self):
-        from .weak_mass import decode, weak, wide
+        from .weak_mass import above_one, decode, weak, wide
         code = self.strength_coordinates
         if not bool(weak(code).any()):
             return super().readout()
         mass = decode(wide(code))
         total = mass.sum(0)
-        denominator = torch.where(total > 1, total, 1.)
+        denominator = torch.where(above_one(mass.movedim(0, -1)), total, 1.)
         return ((wide(self.values)*mass[..., None]).sum(0)/denominator[..., None]).to(self.values)
 
 
