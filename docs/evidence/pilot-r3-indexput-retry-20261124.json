@@ -1,0 +1,63 @@
+{
+  "a1_jobs_registered": [
+    910,
+    911,
+    912,
+    913,
+    914,
+    915,
+    916,
+    917,
+    918,
+    919,
+    920,
+    921
+  ],
+  "evidence": {
+    "formal_result": {
+      "path": ".local/pilot-r3/campaign-runq/round/tasks/low-activity-multiscale_timed-base-n16-d128-k1-8ff51cae18-init-2026112001/attempt-1/result.json",
+      "sha256": "fa7d1b6ad65421bf714b5253c74177616775762924469b715a8e03b9bb3c8e7f"
+    },
+    "frozen_task": {
+      "path": ".local/pilot-r3/campaign-runq/round/tasks/low-activity-multiscale_timed-base-n16-d128-k1-8ff51cae18-init-2026112001/task.json",
+      "sha256": "92a28eea28045792d24af4a627ed29d9aa09ad90cd9806e2db6856c295d5a6a2"
+    },
+    "init_gate": {
+      "path": ".local/pilot-r3/campaign-runq/round/decisions/init-model-low-activity-multiscale_timed-base-n16-d128-k1-8ff51cae18.json",
+      "sha256": "57626cbaf51da51c67d071f4847350de0a17cca27ebc164717a33abc57da1966"
+    },
+    "original_failure": {
+      "path": ".local/pilot-r3/campaign-runq/round/tasks/low-activity-multiscale_timed-base-n16-d128-k1-8ff51cae18-init-2026112001/attempt-0/result.json",
+      "sha256": "daa1352141bb5b76d14cdbe5b635a3fade44f9863081c4ff7d250931257f767e"
+    },
+    "worker_continuity": {
+      "path": ".local/pilot-r3/resource-handoffs/retry-654-20261124/admission-and-workers.json",
+      "sha256": "5f16def7a8ce8935d37e541c1119dafdd5952191c0bb22e979dd5a208d20a21e"
+    }
+  },
+  "init_gate": "passed",
+  "local_handoff": ".local/pilot-r3/resource-handoffs/retry-654-20261124/verified.json",
+  "previous": {
+    "error_code": 507018,
+    "job": 654,
+    "kernel": "IndexPut",
+    "physical_card": 10,
+    "root_cause": "undetermined",
+    "steps": 0
+  },
+  "retry": {
+    "causality_within_tolerance": true,
+    "eligible": true,
+    "evaluation_tokens": 512,
+    "initialization_parameter_sha256": "bb1df34a1e08a94f24e30275de197646a007db5e3af6293293313005e5dd35d6",
+    "job": 909,
+    "physical_card": 7,
+    "status": "completed",
+    "training_steps": 64,
+    "training_tokens": 32768,
+    "validation_final_nll": 8.705318450927734
+  },
+  "seed": 2026112001,
+  "task": "low-activity-multiscale_timed-base-n16-d128-k1-8ff51cae18-init-2026112001",
+  "verified_at": "2026-11-24T18:18:03.331855+08:00"
+}
