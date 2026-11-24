@@ -1,6 +1,6 @@
 {
   "acceptance": {
-    "account_unit_and_service_tests": 9,
+    "account_unit_and_service_tests": 10,
     "device_worker_launch_test": "synthetic driver with private cooperative locks and real systemd lease and worker",
     "independent_cpu_trial": "priority, runtime reservation grant and denial, metadata and result_ready event",
     "physical_device_measurement": "npu-smi mapping, process HBM and chip utilization",
@@ -9,7 +9,7 @@
   },
   "account_tool": {
     "active": true,
-    "commit": "e09a4a3e02bca08e353c0f4bd4bac8f6f49e0d54",
+    "commit": "37531793187893e5e4ccd3487f4efd034d6e56eb",
     "job_count": 0,
     "limits": {
       "cards": 8,
@@ -18,11 +18,12 @@
       "ram": null,
       "threads": 320
     },
+    "observed_at": "2026-11-24T05:50:55.186860+00:00",
     "service": "runq-5e34d651b4-dispatcher.service",
     "state_root": "~/.local/state/runq",
-    "version": "1.0.0"
+    "version": "1.0.1"
   },
-  "observed_at": "2026-11-24T05:47:00.768254+00:00",
+  "observed_at": "2026-11-24T05:50:54.833468+00:00",
   "project_controller": {
     "active_or_queued_with_old_campaign_ram_cap": 0,
     "commit": "1a3396939bf6933feef5fd5d0d14dde331dfa71e",
@@ -56,16 +57,16 @@
       "9": 7
     },
     "observation_errors": [],
-    "selected_models": 154,
+    "selected_models": 155,
     "stage": "stage-a-training-pipeline",
     "stage_b_gate": "closed",
     "status": "running",
     "task_counts": {
-      "completed": 210,
-      "pending": 136,
+      "completed": 214,
+      "pending": 135,
       "running": 100
     },
-    "verified_tasks": 210,
+    "verified_tasks": 214,
     "workers": {
       "cpu": 40,
       "npu": 60
