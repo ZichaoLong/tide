@@ -1,0 +1,508 @@
+{
+  "accepted_test_counts": {
+    "placement_migration_review": 36,
+    "queue_pipeline_scheduler_window_status": 162
+  },
+  "campaign_deadline": "2026-12-20T00:48:33.931+08:00",
+  "card_window": {
+    "absolute_deadline": "2026-11-25T08:28:59.690+08:00",
+    "absolute_deadline_unix": 1795566539.6908517,
+    "observed_timer": {
+      "ActiveState": "active",
+      "NextElapseUSecRealtime": "Wed 2026-11-25 08:28:59 CST",
+      "SubState": "waiting",
+      "Triggers": "tide-pilot-r3-extra-card-release-20261125.service"
+    },
+    "temporary_cards": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      12,
+      13
+    ],
+    "timer": "tide-pilot-r3-extra-card-release-20261125.timer"
+  },
+  "consistency": {
+    "failed_jobs_since_handoff": [],
+    "from_unix": 1795535760.0547438,
+    "reserved_without_command": [],
+    "scheduler_running": 123,
+    "terminal_jobs_still_tracked_running": [],
+    "to_unix": 1795535985.2685716,
+    "workers_observed": 123
+  },
+  "controller_commit": "b12d7fa020fe0a22f4e283383d30cb169a526805",
+  "controller_overlay_files": [
+    "round3.py",
+    "runq_campaign.py"
+  ],
+  "controller_unit": "tide-pilot-r3-pipeline-rejoin-20261124.service",
+  "controller_window_models": 64,
+  "dispatcher": "tide-runq-25fe5df65a-dispatcher.service",
+  "dispatcher_invocation": "06928c312d474a6b99b5d0b833b9985d",
+  "existing_worker_outcomes": {
+    "same_pid": 120
+  },
+  "hbm": {
+    "changed_initial_reservations": {
+      "queued": 3,
+      "reserved": 2,
+      "running": 6
+    },
+    "existing_light_workers": [
+      {
+        "card": 2,
+        "job": 983,
+        "matched_completed_results": 6,
+        "measured_max_gib": 1.495,
+        "new_gib": 3.0,
+        "old_gib": 8,
+        "shape_digest": "117b026adb01744696845e9fb139fc904e2eec6efae589e30c03817e4aba120c"
+      },
+      {
+        "card": 2,
+        "job": 984,
+        "matched_completed_results": 6,
+        "measured_max_gib": 1.495,
+        "new_gib": 3.0,
+        "old_gib": 8,
+        "shape_digest": "117b026adb01744696845e9fb139fc904e2eec6efae589e30c03817e4aba120c"
+      },
+      {
+        "card": 2,
+        "job": 985,
+        "matched_completed_results": 2,
+        "measured_max_gib": 1.536,
+        "new_gib": 3.0,
+        "old_gib": 8,
+        "shape_digest": "b9b49d4d17aa80efe6c09648e2aaf160d94d6af7ce5bd1afe3e017224ec00cb1"
+      },
+      {
+        "card": 2,
+        "job": 979,
+        "matched_completed_results": 8,
+        "measured_max_gib": 2.173,
+        "new_gib": 4.0,
+        "old_gib": 8,
+        "shape_digest": "3734321121cc961489729d36317ca6ab0ee92d680133b552eb7ea8f4519fd46e"
+      },
+      {
+        "card": 2,
+        "job": 980,
+        "matched_completed_results": 8,
+        "measured_max_gib": 2.173,
+        "new_gib": 4.0,
+        "old_gib": 8,
+        "shape_digest": "3734321121cc961489729d36317ca6ab0ee92d680133b552eb7ea8f4519fd46e"
+      },
+      {
+        "card": 3,
+        "job": 944,
+        "matched_completed_results": 2,
+        "measured_max_gib": 1.55,
+        "new_gib": 3.0,
+        "old_gib": 8,
+        "shape_digest": "d185c6cc29d6f2309ad53630e35d5301612061432f5bd16842df356953388777"
+      },
+      {
+        "card": 3,
+        "job": 986,
+        "matched_completed_results": 2,
+        "measured_max_gib": 1.536,
+        "new_gib": 3.0,
+        "old_gib": 8,
+        "shape_digest": "b9b49d4d17aa80efe6c09648e2aaf160d94d6af7ce5bd1afe3e017224ec00cb1"
+      },
+      {
+        "card": 3,
+        "job": 1007,
+        "matched_completed_results": 6,
+        "measured_max_gib": 1.599,
+        "new_gib": 3.0,
+        "old_gib": 8,
+        "shape_digest": "829e57f6cf78ddb0f6487b3f70840be2eb181033fbd9bb55b4f64717b000154d"
+      },
+      {
+        "card": 3,
+        "job": 1008,
+        "matched_completed_results": 6,
+        "measured_max_gib": 1.599,
+        "new_gib": 3.0,
+        "old_gib": 8,
+        "shape_digest": "829e57f6cf78ddb0f6487b3f70840be2eb181033fbd9bb55b4f64717b000154d"
+      },
+      {
+        "card": 3,
+        "job": 1009,
+        "matched_completed_results": 7,
+        "measured_max_gib": 2.351,
+        "new_gib": 5.0,
+        "old_gib": 8,
+        "shape_digest": "0e19cdfaff39bc9d8604e42aeae225dfd4c8b970743edbbe968cde23ec9d9441"
+      }
+    ],
+    "margin": "Round up 1.5 times the larger of the verified same-shape allocator peak and sampled driver footprint plus 0.5 GiB. Only existing default reservations on cards 2 and 3 were reduced.",
+    "measured_input_shapes": 8,
+    "newly_placed": {
+      "960": {
+        "after_headroom_before_start": 30289166336,
+        "before_headroom": 5593104384,
+        "card": 2
+      },
+      "961": {
+        "after_headroom_before_start": 30679236608,
+        "before_headroom": 5983174656,
+        "card": 3
+      }
+    },
+    "peak_gib": {
+      "2": 8.787,
+      "4": 17.002
+    },
+    "requested_gib": {
+      "2": 14.0,
+      "4": 27.0
+    },
+    "timed_k_models": 4
+  },
+  "jobs": [
+    {
+      "attempts_after": [
+        852
+      ],
+      "attempts_before": [
+        852
+      ],
+      "automatic": true,
+      "backend": "npu",
+      "causality_within_tolerance": true,
+      "evaluation_reservation_after": 544,
+      "evaluation_reservation_before": 544,
+      "evaluation_tokens_observed": 512,
+      "health_eligible": true,
+      "job": 852,
+      "physical_card": 10,
+      "queue_state": "completed",
+      "result": {
+        "path": ".local/pilot-r3/campaign-runq/round/tasks/low-activity-multiscale_timed-memory_k-n16-d128-k4-dd13764416-init-2026112001/attempt-0/result.json",
+        "sha256": "527d7f35af0f0a5a734fa37e308124a082554ac2c6fa73221a83fb23e7433fdd"
+      },
+      "scheduler_state": "completed",
+      "task": {
+        "path": ".local/pilot-r3/campaign-runq/round/tasks/low-activity-multiscale_timed-memory_k-n16-d128-k4-dd13764416-init-2026112001/task.json",
+        "sha256": "183069a68604406515a47ff041005c017b90872b1943d02c5a4b782346e93bb3"
+      },
+      "task_id": "low-activity-multiscale_timed-memory_k-n16-d128-k4-dd13764416-init-2026112001",
+      "training_steps": 64,
+      "training_tokens": 32768
+    },
+    {
+      "attempts_after": [
+        853
+      ],
+      "attempts_before": [
+        853
+      ],
+      "automatic": true,
+      "backend": "cpu",
+      "causality_within_tolerance": true,
+      "evaluation_reservation_after": 544,
+      "evaluation_reservation_before": 544,
+      "evaluation_tokens_observed": 512,
+      "health_eligible": true,
+      "job": 853,
+      "physical_card": null,
+      "queue_state": "completed",
+      "result": {
+        "path": ".local/pilot-r3/campaign-runq/round/tasks/low-activity-multiscale_timed-memory_k-n16-d128-k4-dd13764416-init-2026112002/attempt-0/result.json",
+        "sha256": "b537b3becc7b99c129eb32f01a7bfca1fa7b63a2a677bbd6e4b2d085bb088280"
+      },
+      "scheduler_state": "completed",
+      "task": {
+        "path": ".local/pilot-r3/campaign-runq/round/tasks/low-activity-multiscale_timed-memory_k-n16-d128-k4-dd13764416-init-2026112002/task.json",
+        "sha256": "1e30948660e907e5fb3ba7b84ab4d541f6b8359d1e4db0ffe2bd6854248663e0"
+      },
+      "task_id": "low-activity-multiscale_timed-memory_k-n16-d128-k4-dd13764416-init-2026112002",
+      "training_steps": 64,
+      "training_tokens": 32768
+    },
+    {
+      "attempts_after": [
+        854
+      ],
+      "attempts_before": [],
+      "automatic": true,
+      "backend": "cpu",
+      "evaluation_reservation_after": 544,
+      "evaluation_reservation_before": 0,
+      "first_update": {
+        "grad_norm": 5.905412673950195,
+        "loss": 9.033761024475098,
+        "step": 1,
+        "time_unix": 1795535842.7377648,
+        "tokens": 512
+      },
+      "generation": 3,
+      "job": 854,
+      "latest_update": {
+        "grad_norm": 3.0455963611602783,
+        "loss": 9.01817512512207,
+        "step": 3,
+        "time_unix": 1795535957.7236426,
+        "tokens": 1536
+      },
+      "physical_card": null,
+      "pid": 3122739,
+      "queue_state": "running",
+      "scheduler_state": "running",
+      "start_ticks": 2312194762,
+      "task": {
+        "path": ".local/pilot-r3/campaign-runq/round/tasks/low-activity-multiscale_timed-memory_k-n16-d128-k4-dd13764416-init-2026112003/task.json",
+        "sha256": "d26f0da1410cf667ee204d34008b38a3ef61aa0d1c4bf5434f5ac6b750969d6a"
+      },
+      "task_id": "low-activity-multiscale_timed-memory_k-n16-d128-k4-dd13764416-init-2026112003",
+      "unit": "tide-runq-25fe5df65a-job-854-3.service"
+    },
+    {
+      "attempts_after": [
+        960
+      ],
+      "attempts_before": [],
+      "automatic": true,
+      "backend": "npu",
+      "device_admission": {
+        "card": 2,
+        "external": [],
+        "lease": 19,
+        "sample_times": [
+          1795535825.525995,
+          1795535829.6777585
+        ],
+        "used_bytes": 17561550848
+      },
+      "driver_hbm_bytes": 18345885696,
+      "evaluation_reservation_after": 544,
+      "evaluation_reservation_before": 0,
+      "first_update": {
+        "grad_norm": 2.2244224548339844,
+        "loss": 9.048781394958496,
+        "step": 1,
+        "time_unix": 1795535860.7498934,
+        "tokens": 512
+      },
+      "generation": 2,
+      "job": 960,
+      "latest_update": {
+        "grad_norm": 2.4416663646698,
+        "loss": 9.040545463562012,
+        "step": 9,
+        "time_unix": 1795535977.0301335,
+        "tokens": 4608
+      },
+      "physical_card": 2,
+      "pid": 3124832,
+      "queue_state": "running",
+      "reserved_hbm_gib": 27,
+      "scheduler_state": "running",
+      "start_ticks": 2312200060,
+      "task": {
+        "path": ".local/pilot-r3/campaign-runq/round/tasks/low-activity-multiscale_timed-memory_k-n16-d128-k2-7b883fbcc5-init-2026112001/task.json",
+        "sha256": "af418aafb06a6e2ff1120b274aaa63b7ba1916f0377a5fbc3e4e8725a0340ab3"
+      },
+      "task_id": "low-activity-multiscale_timed-memory_k-n16-d128-k2-7b883fbcc5-init-2026112001",
+      "unit": "tide-runq-25fe5df65a-job-960-2.service"
+    },
+    {
+      "attempts_after": [
+        961
+      ],
+      "attempts_before": [],
+      "automatic": true,
+      "backend": "npu",
+      "device_admission": {
+        "card": 3,
+        "external": [],
+        "lease": 20,
+        "sample_times": [
+          1795535825.525995,
+          1795535829.6777585
+        ],
+        "used_bytes": 18424528896
+      },
+      "driver_hbm_bytes": 18282971136,
+      "evaluation_reservation_after": 544,
+      "evaluation_reservation_before": 0,
+      "first_update": {
+        "grad_norm": 2.597907543182373,
+        "loss": 9.027336120605469,
+        "step": 1,
+        "time_unix": 1795535865.5103307,
+        "tokens": 512
+      },
+      "generation": 2,
+      "job": 961,
+      "latest_update": {
+        "grad_norm": 2.730072259902954,
+        "loss": 9.03665542602539,
+        "step": 8,
+        "time_unix": 1795535985.333875,
+        "tokens": 4096
+      },
+      "physical_card": 3,
+      "pid": 3124831,
+      "queue_state": "running",
+      "reserved_hbm_gib": 27,
+      "scheduler_state": "running",
+      "start_ticks": 2312200050,
+      "task": {
+        "path": ".local/pilot-r3/campaign-runq/round/tasks/low-activity-multiscale_timed-memory_k-n16-d128-k2-7b883fbcc5-init-2026112002/task.json",
+        "sha256": "bc3b3b2ac7cc4fedb7081377e258540d8a89357cec25862f5c104abf4bae962f"
+      },
+      "task_id": "low-activity-multiscale_timed-memory_k-n16-d128-k2-7b883fbcc5-init-2026112002",
+      "unit": "tide-runq-25fe5df65a-job-961-2.service"
+    },
+    {
+      "attempts_after": [
+        962
+      ],
+      "attempts_before": [],
+      "automatic": true,
+      "backend": "cpu",
+      "evaluation_reservation_after": 544,
+      "evaluation_reservation_before": 0,
+      "first_update": {
+        "grad_norm": 2.6126952171325684,
+        "loss": 9.030197143554688,
+        "step": 1,
+        "time_unix": 1795535847.4004526,
+        "tokens": 512
+      },
+      "generation": 2,
+      "job": 962,
+      "latest_update": {
+        "grad_norm": 3.0520665645599365,
+        "loss": 9.023813247680664,
+        "step": 3,
+        "time_unix": 1795535971.7280905,
+        "tokens": 1536
+      },
+      "physical_card": null,
+      "pid": 3122740,
+      "queue_state": "running",
+      "scheduler_state": "running",
+      "start_ticks": 2312194774,
+      "task": {
+        "path": ".local/pilot-r3/campaign-runq/round/tasks/low-activity-multiscale_timed-memory_k-n16-d128-k2-7b883fbcc5-init-2026112003/task.json",
+        "sha256": "55f41768cf4f62dd4f2200555b4b966831377a19eb82f551f89bc6f38d943854"
+      },
+      "task_id": "low-activity-multiscale_timed-memory_k-n16-d128-k2-7b883fbcc5-init-2026112003",
+      "unit": "tide-runq-25fe5df65a-job-962-2.service"
+    }
+  ],
+  "local_records": {
+    "controller-handoff.json": {
+      "path": ".local/pilot-r3/resource-handoffs/pipeline-window-recovery-20261124/controller-handoff.json",
+      "sha256": "e5611747cb936237a592939fea58c73a78af548cca8b8336aa9032172317b8a3"
+    },
+    "light-activation.json": {
+      "path": ".local/pilot-r3/resource-handoffs/pipeline-window-recovery-20261124/light-activation.json",
+      "sha256": "8512429df403e911e06b7145e7c4d1de5dd84ee898f53af2869ed16ecfde6aa9"
+    },
+    "light-measurements": {
+      "path": ".local/pilot-r3/resource-handoffs/pipeline-window-recovery-20261124/light-measurements-1795535827675.json",
+      "sha256": "aacba9f63119bd5fbaeb0f039fbefcb19125ee97e5750665e0c7fd4400872cf8"
+    },
+    "live-status.json": {
+      "path": ".local/pilot-r3/resource-handoffs/pipeline-window-recovery-20261124/live-status.json",
+      "sha256": "06c075bc93f4071680d48ae1f1626a64303773578b87924af64665b39e4b69c6"
+    },
+    "storage-before-submission.json": {
+      "path": ".local/pilot-r3/resource-handoffs/pipeline-window-recovery-20261124/storage-before-submission.json",
+      "sha256": "55fa6d36ac07e95e9407a72e0fa164b33814aedb4950734b9354c4ec09ae8d61"
+    },
+    "timed-k-measurement.json": {
+      "path": ".local/pilot-r3/resource-handoffs/pipeline-window-recovery-20261124/timed-k-measurement.json",
+      "sha256": "55b51c650870964c616ddde266c23616f7bee7c200c2f9c203c2bd0e68cc9945"
+    },
+    "timed-k-reservations.json": {
+      "path": ".local/pilot-r3/resource-handoffs/pipeline-window-recovery-20261124/timed-k-reservations.json",
+      "sha256": "31435ea89a6b4a9317a54a4d49ea13aa86e7c222b545f6b5572254f94c8c6c69"
+    },
+    "workers-before.json": {
+      "path": ".local/pilot-r3/resource-handoffs/pipeline-window-recovery-20261124/workers-before.json",
+      "sha256": "5fcdc7d66a01c842525fbc4fd373d92a1d36090afa9de7b544fcaa66a75e4566"
+    }
+  },
+  "other_registered_init_jobs": [
+    {
+      "job": 1024,
+      "queue_reason": "automatic CPU workers full",
+      "queue_state": "queued",
+      "runq_id": 1024,
+      "scheduler_state": "pending",
+      "task_id": "low-activity-multiscale_timed-memory_k-n16-d128-k1-90d0ce2c15-init-2026112001"
+    },
+    {
+      "job": 1025,
+      "queue_reason": "automatic CPU workers full",
+      "queue_state": "queued",
+      "runq_id": 1025,
+      "scheduler_state": "pending",
+      "task_id": "low-activity-multiscale_timed-memory_k-n16-d128-k1-90d0ce2c15-init-2026112002"
+    },
+    {
+      "job": 1026,
+      "queue_reason": "automatic CPU workers full",
+      "queue_state": "queued",
+      "runq_id": 1026,
+      "scheduler_state": "pending",
+      "task_id": "low-activity-multiscale_timed-memory_k-n16-d128-k1-90d0ce2c15-init-2026112003"
+    }
+  ],
+  "previous_controller": "tide-pilot-r3-window-hbm-20261124.service",
+  "queue_observed_at": "2026-11-24T23:59:45.268+08:00",
+  "rejoined_models": 67,
+  "schema": "pilot-r3-pipeline-window-recovery-v1",
+  "stage_a": {
+    "authorized_subjects": 270,
+    "counts": {
+      "completed": 735,
+      "pending": 122,
+      "running": 123,
+      "stopped_budget": 45,
+      "superseded": 8
+    },
+    "deferred_subjects": 74,
+    "models_selected": 166,
+    "stage_b_gate": "closed",
+    "verified_completed": 735
+  },
+  "status": "verified_controller_handoff_and_first_updates",
+  "status_observed_at": "2026-11-24T15:59:32.661594+00:00",
+  "workers": {
+    "cpu": 42,
+    "npu": 81,
+    "npu_workers_per_physical_card": {
+      "0": 5,
+      "1": 7,
+      "10": 4,
+      "11": 4,
+      "12": 4,
+      "13": 5,
+      "14": 3,
+      "15": 4,
+      "2": 8,
+      "3": 8,
+      "4": 7,
+      "5": 5,
+      "6": 7,
+      "7": 4,
+      "8": 4,
+      "9": 2
+    },
+    "temporary_card_workers": 49
+  }
+}
