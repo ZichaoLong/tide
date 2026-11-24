@@ -16,6 +16,13 @@ raises on that input. The selected policy is part of the model recipe and checkp
 The opt-in implementation refines extreme rows on the host and computes gradients
 from pre-floor responses. [API, limits and qualification](shannon-positive-floor.md)
 
+Set `shannon_support_policy="weak-log-v1"` to retain small positive masses
+in log coordinates through allocation, routing and normalized reads. The
+option includes CPU FP64 exceptional arithmetic on Ascend. A result exposes
+rounded physical `strengths`, and `strength_coordinates != 0` identifies
+emitting senders even when their physical strengths round to zero.
+`result.readout()` consumes the coordinates. [Meaning, limits and checkpoint compatibility](shannon-positive-floor.md#weak-positive-log-coordinates)
+
 Execution candidates are explicit `ModelConfig` options: `region_batch_size`
 (default 1) batches compatible regions within a layer, `checkpoint_regions`
 (default false) recomputes regional activations during backward, and

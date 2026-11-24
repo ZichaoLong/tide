@@ -7,6 +7,7 @@ tests/test_attention_native_support.py
 tests/test_shannon_cap.py
 tests/test_shannon_active_set.py
 tests/test_shannon_positive_floor.py
+tests/test_weak_log_mass.py
 tests/test_pool_positive_floor.py
 tests/test_allocation_face.py::test_recorded_shape_sender_and_score_vjp_against_independent_three_node_formula
 tests/test_quad_total.py

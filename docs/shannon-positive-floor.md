@@ -20,7 +20,38 @@ with observe_shannon_support() as counts:
 print(counts.refined_rows, counts.repaired_rows, counts.repaired_coordinates)
 ```
 
-Counts include solves executed within the observing context, including recomputation. The policy's throughput and multi-device execution have not been measured. [Allocator](../src/tide/allocation.py) · [Refinement](../src/tide/shannon_support.py)
+Counts include solves executed within the observing context, including recomputation. Matched single-device update and evaluation timings for two FP32 Timed configurations are available in the downstream comparison. [Allocator](../src/tide/allocation.py) · [Refinement](../src/tide/shannon_support.py) · [Matched timings](../../tide-learning-lab/docs/pilot-r3-weak-mass-comparison.md)
+
+## Weak positive log coordinates
+
+`ModelConfig(shannon_support_policy="weak-log-v1", allocation="shannon", ...)`
+selects an alternative representation. A sender stores zero for exact zero,
+the physical mass for `m >= 2^-60`, and the natural logarithm of its
+pre-rounding mass for smaller positive values. The signs distinguish the
+two coordinates in one scalar slot. The threshold selects the representation.
+Timed pending banks and KV key weights retain it across windows. Physical
+writes and descriptions convert back to their declared arithmetic dtype.
+The bounded reference path solves risky rows in CPU binary64, including on
+Ascend, and reports a range error for positive solver output below the normal
+binary64 range. Ordinary model parameters and stored SSD state retain their
+declared precision. [Implementation](../src/tide/weak_mass.py)
+
+For a normalized read $u=\sum_i p_i v_i$, a weak positive key contributes
+`score + log(m)` to the softmax. With output cotangent $g$, its log-mass
+cotangent is $p_i g^T(v_i-u)$. A true independent zero retains its declared
+one-sided derivative. Padding and a proven constant zero have no movable mass
+root. In a log-total, apply that membership mask before narrowing any physical
+cotangent, since the derivative of the log-total with respect to a physical
+input contains the reciprocal of the total. At an amplitude or normalization
+boundary, even a total of one plus a weak positive can determine which side
+owns the derivative. [Independent score, zero-slot, cap and restore tests](../tests/test_weak_log_mass.py)
+
+Old nonnegative pending and KV entries are read at their saved physical value.
+An entry previously rounded up to a subnormal carries no information about its
+original tail. Newly saved `WeakLogState` requires its matching policy. The CPU
+and Ascend FP32 comparisons used the same two old model prefixes for both
+arms. These short measurements cover particular windows and devices.
+[Matched downstream measurements and qualification](../../tide-learning-lab/docs/pilot-r3-weak-mass-comparison.md)
 
 ## Qualification on 2026-11-20
 
