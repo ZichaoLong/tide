@@ -488,7 +488,7 @@ class Supervisor:
                 raise ValueError("task reused across controller stages")
             elif previous["status"] == "completed":
                 self.verify_completed(task, previous)
-        self.state.update(status="running", stage=stage)
+        self.state.update(status="running", stage=stage, blocking_reason=None)
         self._save()
         try:
             while True:
@@ -542,7 +542,7 @@ class Supervisor:
         requests, permissions, verified = {}, {}, {}
         self.failed_independent_tasks = set()
         failed = self.failed_independent_tasks
-        self.state.update(status="running", stage=stage)
+        self.state.update(status="running", stage=stage, blocking_reason=None)
         try:
             while True:
                 self.supervision_tick()

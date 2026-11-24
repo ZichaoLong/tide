@@ -572,3 +572,14 @@ def test_simultaneous_runq_workers_bind_to_one_physical_lease(round_state,same_l
     assert report["concurrency"]["device_seconds"]==6
     assert report["concurrency"]["accounting_complete"]==same_lease
     assert bool(report["observation_errors"]) != same_lease
+
+
+def test_live_controller_handoff_clears_previous_signal_from_current_report(round_state, monkeypatch):
+    root, state = round_state
+    state.update(blocking_reason="user_signal", controller_identity={"pid":123,"start_ticks":25})
+    write(root/"scheduler.json",state)
+    monkeypatch.setattr(report3,"process_observation",
+                        lambda identity: {**identity,"alive":True,"same_start_ticks":True})
+    report = report3.build_report(root)
+    assert report["status"] == "running"
+    assert report["blocking_reason"] is None

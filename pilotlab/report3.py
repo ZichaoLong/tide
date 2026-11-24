@@ -782,9 +782,12 @@ def build_report(round_path, *, now=None):
     controller = process_observation(state.get("controller_identity"))
     observed_descendants = [process_observation(identity) for identity in state.get("all_seen_processes", {}).values()
                             if identity.get("pid") != state.get("controller_identity", {}).get("pid")]
+    blocker = state.get("blocking_reason") or final_summary.get("blocking_reason")
+    if status == "running" and blocker == "user_signal" and controller.get("alive") and controller.get("same_start_ticks"):
+        blocker = None  # Old snapshots keep the stopping controller's handoff signal.
     return {"schema": "pilot-r3-readonly-report-v1", "round": str(snapshot.root), "observed_unix": now,
         "status": status, "recorded_status": state_status, "stage": state.get("stage"),
-        "blocking_reason": state.get("blocking_reason") or final_summary.get("blocking_reason"),
+        "blocking_reason": blocker,
         "updated_unix": state.get("updated_unix"),
         "snapshot_age_seconds": max(0, now-state["updated_unix"]) if number(state.get("updated_unix")) else None,
         "gates": {"stage_a": stage_a_view, "stage_b_recorded": state.get("stage_b_gate", "not_recorded"), **gates},

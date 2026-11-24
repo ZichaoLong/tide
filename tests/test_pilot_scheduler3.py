@@ -828,3 +828,12 @@ def test_queue_failure_drains_independent_work_before_reporting(supervisor_facto
                                                       "done":"unrelated" in verified})
     assert ran == ["unrelated"]
     assert owner.state["stage_b_gate"] == "closed"
+
+
+def test_queue_uses_available_host_memory_instead_of_stopping_on_aggregate_rss(supervisor_factory):
+    owner = supervisor_factory()
+    owner.last_resources = time.time()
+    owner.resource_cache = {"available_storage_bytes": 10000, "rss_bytes": owner.config["max_rss_bytes"]+1}
+    assert owner.resource_reason() == "process_tree_rss_limit"
+    owner.config["runq_root"] = "/queue"
+    assert owner.resource_reason() is None

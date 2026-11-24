@@ -30,7 +30,7 @@
 
 `pin` 指定排队任务的 CPU 或物理卡，`request` 可在线调整预约。训练输入、评估、检查点与依赖仍由项目记录。按选定任务的完工时间和结果可用时刻决定优先级。
 
-已冻结 Stage A 作业通过 `python scripts/status.py` 和启动指针中的 `runq_root` 查看，其独立工作服务使用原有的项目状态目录。项目队列的低层检查入口是 `python -m pilotlab.runq status`。[项目状态](#查状态)
+已冻结 Stage A 作业通过 `python scripts/status.py` 和启动指针中的 `runq_root` 查看，其独立工作服务使用原有的项目状态目录。项目队列的低层检查入口是 `python -m pilotlab.runq --root ~/.local/state/tide-runq status`。[项目状态](#查状态)
 
 ## 恢复已归档的检查点
 

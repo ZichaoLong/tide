@@ -1,0 +1,75 @@
+{
+  "acceptance": {
+    "account_unit_and_service_tests": 9,
+    "device_worker_launch_test": "synthetic driver with private cooperative locks and real systemd lease and worker",
+    "independent_cpu_trial": "priority, runtime reservation grant and denial, metadata and result_ready event",
+    "physical_device_measurement": "npu-smi mapping, process HBM and chip utilization",
+    "project_tests": 221,
+    "scientific_jobs_added_by_rollout": 0
+  },
+  "account_tool": {
+    "active": true,
+    "commit": "e09a4a3e02bca08e353c0f4bd4bac8f6f49e0d54",
+    "job_count": 0,
+    "limits": {
+      "cards": 8,
+      "cpu": 40,
+      "hbm": null,
+      "ram": null,
+      "threads": 320
+    },
+    "service": "runq-5e34d651b4-dispatcher.service",
+    "state_root": "~/.local/state/runq",
+    "version": "1.0.0"
+  },
+  "observed_at": "2026-11-24T05:47:00.768254+00:00",
+  "project_controller": {
+    "active_or_queued_with_old_campaign_ram_cap": 0,
+    "commit": "1a3396939bf6933feef5fd5d0d14dde331dfa71e",
+    "deadline_unix": 1797698913.9318287,
+    "handoff": {
+      "before": 100,
+      "controller_pid": "96944",
+      "natural_terminal": 0,
+      "observed": 1795498822.8521268,
+      "previous_unit": "tide-pilot-r3-campaign-runq.service",
+      "removed_campaign_ram_caps": 234,
+      "retained": 100,
+      "started": 1795498814.7841208,
+      "steps_advanced": 89,
+      "unit": "tide-pilot-r3-runq-policy-1a339693.service"
+    },
+    "memory_max": "infinity",
+    "plan_sha256": "f28307b16aa8e082af8fed3408a1b0042277df7e91d3b239a39931c624d7fdd0",
+    "state_root": "~/.local/state/tide-runq"
+  },
+  "project_observation": {
+    "blocking_reason": null,
+    "driver_workers_by_card": {
+      "11": 7,
+      "14": 7,
+      "2": 8,
+      "4": 8,
+      "5": 8,
+      "7": 8,
+      "8": 7,
+      "9": 7
+    },
+    "observation_errors": [],
+    "selected_models": 154,
+    "stage": "stage-a-training-pipeline",
+    "stage_b_gate": "closed",
+    "status": "running",
+    "task_counts": {
+      "completed": 210,
+      "pending": 136,
+      "running": 100
+    },
+    "verified_tasks": 210,
+    "workers": {
+      "cpu": 40,
+      "npu": 60
+    }
+  },
+  "schema": "tide-runq-account-rollout-v1"
+}
