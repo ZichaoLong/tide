@@ -1,0 +1,121 @@
+{
+  "automatic_limits": {
+    "auto_card_ids": [
+      7,
+      14
+    ],
+    "cards": 2,
+    "cpu": 40
+  },
+  "controller_unit": "tide-pilot-r3-dev7-20261124.service",
+  "driver_pid_count_on_source": 0,
+  "driver_sample_at": "2026-11-24T16:43:48+08:00",
+  "from_physical_card": 9,
+  "local_manifest": {
+    "path": ".local/pilot-r3/resource-handoffs/device9-to7-20261124T163045+0800/verified.json",
+    "sha256": "0134909e11ffe96645c6ddbf075d4e1e77bb1132f36bf5cd77ebcf9b3320bd6a"
+  },
+  "moved_workers": [
+    {
+      "additional_evaluation_tokens": 32,
+      "first_step": 3195,
+      "new_job": 855,
+      "observed_step": 3216,
+      "observed_tokens": 823296,
+      "old_job": 286,
+      "saved_step": 3194,
+      "saved_tokens": 817664
+    },
+    {
+      "additional_evaluation_tokens": 32,
+      "first_step": 3195,
+      "new_job": 856,
+      "observed_step": 3216,
+      "observed_tokens": 823296,
+      "old_job": 287,
+      "saved_step": 3194,
+      "saved_tokens": 817664
+    },
+    {
+      "additional_evaluation_tokens": 32,
+      "first_step": 2661,
+      "new_job": 857,
+      "observed_step": 2685,
+      "observed_tokens": 687360,
+      "old_job": 419,
+      "saved_step": 2660,
+      "saved_tokens": 680960
+    },
+    {
+      "additional_evaluation_tokens": 32,
+      "first_step": 353,
+      "new_job": 858,
+      "observed_step": 371,
+      "observed_tokens": 189952,
+      "old_job": 527,
+      "saved_step": 352,
+      "saved_tokens": 180224
+    },
+    {
+      "additional_evaluation_tokens": 32,
+      "first_step": 37,
+      "new_job": 859,
+      "observed_step": 45,
+      "observed_tokens": 23040,
+      "old_job": 611,
+      "saved_step": 36,
+      "saved_tokens": 18432
+    },
+    {
+      "additional_evaluation_tokens": 32,
+      "first_step": 2,
+      "new_job": 860,
+      "observed_step": 19,
+      "observed_tokens": 4864,
+      "old_job": 630,
+      "saved_step": 1,
+      "saved_tokens": 256
+    }
+  ],
+  "natural_completions_before_pause": [
+    357,
+    605
+  ],
+  "observed_at": "2026-11-24T16:43:53+08:00",
+  "queue": "~/.local/state/tide-runq",
+  "scheduler": {
+    "authorized_subjects": 270,
+    "cpu_workers": 40,
+    "npu_workers_by_physical_card": {
+      "14": 7,
+      "7": 7
+    },
+    "observed_at": "2026-11-24T16:43:00+08:00",
+    "selected_subjects": 164,
+    "stage_b_gate": "closed",
+    "state": "running",
+    "task_counts": {
+      "completed": 426,
+      "pending": 333,
+      "running": 54,
+      "stopped_budget": 45
+    },
+    "untouched_paused_tasks": 45
+  },
+  "schema": "pilot-r3-physical-card-relocation-review-v1",
+  "source_lease_released_at": "2026-11-24T16:31:28+08:00",
+  "to_physical_card": 7,
+  "unaffected_workers": {
+    "at_controller_switch": {
+      "completed_naturally": 2,
+      "still_running_same_process": 45,
+      "total": 47
+    },
+    "at_request": {
+      "completed_naturally": 10,
+      "still_running_same_process": 36,
+      "total": 46
+    }
+  },
+  "verified_driver_matches_on_destination": 6
+}
