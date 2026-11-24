@@ -252,6 +252,28 @@ def test_activity_fails_closed_for_uncovered_parameter():
     assert any("uncovered" in reason for reason in result.work["activity"]["reasons"])
 
 
+@pytest.mark.parametrize("build", [build_previous, build_model])
+def test_timed_head_counts_a_weak_sender_whose_physical_strength_rounds_to_zero(build, monkeypatch):
+    from tide.model import WeakLogResult
+
+    spec = dict(family="tide", readout_policy=TIMED_LAST_NONEMPTY, config=dict(
+        topology=dict(kind="multiscale", profile="compact-7", n=2, timing="timed", period=8),
+        d=64, memory="K", allocation="shannon", shannon_support_policy="weak-log-v1"))
+    model = build(spec, 31)
+    period = model.core.graph.period
+    codes = torch.zeros(1, 1, period)
+    codes[:, :, -1] = -120.
+    physical = torch.zeros_like(codes)
+    result = WeakLogResult(torch.ones(1, 1, period, 64), physical, torch.arange(period),
+                           None, strength_coordinates=codes)
+    monkeypatch.setattr(model.core, "forward", lambda *args, **kw: result)
+    work = model(torch.tensor([[7]]), record_work=True).work
+    assert work["empty_output_positions"] == 0
+    assert work["empty_logical_output_slots"] == period - 1
+    if build is build_model:
+        assert work["selected_tick_in_period"] == [[period - 1]]
+
+
 def test_moe_causal_continuation_and_fresh_owner_optimizer_resume():
     torch.manual_seed(941)
     model = build_model(MOE, 31)

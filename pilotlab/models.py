@@ -90,7 +90,8 @@ class TideLM(nn.Module):
         logits = F.linear(self.output_norm(hidden), self.embedding.weight)
         work = None
         if record_work:
-            strengths = result.strengths.sum(0)
+            codes = getattr(result, "strength_coordinates", None)
+            strengths = result.strengths.sum(0) if codes is None else (codes != 0).any(0)
             all_empty = (strengths <= 0).sum().item()
             if not self.core.settle:
                 strengths = strengths.reshape(*tokens.shape, self.core.graph.period)[:, :, -1]
