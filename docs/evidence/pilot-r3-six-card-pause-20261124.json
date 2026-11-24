@@ -1,0 +1,89 @@
+{
+  "account_queue_for_active_campaign": "tide-runq",
+  "automatic_limits": {
+    "cards": 2,
+    "cpu": 40
+  },
+  "driver_process_counts": {
+    "11": 0,
+    "2": 0,
+    "4": 0,
+    "5": 0,
+    "7": 0,
+    "8": 0
+  },
+  "driver_processes_of_this_account": {
+    "11": 0,
+    "2": 0,
+    "4": 0,
+    "5": 0,
+    "7": 0,
+    "8": 0
+  },
+  "driver_sample_at": "2026-11-24T15:39:18+08:00",
+  "first_confirmed_clear": {
+    "healthy_with_zero_driver_processes": [
+      2,
+      4,
+      5,
+      7,
+      8,
+      11
+    ],
+    "sample_at": "2026-11-24T15:34:35+08:00"
+  },
+  "held_physical_cards": [
+    9,
+    14
+  ],
+  "paused": {
+    "by_stage": {
+      "a1": 9,
+      "a2": 28,
+      "a3": 8
+    },
+    "count": 45,
+    "final_checkpoint_bytes": 4074164265,
+    "queue_exit_code": 2,
+    "retained_worker_observation": {
+      "completed": 1,
+      "same_running_process": 54
+    },
+    "validated": "CPU decode with frozen worker and foundation, full file and state digests, original NPU contract, source, step/token boundary and stream cursor",
+    "worker_result_status": "budget_exhausted",
+    "worker_stop_reason": "signal"
+  },
+  "reason": "operator_requested_npu_release",
+  "released_physical_cards": [
+    2,
+    4,
+    5,
+    7,
+    8,
+    11
+  ],
+  "resume_manifest": {
+    "project_relative_path": ".local/pilot-r3/resource-handoffs/six-card-pause-20261124T153341+0800/handoff.json",
+    "sha256": "45dd36eaa3f7f7328a61e3089a431e1611e9d17fd3fc919a12492fe604d2a4c7"
+  },
+  "resume_state": "awaiting_later_request",
+  "round": ".local/pilot-r3/campaign-runq/round",
+  "scheduler": {
+    "authorized_subjects": 270,
+    "running_by_backend": {
+      "cpu": 40,
+      "npu": 15
+    },
+    "selected_subjects": 162,
+    "stage_b_gate": "closed",
+    "status": "running",
+    "task_counts": {
+      "completed": 325,
+      "pending": 189,
+      "running": 55,
+      "stopped_budget": 45
+    }
+  },
+  "schema": "pilot-r3-operator-pause-handoff-v1",
+  "snapshot_at": "2026-11-24T15:38:23+08:00"
+}
