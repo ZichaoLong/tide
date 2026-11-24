@@ -117,6 +117,8 @@ def prepare(repo, foundation, output, readiness):
     config = copy.deepcopy(old["config"])
     config.update(reviewed_storage_settings(review))
     apply_reviewed_policy(config, review, "r3-" + output.name)
+    from .runq_campaign import apply_runq
+    apply_runq(config, review)
     from .resource_placement3 import POLICY as direct_policy, split_calibrations
     placement = review.get("stage_a_cpu_placement", old.get("stage_a_cpu_placement")) or {}
     direct = placement.get("policy") == direct_policy

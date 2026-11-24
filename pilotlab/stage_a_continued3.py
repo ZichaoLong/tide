@@ -19,6 +19,8 @@ def verify_scope(plan):
     config = plan["config"]
     prior = {**old["config"], **reviewed_storage_settings(review)}
     apply_reviewed_policy(prior, review, config.get("run_id"))
+    from .runq_campaign import apply_runq
+    apply_runq(prior, review)
     placement = review.get("stage_a_cpu_placement", old.get("stage_a_cpu_placement")) or {}
     if placement.get("policy") == DIRECT_POLICY:
         prior["resource_dispatch"] = True

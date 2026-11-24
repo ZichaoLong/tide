@@ -6,7 +6,7 @@
 
 | 采样结果 | 可以读出什么 |
 |---|---|
-| `live` | 调度控制器的 PID 和启动标识与本机活进程吻合，PID 同时匹配 systemd 主进程并属于其控制组。指针登记了 InvocationID 时也须吻合。驱动可读时按物理卡列出控制组成员与驱动 PID 的交集。 |
+| `live` | 调度控制器的 PID 和启动标识与本机活进程吻合，PID 同时匹配 systemd 主进程并属于其控制组。指针登记了 InvocationID 时也须吻合。runq 作业另外核对独立 worker 服务名、PID 和启动时钟，按物理卡列出与驱动 PID 的交集。 |
 | `snapshot_only` | 有调度记录。服务、进程身份或采样期间的指针变化未能把它绑定到当前作业。查看 systemd 的实际状态、控制组和观测错误。 |
 | `unavailable` | 这份检出缺少可用的启动指针或调度记录。最近一次已审阅的采样在交接中，并附时间与证据。 |
 
@@ -16,9 +16,33 @@
 
 干净检出可以定位当时采用的源码、计划摘要、检查点哈希和首步。r26 正式采样的 `plan` 指向整批调度计划，四项首步核验的 `plan` 指向抽查计划。两份记录通过同一 `launch.sha256` 和 `unit` 对接，再按任务 ID 核对检查点哈希与首个后继步。运行中的账本、数据、完整检查点、冻结安装与日志在原工作树。可按交接给出的路径和哈希找回这些输入，再按当次授权恢复。同一批内保留已消费预算和原截止。[r26 正式采样](evidence/pilot-r3-main-r26-handoff.json) · [四项首步核验](evidence/pilot-r3-r26-resume-first-steps.json)
 
-r30 直接按 CPU 进程数、线程、主存、NPU 租约与每张卡的显存余量派工。调度器先申请已有 NPU 轨迹所需的卡，再按任务预计主存从小到大补位。新的初始化任务可逐项选择设备，同一 A1 配方的两个种子一起确定设备。已开始的训练沿用原设备。已有批大小记录的主体沿用原配方，缺少记录时采用计划中的 2、4 两档。任务派到 CPU 时，将原本在 NPU 上的张量内存计入共用的 1 TB 主存上限。磁盘准入取账号硬配额余量与文件系统可用量的较小值，固定预留为零。[设备选择](../pilotlab/resource_placement3.py) · [调度实现](../pilotlab/scheduler_dynamic3.py) · [直接派工回归](../tests/test_pilot_resource_placement3.py)
+## 自动补位与手动派发
 
-在轮次输出的 `decisions/*-device.json` 中按任务 ID 和输入哈希核对设备选择。迁移记录的 `retired_calibrations` 列出已撤下的校准请求。查询实际占用时，将 `groups/*/queue.json` 的租约状态与驱动 PID 对照。每卡还能接纳多大的任务，取决于该卡已派任务的峰值显存估算和整卡实测用量。[r30 接续审阅](evidence/pilot-r3-r30-resource-readiness.json) · [正式运行采样](evidence/pilot-r3-main-r30-handoff.json)
+在本机任意目录可运行 `~/.local/bin/runq`，仓库入口是 `scripts/runq`。自动池默认占用最多 8 张物理 NPU，目标为 40 个 CPU worker。一个账号队列协调所有提交者。CPU 的派发独立于 NPU 驱动采样。调度器、各物理卡租约和各 worker 分别运行在 `background.slice` 的独立用户服务里。调整自动目标或重启调度器时，已启动的 worker 持续执行。[命令入口](../scripts/runq) · [派发实现](../pilotlab/runq.py)
+
+```bash
+~/.local/bin/runq status
+~/.local/bin/runq status --state queued
+~/.local/bin/runq show "$job_id"
+~/.local/bin/runq pin "$job_id" "npu:$physical_id"
+~/.local/bin/runq pin "$another_job_id" cpu
+~/.local/bin/runq limits --cards 8 --cpu 40
+```
+
+`pin` 接受队列数字 ID 或完整任务键，指定排队任务的目标。要让它回到自动池，用 `pin "$job_id" auto`。手动任务可以超过自动卡数或 CPU 数，卡上的手动请求优先取得下一块满足其峰值显存的空间。若该卡只有本队列的任务，自动任务也可利用剩余显存。有外部进程时，手动请求绑定现场进程身份。给该请求加 `--allow-auto-share` 可在它运行期间允许自动任务与同一批外部进程共享。授权按该次请求生效，提交时的进程身份有变时可重新核对并用 `pin` 更新。最后一个手动任务退出后，已借用该卡的 worker 继续完成。有空出的常规卡名额时，无外部进程的卡可转入自动池。[准入与优先顺序](../pilotlab/runq_place.py)
+
+也可以提交其他项目的独立命令。在该项目的工作目录和已激活环境中，设置唯一键、峰值显存与主存估计（单位 MiB）。以下命令中的路径和资源量由提交者按实际任务替换。已领取的 NPU 在程序内映射为 `npu:0`。通用程序可读取 `RUNQ_DEVICE`，物理卡号可读 `RUNQ_PHYSICAL_DEVICE`。
+
+```bash
+~/.local/bin/runq submit --key "$job_key" --target "npu:$physical_id" \
+  --hbm-mib "$peak_hbm" --ram-mib "$peak_ram" --timeout "$seconds" -- "$python" "$worker" --device npu:0
+~/.local/bin/runq submit --key "$cpu_key" --target cpu \
+  --ram-mib "$peak_ram" --timeout "$seconds" -- "$python" "$worker" --device cpu
+```
+
+自动提交使用 `--target auto --backend npu|cpu|either`。同一键与同一份命令和环境重复提交会返回同一 ID。任务列表、等待原因、提交/派发/启动时间、PID、终态都保存在 `~/.local/state/tide-runq/`，可用 `show` 核对。实验 worker 的首个真实优化步从其 `steps.jsonl` 记录。新卡需要等待账号协作队列与两次驱动采样。已有租约上的派发由唤醒通知触发。指定的主存与显存为峰值，新增预订会扣除已运行进程尚未使用的峰值余量。[设备测量](../pilotlab/runq_devices.py) · [进程与设备锁](../pilotlab/runq_runtime.py)
+
+接续 Stage A 时，队列沿用冻结的任务和检查点。未绑定的成对种子共用一次后端决定，已有轨迹保持原后端。收尾跨设备迁移需逐条核验检查点兼容性与预计节时。单条通用任务可用 `runq cancel ID` 停止。调度器升级用 `runq restart`，它加载新的调度源码快照。实验依赖控制器的 unit、冻结计划与账本记录在本机启动指针中。[Stage A 接口](../pilotlab/runq_campaign.py) · [启动指针说明](#接续同一批)
 
 ## 恢复已归档的检查点
 

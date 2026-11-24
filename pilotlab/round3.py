@@ -78,7 +78,10 @@ def mean_activity(results, tasks=None):
 class Campaign:
     def __init__(self, plan, output):
         self.plan = plan
-        if plan["config"].get("shared_execution"):
+        if plan["config"].get("runq_root"):
+            from .runq_campaign import QueueSupervisor
+            self.supervisor = QueueSupervisor(plan["config"], output)
+        elif plan["config"].get("shared_execution"):
             from .scheduler_shared3 import SharedSupervisor
             self.supervisor = SharedSupervisor(plan["config"], output)
         else:

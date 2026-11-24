@@ -118,6 +118,29 @@ def observe_round(root, launch, result):
     try:
         devices = driver_processes()
         members = set(group["members"])
+        if launch.get("runq_root"):
+            from pilotlab.runq_devices import process_unit
+            from pilotlab.runq_store import unit as worker_unit
+            from pilotlab.scheduler3 import live
+            state, _ = json_observation(directory / "scheduler.json")
+            workers = {"cpu": [], "npu": []}
+            for row in (state or {}).get("tasks", {}).values():
+                if row.get("status") != "running" or not row.get("attempts"):
+                    continue
+                attempt = row["attempts"][-1]
+                identity = attempt.get("process")
+                if not live(identity):
+                    continue
+                name = process_unit(identity["pid"])
+                q = row.get("queue") or {}
+                if (q.get("job_id") != attempt.get("runq_id") or not isinstance(q.get("generation"), int)
+                        or name != worker_unit(launch["runq_root"],"job",attempt["runq_id"],q["generation"])
+                        or name != attempt.get("unit")):
+                    continue
+                workers["cpu" if row["device"] == "cpu" else "npu"].append(identity["pid"])
+                members.add(identity["pid"])
+            result["worker_units"] = workers
+            result["summary"] += f" · CPU workers={len(workers['cpu'])} NPU workers={len(workers['npu'])}"
         by_card = {}
         for card, pids in devices.items():
             owned = members.intersection(pids)

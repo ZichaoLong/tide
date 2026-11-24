@@ -204,6 +204,19 @@ def prior_tasks(root, state, review, refs, identity, destination):
                 if not key or mode != "checkpoint_only" or receipt.get("initial_replay") != replay:
                     raise ValueError("stage-start replay is not bound to its interrupted task")
                 prior[key] += read_bound(replay)["evaluation"]["tokens"] + 32
+                cancelled = review.get("cancelled_stage_start", {}).get(tid)
+                if cancelled:
+                    plan = read_bound(cancelled["plan"])
+                    queue = read_bound(cancelled["queue"])
+                    from .scheduler3 import read
+                    ledger = read(old["config"]["budget_ledger"])
+                    claim = ledger["preparation_token_reservations"][plan["run"]]
+                    if (plan["task"] != task_ref or queue["status"] != "cancelled" or queue["return_code"] == 0
+                            or claim["status"] != "cancelled" or claim["plan_sha256"] != cancelled["plan"]["sha256"]
+                            or plan["ceiling_tokens"] != claim["reserved_tokens"] or
+                            ledger["segments"][plan["run"]]["queue"] != cancelled["queue"]):
+                        raise ValueError("cancelled replay lacks its original reservation and release")
+                    prior[key] += claim["reserved_tokens"]
                 used_replays.add(tid)
             # Previously reserved work covers the last attempt's original bound.
             # Only extra evaluations/probes are charged. For missing terminal
@@ -236,7 +249,7 @@ def prior_tasks(root, state, review, refs, identity, destination):
         source = next(p.parents[1] for p in files if p.name=="worker3.py")
         base = next(p.parents[2] for p in files if p.name=="kv.py" and p.parent.name=="tide")
         decodes[(str(source),str(base))].append({"disposition":"resume","task":original_ref,"checkpoint":cp})
-    if used_replays != set(replays):
+    if used_replays != set(replays) or not set(review.get("cancelled_stage_start", {})) <= used_replays:
         raise ValueError("stage-start replay has no matching interrupted trajectory")
     for (source,base),entries in decodes.items():
         verify_resume_payloads({**state["config"],"worker_source":source,"worker_foundation":base},entries)

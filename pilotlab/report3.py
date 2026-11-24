@@ -148,6 +148,21 @@ def queue_intervals(snapshot, directory, attempt, queue, *, now):
     A terminal attempt without release does not get an invented end timestamp.
     Its conservative scheduler debit remains available in the resource ledger.
     """
+    if "runq_id" in attempt:
+        if not queue.get("started_unix") and attempt.get("status") == "starting":
+            return [], False, []
+        begin, end = queue.get("started_unix"), queue.get("finished_unix")
+        bound = (queue.get("job_id") == attempt["runq_id"] and queue.get("process") == attempt.get("process")
+                 and queue.get("unit") == attempt.get("unit") and queue.get("physical_ids") == [attempt.get("physical_id")])
+        if bound and number(begin):
+            if number(end) and end >= begin:
+                return [(begin,end)], False, []
+            if queue.get("status") == "running" and process_observation(queue["process"])["alive"] is True:
+                return [(begin,now)], True, []
+            if attempt.get("status") == "running" and queue.get("status") == "running":
+                return [], False, []  # publishing the independent worker's exit receipt
+        snapshot.error(directory/"queue.json", "runq allocation or process binding incomplete")
+        return [], False, ["incomplete allocation"]
     path = directory/"stdout.log"
     intervals, problems, acquired = [], [], None
     try:
@@ -727,6 +742,9 @@ def build_report(round_path, *, now=None):
     logical = worker_concurrency(logical_intervals["cpu"] + logical_intervals["npu"], missing=sum(logical_missing.values()))
     cpu_concurrency = worker_concurrency(logical_intervals["cpu"], missing=logical_missing["cpu"])
     npu_concurrency = worker_concurrency(logical_intervals["npu"], missing=logical_missing["npu"])
+    if config.get("runq_root"):
+        queue_stats["method"] = "union of independently recorded worker intervals per physical card"
+        queue_stats["ledger_scope"] = "dedicated physical leases or union of campaign spans on mixed leases"
     queue_stats.update(logical_workers=logical, cpu_workers=cpu_concurrency, npu_workers=npu_concurrency,
                        shared_group_count=len(shared), scheduler_polled_npu_worker_peak=state.get("peak_npu_worker_concurrency"))
     stage_a_view = {"status": stage_a.get("status", "not_recorded"),
