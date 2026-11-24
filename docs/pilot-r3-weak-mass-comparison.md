@@ -49,6 +49,6 @@ FP32 在 1 附近的机器精度 `eps` 是 `2^-23`。本批旧策略仅对本会
 | NPU/S | 19.29 → 10.65 | 8.84 → 8.67 | 2.24 → 3.26 | 2.44 → 3.14 | 5.17 → 4.72 |
 | NPU/K | 89.69 → 16.15 | 44.63 → 13.19 | 4.00 → 5.03 | 2.62 → 5.50 | 6.29 → 5.28 |
 
-本轮两项正式续跑保持原配方和补值前向。后续需要验证弱尾质量语义时，可显式选择 `weak-log-v1`，从同一前缀并列跟踪学习曲线与完工时间。已在旧检查点中合并到同一存储值的尾数，只有更早的可重建输入或重新训练才能区分。扩展到新模型时可先复跑基座数值问题索引中的真实零、恒零、弱正和检查点用例。[可复用的数值回归](../../graph-execution-foundation/docs/numerical-failure-modes.md#弱发送者在归一化读取中的放大)
+本项目新建的 Shannon 配方默认写入 `weak-log-v1`。本轮有 7 个模型从初始化开始完整使用该策略，配方、种子任务、训练源码和检查点均有独立记录。Timed/d256/X_reverse 的旧初始化种子保留原始结果和评估预算，在新组中以相同种子从头运行。已有训练轨迹按各自冻结的前向接续，包括 CPU 上的 967、968。旧检查点里已合并到同一存储值的尾数，需要更早的输入或重新训练才能区分。[本批配方与派发](evidence/pilot-r3-weak-log-window-20261124.json) · [可复用的数值回归](../../graph-execution-foundation/docs/numerical-failure-modes.md#弱发送者在归一化读取中的放大)
 
 两轮原始数据位于 `.local/pilot-r3/resource-handoffs/timed-backward-range-20261124/comparison` 和 `comparison-final`。目录内的 `plan.json` 绑定冻结源码、失败前缀和比较顺序。两种策略的 `result.json` 与 `.pt` 保存标量、逐 token NLL、logits 和梯度，`launch.json` 与 `pair.py` 记录实际启动命令。用具有相同 PyTorch 的解释器运行 `scripts/summarize_weak_mass.py <各配对的 plan.json> --output <输出路径>` 即可离线复算。项目准备预算保留了各次尝试的 token 预记和两轮物理卡实际占用时间。[汇总程序](../scripts/summarize_weak_mass.py) · [预算凭据](../.local/pilot-r3/resource-handoffs/timed-backward-range-20261124/comparison-accounting.json)

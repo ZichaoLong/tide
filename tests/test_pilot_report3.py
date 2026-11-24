@@ -106,6 +106,31 @@ def add_task(root, state, task_id, phase, target, segments, *, model_id="tide-on
     return task, record, results
 
 
+def test_qualified_retry_binds_each_attempt_to_its_own_frozen_task(round_state, tmp_path):
+    from pilotlab.prepare_resume3 import reference
+    from pilotlab.source_migration3 import RECEIPT, digest
+
+    root, state = round_state
+    task, record, results = add_task(root, state, "repair", "a2", 128, [(0, 64), (64, 128)])
+    (first_path, first), (last_path, last) = results
+    write(first_path, {**first, "evaluation": {"tokens": 16}})
+    newer = {**IDENTITY, "source": "repaired"}
+    receipt = write(tmp_path / "handoff/receipt.json", dict(schema=RECEIPT, mode="backward_range_repair",
+        task_id=task["id"], new_source_digest=digest(newer), original_task=reference(record["task_path"]),
+        result=reference(first_path)))
+    revised = write(tmp_path / "handoff/task.json",
+                    {**task, "source_identity": newer, "stage_a_migration": reference(receipt)})
+    write(last_path, {**last, "source_identity": newer, "task_sha256": sha(revised)})
+    record.update(task_path=revised, qualified_task=reference(revised), result_sha256=sha(last_path))
+    write(root / "scheduler.json", state)
+    report = report3.build_report(root)
+    assert not report["observation_errors"]
+    assert report["execution"]["verified_completed_tasks"] == 1
+    write(receipt, {"schema": RECEIPT})
+    invalid = report3.build_report(root)
+    assert invalid["observation_errors"] and invalid["execution"]["verified_completed_tasks"] == 0
+
+
 def gate(root, kind, task_ids):
     filename = "stage-b-gate.json" if kind == "formal" else f"stage-b-{kind}-gate.json"
     manifest = root/"model-manifest.json"

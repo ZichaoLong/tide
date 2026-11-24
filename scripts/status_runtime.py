@@ -67,6 +67,9 @@ def observe_round(root, launch, result):
         "unit", "foundation_commit", "plan_path", "plan_sha256", "prepared_path", "current_review",
         "output", "log", "budget_ledger", "deadline_unix",
     )}
+    for key in ("fresh_shannon", "temporary_card_window"):
+        if key in launch:
+            result["binding"][key] = launch[key]
     try:
         report = build_report(directory)
         controller = report["lifecycle"]["controller"]

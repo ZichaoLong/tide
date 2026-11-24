@@ -1,0 +1,635 @@
+{
+  "checks": {
+    "checkpoint_decode_ok": true,
+    "checkpoint_decode_rehearsal_job": 9,
+    "fresh_models_built_on_meta": 7,
+    "recipe_placement_window_round_tests": 149,
+    "report_tests": 41,
+    "timer_rehearsal_restored_cards": [
+      7
+    ],
+    "timer_rehearsal_seconds": 7.0008
+  },
+  "controller": {
+    "original_worker_outcomes_at_handoff": {
+      "same_pid": 93
+    },
+    "pid": "2883926",
+    "source_commit": "685855a3e3306dea722db2713319697bfb886070",
+    "unit": "tide-pilot-r3-weak-log-20261124.service"
+  },
+  "eta_scope": "Most recent 30 minutes between recorded step completions; excludes terminal evaluation and checkpoint verification.",
+  "fresh_shannon": {
+    "foundation_commit": "e9bd14834df41ddf16c9e4ac30c1f03bad4db1a4",
+    "models_from_init": [
+      "multiscale_settle-d256-s-singleton7-49cd2e2448",
+      "multiscale_settle-d256-x_reverse-singleton7-79bf479cff",
+      "multiscale_timed-d256-x_reverse-singleton7-7307401cb8",
+      "low-activity-multiscale_timed-shannon-n16-d128-k8-a5e305c7e8",
+      "low-activity-multiscale_timed-shannon-n16-d128-k4-f0cc52e3c1",
+      "low-activity-multiscale_timed-shannon-n16-d128-k2-e728e0c7cc",
+      "low-activity-multiscale_timed-shannon-n16-d128-k1-e6b11ef228"
+    ],
+    "new_recipe_default": "weak-log-v1",
+    "other_open_shannon_training_trajectories": 10,
+    "prior_seed_review": [
+      {
+        "cumulative_evaluation": 512,
+        "inherited_reservation": 576,
+        "old_policy": "positive-floor-v1",
+        "seed": 2026112001,
+        "training": 32768
+      }
+    ],
+    "registered": [
+      {
+        "backend": null,
+        "id": 1011,
+        "state": "queued",
+        "task": "multiscale_settle-d256-s-singleton7-49cd2e2448-weak-log-v1-init-2026112001"
+      },
+      {
+        "backend": null,
+        "id": 1012,
+        "state": "queued",
+        "task": "multiscale_settle-d256-s-singleton7-49cd2e2448-weak-log-v1-init-2026112002"
+      },
+      {
+        "backend": null,
+        "id": 1013,
+        "state": "queued",
+        "task": "multiscale_settle-d256-s-singleton7-49cd2e2448-weak-log-v1-init-2026112003"
+      },
+      {
+        "backend": null,
+        "id": 1014,
+        "state": "queued",
+        "task": "multiscale_settle-d256-x_reverse-singleton7-79bf479cff-weak-log-v1-init-2026112001"
+      },
+      {
+        "backend": null,
+        "id": 1015,
+        "state": "queued",
+        "task": "multiscale_settle-d256-x_reverse-singleton7-79bf479cff-weak-log-v1-init-2026112002"
+      },
+      {
+        "backend": null,
+        "id": 1016,
+        "state": "queued",
+        "task": "multiscale_settle-d256-x_reverse-singleton7-79bf479cff-weak-log-v1-init-2026112003"
+      },
+      {
+        "backend": null,
+        "id": 1017,
+        "state": "queued",
+        "task": "multiscale_timed-d256-x_reverse-singleton7-7307401cb8-weak-log-v1-init-2026112001"
+      },
+      {
+        "backend": null,
+        "id": 1018,
+        "state": "queued",
+        "task": "multiscale_timed-d256-x_reverse-singleton7-7307401cb8-weak-log-v1-init-2026112002"
+      },
+      {
+        "backend": null,
+        "id": 1019,
+        "state": "queued",
+        "task": "multiscale_timed-d256-x_reverse-singleton7-7307401cb8-weak-log-v1-init-2026112003"
+      }
+    ],
+    "registered_counts": {
+      "queued": 9
+    },
+    "superseded_before_launch": [
+      41,
+      42,
+      43,
+      79,
+      80,
+      81,
+      82,
+      83
+    ]
+  },
+  "local_records": {
+    "activation-status.json": {
+      "path": ".local/pilot-r3/resource-handoffs/weak-log-window-20261124/activation-status.json",
+      "sha256": "4ec1fca92a5895a6189e3020447bf2d31d064c60b11c1db4e8be7c70b3d23d8b"
+    },
+    "activation.json": {
+      "path": ".local/pilot-r3/resource-handoffs/weak-log-window-20261124/activation.json",
+      "sha256": "5a3d891e306caf28686e474fd822682285960198d0b2800221aa6859572285c4"
+    },
+    "cohort.json": {
+      "path": ".local/pilot-r3/resource-handoffs/weak-log-window-20261124/cohort.json",
+      "sha256": "412912c387b23cd4a1a5a34d641790416b256a8adb4bb30436a72817e078fbe3"
+    },
+    "controller-handoff.json": {
+      "path": ".local/pilot-r3/resource-handoffs/weak-log-window-20261124/controller-handoff.json",
+      "sha256": "ee4ccce867fbb1336910d68dddd07620d1083c739b680fe2ee3f167a1f86b873"
+    },
+    "decode-rehearsal.json": {
+      "path": ".local/pilot-r3/resource-handoffs/weak-log-window-20261124/decode-rehearsal.json",
+      "sha256": "2534f255eeaecc77258177c47d30991d85afea314d7be789c1db3fd651d4dcb2"
+    },
+    "model-check.json": {
+      "path": ".local/pilot-r3/resource-handoffs/weak-log-window-20261124/model-check.json",
+      "sha256": "c70d6dc44dca654bf9c20ffea34d75c3ea1adf981dc89f6505a91664b3eada94"
+    },
+    "pre-expansion.json": {
+      "path": ".local/pilot-r3/resource-handoffs/weak-log-window-20261124/pre-expansion.json",
+      "sha256": "d6461c1d7bf3a9eff497ced2b118590ffa7566944bde462dc593b36dbadfc392"
+    },
+    "window.json": {
+      "path": ".local/pilot-r3/resource-handoffs/weak-log-window-20261124/window.json",
+      "sha256": "6e8b1791db84ca511a37eeee7a88e3bf88d8ccadbd924a695e587a9c6ba93df3"
+    }
+  },
+  "queue": "~/.local/state/tide-runq",
+  "resources": {
+    "additional_npu_workers_at_sample": 56,
+    "automatic_card_target": 16,
+    "automatic_cpu_target": 40,
+    "cpu_running": 41,
+    "manual_cpu_running": 2,
+    "npu_running": 109,
+    "pre_expansion_workers": {
+      "completed": 3,
+      "same_pid": 91
+    },
+    "sharing_grants": [
+      10,
+      15
+    ],
+    "storage_at_activation": {
+      "available_bytes": 217701797888,
+      "fs_free_bytes": 1093454684160,
+      "quota": {
+        "filesystem": "/dev/mapper/ascend_data-data",
+        "grace_epoch": 1795920929,
+        "hard_bytes": 751619276800,
+        "soft_bytes": 322122547200,
+        "used_bytes": 533917478912
+      }
+    },
+    "systemd_and_driver_matched_npu_workers_in_status": 109,
+    "workers_by_physical_card": {
+      "0": {
+        "driver_matched": 7,
+        "first_step_jobs": [
+          886,
+          887,
+          888,
+          939
+        ],
+        "first_updates": 4,
+        "hbm_physically_free_gib": 3.83,
+        "jobs": [
+          886,
+          887,
+          888,
+          889,
+          890,
+          891,
+          939
+        ],
+        "other_driver_processes": 0,
+        "running": 7
+      },
+      "1": {
+        "driver_matched": 7,
+        "first_step_jobs": [
+          942,
+          955,
+          956,
+          957,
+          965,
+          966,
+          969
+        ],
+        "first_updates": 7,
+        "hbm_physically_free_gib": 37.92,
+        "jobs": [
+          942,
+          955,
+          956,
+          957,
+          965,
+          966,
+          969
+        ],
+        "other_driver_processes": 0,
+        "running": 7
+      },
+      "2": {
+        "driver_matched": 7,
+        "first_step_jobs": [
+          943,
+          976,
+          979,
+          980,
+          983,
+          984,
+          985
+        ],
+        "first_updates": 7,
+        "hbm_physically_free_gib": 47.98,
+        "jobs": [
+          943,
+          976,
+          979,
+          980,
+          983,
+          984,
+          985
+        ],
+        "other_driver_processes": 0,
+        "running": 7
+      },
+      "3": {
+        "driver_matched": 7,
+        "first_step_jobs": [
+          944,
+          986,
+          1003,
+          1004,
+          1007,
+          1008,
+          1009
+        ],
+        "first_updates": 7,
+        "hbm_physically_free_gib": 47.32,
+        "jobs": [
+          944,
+          986,
+          1003,
+          1004,
+          1007,
+          1008,
+          1009
+        ],
+        "other_driver_processes": 0,
+        "running": 7
+      },
+      "4": {
+        "driver_matched": 7,
+        "first_step_jobs": [
+          945,
+          970,
+          971,
+          972,
+          973,
+          974,
+          975
+        ],
+        "first_updates": 7,
+        "hbm_physically_free_gib": 40.16,
+        "jobs": [
+          945,
+          970,
+          971,
+          972,
+          973,
+          974,
+          975
+        ],
+        "other_driver_processes": 0,
+        "running": 7
+      },
+      "5": {
+        "driver_matched": 7,
+        "first_step_jobs": [
+          883,
+          884,
+          885,
+          950,
+          1010
+        ],
+        "first_updates": 5,
+        "hbm_physically_free_gib": 1.76,
+        "jobs": [
+          881,
+          882,
+          883,
+          884,
+          885,
+          950,
+          1010
+        ],
+        "other_driver_processes": 0,
+        "running": 7
+      },
+      "6": {
+        "driver_matched": 7,
+        "first_step_jobs": [
+          901,
+          902,
+          926,
+          927,
+          934,
+          935,
+          938
+        ],
+        "first_updates": 7,
+        "hbm_physically_free_gib": 38.65,
+        "jobs": [
+          901,
+          902,
+          926,
+          927,
+          934,
+          935,
+          938
+        ],
+        "other_driver_processes": 0,
+        "running": 7
+      },
+      "7": {
+        "driver_matched": 6,
+        "first_step_jobs": [
+          815,
+          824,
+          867,
+          868,
+          875,
+          876
+        ],
+        "first_updates": 6,
+        "hbm_physically_free_gib": 7.4,
+        "jobs": [
+          815,
+          824,
+          867,
+          868,
+          875,
+          876
+        ],
+        "other_driver_processes": 0,
+        "running": 6
+      },
+      "8": {
+        "driver_matched": 7,
+        "first_step_jobs": [
+          469,
+          816,
+          844,
+          845,
+          846,
+          877,
+          878
+        ],
+        "first_updates": 7,
+        "hbm_physically_free_gib": 33.99,
+        "jobs": [
+          469,
+          816,
+          844,
+          845,
+          846,
+          877,
+          878
+        ],
+        "other_driver_processes": 0,
+        "running": 7
+      },
+      "9": {
+        "driver_matched": 7,
+        "first_step_jobs": [
+          470,
+          822,
+          838,
+          842,
+          847,
+          873,
+          874
+        ],
+        "first_updates": 7,
+        "hbm_physically_free_gib": 18.97,
+        "jobs": [
+          470,
+          822,
+          838,
+          842,
+          847,
+          873,
+          874
+        ],
+        "other_driver_processes": 0,
+        "running": 7
+      },
+      "10": {
+        "driver_matched": 5,
+        "first_step_jobs": [
+          806,
+          831,
+          879,
+          880
+        ],
+        "first_updates": 4,
+        "hbm_physically_free_gib": 31.18,
+        "jobs": [
+          806,
+          831,
+          879,
+          880,
+          913
+        ],
+        "other_driver_processes": 1,
+        "running": 5
+      },
+      "11": {
+        "driver_matched": 7,
+        "first_step_jobs": [
+          829,
+          830,
+          834,
+          835,
+          836,
+          837
+        ],
+        "first_updates": 6,
+        "hbm_physically_free_gib": 47.85,
+        "jobs": [
+          829,
+          830,
+          834,
+          835,
+          836,
+          837,
+          914
+        ],
+        "other_driver_processes": 0,
+        "running": 7
+      },
+      "12": {
+        "driver_matched": 7,
+        "first_step_jobs": [
+          895,
+          896,
+          897,
+          951
+        ],
+        "first_updates": 4,
+        "hbm_physically_free_gib": 2.74,
+        "jobs": [
+          892,
+          893,
+          894,
+          895,
+          896,
+          897,
+          951
+        ],
+        "other_driver_processes": 0,
+        "running": 7
+      },
+      "13": {
+        "driver_matched": 7,
+        "first_step_jobs": [
+          898,
+          899,
+          900,
+          954
+        ],
+        "first_updates": 4,
+        "hbm_physically_free_gib": 4.55,
+        "jobs": [
+          898,
+          899,
+          900,
+          910,
+          911,
+          912,
+          954
+        ],
+        "other_driver_processes": 0,
+        "running": 7
+      },
+      "14": {
+        "driver_matched": 7,
+        "first_step_jobs": [
+          817,
+          841,
+          843,
+          848,
+          869,
+          871,
+          872
+        ],
+        "first_updates": 7,
+        "hbm_physically_free_gib": 11.78,
+        "jobs": [
+          817,
+          841,
+          843,
+          848,
+          869,
+          871,
+          872
+        ],
+        "other_driver_processes": 0,
+        "running": 7
+      },
+      "15": {
+        "driver_matched": 7,
+        "first_step_jobs": [
+          805,
+          818,
+          819,
+          821,
+          823,
+          833,
+          870
+        ],
+        "first_updates": 7,
+        "hbm_physically_free_gib": 40.51,
+        "jobs": [
+          805,
+          818,
+          819,
+          821,
+          823,
+          833,
+          870
+        ],
+        "other_driver_processes": 0,
+        "running": 7
+      }
+    }
+  },
+  "retries_cpu": {
+    "967": {
+      "memory": "S",
+      "policy": "positive-floor-v1",
+      "remaining_training_hours": 7.44,
+      "sample_steps": 68,
+      "seconds_per_update": 26.44,
+      "step": 3083,
+      "target_steps": 4096
+    },
+    "968": {
+      "memory": "K",
+      "policy": "positive-floor-v1",
+      "remaining_training_hours": 55.83,
+      "sample_steps": 20,
+      "seconds_per_update": 87.34,
+      "step": 1795,
+      "target_steps": 4096
+    }
+  },
+  "sample_at": "2026-11-24T22:35:20.544+08:00",
+  "schema": "pilot-r3-weak-log-card-window-v1",
+  "stage_a": {
+    "authorized": 270,
+    "counts": {
+      "completed": 690,
+      "pending": 121,
+      "running": 150,
+      "stopped_budget": 45,
+      "superseded": 8
+    },
+    "deferred": 74,
+    "observer_errors": [],
+    "selected": 165,
+    "stage_b": "closed",
+    "verified_completed": 690
+  },
+  "status_sample_at": "2026-11-24T14:35:21.307544+00:00",
+  "window": {
+    "action": "At cutoff, close temporary automatic placement and signal each matching campaign worker at a training boundary. Check driver release and decode saved checkpoints on CPU.",
+    "activated_at": "2026-11-24T22:28:59.690+08:00",
+    "duration_seconds": 36000,
+    "expected_release_receipt": ".local/pilot-r3/resource-handoffs/weak-log-window-20261124/release.json",
+    "retained_cards": [
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      14,
+      15
+    ],
+    "status_at_sample": "running before cutoff",
+    "stop_refill_at": "2026-11-25T08:28:59.690+08:00",
+    "temporary_cards": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      12,
+      13
+    ],
+    "timer": "tide-pilot-r3-extra-card-release-20261125.timer",
+    "timer_state": {
+      "AccuracyUSec": "1ms",
+      "ActiveState": "active",
+      "InvocationID": "861bd7097a474729a7a9462b7f0fd838",
+      "NextElapseUSecRealtime": "Wed 2026-11-25 08:28:59 CST",
+      "SubState": "waiting",
+      "Triggers": "tide-pilot-r3-extra-card-release-20261125.service"
+    }
+  }
+}

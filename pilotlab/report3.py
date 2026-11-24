@@ -123,6 +123,35 @@ def union_length(intervals):
     return length
 
 
+def qualified_predecessor(snapshot, task_id, record):
+    """Bind an individual source-repair attempt and its original failed result."""
+    from .source_migration3 import RECEIPT, digest
+
+    ref = record["qualified_task"]
+    try:
+        path = Path(ref["path"]).resolve()
+        task = snapshot.read_import_reference(ref)
+        receipt = snapshot.read_import_reference(task["stage_a_migration"])
+        original = receipt["original_task"]
+        prior = snapshot.read_import_reference(original)
+        result = snapshot.read_import_reference(receipt["result"])
+        result_path = Path(receipt["result"]["path"]).resolve()
+        if (path != Path(record["task_path"]).resolve() or receipt.get("schema") != RECEIPT
+                or receipt.get("mode") != "backward_range_repair" or receipt["task_id"] != task_id
+                or task["id"] != task_id or prior["id"] != task_id or result["id"] != task_id
+                or task["model_id"] != record["model_id"] or prior["model_id"] != task["model_id"]
+                or receipt["new_source_digest"] != digest(task["source_identity"])
+                or result.get("status") != "failed" or result["source_identity"] != prior["source_identity"]
+                or result["task_sha256"] != original["sha256"]
+                or result_path not in {Path(a["path"]).resolve() / "result.json" for a in record["attempts"]}):
+            raise ValueError("individual source-repair receipt does not bind both attempts")
+        snapshot.external_files.update((path, Path(original["path"]).resolve()))
+        return {result_path: (original["path"], prior)}
+    except (KeyError, TypeError, ValueError, OSError) as error:
+        snapshot.error(task_id, f"qualified task evidence unavailable: {error}")
+        return {}
+
+
 def concurrency(intervals):
     """Half-open allocation intervals; releases precede simultaneous acquires."""
     events = defaultdict(int)
@@ -459,6 +488,7 @@ def build_report(round_path, *, now=None):
     discovered_subjects = set(subjects)
 
     for task_id, record in state.get("tasks", {}).items():
+        predecessors = qualified_predecessor(snapshot, task_id, record) if record.get("qualified_task") else {}
         task_path = record.get("task_path", f"tasks/{task_id}/task.json")
         task = snapshot.read(task_path, required=bool(record.get("attempts"))) or {}
         phase = task.get("phase", "unknown")
@@ -567,6 +597,7 @@ def build_report(round_path, *, now=None):
             elif not never_started and (result or group_worker.get("started_unix") is not None):
                 logical_missing[backend] += 1
             if result is not None:
+                observed_path, observed_task = predecessors.get(result_path, (task_path, task))
                 if inherited and (not import_row.get("result") or not snapshot.bound(result_path, import_row["result"]["sha256"])
                         or result.get("task_sha256") != import_row.get("task", {}).get("sha256")):
                     integrity.append("imported result or original task binding mismatch")
@@ -574,9 +605,9 @@ def build_report(round_path, *, now=None):
                     integrity.append("shared worker result binding mismatch")
                 if result.get("id") != task.get("id", task_id) or result.get("model_id") != model_id:
                     integrity.append("task/model identity mismatch")
-                if not task.get("source_identity") or result.get("source_identity") != task.get("source_identity"):
+                if not observed_task.get("source_identity") or result.get("source_identity") != observed_task.get("source_identity"):
                     integrity.append("source identity mismatch")
-                if not snapshot.bound(task_path, result.get("task_sha256")):
+                if not snapshot.bound(observed_path, result.get("task_sha256")):
                     integrity.append("worker result does not bind the task JSON")
                 if index == len(attempt_records)-1 and record.get("status") == "completed":
                     if not snapshot.bound(result_path, record.get("result_sha256")):
@@ -588,7 +619,7 @@ def build_report(round_path, *, now=None):
                 if result.get("status") in TERMINAL and not valid_tokens:
                     integrity.append("invalid cumulative/segment loss-token record")
                 if not integrity and not publication_pending and valid_tokens:
-                    recipe = {key: task.get(key) for key in RECIPE_FIELDS}
+                    recipe = {key: observed_task.get(key) for key in RECIPE_FIELDS}
                     key = json.dumps(recipe, sort_keys=True, separators=(",", ":"), allow_nan=False)
                     # Independent capacity probes do not form one continuation.
                     if category in {"preparation", "other"}:
