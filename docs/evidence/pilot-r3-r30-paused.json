@@ -1,0 +1,79 @@
+{
+  "execution": {
+    "completed": 922,
+    "failed": 43,
+    "pending": 167,
+    "stopped_budget": 33
+  },
+  "interrupted_task": {
+    "checkpoint_index": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d128-x-mixed9-ae4ffdec56-a3-2026112002-r5/attempt-0/checkpoint.json",
+      "sha256": "47232ac3df4311c00882547dd0879fbf9eae3a0d56373533defd2ee5361b1966"
+    },
+    "journal": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d128-x-mixed9-ae4ffdec56-a3-2026112002-r5/attempt-0/steps.jsonl",
+      "sha256": "c7322f47988381d850d3fabcc25c2bbd3f640feb785b80d1dcda48780aa7cc5a"
+    },
+    "last_indexed_step": 7923,
+    "last_observed_step": 7935,
+    "task": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d128-x-mixed9-ae4ffdec56-a3-2026112002-r5/task.json",
+      "sha256": "163db69c1901a3042eccae3b3eded943b3c50acf82cac0b3200474c893f98fd3"
+    }
+  },
+  "last_campaign": "tide-pilot-r3-campaign-r30.service",
+  "observed_beijing": "2026-11-24T09:43:52+08:00",
+  "previously_seen_signal_result": {
+    "low-activity-exchange-kv64-n16-d128-k8-9cab7ff1d3-a1-2026112002-r5": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-exchange-kv64-n16-d128-k8-9cab7ff1d3-a1-2026112002-r5/attempt-0/result.json",
+      "sha256": "a0c2b5524a3ca06b197aea2e88e4f531368701b8d575fc9ffdae1e9aeba81c69"
+    }
+  },
+  "r31_submitted": false,
+  "reason": "User paused placement changes to discuss manual HBM-based dispatch.",
+  "released": {
+    "cgroup": true,
+    "processes": true,
+    "queue": true
+  },
+  "scheduler": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/scheduler.json",
+    "sha256": "605a8c40ec620cebe04eceba5b5f994576e3f05b3e5d18f2ac601e1c8cbaadcd",
+    "status": "passed"
+  },
+  "schema": "pilot-r3-paused-handoff-v1",
+  "selected": 147,
+  "stage_b_gate": "closed",
+  "stage_start_replay": {
+    "device": 11,
+    "elapsed_seconds_charged": 85.50397004187107,
+    "lock": {
+      "method": "read /proc/locks by device/inode; never acquire a queue/device lock",
+      "owners": [],
+      "path": "/run/user/1003/ascend-device-locks/physical-11.lock",
+      "status": "unlocked"
+    },
+    "optimizer_updates": 0,
+    "published_eval": false,
+    "queue": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resident-r31/initial-queue.json",
+      "sha256": "0b9a64ebe7e7c945532ee51c7ff9613e64bb505677d466ef65127c2e2b342564"
+    },
+    "reserved_tokens": 16416,
+    "status": "cancelled",
+    "unit": "tide-pilot-r3-r31-stage-start.service"
+  },
+  "subjects": 270,
+  "systemd_result": "timeout",
+  "terminal_audit": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resident-r31/docs/evidence/r30-terminal-audit.json",
+    "sha256": "eb58c2525040cacb45e55ad192b9db460d1c6eaee7e1c40bce85219528246a03"
+  },
+  "terminal_findings": {
+    "mismatch": 1
+  },
+  "unsubmitted_controller_review": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resident-r31/docs/evidence/unsubmitted-r31-readiness.json",
+    "sha256": "50f182dadd9d641c52e8b2b3c05881ff64a120cef7c11872a64c08528132b472"
+  }
+}
