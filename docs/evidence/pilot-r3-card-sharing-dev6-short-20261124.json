@@ -1,0 +1,129 @@
+{
+  "admission_max_seconds": 60,
+  "arms": [
+    {
+      "cohort": "settle",
+      "name": "settle-7",
+      "width": 7
+    },
+    {
+      "cohort": "settle",
+      "name": "settle-1",
+      "width": 1
+    },
+    {
+      "cohort": "settle",
+      "name": "settle-4",
+      "width": 4
+    },
+    {
+      "cohort": "settle",
+      "name": "settle-2",
+      "width": 2
+    },
+    {
+      "cohort": "timed",
+      "name": "timed-2",
+      "width": 2
+    },
+    {
+      "cohort": "timed",
+      "name": "timed-1",
+      "width": 1
+    }
+  ],
+  "attempts_per_arm": 1,
+  "batch_size": 4,
+  "cpu_threads_per_worker": 4,
+  "data_manifest_sha256": "2f4617d73b5dad4f6a343707382714738e8012432fda85d9f7e36f44b26a4e1a",
+  "deadline_unix": 1795523212.102356,
+  "driver_pids": [
+    2209976,
+    2209978,
+    2209981,
+    2209983,
+    2209987,
+    2209989,
+    2209990
+  ],
+  "evaluation_tokens_per_job": 512,
+  "input_change": "target_tokens 32768 to 8192; source, seed, model, stream and learning-rate schedule fixed",
+  "jobs_at_launch_verification": [
+    {
+      "observed_unix": 1795519664.4485714,
+      "pid": 2209976,
+      "slot": "job-01",
+      "start_ticks": 2310579397,
+      "step": 5
+    },
+    {
+      "observed_unix": 1795519668.5777872,
+      "pid": 2209978,
+      "slot": "job-02",
+      "start_ticks": 2310579398,
+      "step": 5
+    },
+    {
+      "observed_unix": 1795519670.302612,
+      "pid": 2209981,
+      "slot": "job-03",
+      "start_ticks": 2310579398,
+      "step": 5
+    },
+    {
+      "observed_unix": 1795519665.8796637,
+      "pid": 2209983,
+      "slot": "job-04",
+      "start_ticks": 2310579398,
+      "step": 5
+    },
+    {
+      "observed_unix": 1795519664.1006918,
+      "pid": 2209987,
+      "slot": "job-05",
+      "start_ticks": 2310579399,
+      "step": 5
+    },
+    {
+      "observed_unix": 1795519664.7016776,
+      "pid": 2209989,
+      "slot": "job-06",
+      "start_ticks": 2310579399,
+      "step": 5
+    },
+    {
+      "observed_unix": 1795519665.5573108,
+      "pid": 2209990,
+      "slot": "job-07",
+      "start_ticks": 2310579400,
+      "step": 5
+    }
+  ],
+  "jobs_total": 32,
+  "local_launch": ".local/pilot-r3/benchmarks/card-sharing-dev6-16step-20261124/launch.json",
+  "local_plan": ".local/pilot-r3/benchmarks/card-sharing-dev6-16step-20261124/plan.json",
+  "local_report": ".local/pilot-r3/benchmarks/card-sharing-dev6-16step-20261124/report.md",
+  "local_status": ".local/pilot-r3/benchmarks/card-sharing-dev6-16step-20261124/status.json",
+  "local_summary": ".local/pilot-r3/benchmarks/card-sharing-dev6-16step-20261124/summary.json",
+  "logical_device": "npu:0",
+  "max_seconds": 3600,
+  "observed_at": "2026-11-24T19:27:50+08:00",
+  "outside_driver_pids": [],
+  "physical_device": 6,
+  "plan_sha256": "6229ff4dcc5920214a546075ef65532857c2fba4e576c4f31a5ffb7e1197df00",
+  "requested_unix": 1795519612.102356,
+  "scope": "launch verification of the one-hour Device 6 comparison; terminal and per-arm results are in the live report",
+  "sequence_length": 128,
+  "steps_per_job": 16,
+  "systemd": {
+    "ActiveState": "active",
+    "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-card-sharing-dev6-16step-20261124.service",
+    "Id": "tide-card-sharing-dev6-16step-20261124.service",
+    "MainPID": "2209281",
+    "Restart": "no",
+    "RuntimeMaxUSec": "59min 45s"
+  },
+  "telemetry_unix": 1795519663.2670422,
+  "training_tokens_per_job": 8192,
+  "unit": "tide-card-sharing-dev6-16step-20261124.service"
+}
