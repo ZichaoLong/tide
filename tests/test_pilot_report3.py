@@ -553,3 +553,22 @@ def test_positive_queue_cancellation_without_allocation_needs_no_worker_result(r
     assert not report["observation_errors"]
     assert report["tasks"][0]["attempts"][0]["never_started_verified"]
     assert report["concurrency"]["device_seconds"] == 0
+
+
+@pytest.mark.parametrize("same_lease", [True,False])
+def test_simultaneous_runq_workers_bind_to_one_physical_lease(round_state,same_lease):
+    root,state=round_state
+    state["config"]["runq_root"]=str(root.parent/"queue")
+    for i in (1,2):
+        _,record,_=add_task(root,state,str(i),"a1",10,[(0,10)],queue_times=[(100+i,105+i)])
+        attempt=record["attempts"][0]
+        identity=dict(pid=i+5000,start_ticks=40)
+        attempt.update(runq_id=i,physical_id=4,unit=f"worker-{i}.service",process=identity)
+        write(Path(attempt["path"])/"queue.json",dict(job_id=i,lease_id=1 if same_lease else i,
+              physical_ids=[4],unit=attempt["unit"],process=identity,status="completed",return_code=0,
+              started_unix=100+i,finished_unix=105+i))
+    write(root/"scheduler.json",state)
+    report=report3.build_report(root,now=130)
+    assert report["concurrency"]["device_seconds"]==6
+    assert report["concurrency"]["accounting_complete"]==same_lease
+    assert bool(report["observation_errors"]) != same_lease

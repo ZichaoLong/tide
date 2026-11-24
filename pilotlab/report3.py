@@ -152,7 +152,8 @@ def queue_intervals(snapshot, directory, attempt, queue, *, now):
         if not queue.get("started_unix") and attempt.get("status") == "starting":
             return [], False, []
         begin, end = queue.get("started_unix"), queue.get("finished_unix")
-        bound = (queue.get("job_id") == attempt["runq_id"] and queue.get("process") == attempt.get("process")
+        bound = (type(queue.get("lease_id")) is int and queue.get("job_id") == attempt["runq_id"]
+                 and attempt.get("process") and queue.get("process") == attempt.get("process")
                  and queue.get("unit") == attempt.get("unit") and queue.get("physical_ids") == [attempt.get("physical_id")])
         if bound and number(begin):
             if number(end) and end >= begin:
@@ -432,6 +433,7 @@ def build_report(round_path, *, now=None):
     groups = {item["id"]: item.get("group") for item in manifest.get("subjects", []) if isinstance(item, dict) and "id" in item}
     rows, exposure, physical = [], defaultdict(list), Counter()
     by_card, admitted_by_card, conservative_by_card = defaultdict(list), defaultdict(list), defaultdict(list)
+    runq_intervals, runq_open = defaultdict(list), set()
     logical_intervals = {"cpu": [], "npu": []}
     logical_missing = Counter()
     backend_tokens, backend_seconds = Counter(), Counter()
@@ -533,11 +535,17 @@ def build_report(round_path, *, now=None):
                 measured, opened, _ = queue_intervals(snapshot, directory, attempt, queue, now=now)
                 ids = queue.get("physical_ids", [])
                 card = ("physical", ids[0]) if len(ids) == 1 else ("single", task_id, index)
-                by_card[card].extend(measured)
-                admitted_by_card[card].extend(measured)
-                conservative_by_card[card].extend(False for _ in measured)
-                allocation_count += len(measured)
-                open_allocations += int(opened)
+                if "runq_id" in attempt and measured:
+                    key = (card, queue["lease_id"])
+                    runq_intervals[key].extend(measured)
+                    if opened:
+                        runq_open.add(key)
+                else:
+                    by_card[card].extend(measured)
+                    admitted_by_card[card].extend(measured)
+                    conservative_by_card[card].extend(False for _ in measured)
+                    allocation_count += len(measured)
+                    open_allocations += int(opened)
             result_path = directory/"result.json"
             terminal = attempt.get("status") in TERMINAL
             never_started = import_row.get("disposition") == "not_started" if inherited else (group_binding and group_worker.get("status") == "not_started"
@@ -714,6 +722,18 @@ def build_report(round_path, *, now=None):
                  and row["target_loss_tokens"] == FORMAL_TOKENS and row["cumulative_loss_tokens"] == FORMAL_TOKENS}
     healthy = {row["model_id"] for row in formal if row["execution_complete"] and row["model_id"] in completed and row["health"].get("eligible") is True
                and not row["health"].get("blocking_reasons")}
+    # Independent workers deliberately overlap inside the same physical lock.
+    # Keep distinct leases separate for the cross-lease overlap checks below.
+    runq_cards = {}
+    for (card,lease), spans in runq_intervals.items():
+        if runq_cards.setdefault(lease,card) != card:
+            snapshot.error(str(lease),"one runq lease references different physical cards")
+        merged = merge_intervals(spans)
+        by_card[card].extend(merged)
+        admitted_by_card[card].extend(merged)
+        conservative_by_card[card].extend(False for _ in merged)
+        allocation_count += len(merged)
+    open_allocations += len(runq_open)
     intervals = [span for values in by_card.values() for span in merge_intervals(values)]
     accounting_overlap = 0
     for card, values in by_card.items():
@@ -744,6 +764,7 @@ def build_report(round_path, *, now=None):
     npu_concurrency = worker_concurrency(logical_intervals["npu"], missing=logical_missing["npu"])
     if config.get("runq_root"):
         queue_stats["method"] = "union of independently recorded worker intervals per physical card"
+        admitted_stats["scope"] = "observed worker occupancy within each identified physical runq lease"
         queue_stats["ledger_scope"] = "dedicated physical leases or union of campaign spans on mixed leases"
     queue_stats.update(logical_workers=logical, cpu_workers=cpu_concurrency, npu_workers=npu_concurrency,
                        shared_group_count=len(shared), scheduler_polled_npu_worker_peak=state.get("peak_npu_worker_concurrency"))

@@ -229,3 +229,24 @@ def test_cpu_reservation_uses_only_bound_previous_trajectory(tmp_path,tamper):
     requested=dict(allowed=["cpu"],ram={"cpu":30*gib},owner=str(tmp_path),task_id=tid)
     adjusted=estimated_spec(requested)
     assert adjusted["ram"]["cpu"]==(30*gib if tamper else 5*gib+3*gib//4)
+
+
+def test_shared_cooperative_second_sample_checks_identity_and_hbm(monkeypatch):
+    from pilotlab import runq_devices
+    from pilotlab.shared_npu3 import load_queue_helper
+    helper=load_queue_helper()
+    occupant={"uid":17,"pid":44,"start_ticks":10}
+    monkeypatch.setattr(runq_devices,"resident_identity",lambda pid: dict(occupant,pid=pid))
+    monkeypatch.setattr(runq_devices,"boot_id",lambda: "sample-boot")
+    grant=dict(card=3,boot="sample-boot",until=time.time()+60,residents=[dict(occupant)])
+    samples=runq_devices.install_predicate(helper,3,grant,32*2**20,True)
+    kwargs=dict(max_hbm_mib=4096,max_aicore_percent=5)
+    def card(used=30):
+        return helper.DeviceStatus(board_id=1,chip_id=1,physical_id=3,health="OK",
+                                   aicore_percent=71,hbm_used_mib=used,hbm_total_mib=64,process_ids=(44,))
+    assert card().is_free(**kwargs)
+    assert card().is_free(**kwargs)
+    assert len(samples)==2
+    assert not card(used=33).is_free(**kwargs)
+    occupant["start_ticks"]+=1
+    assert not card().is_free(**kwargs)

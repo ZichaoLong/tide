@@ -1,0 +1,315 @@
+{
+  "available_storage_bytes": 291964772352,
+  "budget_ledger": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/budget.json",
+  "campaign_rss_limit_bytes": 1000000000000,
+  "controller_commit": "9b6cc81a2602f9d5cf0c2d69fd6017acb83a4cad",
+  "deadline_unix": 1797698913.9318287,
+  "dispatcher": {
+    "cgroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-runq-25fe5df65a-dispatcher.service",
+    "commit": "a971fb31e240e4d1316c416def1b08508c43a9da",
+    "limits": {
+      "auto_cpu_workers": 40,
+      "auto_physical_npu": 8
+    },
+    "main_pid": 3617799,
+    "queue_root": "/mi/data2T/zlong/home/.local/state/tide-runq",
+    "source_directory": "/mi/data2T/zlong/home/.local/state/tide-runq/versions/3baae9ce35b519ba13c8ee2d07722b4d89894c673c1143baa95d10cb00b1a1a6",
+    "source_files": {
+      "runq.py": "7fc54a42bbe588da6b3a1c411ee1bb519ecf8b91f5ecece08d4aa085c9f7431f",
+      "runq_campaign.py": "acf1822b54c304813deb9ce4a4d85a220653338467bb4c324ac7be56e59ce440",
+      "runq_devices.py": "1ea4721a04ec4b49b0f0624e2d4895988543723261df56acbb2853cc9e55d214",
+      "runq_place.py": "821ea3ca470da15fad97702f90e1a025d58c7f120bf5ac207f57432ccc2e5fe6",
+      "runq_runtime.py": "841646d722f86e63a49133ef6e4f58db676157014f230e2dfa9e465d4f49973a",
+      "runq_store.py": "7a9f5aae51a7687d3f0bf01df20fc1e10640134219ea22f71903858e6af0cf91"
+    },
+    "unit": "tide-runq-25fe5df65a-dispatcher.service"
+  },
+  "first_wave": {
+    "all_outstanding_registered": true,
+    "by_disposition": {
+      "carry_checkpoint": 7,
+      "checkpoint_only": 1,
+      "not_started": 161,
+      "signal": 74
+    },
+    "device_counts": {
+      "cpu": 46,
+      "npu:0": 36,
+      "unbound": 161
+    },
+    "from_predecessor": 243,
+    "plan": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-runq/campaign-plan.json",
+      "sha256": "9827a55649fa0daf435bbdbca525585c7f1ae07482d04f7bb4ecc4a3af0ba1b7"
+    },
+    "retired_calibrations": 26,
+    "selected": 147,
+    "total_requests": 243,
+    "unbound_tasks": 161
+  },
+  "launch": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-runq/submission.json",
+    "sha256": "9dbc95d0d9b5edcd356cd3607d921a7eed5e4d6323066caf01e87325bf3adb35"
+  },
+  "measured_worker_rss_bytes": 653680214016,
+  "observed_at": "2026-11-24T02:27:11.522873+00:00",
+  "placement": {
+    "leases": [
+      {
+        "aicore_percent": 1,
+        "card": 2,
+        "external_pids": [],
+        "hbm_after_reservations_bytes": 46778023936,
+        "hbm_free_bytes": 53381955584,
+        "id": 1,
+        "reason": null,
+        "role": "auto",
+        "running_workers": 2,
+        "state": "held"
+      },
+      {
+        "aicore_percent": 0,
+        "card": 4,
+        "external_pids": [],
+        "hbm_after_reservations_bytes": 45619347456,
+        "hbm_free_bytes": 56813944832,
+        "id": 2,
+        "reason": null,
+        "role": "auto",
+        "running_workers": 2,
+        "state": "held"
+      },
+      {
+        "aicore_percent": 0,
+        "card": 5,
+        "external_pids": [],
+        "hbm_after_reservations_bytes": 59107180544,
+        "hbm_free_bytes": 61425582080,
+        "id": 3,
+        "reason": null,
+        "role": "auto",
+        "running_workers": 1,
+        "state": "held"
+      },
+      {
+        "aicore_percent": 1,
+        "card": 7,
+        "external_pids": [],
+        "hbm_after_reservations_bytes": 56533975040,
+        "hbm_free_bytes": 58474889216,
+        "id": 4,
+        "reason": null,
+        "role": "auto",
+        "running_workers": 1,
+        "state": "held"
+      },
+      {
+        "aicore_percent": 0,
+        "card": 8,
+        "external_pids": [],
+        "hbm_after_reservations_bytes": 47458549760,
+        "hbm_free_bytes": 57496567808,
+        "id": 5,
+        "reason": null,
+        "role": "auto",
+        "running_workers": 2,
+        "state": "held"
+      },
+      {
+        "aicore_percent": 0,
+        "card": 11,
+        "external_pids": [],
+        "hbm_after_reservations_bytes": 49980375040,
+        "hbm_free_bytes": 59183726592,
+        "id": 6,
+        "reason": null,
+        "role": "auto",
+        "running_workers": 2,
+        "state": "held"
+      },
+      {
+        "aicore_percent": 0,
+        "card": 14,
+        "external_pids": [],
+        "hbm_after_reservations_bytes": 56558092288,
+        "hbm_free_bytes": 63650660352,
+        "id": 7,
+        "reason": null,
+        "role": "auto",
+        "running_workers": 1,
+        "state": "held"
+      }
+    ],
+    "reserved_host_bytes_by_owner": {
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-runq/round": 1014689434871
+    },
+    "wait_reasons": {
+      "waiting for campaign RAM": 192
+    },
+    "workers": {
+      "cpu": {
+        "auto": 38,
+        "manual": 0
+      },
+      "npu": {
+        "auto": 11,
+        "manual": 0
+      }
+    }
+  },
+  "plan": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-runq/campaign-plan.json",
+    "sha256": "9827a55649fa0daf435bbdbca525585c7f1ae07482d04f7bb4ecc4a3af0ba1b7"
+  },
+  "replay": {
+    "checkpoint_step": 7923,
+    "cpu_or_npu": "npu:0",
+    "first_line_sha256": "a206c7b02b55d6b3fc6a7e97a33120b2a4a0488f49861c3d8e0119bfeeee2349",
+    "first_step": {
+      "grad_norm": 1.1185023784637451,
+      "loss": 4.787329196929932,
+      "lr": 0.000946482304723189,
+      "objective": 4.787329196929932,
+      "sampled_diagnostics": true,
+      "seconds": 9.803937941789627,
+      "state_reset": false,
+      "step": 7924,
+      "time_unix": 1795486810.0070279,
+      "tokens": 2028544
+    },
+    "heartbeat_step": 7979,
+    "initial_eval_tokens": 16384,
+    "initial_exposure": 1048576,
+    "previous_observed_step": 7935,
+    "recovery": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/runq-recovery/initial/result.json",
+      "sha256": "7de67238e662c72f33a088576317c0bd9137206ba631844ee7fa95643efcdae0"
+    },
+    "step_journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-runq/round/tasks/multiscale_timed-d128-x-mixed9-ae4ffdec56-a3-2026112002-r5/attempt-0/steps.jsonl",
+    "task_id": "multiscale_timed-d128-x-mixed9-ae4ffdec56-a3-2026112002-r5"
+  },
+  "resources_observed_unix": 1795487231.7817326,
+  "restart": {
+    "receipt": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/runq-cutover/restart-mixed.json",
+      "sha256": "b7471b4716ee14f9f42941daa2efdf7c139d5d92324427a343afb498d63c643d"
+    },
+    "survivors": {
+      "cpu": 28,
+      "npu": 13
+    },
+    "verified_pid_and_start_ticks": true
+  },
+  "schema": "pilot-r3-runq-live-v1",
+  "scope": {
+    "completed_in_run": 2,
+    "deferred": 74,
+    "inherited_completed": 4206,
+    "selected": 147,
+    "stage_b": "closed",
+    "subjects": 270,
+    "task_counts": {
+      "completed": 2,
+      "pending": 192,
+      "running": 49
+    }
+  },
+  "storage_hard_limit_bytes": 751619276800,
+  "supervisor": {
+    "cpu_workers": 38,
+    "driver_workers_by_physical_id": {
+      "11": 2,
+      "14": 1,
+      "2": 2,
+      "4": 2,
+      "5": 1,
+      "7": 1,
+      "8": 2
+    },
+    "kind": "live",
+    "main_pid": 3597796,
+    "npu_workers": 11,
+    "observation_errors": [],
+    "unit": "tide-pilot-r3-campaign-runq.service",
+    "worker_first_steps_observed": 34
+  },
+  "validation": {
+    "automatic_cpu_refill_seconds": 0.11695432662963867,
+    "cpu_smoke": {
+      "cpu-a": {
+        "finish": 1795486224.0345385,
+        "id": 1,
+        "physical_id": null,
+        "pid": 3573490,
+        "rc": 0,
+        "start": 1795486196.033731,
+        "start_ticks": 2307236674,
+        "submit_to_start_seconds": 0.2527425289154053
+      },
+      "cpu-b": {
+        "finish": 1795486226.1523042,
+        "id": 2,
+        "physical_id": null,
+        "pid": 3574739,
+        "rc": 0,
+        "start": 1795486224.1514928,
+        "start_ticks": 2307239485,
+        "submit_to_start_seconds": 28.1815505027771
+      },
+      "cpu-extra": {
+        "finish": 1795486222.2430902,
+        "id": 3,
+        "physical_id": null,
+        "pid": 3573499,
+        "rc": 0,
+        "start": 1795486196.2420828,
+        "start_ticks": 2307236694,
+        "submit_to_start_seconds": 0.1164708137512207
+      }
+    },
+    "npu_smoke": {
+      "auto-base": {
+        "finish": 1795486308.9539313,
+        "id": 1,
+        "physical_id": 2,
+        "pid": 3576214,
+        "rc": 0,
+        "start": 1795486240.2586105,
+        "start_ticks": 2307241096,
+        "submit_to_start_seconds": 10.51412844657898
+      },
+      "borrow": {
+        "finish": 1795486295.7603247,
+        "id": 3,
+        "physical_id": 4,
+        "pid": 3578049,
+        "rc": 0,
+        "start": 1795486251.4098787,
+        "start_ticks": 2307242211,
+        "submit_to_start_seconds": 0.13097476959228516
+      },
+      "extra": {
+        "finish": 1795486277.5450935,
+        "id": 2,
+        "physical_id": 4,
+        "pid": 3577969,
+        "rc": 0,
+        "start": 1795486250.9602444,
+        "start_ticks": 2307242166,
+        "submit_to_start_seconds": 7.4258739948272705
+      },
+      "fill-next": {
+        "finish": 1795486325.56387,
+        "id": 4,
+        "physical_id": 4,
+        "pid": 3581713,
+        "rc": 0,
+        "start": 1795486317.1414826,
+        "start_ticks": 2307248784,
+        "submit_to_start_seconds": 39.32486844062805
+      }
+    },
+    "scope": "Isolated live auto target 1, manual extra CPU and physical NPU, shared borrower draining, dispatcher restart with surviving PIDs; external resident admission checked by regression fixtures.",
+    "targeted_pytest": "170 passed in 5.39s"
+  }
+}
