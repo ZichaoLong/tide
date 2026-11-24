@@ -61,6 +61,12 @@ and time bounds, and durable logs per [execution](docs/execution-flows.md).
 Available CPUs/memory/idle NPUs may be used fully with coordination. Shared NPU use
 requires current-conversation authorization, not a repository default.
 
+For formal submissions through the account scheduler, use the installed
+`use-runq` skill and `~/.local/bin/runq submit --help`. Declare host CPU threads,
+host RAM for each allowed backend and HBM per assigned NPU. Developers can test
+directly on a shared physical card with sufficient free memory using
+`use-local-ascend`. Measurements and project metadata are optional queue inputs.
+
 Keep STATUS as the current handoff and ROADMAP as the backlog. Update handoffs via
 fsynced staging and atomic replacement (the current `scripts/job.py:atomic` helper
 handles JSON records; use the same staged protocol for text).
