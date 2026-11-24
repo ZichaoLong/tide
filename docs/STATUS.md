@@ -1,6 +1,6 @@
-# Stage A 在八张 NPU 和 40 个 CPU 作业位上自动补位
+# Stage A 自动补位，两项 Timed A2 已越过原失败步
 
-北京时间 2026-11-24 20:33:30，项目旧队列将物理卡 6 加入自动派发。20:37:29，卡 6、7、8、9、11、14、15 各有 7 个 worker，卡 10 有 6 个，55 个 NPU worker 均与驱动 PID 匹配。CPU 的 40 个自动作业位已填满，每个 worker 申请 4 个线程。扩容前的 88 个 worker 中，86 个仍以原进程运行，2 个已正常完成。用 `python scripts/status.py` 查看最新读数。[扩容及补位记录](evidence/pilot-r3-auto-fill-device6-20261124.json)
+北京时间 2026-11-24 21:59:13，项目旧队列在 8 张物理卡上运行 55 个 NPU worker。CPU 正在运行 42 个 worker。Timed/d256/S、K 的正式补跑 967、968 已越过第 2959、1760 步，采样时各至第 3001、1771 步。两项沿用补值前向，显式对数质量策略已在 CPU 与 Ascend 独立测量。用 `python scripts/status.py` 查看现场读数。[两例正式接续与短窗比较](pilot-r3-weak-mass-comparison.md) · [扩容记录](evidence/pilot-r3-auto-fill-device6-20261124.json)
 
 Stage A 控制器按模型推进。一个模型凑齐本阶段所需的种子结果并通过相应检查后，控制器会登记其下一组作业。派发器按后端约束补 CPU 空位，NPU 先分散到指定的物理卡，再优先试放到 worker 较少的卡。启动前核对主存，以及扣除已有 worker 未兑现预约后的实际空闲显存。卡 10、15 的共享许可绑定已获准的外部进程，每次新增 worker 都复核身份。单卡并发随作业申请和可用资源变化。[派发实现](../pilotlab/runq_place.py) · [显存与共享准入](../pilotlab/runq_devices.py)
 
@@ -14,11 +14,11 @@ Timed 三路与双路的补测于北京时间 2026-11-24 20:24:54 完成并释�
 
 此前让出六张卡时暂停的 45 个任务均保留 `stopped_budget` 状态。45 份最终检查点已用冻结的 worker 和基座在 CPU 上解码，核对了文件和训练状态摘要、原 NPU 配置、训练步数、token 数与数据游标。接续清单按任务保存了检查点、原始结果、阶段起点评估来源和本轮已预约的评估预算。收到恢复指示后按该清单开新尝试。[六张卡的交接记录](evidence/pilot-r3-six-card-pause-20261124.json) · [本机逐任务接续清单](../.local/pilot-r3/resource-handoffs/six-card-pause-20261124T153341+0800/handoff.json)
 
-270 个本批主体中，164 个已选定配方，106 个待选。20:37:29 的 Stage A 任务记录有 581 个完成、95 个运行、223 个待派、45 个暂停、2 个失败。控制器会随模型进展继续登记任务。另有 74 个早期主体待复核，阶段 B 门禁关闭。绝对截止为北京时间 2026-12-20 00:48:33。[任务快照](evidence/pilot-r3-auto-fill-device6-20261124.json) · [74 个主体复核](evidence/pilot-r3-deferred-74-review.json)
+270 个本批主体中，165 个已选定配方，105 个待选。采样时 Stage A 有 660 个任务完成、97 个运行、173 个待派、45 个暂停、0 个最新尝试失败。控制器会随模型进展登记任务。另有 74 个早期主体待复核，阶段 B 门禁关闭。绝对截止为北京时间 2026-12-20 00:48:33。[任务快照](evidence/pilot-r3-timed-weak-mass-20261124.json) · [74 个主体复核](evidence/pilot-r3-deferred-74-review.json)
 
 ## 接续入口
 
-本机启动指针为 `.local/pilot-r3/launch.json`，指向控制器 `tide-pilot-r3-dev7-20261124.service` 及其冻结计划。实验输出在 `.local/pilot-r3/campaign-runq/round/`，运行中的实验使用 `~/.local/state/tide-runq`。用 `python scripts/status.py` 核实项目科研进度，用 `python -m pilotlab.runq --root ~/.local/state/tide-runq status` 查看该批队列。账户新任务通过 `~/.local/bin/runq` 提交，使用独立的 `~/.local/state/runq`。下一次整理剩余任务时，先按研究任务身份核对已运行和已完成记录，再决定优先级与放置。[操作入口](README.md#自动补位与手动派发)
+本机启动指针为 `.local/pilot-r3/launch.json`，指向控制器 `tide-pilot-r3-vjp-20261124.service` 及其冻结计划。实验输出在 `.local/pilot-r3/campaign-runq/round/`，运行中的实验使用 `~/.local/state/tide-runq`。用 `python scripts/status.py` 核实项目科研进度，用 `python -m pilotlab.runq --root ~/.local/state/tide-runq status` 查看该批队列。账户新任务通过 `~/.local/bin/runq` 提交，使用独立的 `~/.local/state/runq`。下一次整理剩余任务时，先按研究任务身份核对已运行和已完成记录，再决定优先级与放置。[操作入口](README.md#自动补位与手动派发)
 
 项目队列按机器可用主存及未兑现预约准入，原 1 TB 批次额度已解除。[切换与验收记录](evidence/account-runq-rollout-20261124.json)
 
