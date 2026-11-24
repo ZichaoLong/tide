@@ -1,0 +1,132 @@
+{
+  "applied_at": "2026-11-24T20:33:30.996+08:00",
+  "automatic_card_target": 8,
+  "automatic_cpu_target": 40,
+  "automatic_cpu_workers": 40,
+  "automatic_npu_workers_by_card": {
+    "10": 6,
+    "11": 7,
+    "14": 7,
+    "15": 7,
+    "6": 7,
+    "7": 7,
+    "8": 7,
+    "9": 7
+  },
+  "automatic_physical_cards": [
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    14,
+    15
+  ],
+  "controller_same_instance": true,
+  "cpu_workers_by_requested_threads": {
+    "4": 40
+  },
+  "device10": {
+    "hbm_free_after_outstanding_reservations_gib": 5.84,
+    "other_driver_processes": 1
+  },
+  "device6": {
+    "automatic_lease": 16,
+    "first_training_updates": {
+      "901": 1025,
+      "902": 1025,
+      "926": 1025,
+      "927": 1025,
+      "938": 2049
+    },
+    "hbm_free_after_outstanding_reservations_gib": 0.97,
+    "initial_checks": [
+      934,
+      935
+    ],
+    "jobs": [
+      901,
+      902,
+      926,
+      927,
+      934,
+      935,
+      938
+    ],
+    "reservations_gib": {
+      "901": 8.0,
+      "902": 8.0,
+      "926": 8.0,
+      "927": 8.0,
+      "934": 10.124,
+      "935": 10.124,
+      "938": 8.0
+    }
+  },
+  "dispatcher_same_instance": true,
+  "driver_sample_at": "2026-11-24T20:37:29.599+08:00",
+  "external_sharing_grant_cards": [
+    10,
+    15
+  ],
+  "local_evidence": [
+    {
+      "path": ".local/pilot-r3/resource-handoffs/add-device6-20261124T203330+0800/before.json",
+      "sha256": "7ef9a295789afa31ed88687f9eee028f6885210c380b6322ec6debebdbdeec8b"
+    },
+    {
+      "path": ".local/pilot-r3/resource-handoffs/add-device6-20261124T203330+0800/change.json",
+      "sha256": "2d6687e53c0173cbf130479d51e0bb0ec3f98ed6dde0975a293424446762a078"
+    },
+    {
+      "path": ".local/pilot-r3/resource-handoffs/add-device6-20261124T203330+0800/verified.json",
+      "sha256": "0baeaf26e9112a19d9a301e9d734df2b98c0fdcd7fc3570c46c5dfcad992d87a"
+    }
+  ],
+  "matched_npu_driver_pids": 55,
+  "prechange_worker_outcomes": {
+    "completed": 2,
+    "same_live_process": 86
+  },
+  "queue": "~/.local/state/tide-runq",
+  "refill_examples": [
+    {
+      "backend": "cpu",
+      "gap_seconds": 1.863,
+      "next_job": 948,
+      "next_started_at": "2026-11-24T20:27:20.656+08:00",
+      "physical_card": null,
+      "previous_finished_at": "2026-11-24T20:27:18.793+08:00",
+      "previous_job": 907
+    },
+    {
+      "backend": "npu",
+      "gap_seconds": 6.433,
+      "next_job": 779,
+      "next_started_at": "2026-11-24T20:32:04.080+08:00",
+      "physical_card": 14,
+      "previous_finished_at": "2026-11-24T20:31:57.647+08:00",
+      "previous_job": 718
+    }
+  ],
+  "schema": "pilot-r3-automatic-device6-fill-v1",
+  "stage_a": {
+    "authorized_subjects": 270,
+    "counts": {
+      "completed": 581,
+      "failed": 2,
+      "pending": 223,
+      "running": 95,
+      "stopped_budget": 45
+    },
+    "deferred_subjects": 74,
+    "observed_at": "2026-11-24T20:37:29.216+08:00",
+    "selected_models": 164,
+    "stage": "stage-a-training-pipeline",
+    "stage_b_gate": "closed",
+    "status": "running"
+  },
+  "verified_at": "2026-11-24T20:37:29.721+08:00",
+  "workers_running_before_change": 88
+}
