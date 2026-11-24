@@ -100,6 +100,30 @@ class QueueSupervisor(SharedSupervisor):
     def stage_drained(self):
         return True
 
+    def inflight_model_ids(self):
+        """Find models whose queue requests still need a controller on handoff."""
+        records = self.state["tasks"]
+        models = {row["model_id"] for row in records.values()
+                  if row["status"] == "running" or (row["status"] == "pending" and row.get("runq_id"))}
+        jobs = self.db.execute("""SELECT DISTINCT json_extract(spec, '$.task_id') FROM jobs
+            WHERE state IN ('queued','reserved','starting','running') AND json_extract(spec, '$.owner')=?""",
+            (self.owner,))
+        for (tid,) in jobs:
+            if tid in records:
+                models.add(records[tid]["model_id"])
+                continue
+            # SQLite submission may have committed before scheduler.json was saved.
+            if not isinstance(tid, str) or not tid or Path(tid).name != tid or tid in (".", ".."):
+                raise Blocked(f"invalid queue task id: {tid!r}")
+            directory = self.output / "tasks" / tid
+            task = read(directory / "task.json")
+            if task is None:
+                task = read(directory / "intent.json")
+            if not task or task.get("id") != tid or not task.get("model_id"):
+                raise Blocked(f"cannot identify the frozen model for queue task {tid}")
+            models.add(task["model_id"])
+        return models
+
     def actual_npu_concurrency(self, records):
         live = self.db.execute("""SELECT j.backend,l.card FROM jobs j LEFT JOIN leases l ON j.lease=l.id
                          WHERE j.state='running' AND json_extract(j.spec,'$.owner')=?""",(self.owner,)).fetchall()

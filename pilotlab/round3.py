@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import argparse
 import copy
-from collections import defaultdict
+from collections import defaultdict, deque
 import json
 import math
 import os
@@ -203,9 +203,11 @@ class Campaign:
         limit = self.plan.get("pipeline_model_limit", default_limit)
         if type(limit) is not int or limit < 1:
             raise ValueError("pipeline_model_limit must be a positive integer")
-        pending = iter(models)
+        rejoining = self.supervisor.inflight_model_ids() if config.get("runq_root") else set()
+        # Keep plan order within each group. Already dispatched work can span
+        # more models than the window now admits.
+        pending = deque(sorted(models, key=lambda model: model["id"] not in rejoining))
         active = {}
-        exhausted = False
 
         blocked_models = {}
 
@@ -227,7 +229,6 @@ class Campaign:
                 answers = {}
 
         def produce(verified):
-            nonlocal exhausted
             dispatch = getattr(self.supervisor, "dispatch_placement", None)
             requests = []
             # Continue ready chains before admitting replacement models.
@@ -244,18 +245,15 @@ class Campaign:
                     del active[mid]
                 else:
                     active[mid] = flow, next_wave
-            while not exhausted and len(active) < limit:
-                model = next(pending, None)
-                if model is None:
-                    exhausted = True
-                    break
+            while pending and (pending[0]["id"] in rejoining or len(active) < limit):
+                model = pending.popleft()
                 flow = factory([model])
                 waiting = advance(model["id"], flow, None, requests)
                 if waiting is not None:
                     active[model["id"]] = flow, waiting
             if dispatch and stage == "stage-a-training-pipeline":
                 requests[:0] = dispatch.supplemental_requests(verified)
-            return {"requests": requests, "done": exhausted and not active}
+            return {"requests": requests, "done": not pending and not active}
 
         try:
             self.supervisor.run_dynamic(stage, produce)

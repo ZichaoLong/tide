@@ -6,6 +6,7 @@ import time
 import pytest
 
 from pilotlab.io import atomic_json, sha256
+from pilotlab.round3 import Campaign
 from pilotlab.runq_campaign import QueueSupervisor, device_cost, hbm_shape
 from pilotlab.runq_devices import admission, free_bytes, grant_for
 from pilotlab.runq_place import place
@@ -30,6 +31,64 @@ def held(db, card, job, role="auto"):
 
 def run(db, job, lease):
     db.execute("UPDATE jobs SET state='running',backend='npu',lease=?,generation=1 WHERE id=?",(lease,job))
+
+
+@pytest.mark.parametrize("frozen_name", ["intent.json", "task.json"])
+def test_pipeline_handoff_rejoins_queue_before_opening_new_models(tmp_path, frozen_name):
+    supervisor = QueueSupervisor.__new__(QueueSupervisor)
+    supervisor.db, supervisor.owner, supervisor.output = connect(tmp_path), str(tmp_path), tmp_path
+    supervisor.state = {"tasks": {
+        "852": {"model_id": "k4", "status": "running", "runq_id": 1},
+        "853": {"model_id": "k4", "status": "running", "runq_id": 2},
+        "854": {"model_id": "k4", "status": "pending", "runq_id": 3},
+        "settled": {"model_id": "fresh-1", "status": "completed", "runq_id": 9},
+        "import": {"model_id": "fresh-2", "status": "pending"}}}
+    groups = {"k4": ["852", "853", "854"], "k2": ["960", "961", "962"],
+              "fresh-1": ["new-1"], "fresh-2": ["new-2"]}
+    for tid in groups["k4"] + groups["k2"]:
+        job = submit(supervisor.db, tid, {**spec(), "owner": supervisor.owner, "task_id": tid})
+        state = "completed" if tid in ("852", "853") else "reserved"
+        supervisor.db.execute("UPDATE jobs SET state=? WHERE id=?", (state, job))
+        if tid in groups["k2"]:
+            # A crash can follow SQLite submission before scheduler.json is saved.
+            atomic_json(tmp_path / "tasks" / tid / frozen_name, {"id": tid, "model_id": "k2"})
+    submit(supervisor.db, "foreign", {**spec(), "owner": "another-round", "task_id": "other"})
+    campaign = Campaign.__new__(Campaign)
+    campaign.supervisor = supervisor
+    campaign.plan = {"config": {"runq_root": str(tmp_path), "max_workers": 4}, "pipeline_model_limit": 1}
+    models = [{"id": mid} for mid in ("fresh-1", "fresh-2", "k4", "k2")]
+
+    def factory(models):
+        ids = groups[models[0]["id"]]
+        answers = yield [{"stage": "init", "tasks": [{"id": tid} for tid in ids]}]
+        assert set(answers) == set(ids)
+
+    def check_restart(stage, produce):
+        def offered(verified):
+            update = produce(dict.fromkeys(verified, "verified"))
+            return [t["id"] for wave in update["requests"] for t in wave["tasks"]], update["done"]
+
+        assert offered([]) == (groups["k4"] + groups["k2"], False)
+        assert offered(groups["k4"]) == ([], False)
+        verified = groups["k4"] + groups["k2"]
+        assert offered(verified) == (["new-1"], False)
+        assert offered(verified + ["new-1"]) == (["new-2"], False)
+        assert offered(verified + ["new-1", "new-2"]) == ([], True)
+
+    supervisor.run_dynamic = check_restart
+    campaign.run_model_flows(models, factory, stage="stage-a-training-pipeline")
+
+
+def test_handoff_rejoins_model_when_its_last_worker_finished_offline(tmp_path):
+    supervisor = QueueSupervisor.__new__(QueueSupervisor)
+    supervisor.db, supervisor.owner, supervisor.output = connect(tmp_path), str(tmp_path), tmp_path
+    job = submit(supervisor.db, "last", {**spec(), "owner": supervisor.owner, "task_id": "last"})
+    supervisor.db.execute("UPDATE jobs SET state='completed' WHERE id=?", (job,))
+    record = {"model_id": "m", "status": "running", "runq_id": job}
+    supervisor.state = {"tasks": {"last": record}}
+    assert supervisor.inflight_model_ids() == {"m"}
+    record["status"] = "completed"
+    assert not supervisor.inflight_model_ids()
 
 
 def test_campaign_reserves_measured_shape_on_registration(tmp_path):
