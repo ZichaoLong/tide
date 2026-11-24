@@ -278,7 +278,7 @@ class Supervisor:
             return "storage_exhausted"
         if available < self.config.get("storage_reserve_bytes", 0):
             return "storage_reserve_exhausted"
-        if self.resource_cache.get("rss_bytes", 0) > self.config.get("max_rss_bytes", 512*GIB):
+        if not self.config.get("runq_root") and self.resource_cache.get("rss_bytes", 0) > self.config.get("max_rss_bytes", 512*GIB):
             return "process_tree_rss_limit"
         return None
 
@@ -540,6 +540,8 @@ class Supervisor:
         calls or independent resource pools are introduced.
         """
         requests, permissions, verified = {}, {}, {}
+        self.failed_independent_tasks = set()
+        failed = self.failed_independent_tasks
         self.state.update(status="running", stage=stage)
         try:
             while True:
@@ -548,7 +550,7 @@ class Supervisor:
                     record = self.state["tasks"][task_id]
                     if record["status"] == "running":
                         self._poll(task, record)
-                    if task_id in verified:
+                    if task_id in verified or task_id in failed:
                         continue
                     if record["status"] == "completed":
                         self.verify_completed(task, record)
@@ -577,9 +579,14 @@ class Supervisor:
                             and sha256(record["result_path"]) == record.get("result_sha256")
                             and result.get("task_sha256") == sha256(record["task_path"])
                             and result.get("source_identity") == task.get("source_identity"))
+                        if not allowed and self.config.get("runq_root"):
+                            # This result never enters the verified science inputs.
+                            failed.add(task_id)
+                            continue
                         if not allowed:
                             raise Blocked(f'{record["stage"]}: {record.get("reason")}')
                         verified[task_id] = result
+                settled = verified.keys() | failed
                 update = producer(dict(verified))
                 if not isinstance(update, dict) or type(update.get("done")) is not bool:
                     raise ValueError("dynamic producer requires requests and explicit done")
@@ -612,7 +619,7 @@ class Supervisor:
                 self.stop_reason = self.stop_reason or self.resource_reason()
                 if self.stop_reason:
                     raise Blocked(self.stop_reason)
-                if any(self.state["tasks"][key]["status"] in TERMINAL and key not in verified for key in requests):
+                if any(self.state["tasks"][key]["status"] in TERMINAL and key not in settled for key in requests):
                     self._save()
                     continue
                 records = [self.state["tasks"][key] for key in requests]
@@ -622,15 +629,17 @@ class Supervisor:
                 self.state["peak_actual_npu_concurrency"] = max(self.state["peak_actual_npu_concurrency"], allocated)
                 self.start_ready_tasks(list(requests.values()), max(0, worker_limit(self.config)-active))
                 self._save()
-                if update["done"] and len(verified) == len(requests) and self.stage_drained():
+                if update["done"] and len(settled) == len(requests) and self.stage_drained():
                     if self.owned_members():
                         raise Blocked("dynamic_stage_has_live_descendants")
+                    if failed:
+                        raise Blocked(f"independent task failures after queue drain: {sorted(failed)}")
                     return verified
-                if not update["done"] and len(verified) == len(requests):
+                if not update["done"] and len(settled) == len(requests):
                     raise Blocked("dynamic_producer_stalled_without_work")
                 # Reused terminal evidence can advance a dependency without
                 # paying a poll interval for every imported stage.
-                if any(self.state["tasks"][key]["status"] in TERMINAL and key not in verified for key in requests):
+                if any(self.state["tasks"][key]["status"] in TERMINAL and key not in settled for key in requests):
                     continue
                 time.sleep(self.config.get("poll_seconds", 2))
         except BaseException as error:

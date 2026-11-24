@@ -438,7 +438,8 @@ def write_campaign_draft(root, new, plan, module, remaining, provenance):
     argv = ["systemd-run", "--user", "--unit="+unit, "--service-type=exec", "--slice=background.slice",
         "--working-directory="+new["source"], "--property=KillMode=control-group",
         "--property=RuntimeMaxSec="+str(math.ceil(remaining["remaining_wall_seconds"])+120), "--property=TimeoutStopSec=120",
-        "--property=MemoryAccounting=yes", "--property=MemoryMax="+str(config["max_rss_bytes"]),
+        "--property=MemoryAccounting=yes",
+        *([] if config.get("runq_root") else ["--property=MemoryMax="+str(config["max_rss_bytes"])]),
         "--property=StandardOutput=append:"+str(log), "--property=StandardError=append:"+str(log), str(launcher)]
     draft = {"schema": "pilot-r3-campaign-launch-draft-v1", "status": "not_submitted", "unit": unit,
         "prepared_path": str(campaign_path), "prepared_sha256": sha256(campaign_path),

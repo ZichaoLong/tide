@@ -803,3 +803,28 @@ def test_json_normalization_still_rejects_real_generated_model_change(generated_
     with pytest.raises(ValueError, match="immutable request differs"):
         s.freeze_json(path, changed)
     assert (path.read_bytes(), path.stat().st_mtime_ns) == before
+
+
+def test_queue_failure_drains_independent_work_before_reporting(supervisor_factory, monkeypatch):
+    owner = supervisor_factory()
+    owner.config["runq_root"] = "/queue"
+    failed, unrelated = task(id="failed"), task(id="unrelated")
+    record, _ = saved_record(owner, failed, status="failed")
+    record["stage"] = "a1"
+    ran = []
+
+    def start(item, row):
+        ran.append(item["id"])
+        row.update(status="completed", result_path=str(owner.output/"independent-result.json"))
+        write_json(owner.output/"independent-result.json", {"id":item["id"]})
+
+    monkeypatch.setattr(owner, "_start", start)
+    monkeypatch.setattr(owner, "verify_completed", lambda *_: None)
+    monkeypatch.setattr(owner, "resource_reason", lambda: None)
+    monkeypatch.setattr(owner, "owned_members", lambda: {})
+    monkeypatch.setattr(s.time, "sleep", lambda _: None)
+    with pytest.raises(s.Blocked, match="independent task failures after queue drain"):
+        owner.run_dynamic("stage-a", lambda verified: {"requests":[{"stage":"a1","tasks":[failed,unrelated]}],
+                                                      "done":"unrelated" in verified})
+    assert ran == ["unrelated"]
+    assert owner.state["stage_b_gate"] == "closed"

@@ -104,7 +104,7 @@ class QueueSupervisor(SharedSupervisor):
             ram = {b:self.worker_reservations({**task,"device":"npu:0" if b=="npu" else "cpu"})["reserved_rss_bytes"] for b in allowed}
             group = getattr(self, "resource_placement", None)
             members = group.groups.get(task["id"]) if group else None
-            spec = dict(owner=self.owner,task_id=task["id"],allowed=allowed,ram=ram,ram_limit=self.config["max_rss_bytes"],
+            spec = dict(owner=self.owner,task_id=task["id"],allowed=allowed,ram=ram,
                         hbm=task.get("reserved_hbm_bytes",8*2**30),deadline=self.config["deadline_unix"],
                         binding=self.owner+"/"+members[0] if members else None,preparation=row.get("preparation",False))
             ident = submit(self.db,key,spec)
@@ -219,7 +219,7 @@ class QueueSupervisor(SharedSupervisor):
         put(self.db,"permit."+self.owner,0)
         self.state.update(status="a_blocked_needs_repair",stage_b_gate="closed",blocking_reason=self.stop_reason)
         if self.stop_reason in {"global_deadline","global_device_hour_limit","preparation_device_hour_limit",
-                                 "storage_exhausted","storage_reserve_exhausted","process_tree_rss_limit"}:
+                                 "storage_exhausted","storage_reserve_exhausted"}:
             self.state["status"] = "stopped_budget"
             rows = self.db.execute("""SELECT id,generation FROM jobs WHERE state IN ('starting','running')
                                       AND json_extract(spec,'$.owner')=?""",(self.owner,))

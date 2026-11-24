@@ -169,6 +169,8 @@ def main(argv=None):
     parser.add_argument("--output",type=Path,required=True)
     args = parser.parse_args(argv)
     plan = read(args.plan)
+    if "controller_source" in plan and Path(plan["controller_source"]).resolve() != Path(__file__).resolve().parents[1]:
+        raise ValueError("controller must execute its declared frozen source")
     scope = verify_scope(plan)
     if plan.get("stage_a_migration"):
         from .stage_a_continued3 import MigrationCampaign

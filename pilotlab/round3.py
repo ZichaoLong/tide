@@ -207,10 +207,17 @@ class Campaign:
         active = {}
         exhausted = False
 
-        def advance(flow, answers, requests):
+        blocked_models = {}
+
+        def advance(mid, flow, answers, requests):
             while True:
                 try:
                     wave = flow.send(answers)
+                except Blocked as error:
+                    if not config.get("runq_root"):
+                        raise
+                    blocked_models[mid] = str(error)
+                    return None
                 except StopIteration:
                     return None
                 task_ids = {task["id"] for request in wave for task in request["tasks"]}
@@ -226,9 +233,13 @@ class Campaign:
             # Continue ready chains before admitting replacement models.
             # A scheduler result is visible here only after owner cleanup.
             for mid, (flow, waiting) in list(active.items()):
+                if waiting.intersection(getattr(self.supervisor, "failed_independent_tasks", ())):
+                    flow.close()
+                    del active[mid]
+                    continue
                 if not waiting.issubset(verified):
                     continue
-                next_wave = advance(flow, {tid: verified[tid] for tid in waiting}, requests)
+                next_wave = advance(mid, flow, {tid: verified[tid] for tid in waiting}, requests)
                 if next_wave is None:
                     del active[mid]
                 else:
@@ -239,7 +250,7 @@ class Campaign:
                     exhausted = True
                     break
                 flow = factory([model])
-                waiting = advance(flow, None, requests)
+                waiting = advance(model["id"], flow, None, requests)
                 if waiting is not None:
                     active[model["id"]] = flow, waiting
             if dispatch and stage == "stage-a-training-pipeline":
@@ -248,6 +259,8 @@ class Campaign:
 
         try:
             self.supervisor.run_dynamic(stage, produce)
+            if blocked_models:
+                raise Blocked(f"model dependencies blocked after queue drain: {blocked_models}")
         finally:
             for flow, _ in active.values():
                 flow.close()

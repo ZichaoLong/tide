@@ -1,12 +1,3 @@
-#!/usr/bin/env python3
-"""Dispatch from any working directory, including through ~/.local/bin/runq."""
-from pathlib import Path
-import sys
-
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from pilotlab.runq import main
-
-try:
-    main()
-except (ValueError, OSError, RuntimeError) as error:
-    sys.exit(str(error))
+#!/usr/bin/env bash
+# Project convenience entry for the independently installed account tool.
+exec "${HOME}/tools/runq/runq" "$@"

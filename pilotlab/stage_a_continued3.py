@@ -56,7 +56,10 @@ def verify_scope(plan):
                        "prior_evaluation_reservations", "migration_evaluation_reservations"}
             if {k:v for k,v in config.items() if k not in runtime} != {k:v for k,v in prior.items() if k not in runtime}:
                 raise ValueError("controller continuation changed the prior resource or training configuration")
-        source_inventory({"source":config["source"], "foundation":config["foundation"],
+        # A controller-only restart can use a new immutable code directory while the
+        # same live workers, task configuration and budget still own their records.
+        controller_source = plan.get("controller_source", config["source"])
+        source_inventory({"source":controller_source, "foundation":config["foundation"],
                           "source_identity":plan["controller_source_identity"]})
         placement = plan.get("stage_a_cpu_placement")
         if placement != review.get("stage_a_cpu_placement", old.get("stage_a_cpu_placement")):
