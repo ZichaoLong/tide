@@ -259,7 +259,8 @@ class TideLM(_TideLM):
         try:
             result = self.core(self.embedding(tokens), state, record_work=record_work)
             hidden = result.readout()
-            strengths = result.strengths.sum(0)
+            codes = getattr(result, "strength_coordinates", None)
+            strengths = result.strengths.sum(0) if codes is None else (codes != 0).any(0)
             selected = None
             if not self.core.settle:
                 b, length = tokens.shape
