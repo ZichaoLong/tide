@@ -78,15 +78,18 @@ def mean_activity(results, tasks=None):
 class Campaign:
     def __init__(self, plan, output):
         self.plan = plan
+        from .hbm_profile3 import frozen_profile
+        inherited_hbm = frozen_profile(plan.get("hbm_profile"))
         if plan["config"].get("runq_root"):
             from .runq_campaign import QueueSupervisor
-            self.supervisor = QueueSupervisor(plan["config"], output)
+            self.supervisor = QueueSupervisor(plan["config"], output, inherited_hbm=inherited_hbm)
         elif plan["config"].get("shared_execution"):
             from .scheduler_shared3 import SharedSupervisor
             self.supervisor = SharedSupervisor(plan["config"], output)
         else:
             self.supervisor = Supervisor(plan["config"], output)
         self.output = self.supervisor.output
+        self.inherited_hbm = inherited_hbm
         self.identity = plan["source_identity"]
         self.protocol = plan["protocol"]
         self.subjects = plan["subjects"]
@@ -683,6 +686,29 @@ class Campaign:
         task.pop("resume_checkpoint", None)
         task.pop("resume_checkpoint_sha256", None)
         self.reserve_resources(task)
+        if task.get("device", "npu:0").startswith("npu"):
+            from .hbm_profile3 import HbmProfile, hbm_shape
+            # Frozen formal requests must replay byte-for-byte on controller restart.
+            frozen = read(self.output/"tasks"/task["id"]/"task.json")
+            if frozen:
+                if "reserved_hbm_bytes" in frozen:
+                    task["reserved_hbm_bytes"] = frozen["reserved_hbm_bytes"]
+                else:
+                    task.pop("reserved_hbm_bytes", None)
+            else:
+                shape = hbm_shape(task)
+                estimate = getattr(self, "inherited_hbm", {}).get(shape, 0)
+                profile = getattr(self.supervisor, "hbm_profile", None)
+                if profile:
+                    estimate = max(estimate, self.supervisor.measured_hbm(shape))
+                elif (self.output/"hbm-profile.sqlite3").is_file():
+                    local = HbmProfile(self.output, readonly=True)
+                    try:
+                        estimate = max(estimate, local.summaries().get(shape, {}).get("reservation_bytes", 0))
+                    finally:
+                        local.db.close()
+                if estimate:
+                    task["reserved_hbm_bytes"] = max(task.get("reserved_hbm_bytes", 0), estimate)
         return task
 
     def retire_completed_stage_a(self):

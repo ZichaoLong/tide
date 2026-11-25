@@ -183,11 +183,15 @@ def frozen_subjects(prepared):
 
 def prepare(repo, foundation, output, *, python, data, budget, preflight_prepared,
             card_count, max_workers=16, preflight_report=None,
-            storage_reserve_bytes=0, max_rss_bytes=512 * GIB):
+            storage_reserve_bytes=0, max_rss_bytes=512 * GIB, hbm_profile=None):
     if any(type(value) is not int or value < 1 for value in (card_count, max_workers)):
         raise ValueError("measured card count and maximum workers must be positive integers")
     repo, foundation, output = Path(repo).resolve(), Path(foundation).resolve(), Path(output).resolve()
     preflight_prepared = Path(preflight_prepared).resolve()
+    if hbm_profile is not None:
+        from .hbm_profile3 import frozen_profile
+        hbm_profile = {"path": str(Path(hbm_profile).resolve()), "sha256": sha256(hbm_profile)}
+        frozen_profile(hbm_profile)
     old = load(preflight_prepared)
     report_path = Path(preflight_report).resolve() if preflight_report else Path(old["output"]) / "preflight-report.json"
     if Path(old["budget_ledger"]).resolve() != Path(budget).resolve():
@@ -247,6 +251,8 @@ def prepare(repo, foundation, output, *, python, data, budget, preflight_prepare
             "profile_private_checkpoint_target_bytes": 32*2**20, "profile_private_parameter_factor": 2,
             "qualification_transfer": qualification, "budget_remaining_at_freeze": remaining,
             "storage_observation": storage}
+    if hbm_profile is not None:
+        plan["hbm_profile"] = hbm_profile
     plan_path = freeze_json(output / "campaign-plan.json", plan)
     launcher = output / "campaign-launch.sh"
     command = [prepared["python"], "-u", "-m", "pilotlab.round3", "--plan", str(plan_path), "--output", prepared["output"]]
@@ -290,6 +296,7 @@ def main(argv=None):
     for name in ("repo", "foundation", "output", "python", "data", "budget", "preflight-prepared"):
         parser.add_argument("--" + name, type=Path, required=True)
     parser.add_argument("--preflight-report", type=Path)
+    parser.add_argument("--hbm-profile", type=Path, help="Frozen Stage A HBM snapshot for matching worker and input shapes")
     parser.add_argument("--card-count", type=int, required=True)
     parser.add_argument("--max-workers", type=int, default=16)
     args = parser.parse_args(argv)

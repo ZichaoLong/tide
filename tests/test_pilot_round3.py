@@ -289,6 +289,26 @@ def test_measured_cpu_recipe_keeps_backend_through_continuations_and_formal(simu
     assert formal["source_identity"] == campaign.identity
 
 
+def test_formal_npu_uses_same_shape_stage_a_profile_and_replays_frozen_request(simulation):
+    from pilotlab.hbm_profile3 import GIB, HbmProfile, hbm_shape
+    campaign = simulation()
+    model = campaign.subjects[0]
+    campaign.train_group([model])
+    selected = s.read(campaign.selected[model["id"]]["confirmation"][0]["task_path"])
+    assert selected["device"] == "npu:0"
+    profile = HbmProfile(campaign.output)
+    with profile.db:
+        profile.record_driver(campaign.output/"sample", hbm_shape(selected), model["id"], selected["batch_size"],
+                              16*GIB, False)
+    first = campaign.formal_task(model, r.FORMAL_SEED, "b", campaign.output/"gate.json")
+    assert first["reserved_hbm_bytes"] == 25*GIB
+    r.freeze_json(campaign.output/"tasks"/first["id"]/"task.json", first)
+    profile.set_policy(2., 0)
+    assert campaign.formal_task(model, r.FORMAL_SEED, "b", campaign.output/"gate.json") == first
+    other = campaign.formal_task(model, r.FORMAL_SEED+1, "b_repeat", campaign.output/"repeat.json")
+    assert other["reserved_hbm_bytes"] == 32*GIB
+
+
 def test_consumed_parent_retirement_keeps_a3_and_is_independently_verifiable(simulation):
     from pilotlab.catalog3 import generate_subjects
     from pilotlab.chain_receipt3 import verify_model_chain_receipt

@@ -8,25 +8,30 @@ import subprocess
 import time
 
 from .io import atomic_json, sha256
+from .hbm_profile3 import GIB, HbmProfile, hbm_shape, oom_kind
 from .runq import start
-from .runq_store import command_env, connect, lookup, packed, put, setting, submit, unit, wake, write
+from .runq_store import command_env, connect, event, lookup, packed, put, setting, submit, unit, wake, write
 from .scheduler3 import Blocked, Supervisor, evaluate_outcome, evaluation_bound, freeze_json, live, read
 from .scheduler_shared3 import SharedSupervisor
-from .source_migration3 import digest
 
 
-def hbm_shape(task):
-    """Match a measured worker implementation, model and input shape across seeds and rungs."""
-    return digest({key: task.get(key) for key in (
-        "source_identity", "model", "precision", "deterministic", "sequence_length", "stream_chunks", "batch_size")})
+def queue_hbm(db, owner, task, allowed, observed=0, shape=None):
+    if "npu" not in allowed:
+        return task.get("reserved_hbm_bytes", 8 * GIB)
+    floors = setting(db, "hbm_floors." + owner, {})
+    floor = floors.get(shape or hbm_shape(task), 0) if floors else 0
+    declared = task.get("reserved_hbm_bytes", 0)
+    return max(declared, observed, floor) or 8 * GIB
 
 
-def queue_hbm(db, owner, task, allowed):
-    declared = task.get("reserved_hbm_bytes", 8 * 2**30)
-    floors = setting(db, "hbm_floors." + owner, {}) if "npu" in allowed else {}
-    if not floors:
-        return declared
-    return max(declared, floors.get(hbm_shape(task), 0))
+def first_update_time(directory):
+    path = Path(directory) / "steps.jsonl"
+    if path.is_file():
+        with path.open() as stream:
+            line = stream.readline()
+        if line.endswith("\n"):
+            return json.loads(line)["time_unix"]
+    return None
 
 
 def device_cost(db, owner, now, preparation=False):
@@ -73,12 +78,17 @@ def apply_runq(config, review):
 
 
 class QueueSupervisor(SharedSupervisor):
-    def __init__(self, config, output):
+    def __init__(self, config, output, *, inherited_hbm=None):
         self.root = Path(config["runq_root"])
         self.db = connect(self.root)
         self.owner = str(Path(output).resolve())
         self.registered = {}
         super().__init__(config, output)
+        self.hbm_profile = HbmProfile(self.output)
+        self.inherited_hbm = inherited_hbm or {}
+        self.shape_stats = self.hbm_profile.summaries()
+        self.hbm_jobs = {}
+        self.last_hbm_sample = None
         self.capacity_retry_jobs = set(setting(self.db, "hbm_retry_jobs." + self.owner, []))
         recovered = False
         for row in self.state["tasks"].values():
@@ -96,6 +106,81 @@ class QueueSupervisor(SharedSupervisor):
 
     def supervision_tick(self):
         put(self.db,"permit."+self.owner,time.time()+60)
+        self.refresh_hbm()
+
+    def measured_hbm(self, shape):
+        stats = getattr(self, "shape_stats", {}).get(shape, {})
+        measured = stats.get("reservation_bytes", 0)
+        return max(measured, getattr(self, "inherited_hbm", {}).get(shape, 0))
+
+    def refresh_hbm(self):
+        samples = setting(self.db, "samples", [])
+        if not samples or samples[-1]["at"] == self.last_hbm_sample:
+            return
+        now = time.time()
+        samples = [s for s in samples[-2:] if now - s["at"] < 15 and
+                   (self.last_hbm_sample is None or s["at"] > self.last_hbm_sample)]
+        if not samples:
+            return
+        rows = self.db.execute("""SELECT j.*,l.card FROM jobs j LEFT JOIN leases l ON j.lease=l.id
+            WHERE j.state IN ('queued','reserved','starting','running') AND COALESCE(j.backend,'npu')='npu'
+            AND json_extract(j.spec,'$.owner')=?""", (self.owner,)).fetchall()
+        active = {}
+        with self.hbm_profile.db:
+            for job in rows:
+                spec = json.loads(job["spec"])
+                if "npu" not in spec["allowed"]:
+                    continue
+                row = self.state["tasks"].get(spec["task_id"], {})
+                task = self.hbm_jobs.get(job["id"])
+                if task is None:
+                    path = row.get("task_path")
+                    frozen = read(path) if path else None
+                    if not frozen or frozen["id"] != spec["task_id"]:
+                        continue
+                    task = (hbm_shape(frozen), frozen["model_id"], frozen["batch_size"], frozen.get("reserved_hbm_bytes", 0))
+                active[job["id"]] = task
+                if not job["pid"] or not row.get("attempts"):
+                    continue
+                attempt = row["attempts"][-1]
+                if attempt.get("runq_id") != job["id"]:
+                    continue
+                name = unit(self.root, "job", job["id"], job["generation"])
+                first_update = job["first_step"] or first_update_time(attempt["path"])
+                for sample in samples:
+                    card = sample["cards"].get(str(job["card"]), {})
+                    for process in card.get("processes", []):
+                        if (process["unit"] == name and process["pid"] == job["pid"] and
+                                (process["identity"] or {}).get("start_ticks") == job["ticks"]):
+                            before = first_update is None or sample["at"] < first_update
+                            self.hbm_profile.record_driver(attempt["path"], *task[:3], process["bytes"], before)
+        self.hbm_jobs = active
+        self.shape_stats = self.hbm_profile.summaries()
+        with write(self.db):
+            floors = setting(self.db, "hbm_floors." + self.owner, {})
+            for ident, (shape, _, _, declared) in active.items():
+                job = lookup(self.db, ident)
+                if job["state"] not in ("queued", "reserved", "starting", "running") or job["backend"] == "cpu":
+                    continue
+                spec = json.loads(job["spec"])
+                current = spec["hbm"]
+                original = json.loads(job["original"])[0]["hbm"]
+                # Retain an operator's change when taking ownership of the baseline.
+                prior = spec.get("profile_hbm_bytes", original)
+                minimum = spec.get("hbm_min_bytes", 0) if prior == current else current
+                wanted = max(declared, minimum, floors.get(shape, 0), self.measured_hbm(shape)) or 8 * GIB
+                if wanted < current and job["state"] in ("starting", "running") and not job["first_step"]:
+                    continue
+                if wanted != current:
+                    spec.update(hbm=wanted, profile_hbm_bytes=wanted, hbm_min_bytes=minimum)
+                    self.db.execute("UPDATE jobs SET spec=? WHERE id=?", (packed(spec), ident))
+                    event(self.db, ident, "shape_hbm_reservation", packed(dict(previous=current, current=wanted, shape=shape)))
+        self.last_hbm_sample = samples[-1]["at"]
+        wake(self.root)
+
+    def close(self):
+        self.hbm_profile.db.close()
+        super().close()
 
     def stage_drained(self):
         return True
@@ -154,8 +239,10 @@ class QueueSupervisor(SharedSupervisor):
             ram = {b:self.worker_reservations({**task,"device":"npu:0" if b=="npu" else "cpu"})["reserved_rss_bytes"] for b in allowed}
             group = getattr(self, "resource_placement", None)
             members = group.groups.get(task["id"]) if group else None
+            shape = hbm_shape(task)
+            hbm = queue_hbm(self.db,self.owner,task,allowed,self.measured_hbm(shape),shape)
             spec = dict(owner=self.owner,task_id=task["id"],allowed=allowed,ram=ram,
-                        hbm=queue_hbm(self.db,self.owner,task,allowed),deadline=self.config["deadline_unix"],
+                        hbm=hbm,deadline=self.config["deadline_unix"],
                         binding=self.owner+"/"+members[0] if members else None,preparation=row.get("preparation",False))
             ident = submit(self.db,key,spec,target)
         self.registered[key] = ident
@@ -172,20 +259,20 @@ class QueueSupervisor(SharedSupervisor):
             self.db.execute("UPDATE jobs SET command=? WHERE id=? AND command IS NULL",(value,ident))
 
     def retry_capacity(self, task, row, result):
-        """Reopen a reviewed first attempt after an increase in its physical HBM reservation."""
+        """Reopen a reviewed first OOM from the last committed optimizer update."""
         ident = row.get("runq_id")
         if (ident not in self.capacity_retry_jobs or row["status"] != "failed" or row.get("observation_error")
                 or len(row["attempts"]) != 1 or row.get("resume_receipt") or row.get("qualified_task")
                 or not task or task.get("device") != "npu:0" or task.get("resume_checkpoint") or task.get("stage_a_migration")
-                or not result or result.get("failure_class") != "capacity_error"
-                or not result.get("error", "").lower().startswith("npu out of memory")):
+                or not result):
             return False
         attempt = row["attempts"][0]
         job = lookup(self.db, ident)
         original = json.loads(job["original"])[0]
-        floor = queue_hbm(self.db, self.owner, task, ["npu"])
+        floor = queue_hbm(self.db, self.owner, task, ["npu"], self.measured_hbm(hbm_shape(task)))
         path = Path(attempt["path"]) / "result.json"
-        if (attempt.get("runq_id") != ident or original.get("owner") != self.owner or original["task_id"] != task["id"]
+        kind = oom_kind(result, path.parent / "stdout.log")
+        if (not kind or attempt.get("runq_id") != ident or original.get("owner") != self.owner or original["task_id"] != task["id"]
                 or job["state"] != "failed" or job["backend"] != "npu" or job["rc"] != 1 or not job["pid"]
                 or original["hbm"] >= floor
                 or live({"pid": job["pid"], "start_ticks": job["ticks"]}) or result.get("status") != "failed"
@@ -200,15 +287,21 @@ class QueueSupervisor(SharedSupervisor):
         checkpoint = result.get("checkpoint")
         if progress["steps"] or progress["tokens"]:
             if (not checkpoint or checkpoint != read(path.parent / "checkpoint.json", {}).get("current")
-                    or any(checkpoint.get(k) != progress[k] for k in ("steps", "tokens"))
                     or not checkpoint.get("path") or not Path(checkpoint["path"]).is_file()
                     or sha256(checkpoint["path"]) != checkpoint.get("sha256")):
                 return False
+            if any(checkpoint.get(k) != progress[k] for k in ("steps", "tokens")):
+                quantum = task["batch_size"] * task["sequence_length"]
+                if not (type(checkpoint.get("steps")) is int and 0 < checkpoint["steps"] < progress["steps"]
+                        and checkpoint.get("tokens") == checkpoint["steps"] * quantum and progress["tokens"] == progress["steps"] * quantum):
+                    return False
             row.update(retry_checkpoint=checkpoint["path"], retry_checkpoint_sha256=checkpoint["sha256"])
         elif checkpoint:
             return False
         row["capacity_retry"] = dict(job=ident, result={"path": str(path), "sha256": row["result_sha256"]},
-                                     previous_hbm=original["hbm"], reserved_hbm=floor, checkpoint=checkpoint)
+                                     previous_hbm=original["hbm"], reserved_hbm=floor, checkpoint=checkpoint, oom=kind,
+                                     replay_steps=progress["steps"]-(checkpoint or {}).get("steps", 0),
+                                     replay_tokens=progress["tokens"]-(checkpoint or {}).get("tokens", 0))
         for key in ("result_path", "result_sha256", "heartbeat", "queue", "process"):
             row.pop(key, None)
         row.update(status="pending", reason=None)
@@ -254,6 +347,13 @@ class QueueSupervisor(SharedSupervisor):
         publish = []
         for tid, task in pending.items():
             record = self.state["tasks"][tid]
+            stats = getattr(self, "shape_stats", {}).get(hbm_shape(task), {})
+            leader = stats.get("leader")
+            if leader and leader != tid and task["device"] in ("npu:0", "unbound"):
+                key = f'{self.config["run_id"]}/{tid}/{len(record["attempts"])}'
+                if not self.db.execute("SELECT 1 FROM jobs WHERE job_key=?", (key,)).fetchone():
+                    record["queue_wait"] = "waiting for measured NPU representative " + leader
+                    continue
             ident = self.register_job(task,record)
             job = lookup(self.db,ident)
             record["runq_id"] = ident
@@ -313,13 +413,11 @@ class QueueSupervisor(SharedSupervisor):
         hb = read(directory/"heartbeat.json")
         if hb:
             record["heartbeat"] = hb
-        if not job["first_step"] and (directory/"steps.jsonl").exists():
-            with (directory/"steps.jsonl").open() as stream:
-                line = stream.readline()
-            if line.endswith("\n"):
-                first = json.loads(line)
+        if not job["first_step"]:
+            first = first_update_time(directory)
+            if first is not None:
                 self.db.execute("UPDATE jobs SET first_step=? WHERE id=? AND first_step IS NULL",
-                                (first["time_unix"],job["id"]))
+                                (first,job["id"]))
         if job["state"] not in ("completed","failed","cancelled"):
             return False
         result_path = directory/"result.json"
@@ -331,6 +429,11 @@ class QueueSupervisor(SharedSupervisor):
             record["observation_error"] = reason
         attempt.update(status=status,return_code=job["rc"],finished_unix=job["finished"],reason=reason)
         record.update(status=status,reason=reason,result_path=str(result_path),result_sha256=sha256(result_path) if result else None)
+        if result and job["backend"] == "npu" and not record.get("observation_error"):
+            with self.hbm_profile.db:
+                self.hbm_profile.record_result(task, sha256(record["task_path"]), result_path, result,
+                                               record["result_sha256"], outcome=status)
+            self.shape_stats = self.hbm_profile.summaries()
         self.retry_transient(task,record,result)
         return True
 

@@ -6,11 +6,12 @@ import time
 import pytest
 
 from pilotlab.io import atomic_json, sha256
+from pilotlab.hbm_profile3 import GIB, HbmProfile
 from pilotlab.round3 import Campaign
 from pilotlab.runq_campaign import QueueSupervisor, device_cost, hbm_shape
 from pilotlab.runq_devices import admission, free_bytes, grant_for
 from pilotlab.runq_place import place
-from pilotlab.runq_store import connect, lookup, pin, put, submit, write
+from pilotlab.runq_store import connect, lookup, pin, put, submit, unit, write
 
 
 def spec(size=20, allowed=("npu",), binding=None):
@@ -109,13 +110,13 @@ def test_campaign_reserves_measured_shape_on_registration(tmp_path):
         assert task["reserved_hbm_bytes"] == change.get("reserved_hbm_bytes", 8)
 
 
-@pytest.mark.parametrize("steps", [0, 1])
-def test_reviewed_first_npu_oom_retries_once_with_its_original_progress(tmp_path, steps):
+@pytest.mark.parametrize("steps, saved", [(0, 0), (1, 1), (162, 160)])
+def test_reviewed_first_npu_oom_retries_once_with_its_original_progress(tmp_path, steps, saved):
     s = QueueSupervisor.__new__(QueueSupervisor)
     s.db, s.owner = connect(tmp_path), str(tmp_path)
     source = {"code": "v1"}
     task = {"id": "timed", "model": {"family": "timed"}, "source_identity": source, "device": "npu:0",
-            "batch_size": 2, "reserved_hbm_bytes": 8}
+            "batch_size": 2, "sequence_length": 128, "reserved_hbm_bytes": 8}
     path = tmp_path / "task.json"
     atomic_json(path, task)
     spec0 = {**spec(size=8), "owner": s.owner, "task_id": task["id"]}
@@ -126,7 +127,7 @@ def test_reviewed_first_npu_oom_retries_once_with_its_original_progress(tmp_path
     if steps:
         cp = tmp_path / "step.pt"
         cp.write_bytes(b"preserved worker state")
-        checkpoint = {"path": str(cp), "sha256": sha256(cp), "steps": steps, "tokens": 256 * steps}
+        checkpoint = {"path": str(cp), "sha256": sha256(cp), "steps": saved, "tokens": 256 * saved}
         atomic_json(tmp_path / "checkpoint.json", {"current": checkpoint})
     result = {"id": "timed", "device": "npu:0", "source_identity": source, "task_sha256": sha256(path),
               "status": "failed", "failure_class": "capacity_error", "error": "NPU out of memory. Tried to allocate",
@@ -148,9 +149,79 @@ def test_reviewed_first_npu_oom_retries_once_with_its_original_progress(tmp_path
     assert s.retry_transient(task, row, result) and row["status"] == "pending"
     assert row["evaluation_reserved_tokens"] == 32800 and row["attempts"] == [attempt]
     assert row["capacity_retry"]["result"] == {"path": str(output), "sha256": sha256(output)}
+    assert row["capacity_retry"]["replay_steps"] == steps - saved
+    assert row["capacity_retry"]["replay_tokens"] == 256 * (steps - saved)
     assert row.get("retry_checkpoint_sha256") == (checkpoint["sha256"] if steps else None)
     row.update(status="failed", attempts=[attempt, {"runq_id": job + 1}])
     assert not s.retry_transient(task, row, result)
+
+
+def test_shape_trial_waits_only_for_unmeasured_npu_followers(tmp_path):
+    s = QueueSupervisor.__new__(QueueSupervisor)
+    s.db, s.owner, s.root, s.registered = connect(tmp_path), str(tmp_path), tmp_path, {}
+    s.config = {"run_id": "round", "deadline_unix": time.time() + 300}
+    s.worker_reservations = lambda _: {"reserved_rss_bytes": 1}
+    base = dict(model={"family":"example"}, source_identity={"source":"v1"}, model_id="m", batch_size=4)
+    tasks = [{**base, "id": name, "device": device} for name, device in
+             (("trial","npu:0"), ("follower","npu:0"), ("host","cpu"))]
+    s.state = {"tasks": {t["id"]: {"status":"pending","attempts":[]} for t in tasks}}
+    profile = HbmProfile(tmp_path)
+    shape = hbm_shape(base)
+    assert profile.add_trial(tasks[0], 29*GIB) == shape
+    s.shape_stats = profile.summaries()
+    s.start_ready_tasks(tasks, 3)
+    assert "trial" in s.state["tasks"]["follower"]["queue_wait"] and "runq_id" not in s.state["tasks"]["follower"]
+    assert s.state["tasks"]["host"]["runq_id"]
+    trial = s.state["tasks"]["trial"]["runq_id"]
+    assert json.loads(lookup(s.db, trial)["spec"])["hbm"] == 44*GIB
+    result = dict(id="trial", source_identity=base["source_identity"], device="npu:0", task_sha256="task",
+                  status="completed", device_memory={"npu_peak_reserved_bytes":20*GIB})
+    with profile.db:
+        profile.record_result(tasks[0], "task", tmp_path/"trial/result.json", result, "result")
+    s.shape_stats = profile.summaries()
+    s.start_ready_tasks(tasks, 3)
+    follower = s.state["tasks"]["follower"]["runq_id"]
+    assert json.loads(lookup(s.db, follower)["spec"])["hbm"] == 31*GIB
+
+
+def test_matched_driver_high_water_reprices_without_restarting_and_admission_recovers(tmp_path):
+    s = QueueSupervisor.__new__(QueueSupervisor)
+    s.db, s.root, s.owner = connect(tmp_path), tmp_path, str(tmp_path)
+    s.hbm_profile, s.hbm_jobs, s.last_hbm_sample = HbmProfile(tmp_path), {}, None
+    task = dict(id="tid", model_id="m", model={"family":"tide"}, source_identity={"src":"v1"}, batch_size=2)
+    task_path = tmp_path / "task.json"
+    atomic_json(task_path, task)
+    job = submit(s.db, "active", {**spec(8*GIB), "owner":s.owner, "task_id":"tid"})
+    lease = held(s.db, 1, job)
+    run(s.db, job, lease)
+    s.db.execute("UPDATE jobs SET pid=543,ticks=72 WHERE id=?", (job,))
+    s.state = {"tasks":{"tid":{"task_path":str(task_path),"attempts":[{"path":str(tmp_path),"runq_id":job}]}}}
+    name = unit(tmp_path, "job", job, 1)
+    procs = [dict(pid=543, unit=name, identity={"start_ticks":72}, bytes=9*GIB),
+             dict(pid=544, unit="other", identity={"start_ticks":72}, bytes=14*GIB)]
+    observations = samples(procs, used=23*GIB)
+    for sample in observations:
+        sample["cards"]["1"]["total"] = 27*GIB
+    put(s.db, "samples", observations)
+    s.refresh_hbm()
+    row = lookup(s.db, job)
+    assert (row["pid"], row["generation"], json.loads(row["spec"])["hbm"]) == (543, 1, 14*GIB)
+    usage = s.hbm_profile.db.execute("SELECT driver,before_first_update FROM attempts").fetchone()
+    assert tuple(usage) == (9*GIB, 9*GIB)
+    occupants = [{"unit":name, "data":json.loads(row["spec"])}]
+    grants = [grant_for(observations[-1], "npu:1", {name}, time.time()+300)]
+    assert admission(observations, 1, occupants, GIB, grants) == "waiting for peak HBM"
+    s.hbm_profile.set_policy(1., 0)
+    s.db.execute("UPDATE jobs SET first_step=1 WHERE id=?", (job,))
+    later = samples(procs, used=23*GIB)
+    for sample in later:
+        sample["cards"]["1"]["total"] = 27*GIB
+    procs[0]["bytes"] = 8*GIB
+    put(s.db, "samples", later)
+    s.refresh_hbm()
+    row = lookup(s.db,job)
+    assert json.loads(row["spec"])["hbm"] == 9*GIB and json.loads(row["original"])[0]["hbm"] == 8*GIB
+    assert admission(later, 1, [{"unit":name, "data":json.loads(row["spec"])}], GIB, grants) is None
 
 
 def test_cpu_idempotent_manual_extra_and_refill(tmp_path):

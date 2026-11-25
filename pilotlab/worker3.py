@@ -585,6 +585,7 @@ def execute(args):
               "initialization": {"status": "not_measured"}, "work": [], "checkpoint": None}
     atomic_json(old_result, result)
     model = optimizer = state = stream = device = store = None
+    startup_memory = {}
     tokens = steps = from_tokens = from_steps = 0
     train_seconds = 0.0
     evaluated_tokens = 0
@@ -596,6 +597,8 @@ def execute(args):
         validate_source_identity(task, data)
         result["stage_gate"] = validate_gate(task, task_sha)
         device = initialize(args.device, task)
+        result["device"] = str(device)
+        result["physical_visibility"] = os.environ.get("ASCEND_RT_VISIBLE_DEVICES")
         store = DocumentStore3(data, allow_confirmation=bool(task.get("allow_confirmation", False)))
         model = build_model(task["model"], store.vocab_size, init_recipe=task.get("init_recipe", "default")).to(device)
         optimizer = optimizer_for(model, task)
@@ -625,8 +628,6 @@ def execute(args):
                 "resolved_recipe": getattr(model, "initialization_recipe", task.get("init_recipe", "default")),
                 "multi_seed_qualification": "controller must aggregate prescribed independent seeds"}
         from_tokens, from_steps = tokens, steps
-        result["device"] = str(device)
-        result["physical_visibility"] = os.environ.get("ASCEND_RT_VISIBLE_DEVICES")
         result["parameters"] = sum(p.numel() for p in model.parameters())
         result["readout_policy"] = model.readout_policy
         _heartbeat(output, task, tokens, steps, "initial_checks")
@@ -649,6 +650,9 @@ def execute(args):
         next_eval = ((tokens // eval_interval) + 1) * eval_interval if eval_interval > 0 else math.inf
         next_sample = ((tokens // sample_interval) + 1) * sample_interval if sample_interval > 0 else math.inf
         if device.type == "npu":
+            startup_memory = {"npu_startup_peak_allocated_bytes": torch.npu.max_memory_allocated(device),
+                              "npu_startup_peak_reserved_bytes": torch.npu.max_memory_reserved(device)}
+            atomic_json(output / "startup-memory.json", startup_memory)
             torch.npu.reset_peak_memory_stats(device)
         while tokens < task["target_tokens"] and not STOP and time.time() < training_deadline:
             synchronize(device)
@@ -775,8 +779,13 @@ def execute(args):
         if device is not None:
             try:
                 result["device_memory"] = device_memory(device)
+                if device.type == "npu" and not startup_memory:
+                    # The job ended before the training-loop reset.
+                    startup_memory = {"npu_startup_peak_allocated_bytes": result["device_memory"]["npu_peak_allocated_bytes"],
+                                      "npu_startup_peak_reserved_bytes": result["device_memory"]["npu_peak_reserved_bytes"]}
+                result["device_memory"].update(startup_memory)
             except Exception as memory_error:
-                result["device_memory"] = {"observation_error": str(memory_error)}
+                result["device_memory"] = {**startup_memory, "observation_error": str(memory_error)}
         atomic_json(old_result, result)
         if all(name in task for name in ("id", "phase", "target_tokens")):
             _heartbeat(output, task, tokens, steps, result["status"], stop_reason=result.get("stop_reason"))
