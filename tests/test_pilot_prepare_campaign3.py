@@ -115,7 +115,10 @@ def test_campaign_draft_keeps_existing_artifacts_budget_and_explicit_launch_cont
 
     monkeypatch.setattr(prepare3, "freeze", observe_freeze)
     (inputs.args["repo"] / "pilotlab/scheduler3.py").write_text("# changed lifecycle, same qualified math\n")
-    draft = p.prepare(**inputs.args)
+    from pilotlab.hbm_profile3 import SNAPSHOT
+    profile = inputs.args["output"].parent / "profile.json"
+    write_json(profile, {"schema":SNAPSHOT, "shapes":{"shape":{"reservation_bytes":3*p.GIB}}})
+    draft = p.prepare(**inputs.args, hbm_profile=profile)
     root = inputs.args["output"]
     assert draft["status"] == "not_submitted"
     assert inputs.args["budget"].read_bytes() == budget_before
@@ -123,6 +126,7 @@ def test_campaign_draft_keeps_existing_artifacts_budget_and_explicit_launch_cont
     for name, before in generated_preflight_artifacts.items():
         assert (root / name).read_bytes() == before
     plan = p.load(draft["plan_path"])
+    assert plan["hbm_profile"] == {"path":str(profile), "sha256":p.sha256(profile)}
     assert len(plan["subjects"]) == 216 and plan["cohort_models"] == 4
     assert plan["config"]["max_workers"] == 16
     assert inputs.old["storage_reserve_bytes"] == plan["config"]["storage_reserve_bytes"] == 0

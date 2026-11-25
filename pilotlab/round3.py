@@ -79,7 +79,7 @@ class Campaign:
     def __init__(self, plan, output):
         self.plan = plan
         from .hbm_profile3 import frozen_profile
-        inherited_hbm = frozen_profile(plan.get("hbm_profile"))
+        inherited_hbm = frozen_profile(plan.get("hbm_profile"), plan["source_identity"])
         if plan["config"].get("runq_root"):
             from .runq_campaign import QueueSupervisor
             self.supervisor = QueueSupervisor(plan["config"], output, inherited_hbm=inherited_hbm)

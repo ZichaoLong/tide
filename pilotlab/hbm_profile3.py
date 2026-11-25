@@ -19,11 +19,28 @@ from .source_migration3 import digest, read_bound
 GIB = 2**30
 SNAPSHOT = "pilot-r3-hbm-profile-v1"
 DEFAULT_POLICY = (1.5, GIB // 2)
+SHAPE_FIELDS = ("model", "precision", "deterministic", "sequence_length", "stream_chunks", "batch_size")
 
 
 def hbm_shape(task):
-    return digest({key: task.get(key) for key in (
-        "source_identity", "model", "precision", "deterministic", "sequence_length", "stream_chunks", "batch_size")})
+    return digest({key: task.get(key) for key in ("source_identity", *SHAPE_FIELDS)})
+
+
+def source_content(identity):
+    """Compare identical frozen trees installed at different absolute paths."""
+    if not identity or not identity.get("source_files"):
+        return None
+    files = {}
+    for name, checksum in identity["source_files"].items():
+        parts = Path(name).parts
+        roots = [i for i, part in enumerate(parts) if part == "pilotlab" or parts[i:i+2] == ("src", "tide")]
+        if len(roots) != 1:
+            return None
+        relative = "/".join(parts[roots[0]:])
+        if relative in files:
+            return None
+        files[relative] = checksum
+    return digest({**identity, "source_files":files})
 
 
 def _amount(error, pattern):
@@ -156,11 +173,30 @@ class HbmProfile:
         return summaries
 
     def snapshot(self):
+        self.db.execute("SAVEPOINT hbm_export")
+        try:
+            return self._snapshot()
+        finally:
+            self.db.execute("RELEASE hbm_export")
+
+    def _snapshot(self):
         factor, padding = self.policy()
-        return dict(schema=SNAPSHOT, factor=factor, padding_bytes=padding, shapes=self.summaries())
+        shapes = self.summaries()
+        portable = {}
+        for shape, directory in self.db.execute("SELECT shape,MIN(path) FROM attempts GROUP BY shape"):
+            path = Path(directory) / "task.json"
+            if not path.is_file():
+                continue
+            task = json.loads(path.read_bytes())
+            if hbm_shape(task) != shape:
+                raise ValueError(f"changed task in HBM snapshot: {path}")
+            content = source_content(task["source_identity"])
+            if content:
+                portable[shape] = dict(source=content, inputs={k:task.get(k) for k in SHAPE_FIELDS})
+        return dict(schema=SNAPSHOT, factor=factor, padding_bytes=padding, shapes=shapes, portable_shapes=portable)
 
 
-def frozen_profile(reference):
+def frozen_profile(reference, worker_source=None):
     if not reference:
         return {}
     snapshot = read_bound(reference)
@@ -169,6 +205,12 @@ def frozen_profile(reference):
     values = {k: row["reservation_bytes"] for k, row in snapshot["shapes"].items()}
     if any(type(size) is not int or size < 0 for size in values.values()):
         raise ValueError("invalid HBM reservation in frozen snapshot")
+    content = source_content(worker_source)
+    if content:
+        for previous, item in snapshot.get("portable_shapes", {}).items():
+            if item["source"] == content:
+                shape = hbm_shape({**item["inputs"], "source_identity":worker_source})
+                values[shape] = max(values.get(shape, 0), values[previous])
     return values
 
 

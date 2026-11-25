@@ -49,3 +49,24 @@ def test_opaque_aclnn_failure_requires_driver_oom_in_same_attempt(tmp_path):
     log.write_text("Memory_Allocation_Failure(EL0004)\ndriver error:out of memory")
     assert oom_kind(result, log) == "driver"
     assert oom_kind({**result, "failure_class":"numerical_error"}, log) is None
+
+
+def test_refrozen_workers_match_only_with_the_same_files_and_runtime(tmp_path):
+    def identity(root, foundation="bbb", package="v1"):
+        return dict(source_files={f"/{root}/source/pilotlab/worker3.py":"aaa",
+                                  f"/{root}/foundation/src/tide/core.py":foundation},
+                    runtime_packages={"torch":package}, data_manifest_sha256="data")
+
+    task = dict(id="task", model_id="model", batch_size=2, model={"d":64}, source_identity=identity("a"))
+    attempt = tmp_path/"attempt"
+    atomic_json(attempt/"task.json", task)
+    profile = HbmProfile(tmp_path)
+    with profile.db:
+        profile.record_driver(attempt, hbm_shape(task), "model", 2, 16*GIB, False)
+    path = tmp_path/"profile.json"
+    atomic_json(path, profile.snapshot())
+    ref = dict(path=str(path), sha256=sha256(path))
+    target = identity("b")
+    assert frozen_profile(ref, target)[hbm_shape({**task, "source_identity":target})] == 25*GIB
+    for other in (identity("b","changed"), identity("b",package="v2")):
+        assert hbm_shape({**task, "source_identity":other}) not in frozen_profile(ref, other)
