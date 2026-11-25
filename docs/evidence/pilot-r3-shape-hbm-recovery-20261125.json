@@ -1,0 +1,1623 @@
+{
+  "card7": {
+    "admission_headroom_after_bytes": -48234496,
+    "jobs": [
+      {
+        "driver_peak_bytes": 8852078592,
+        "job": 1277,
+        "new_bytes": 13958643712,
+        "pid": 4026086,
+        "prior_bytes": 8589934592
+      },
+      {
+        "driver_peak_bytes": 8939110400,
+        "job": 1278,
+        "new_bytes": 13958643712,
+        "pid": 4026626,
+        "prior_bytes": 8589934592
+      }
+    ],
+    "refill": {
+      "1277": {
+        "assigned": 1795556842.0970862,
+        "finished": 1795572062.0921428,
+        "pid": 4026086,
+        "state": "completed"
+      },
+      "1278": {
+        "assigned": 1795556850.384701,
+        "finished": 1795571670.2188923,
+        "pid": 4026626,
+        "state": "completed"
+      },
+      "1453": {
+        "assigned": 1795572068.2372565,
+        "finished": null,
+        "pid": 1166208,
+        "state": "running"
+      }
+    },
+    "snapshot": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/shape-hbm-20261125/card7.json",
+      "sha256": "bbeb3e25021d140bf147fe02a536075a20f17aa38042c0ec34400fba75b18960"
+    }
+  },
+  "clock": "2026-11-25T10:11:44+08:00",
+  "controller": {
+    "commit": "560a4348842963962812fe5671838986b724255a",
+    "dispatcher_invocation": "06928c312d474a6b99b5d0b833b9985d",
+    "dispatcher_pid": "1383298",
+    "frozen_worker_source_preserved": true,
+    "handoff": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/shape-hbm-20261125/controller-handoff.json",
+      "sha256": "185f3bd08fc9f35e0fa471d183c4e87943903757356227e0036018c86b793a7e"
+    },
+    "invocation": "3c7e09da826f48109de423d350361550",
+    "overlays": [
+      "round3.py",
+      "runq_campaign.py",
+      "hbm_profile3.py"
+    ],
+    "pid": 1202252,
+    "unit": "tide-pilot-r3-shape-hbm-20261125.service",
+    "worker_outcomes": {
+      "same_pid": 82
+    }
+  },
+  "controls": {
+    "auto_cards": [
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      14,
+      15
+    ],
+    "available_bytes_before_submission": 133239959552,
+    "cpu_auto_target": 40,
+    "previously_stopped_preserved": 100,
+    "release_issues": 0,
+    "temporary_card_release": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/weak-log-window-20261124/release.json",
+      "sha256": "89e3bcd861a04ff83eaeb630cd746b903c22075fd646eeae00a8380af7d334db"
+    },
+    "window_jobs": 55
+  },
+  "formal_dry_run": {
+    "assessment": {
+      "exchange-d128-k-base-4aac2dcb10": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1106247680,
+        "matched_estimate_gib": null
+      },
+      "exchange-d128-k-capacity-74eba502b1": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1263534080,
+        "matched_estimate_gib": null
+      },
+      "exchange-d128-k-narrowwide-a8b4f1078d": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1269825536,
+        "matched_estimate_gib": null
+      },
+      "exchange-d128-k-pool-25a642ea44": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1099956224,
+        "matched_estimate_gib": null
+      },
+      "exchange-d128-s-capacity-32268b8664": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1219493888,
+        "matched_estimate_gib": null
+      },
+      "exchange-d128-x-narrowwide-f2f75f7e7f": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1282408448,
+        "matched_estimate_gib": null
+      },
+      "exchange-d256-k-base-4f97098597": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 2147483648,
+        "matched_estimate_gib": 2.0
+      },
+      "exchange-d256-k-capacity-afae2c3e83": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1801453568,
+        "matched_estimate_gib": null
+      },
+      "exchange-d256-k-narrowwide-c37cf9388b": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 2147483648,
+        "matched_estimate_gib": 2.0
+      },
+      "exchange-d256-k-pool-2ad67d691b": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 2147483648,
+        "matched_estimate_gib": 2.0
+      },
+      "exchange-d256-k-shannon-417a5ef511": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 2147483648,
+        "matched_estimate_gib": 2.0
+      },
+      "exchange-d256-s-capacity-171c8b98d0": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 2147483648,
+        "matched_estimate_gib": 2.0
+      },
+      "exchange-d256-x_reverse-base-7cf4ba7a94": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 2147483648,
+        "matched_estimate_gib": 2.0
+      },
+      "fc-d128-k-ffn1-e8be37f2b7": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1073741824,
+        "matched_estimate_gib": null
+      },
+      "fc-d128-k-shared-f9498953c0": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1073741824,
+        "matched_estimate_gib": null
+      },
+      "fc-d128-s-base-5c4809c97b": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1073741824,
+        "matched_estimate_gib": null
+      },
+      "fc-d128-s-depth3-fbc6080d7d": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1073741824,
+        "matched_estimate_gib": null
+      },
+      "fc-d128-s-shared-cbe5e2ff4e": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1073741824,
+        "matched_estimate_gib": null
+      },
+      "fc-d256-k-base-0e3021c331": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1073741824,
+        "matched_estimate_gib": null
+      },
+      "fc-d256-k-depth3-2f03e71304": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1084227584,
+        "matched_estimate_gib": null
+      },
+      "fc-d256-k-ffn1-2b14f30d4a": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1073741824,
+        "matched_estimate_gib": null
+      },
+      "fc-d256-k-shared-b862e34fe3": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1073741824,
+        "matched_estimate_gib": null
+      },
+      "fc-d256-s-base-7e5a1b3415": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1073741824,
+        "matched_estimate_gib": null
+      },
+      "fc-d256-s-depth3-91e5cfbe4e": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1096810496,
+        "matched_estimate_gib": null
+      },
+      "fc-d256-s-ffn1-ca290fd261": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1073741824,
+        "matched_estimate_gib": null
+      },
+      "lattice-d128-k-nodes4-1f22ba3272": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1121976320,
+        "matched_estimate_gib": null
+      },
+      "lattice-d128-k-receive128-ee1edca248": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1073741824,
+        "matched_estimate_gib": null
+      },
+      "lattice-d128-s-base-0a353237f5": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1073741824,
+        "matched_estimate_gib": null
+      },
+      "lattice-d128-s-depth2-00b9531d37": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1093664768,
+        "matched_estimate_gib": null
+      },
+      "lattice-d128-s-layershared-6312958b4e": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1073741824,
+        "matched_estimate_gib": null
+      },
+      "lattice-d128-s-nodes4-87a2e4a9d9": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1073741824,
+        "matched_estimate_gib": null
+      },
+      "lattice-d128-s-receive128-1ede806cba": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1073741824,
+        "matched_estimate_gib": null
+      },
+      "lattice-d128-s-receive64-cd47a49acb": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1073741824,
+        "matched_estimate_gib": null
+      },
+      "lattice-d256-k-base-416b5585a2": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1140850688,
+        "matched_estimate_gib": null
+      },
+      "lattice-d256-k-depth2-c24a34d6ed": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1751121920,
+        "matched_estimate_gib": null
+      },
+      "lattice-d256-k-ffn2-e4a5b07a08": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1197473792,
+        "matched_estimate_gib": null
+      },
+      "lattice-d256-k-layershared-1bb62cd81d": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1109393408,
+        "matched_estimate_gib": null
+      },
+      "lattice-d256-k-memoryshared-719a561efa": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1156579328,
+        "matched_estimate_gib": null
+      },
+      "lattice-d256-k-nodes4-910f84829b": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1512046592,
+        "matched_estimate_gib": null
+      },
+      "lattice-d256-k-receive128-959d85255b": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1213202432,
+        "matched_estimate_gib": null
+      },
+      "lattice-d256-k-receive64-c3e271805b": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1219493888,
+        "matched_estimate_gib": null
+      },
+      "lattice-d256-s-depth2-8bfed52ede": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 2147483648,
+        "matched_estimate_gib": 2.0
+      },
+      "lattice-d256-s-ffn2-5372474eb5": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 2147483648,
+        "matched_estimate_gib": 2.0
+      },
+      "lattice-d256-s-layershared-015f2cec51": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1073741824,
+        "matched_estimate_gib": null
+      },
+      "lattice-d256-s-memoryshared-f80260ac11": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 2147483648,
+        "matched_estimate_gib": 2.0
+      },
+      "lattice-d256-s-nodes4-3f686fda6a": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 2147483648,
+        "matched_estimate_gib": 2.0
+      },
+      "lattice-d256-s-receive128-0a7681b33e": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 2147483648,
+        "matched_estimate_gib": 2.0
+      },
+      "lattice-d256-s-receive64-2d8d03e9f1": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 2147483648,
+        "matched_estimate_gib": 2.0
+      },
+      "low-activity-exchange-base-n16-d128-k8-415e146049": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 3221225472,
+        "matched_estimate_gib": 3.0
+      },
+      "low-activity-exchange-kv64-n16-d128-k8-9cab7ff1d3": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 4294967296,
+        "matched_estimate_gib": 4.0
+      },
+      "low-activity-exchange-memory_k-n16-d128-k2-afb94b0a0d": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 4294967296,
+        "matched_estimate_gib": 4.0
+      },
+      "low-activity-exchange-memory_k-n16-d128-k4-57954dce3e": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 4294967296,
+        "matched_estimate_gib": 4.0
+      },
+      "low-activity-exchange-memory_k-n16-d128-k8-fd43c71291": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 3221225472,
+        "matched_estimate_gib": 3.0
+      },
+      "low-activity-exchange-memory_x_reverse-n16-d128-k8-2714097460": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 3221225472,
+        "matched_estimate_gib": 3.0
+      },
+      "low-activity-exchange-shannon-n16-d128-k4-022e546538": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 4294967296,
+        "matched_estimate_gib": 4.0
+      },
+      "low-activity-exchange-shannon-n16-d128-k8-b9399a7e74": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 3221225472,
+        "matched_estimate_gib": 3.0
+      },
+      "low-activity-fc-base-n16-d128-k1-9459fb82e1": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 3221225472,
+        "matched_estimate_gib": 3.0
+      },
+      "low-activity-fc-base-n16-d128-k2-facd1047db": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 3221225472,
+        "matched_estimate_gib": 3.0
+      },
+      "low-activity-fc-base-n16-d128-k4-331e82d848": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 3221225472,
+        "matched_estimate_gib": 3.0
+      },
+      "low-activity-fc-region_shared-n16-d128-k1-785be8353e": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 2147483648,
+        "matched_estimate_gib": 2.0
+      },
+      "low-activity-lattice-depth2-n16-d128-k1-7bda9ab5fb": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 6442450944,
+        "matched_estimate_gib": 6.0
+      },
+      "low-activity-lattice-depth2-n16-d128-k4-77003f6ed1": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 4294967296,
+        "matched_estimate_gib": 4.0
+      },
+      "low-activity-lattice-ffn2-n16-d128-k2-1fd82b799b": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 3221225472,
+        "matched_estimate_gib": 3.0
+      },
+      "low-activity-lattice-memory_s-n16-d128-k1-4d7eb09769": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 2147483648,
+        "matched_estimate_gib": 2.0
+      },
+      "low-activity-lattice-receive64-n16-d128-k1-1dc2a0ee70": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 3221225472,
+        "matched_estimate_gib": 3.0
+      },
+      "low-activity-lattice-receive64-n16-d128-k2-400416d4c4": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 4294967296,
+        "matched_estimate_gib": 4.0
+      },
+      "low-activity-lattice-receive64-n16-d128-k4-1ea60981fe": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 3221225472,
+        "matched_estimate_gib": 3.0
+      },
+      "low-activity-multiscale_settle-base-n16-d128-k1-80f6f2f85c": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 3221225472,
+        "matched_estimate_gib": 3.0
+      },
+      "low-activity-multiscale_settle-base-n16-d128-k2-5bc221bc84": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 4294967296,
+        "matched_estimate_gib": 4.0
+      },
+      "low-activity-multiscale_settle-base-n16-d128-k4-b41ff79e04": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 3221225472,
+        "matched_estimate_gib": 3.0
+      },
+      "low-activity-multiscale_settle-memory_k-n16-d128-k8-7e92e6e681": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 5368709120,
+        "matched_estimate_gib": 5.0
+      },
+      "low-activity-multiscale_settle-memory_s-n16-d128-k1-5e14e8d4df": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 3221225472,
+        "matched_estimate_gib": 3.0
+      },
+      "low-activity-multiscale_settle-memory_s-n16-d128-k4-c984e0a483": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 3221225472,
+        "matched_estimate_gib": 3.0
+      },
+      "multiscale_settle-d128-k-singleton7-43b1716b2d": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1703936000,
+        "matched_estimate_gib": null
+      },
+      "multiscale_settle-d128-s-mixed9-5bc345edf5": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1458569216,
+        "matched_estimate_gib": null
+      },
+      "multiscale_settle-d128-s-singleton7-ffd53c4df7": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1596981248,
+        "matched_estimate_gib": null
+      },
+      "multiscale_settle-d128-x-singleton7-281f04cf8c": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1725956096,
+        "matched_estimate_gib": null
+      },
+      "multiscale_settle-d128-x_reverse-singleton7-655942fdd4": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 1587544064,
+        "matched_estimate_gib": null
+      },
+      "multiscale_settle-d256-k-group5-53ebbbaa25": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 2147483648,
+        "matched_estimate_gib": 2.0
+      },
+      "multiscale_settle-d256-k-singleton7-cad34be170": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 3221225472,
+        "matched_estimate_gib": 3.0
+      },
+      "multiscale_timed-d128-k-group5-b74cd801f3": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 4701814784,
+        "matched_estimate_gib": null
+      },
+      "multiscale_timed-d128-k-mixed9-b193254132": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 9860808704,
+        "matched_estimate_gib": null
+      },
+      "multiscale_timed-d128-k-singleton7-eaab60796a": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 6469713920,
+        "matched_estimate_gib": null
+      },
+      "multiscale_timed-d128-s-group5-37506fa4ee": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 2270167040,
+        "matched_estimate_gib": null
+      },
+      "multiscale_timed-d128-s-singleton7-139de547de": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 5224005632,
+        "matched_estimate_gib": null
+      },
+      "multiscale_timed-d128-x-group5-4b26d12571": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 2606759936,
+        "matched_estimate_gib": null
+      },
+      "multiscale_timed-d128-x-mixed9-ae4ffdec56": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 11811160064,
+        "matched_estimate_gib": 11.0
+      },
+      "multiscale_timed-d128-x-singleton7-8ac3511b6a": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 11565793280,
+        "matched_estimate_gib": null
+      },
+      "multiscale_timed-d128-x_reverse-group5-f83e81e4af": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": false,
+        "declared_formal_request_bytes": 2414870528,
+        "matched_estimate_gib": null
+      },
+      "multiscale_timed-d128-x_reverse-mixed9-99820c3100": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 7516192768,
+        "matched_estimate_gib": 7.0
+      },
+      "multiscale_timed-d128-x_reverse-singleton7-2f58b0a0f6": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 6442450944,
+        "matched_estimate_gib": 6.0
+      },
+      "multiscale_timed-d256-k-group5-27d7c0e70b": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 17179869184,
+        "matched_estimate_gib": 16.0
+      },
+      "multiscale_timed-d256-x-group5-3db19adc40": {
+        "a_confirmation_measured": true,
+        "a_source_equals_assumed_b": true,
+        "declared_formal_request_bytes": 17179869184,
+        "matched_estimate_gib": 16.0
+      }
+    },
+    "no_launch": true,
+    "same_source_measurement": 44,
+    "selected_npu": 93,
+    "source": "current plan source_identity",
+    "source_mismatch_without_measurement": 49
+  },
+  "observations": {
+    "backfilled_on_handoff": 3744,
+    "current": {
+      "attempts": 3785,
+      "identified_oom": 44,
+      "terminal": 3748,
+      "with_allocator_pool_peak": 3748,
+      "with_allocator_startup_peak": 0,
+      "with_attributed_driver_sample": 41,
+      "with_driver_sample_before_first_update": 2
+    },
+    "exported": {
+      "portable_shapes": 878,
+      "shapes": 878,
+      "successful_measured": 3594,
+      "terminal": 3745
+    },
+    "factor": 1.5,
+    "frozen_profile": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/shape-hbm-20261125/phase-b-hbm.json",
+      "sha256": "2f8cc4a395ac64db9cf707daece02c7d8fb25d360ec2a88c46f1a76bcb3b76cd"
+    },
+    "padding_bytes": 536870912,
+    "profile_store": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-runq/round/hbm-profile.sqlite3",
+    "snapshot_code": "d32ae04e2acc5ad93b462a30186b28c71d90a1dc"
+  },
+  "observed_unix": 1795572704.0764413,
+  "placement": {
+    "capacity_at_decision_gib": {
+      "10": -0.8,
+      "11": 5.53,
+      "14": 5.11,
+      "15": 1.46,
+      "6": 7.07,
+      "7": 2.5,
+      "8": -4.89,
+      "9": -6.54
+    },
+    "inputs": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/shape-hbm-20261125/placements.json",
+      "sha256": "82d70eb3c427f1c8e07d497384fda0118847f2e72d76796538e432c0fd9ba902"
+    },
+    "pinned_ids": [
+      1468,
+      1469,
+      1470,
+      1471
+    ],
+    "same_lane_jobs": 4,
+    "selected_card": 6,
+    "temporary_cards_reused": false,
+    "updates_per_job": 64
+  },
+  "prior_wave": {
+    "852": {
+      "queue": "completed",
+      "result_sha256": "527d7f35af0f0a5a734fa37e308124a082554ac2c6fa73221a83fb23e7433fdd",
+      "scheduler": "completed"
+    },
+    "853": {
+      "queue": "completed",
+      "result_sha256": "b537b3becc7b99c129eb32f01a7bfca1fa7b63a2a677bbd6e4b2d085bb088280",
+      "scheduler": "completed"
+    },
+    "854": {
+      "queue": "completed",
+      "result_sha256": "ae12bcbeddb5cde14c0ec0f3b1113a66633523d3cff58713427244afcf799108",
+      "scheduler": "completed"
+    },
+    "960": {
+      "queue": "completed",
+      "result_sha256": "9015c8d18750d364fc3d4731ee69c3404036873ab6fb26bb68994fe2fc9a6c73",
+      "scheduler": "completed"
+    },
+    "961": {
+      "queue": "completed",
+      "result_sha256": "60e7f6a9fdcccbffd6877c6269eac444589bd27f6e612a054c99987756324a62",
+      "scheduler": "completed"
+    },
+    "962": {
+      "queue": "completed",
+      "result_sha256": "d730ebe36ae3c5e156ce81f7d9c6955fd2561753bb3c0cf9254af942b4e459d0",
+      "scheduler": "completed"
+    },
+    "967": {
+      "queue": "completed",
+      "result_sha256": "9065ef7674d483e67bd9bdf20a6c1dc0fe9fe98eaf3eb39d0e7abdc2419fac26",
+      "scheduler": "completed"
+    },
+    "968": {
+      "queue": "running",
+      "result_sha256": "b9955db78ab7b054625e07103786bf2dc4dbe38d256d7a608aa4a142d8d76d7f",
+      "scheduler": "running"
+    },
+    "1027": {
+      "queue": "completed",
+      "result_sha256": "36620bead12ebec2d8f447992f8ebe97e517aa5aadff96ae9b58a84d9025a4ab",
+      "scheduler": "completed"
+    },
+    "1028": {
+      "queue": "completed",
+      "result_sha256": "6da8791b5bdf828935429b231eaa74f3d605307fca563beb2cb3d0453b2e9db1",
+      "scheduler": "completed"
+    },
+    "1029": {
+      "queue": "completed",
+      "result_sha256": "66fcfcf57f71fbe4d1e95d9804d017c7ce87cc4fe3c3410431d961b62bc4de2b",
+      "scheduler": "completed"
+    },
+    "1030": {
+      "queue": "completed",
+      "result_sha256": "300938c4b69a2fa48ba752050db3b30e8d1fdcc00935fc2cb4f871f7709eecb8",
+      "scheduler": "completed"
+    },
+    "1031": {
+      "queue": "completed",
+      "result_sha256": "a8da735a7dc67caac2ebd3632a73a18473a5d217eb1c00c53fa7fba74deee7ef",
+      "scheduler": "completed"
+    },
+    "1032": {
+      "queue": "completed",
+      "result_sha256": "dc75dd2e340ee3c9578d90adba96dda548d0b9fc6364fd560a1339fc27786943",
+      "scheduler": "completed"
+    },
+    "1033": {
+      "queue": "completed",
+      "result_sha256": "c2d5516e4a0b1d09389076bdda1103aefe0c0abc713d9ddc89310c2d69e61f06",
+      "scheduler": "completed"
+    },
+    "1034": {
+      "queue": "completed",
+      "result_sha256": "9c5ac2e79b5190304c7abd6edb1cbeaf06266857c749d2f3666950bf831df189",
+      "scheduler": "completed"
+    },
+    "1035": {
+      "queue": "completed",
+      "result_sha256": "a68def2b57c091bddd11dc9645ba5b18644815bb35ba501f9493ad66fd47c175",
+      "scheduler": "completed"
+    },
+    "1036": {
+      "queue": "completed",
+      "result_sha256": "fef5e8e07808bc9fd86d1354d66c8aba345010aca968f9b8373c5a797d76c2c0",
+      "scheduler": "completed"
+    }
+  },
+  "representatives": {
+    "1218": {
+      "basis_gib": 16.634765625,
+      "basis_oom_pool_bytes": null,
+      "basis_oom_requested_bytes": null,
+      "basis_result_sha256": "a9cac894747aee98594f44a660b55a649b0c7f63d5ee9e644ceddcb2f4ade514",
+      "follower_old_jobs": [
+        1219,
+        1220
+      ],
+      "leader": "low-activity-multiscale_timed-singleton-n16-d128-k1-bf730d9c03-init-2026112001",
+      "model": "low-activity-multiscale_timed-singleton-n16-d128-k1-bf730d9c03",
+      "related_shapes": [
+        "731d30c2b220c8b3740a7cb5c18b4ab1a40d06b4fa43c9355f50631e6e06715d",
+        "77b1f21ac03ae884c56d018ca3c1acee8e58585b908748e71a9f3371fe8e4486",
+        "7925014fbfd663b4a6177d5695f72b32c61f5b710299e27c7d5602c0505756f6",
+        "f48df0ab35791c526100ebc2f0787c51efb2cb2758091fb1a5a0b1d158fdb3cf"
+      ],
+      "shape": "77b1f21ac03ae884c56d018ca3c1acee8e58585b908748e71a9f3371fe8e4486",
+      "worker_reservation_gib": 26
+    },
+    "1229": {
+      "basis_gib": 29.40000000037253,
+      "basis_oom_pool_bytes": 29699698852,
+      "basis_oom_requested_bytes": 1868310774,
+      "basis_result_sha256": "9012eaa8bb362c5b6232f5f5fdb57e576315b592f8def5426dd94988c7cdeea2",
+      "follower_old_jobs": [
+        1230,
+        1231
+      ],
+      "leader": "low-activity-multiscale_timed-mixed-n16-d128-k8-c75f97de35-init-2026112001",
+      "model": "low-activity-multiscale_timed-mixed-n16-d128-k8-c75f97de35",
+      "related_shapes": [
+        "358228a31f7686eb0df8db225145f70b39e46c0e3e7666f88cf1a4e8ced6dff6",
+        "60fecfaa6534074aa76492178838eb4215759e1fda28316079cbb3bdb21b6b83",
+        "7ddc6d053d29fa34b13c372eaed65eba6bc6dcfc6e88d9eefd73b4f3ea8640ac",
+        "d8eeb7b84b4e08c46646b93d0d7d865ab8c6cdebc6591b2eeef433c9e47cfa92"
+      ],
+      "shape": "d8eeb7b84b4e08c46646b93d0d7d865ab8c6cdebc6591b2eeef433c9e47cfa92",
+      "worker_reservation_gib": 45
+    },
+    "1232": {
+      "basis_gib": 29.40000000037253,
+      "basis_oom_pool_bytes": 29699698852,
+      "basis_oom_requested_bytes": 1868310774,
+      "basis_result_sha256": "9012eaa8bb362c5b6232f5f5fdb57e576315b592f8def5426dd94988c7cdeea2",
+      "follower_old_jobs": [
+        1233,
+        1234
+      ],
+      "leader": "low-activity-multiscale_timed-mixed-n16-d128-k4-ae78164f7a-init-2026112001",
+      "model": "low-activity-multiscale_timed-mixed-n16-d128-k4-ae78164f7a",
+      "related_shapes": [
+        "358228a31f7686eb0df8db225145f70b39e46c0e3e7666f88cf1a4e8ced6dff6",
+        "60fecfaa6534074aa76492178838eb4215759e1fda28316079cbb3bdb21b6b83",
+        "7ddc6d053d29fa34b13c372eaed65eba6bc6dcfc6e88d9eefd73b4f3ea8640ac",
+        "d8eeb7b84b4e08c46646b93d0d7d865ab8c6cdebc6591b2eeef433c9e47cfa92"
+      ],
+      "shape": "358228a31f7686eb0df8db225145f70b39e46c0e3e7666f88cf1a4e8ced6dff6",
+      "worker_reservation_gib": 45
+    },
+    "1235": {
+      "basis_gib": 29.40000000037253,
+      "basis_oom_pool_bytes": 29699698852,
+      "basis_oom_requested_bytes": 1868310774,
+      "basis_result_sha256": "9012eaa8bb362c5b6232f5f5fdb57e576315b592f8def5426dd94988c7cdeea2",
+      "follower_old_jobs": [
+        1236,
+        1237
+      ],
+      "leader": "low-activity-multiscale_timed-mixed-n16-d128-k2-e852e73b26-init-2026112001",
+      "model": "low-activity-multiscale_timed-mixed-n16-d128-k2-e852e73b26",
+      "related_shapes": [
+        "358228a31f7686eb0df8db225145f70b39e46c0e3e7666f88cf1a4e8ced6dff6",
+        "60fecfaa6534074aa76492178838eb4215759e1fda28316079cbb3bdb21b6b83",
+        "7ddc6d053d29fa34b13c372eaed65eba6bc6dcfc6e88d9eefd73b4f3ea8640ac",
+        "d8eeb7b84b4e08c46646b93d0d7d865ab8c6cdebc6591b2eeef433c9e47cfa92"
+      ],
+      "shape": "7ddc6d053d29fa34b13c372eaed65eba6bc6dcfc6e88d9eefd73b4f3ea8640ac",
+      "worker_reservation_gib": 45
+    },
+    "1238": {
+      "basis_gib": 29.40000000037253,
+      "basis_oom_pool_bytes": 29699698852,
+      "basis_oom_requested_bytes": 1868310774,
+      "basis_result_sha256": "9012eaa8bb362c5b6232f5f5fdb57e576315b592f8def5426dd94988c7cdeea2",
+      "follower_old_jobs": [
+        1239,
+        1240
+      ],
+      "leader": "low-activity-multiscale_timed-mixed-n16-d128-k1-d8614748b3-init-2026112001",
+      "model": "low-activity-multiscale_timed-mixed-n16-d128-k1-d8614748b3",
+      "related_shapes": [
+        "358228a31f7686eb0df8db225145f70b39e46c0e3e7666f88cf1a4e8ced6dff6",
+        "60fecfaa6534074aa76492178838eb4215759e1fda28316079cbb3bdb21b6b83",
+        "7ddc6d053d29fa34b13c372eaed65eba6bc6dcfc6e88d9eefd73b4f3ea8640ac",
+        "d8eeb7b84b4e08c46646b93d0d7d865ab8c6cdebc6591b2eeef433c9e47cfa92"
+      ],
+      "shape": "60fecfaa6534074aa76492178838eb4215759e1fda28316079cbb3bdb21b6b83",
+      "worker_reservation_gib": 45
+    },
+    "1267": {
+      "basis_gib": 14.91015625,
+      "basis_oom_pool_bytes": null,
+      "basis_oom_requested_bytes": null,
+      "basis_result_sha256": "b236355327a45509f806653aa1d4d770ca8faf2b0ea2438359f47d66ab46a615",
+      "follower_old_jobs": [
+        1269
+      ],
+      "leader": "low-activity-multiscale_timed-shannon-n16-d128-k2-e728e0c7cc-weak-log-v1-init-2026112001",
+      "model": "low-activity-multiscale_timed-shannon-n16-d128-k2-e728e0c7cc",
+      "related_shapes": [
+        "15603f58595e97f7f81746eb7024ccc1809c141a192b3a779de972e0653c5ed6",
+        "15a0eb0a10d04d9f53220c795513eb107bc5fde2ac3ac0167e3783143861b55b",
+        "a5bfd5a00e94fe82e60e5e6bf5812cb37df7f5d1e054efaf52dab96c9b9a7716",
+        "b25cdf9e4082fe54decd1580e331f6aa8d6a36c990285d5baf1c4cb68806b8c8"
+      ],
+      "shape": "15a0eb0a10d04d9f53220c795513eb107bc5fde2ac3ac0167e3783143861b55b",
+      "worker_reservation_gib": 23
+    }
+  },
+  "retry_review": {
+    "by_job": {
+      "1209": {
+        "checkpoint_sha256": "362895f18b5552004f084285ad228adae0a95867247b17f65ebe80d35ee18610",
+        "current_reason": "waiting for peak HBM",
+        "evaluation_before": 32800,
+        "evaluation_charged": 32800,
+        "evaluation_next": 32800,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": 26,
+        "is_representative": false,
+        "new_job": 1481,
+        "oom": "allocator",
+        "original_result_sha256": "aa72fa2044439bbc29a34626a1286600aa8c8ec8e9abbe2b202b77f2150a124a",
+        "original_training_steps": 162,
+        "replay_steps": 2,
+        "resume_step": 160,
+        "status": "queued",
+        "target": "auto",
+        "task": "low-activity-multiscale_timed-singleton-n16-d128-k8-ae40078b73-a1-2026112002-r5"
+      },
+      "1210": {
+        "checkpoint_sha256": "b49a551b6053ad908302c8a8d8b4b019d257f03e513ee1d438901b2291518afb",
+        "current_reason": "waiting for peak HBM",
+        "evaluation_before": 544,
+        "evaluation_charged": 544,
+        "evaluation_next": 544,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": 25,
+        "is_representative": false,
+        "new_job": 1463,
+        "oom": "allocator",
+        "original_result_sha256": "f6dfc451676b0871cf596c16a21e61928ebe6f93b7b524d7aec8d85d481a7112",
+        "original_training_steps": 1,
+        "replay_steps": 0,
+        "resume_step": 1,
+        "status": "queued",
+        "target": "auto",
+        "task": "low-activity-multiscale_timed-singleton-n16-d128-k4-a02c4514ac-init-2026112001"
+      },
+      "1211": {
+        "checkpoint_sha256": "ae925848dc82d4b90ef3edb35b2b10e1196e3aedbd2b9420894c240d7c6ace54",
+        "current_reason": "waiting for peak HBM",
+        "evaluation_before": 544,
+        "evaluation_charged": 544,
+        "evaluation_next": 544,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": 25,
+        "is_representative": false,
+        "new_job": 1464,
+        "oom": "allocator",
+        "original_result_sha256": "86299935e7de73d77fdf143e131f37643d1a767c76a31a3a7cd04728d1c49494",
+        "original_training_steps": 1,
+        "replay_steps": 0,
+        "resume_step": 1,
+        "status": "queued",
+        "target": "auto",
+        "task": "low-activity-multiscale_timed-singleton-n16-d128-k4-a02c4514ac-init-2026112002"
+      },
+      "1216": {
+        "checkpoint_sha256": null,
+        "current_reason": "waiting for peak HBM",
+        "evaluation_before": 544,
+        "evaluation_charged": 544,
+        "evaluation_next": 544,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": 25,
+        "is_representative": false,
+        "new_job": 1465,
+        "oom": "allocator",
+        "original_result_sha256": "626af2fd127e6e843747f6ca379c65d86a80bf8977c4d18b0200e7ed4db96a97",
+        "original_training_steps": 0,
+        "replay_steps": 0,
+        "resume_step": 0,
+        "status": "queued",
+        "target": "auto",
+        "task": "low-activity-multiscale_timed-singleton-n16-d128-k2-94bc7a4b13-init-2026112002"
+      },
+      "1217": {
+        "checkpoint_sha256": "32b07927e3e62f3dc78646115cb2ff590f31623130b7d06a411bd7188b6547ee",
+        "current_reason": "waiting for peak HBM",
+        "evaluation_before": 544,
+        "evaluation_charged": 544,
+        "evaluation_next": 544,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": 25,
+        "is_representative": false,
+        "new_job": 1466,
+        "oom": "allocator",
+        "original_result_sha256": "698ff87ae8711cb303cf26e99ae9ec8da0ab0ff0cc612251cab30acf40a45f8b",
+        "original_training_steps": 1,
+        "replay_steps": 0,
+        "resume_step": 1,
+        "status": "queued",
+        "target": "auto",
+        "task": "low-activity-multiscale_timed-singleton-n16-d128-k2-94bc7a4b13-init-2026112003"
+      },
+      "1218": {
+        "checkpoint_sha256": "c2949a1d7ac3a8de219164f61253731c0e4e22ce6aeb478cb6f0fdbf1ec2b124",
+        "current_reason": "waiting for peak HBM",
+        "evaluation_before": 544,
+        "evaluation_charged": 544,
+        "evaluation_next": 544,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": 26,
+        "is_representative": true,
+        "new_job": 1467,
+        "oom": "allocator",
+        "original_result_sha256": "68ca92f8c242ab7634c3c1aedddaac40fc88f7abddda20c4be014b5f1a0c6e16",
+        "original_training_steps": 1,
+        "replay_steps": 0,
+        "resume_step": 1,
+        "status": "queued",
+        "target": "auto",
+        "task": "low-activity-multiscale_timed-singleton-n16-d128-k1-bf730d9c03-init-2026112001"
+      },
+      "1219": {
+        "checkpoint_sha256": "f8501abdb8731d3bae18fd56624fc0c229ea69ca905ceef347b406cd5d6d1878",
+        "current_reason": "waiting for measured NPU representative low-activity-multiscale_timed-singleton-n16-d128-k1-bf730d9c03-init-2026112001",
+        "evaluation_before": 544,
+        "evaluation_charged": 544,
+        "evaluation_next": 544,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": null,
+        "is_representative": false,
+        "new_job": null,
+        "oom": "allocator",
+        "original_result_sha256": "308bb491b5451fd3627b8eebd66d5a9659c74896fe7afa804faafeb831b85885",
+        "original_training_steps": 1,
+        "replay_steps": 0,
+        "resume_step": 1,
+        "status": "waiting_for_representative",
+        "target": null,
+        "task": "low-activity-multiscale_timed-singleton-n16-d128-k1-bf730d9c03-init-2026112002"
+      },
+      "1220": {
+        "checkpoint_sha256": "c9dbcb9e0cbd502272929f753ff6fe054f03d4dd4cbbf7b82a2f35cf7fa2b449",
+        "current_reason": "waiting for measured NPU representative low-activity-multiscale_timed-singleton-n16-d128-k1-bf730d9c03-init-2026112001",
+        "evaluation_before": 544,
+        "evaluation_charged": 544,
+        "evaluation_next": 544,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": null,
+        "is_representative": false,
+        "new_job": null,
+        "oom": "allocator",
+        "original_result_sha256": "08368575a7a940c55ae7cbcdc22e6367ac931cdd9f6c6723d3b7de83a7d677a9",
+        "original_training_steps": 1,
+        "replay_steps": 0,
+        "resume_step": 1,
+        "status": "waiting_for_representative",
+        "target": null,
+        "task": "low-activity-multiscale_timed-singleton-n16-d128-k1-bf730d9c03-init-2026112003"
+      },
+      "1229": {
+        "checkpoint_sha256": null,
+        "current_reason": "waiting for peak HBM",
+        "evaluation_before": 544,
+        "evaluation_charged": 544,
+        "evaluation_next": 544,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": 45,
+        "is_representative": true,
+        "new_job": 1468,
+        "oom": "allocator",
+        "original_result_sha256": "03f5b66daf4317defa9b917b12c4def029bce2abf5b0c920f7dcc247884f90d7",
+        "original_training_steps": 0,
+        "replay_steps": 0,
+        "resume_step": 0,
+        "status": "queued",
+        "target": "npu:6",
+        "task": "low-activity-multiscale_timed-mixed-n16-d128-k8-c75f97de35-init-2026112001"
+      },
+      "1230": {
+        "checkpoint_sha256": null,
+        "current_reason": "waiting for measured NPU representative low-activity-multiscale_timed-mixed-n16-d128-k8-c75f97de35-init-2026112001",
+        "evaluation_before": 544,
+        "evaluation_charged": 544,
+        "evaluation_next": 544,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": null,
+        "is_representative": false,
+        "new_job": null,
+        "oom": "allocator",
+        "original_result_sha256": "36636a02c689ed14340dd8ffc4c1955d3ba50bc8eabd5ee93807a1e19906bede",
+        "original_training_steps": 0,
+        "replay_steps": 0,
+        "resume_step": 0,
+        "status": "waiting_for_representative",
+        "target": null,
+        "task": "low-activity-multiscale_timed-mixed-n16-d128-k8-c75f97de35-init-2026112002"
+      },
+      "1231": {
+        "checkpoint_sha256": null,
+        "current_reason": "waiting for measured NPU representative low-activity-multiscale_timed-mixed-n16-d128-k8-c75f97de35-init-2026112001",
+        "evaluation_before": 544,
+        "evaluation_charged": 544,
+        "evaluation_next": 544,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": null,
+        "is_representative": false,
+        "new_job": null,
+        "oom": "allocator",
+        "original_result_sha256": "3f9a01126bf0004bcc2cb94ee7a5eeba316916e727a20169b222d258705a2f0d",
+        "original_training_steps": 0,
+        "replay_steps": 0,
+        "resume_step": 0,
+        "status": "waiting_for_representative",
+        "target": null,
+        "task": "low-activity-multiscale_timed-mixed-n16-d128-k8-c75f97de35-init-2026112003"
+      },
+      "1232": {
+        "checkpoint_sha256": null,
+        "current_reason": "waiting for an admissible NPU",
+        "evaluation_before": 544,
+        "evaluation_charged": 544,
+        "evaluation_next": 544,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": 45,
+        "is_representative": true,
+        "new_job": 1469,
+        "oom": "allocator",
+        "original_result_sha256": "d89b61bdcdd4b79d50e6ee27b7031d3cb76dc929eafc07b75df3b6804340c7db",
+        "original_training_steps": 0,
+        "replay_steps": 0,
+        "resume_step": 0,
+        "status": "queued",
+        "target": "npu:6",
+        "task": "low-activity-multiscale_timed-mixed-n16-d128-k4-ae78164f7a-init-2026112001"
+      },
+      "1233": {
+        "checkpoint_sha256": null,
+        "current_reason": "waiting for measured NPU representative low-activity-multiscale_timed-mixed-n16-d128-k4-ae78164f7a-init-2026112001",
+        "evaluation_before": 544,
+        "evaluation_charged": 544,
+        "evaluation_next": 544,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": null,
+        "is_representative": false,
+        "new_job": null,
+        "oom": "allocator",
+        "original_result_sha256": "bda26c76ad548b0a0c9261c60046f184bdf1c2a352784dd075481f5b5cd5a39d",
+        "original_training_steps": 0,
+        "replay_steps": 0,
+        "resume_step": 0,
+        "status": "waiting_for_representative",
+        "target": null,
+        "task": "low-activity-multiscale_timed-mixed-n16-d128-k4-ae78164f7a-init-2026112002"
+      },
+      "1234": {
+        "checkpoint_sha256": null,
+        "current_reason": "waiting for measured NPU representative low-activity-multiscale_timed-mixed-n16-d128-k4-ae78164f7a-init-2026112001",
+        "evaluation_before": 544,
+        "evaluation_charged": 544,
+        "evaluation_next": 544,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": null,
+        "is_representative": false,
+        "new_job": null,
+        "oom": "allocator",
+        "original_result_sha256": "363ece673ac98bb3ffb56246439c32b451d4bb4e2e51efa819b1966023819ea4",
+        "original_training_steps": 0,
+        "replay_steps": 0,
+        "resume_step": 0,
+        "status": "waiting_for_representative",
+        "target": null,
+        "task": "low-activity-multiscale_timed-mixed-n16-d128-k4-ae78164f7a-init-2026112003"
+      },
+      "1235": {
+        "checkpoint_sha256": null,
+        "current_reason": "waiting for an admissible NPU",
+        "evaluation_before": 544,
+        "evaluation_charged": 544,
+        "evaluation_next": 544,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": 45,
+        "is_representative": true,
+        "new_job": 1470,
+        "oom": "allocator",
+        "original_result_sha256": "9012eaa8bb362c5b6232f5f5fdb57e576315b592f8def5426dd94988c7cdeea2",
+        "original_training_steps": 0,
+        "replay_steps": 0,
+        "resume_step": 0,
+        "status": "queued",
+        "target": "npu:6",
+        "task": "low-activity-multiscale_timed-mixed-n16-d128-k2-e852e73b26-init-2026112001"
+      },
+      "1236": {
+        "checkpoint_sha256": null,
+        "current_reason": "waiting for measured NPU representative low-activity-multiscale_timed-mixed-n16-d128-k2-e852e73b26-init-2026112001",
+        "evaluation_before": 544,
+        "evaluation_charged": 544,
+        "evaluation_next": 544,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": null,
+        "is_representative": false,
+        "new_job": null,
+        "oom": "allocator",
+        "original_result_sha256": "13f8871da894f199536b037d68bf26532c79f1409d5153ad8ab06ef939658b36",
+        "original_training_steps": 0,
+        "replay_steps": 0,
+        "resume_step": 0,
+        "status": "waiting_for_representative",
+        "target": null,
+        "task": "low-activity-multiscale_timed-mixed-n16-d128-k2-e852e73b26-init-2026112002"
+      },
+      "1237": {
+        "checkpoint_sha256": null,
+        "current_reason": "waiting for measured NPU representative low-activity-multiscale_timed-mixed-n16-d128-k2-e852e73b26-init-2026112001",
+        "evaluation_before": 544,
+        "evaluation_charged": 544,
+        "evaluation_next": 544,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": null,
+        "is_representative": false,
+        "new_job": null,
+        "oom": "allocator",
+        "original_result_sha256": "e357e41fa2a5f12d9da8a48b927f9471035f8392edbe5a9283adfc87be2de1c8",
+        "original_training_steps": 0,
+        "replay_steps": 0,
+        "resume_step": 0,
+        "status": "waiting_for_representative",
+        "target": null,
+        "task": "low-activity-multiscale_timed-mixed-n16-d128-k2-e852e73b26-init-2026112003"
+      },
+      "1238": {
+        "checkpoint_sha256": null,
+        "current_reason": "waiting for an admissible NPU",
+        "evaluation_before": 544,
+        "evaluation_charged": 544,
+        "evaluation_next": 544,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": 45,
+        "is_representative": true,
+        "new_job": 1471,
+        "oom": "allocator",
+        "original_result_sha256": "5489467afb4ea453faa5ad7661c045f38b44f5a2c6d2dbd3098d9202fb58f51c",
+        "original_training_steps": 0,
+        "replay_steps": 0,
+        "resume_step": 0,
+        "status": "queued",
+        "target": "npu:6",
+        "task": "low-activity-multiscale_timed-mixed-n16-d128-k1-d8614748b3-init-2026112001"
+      },
+      "1239": {
+        "checkpoint_sha256": null,
+        "current_reason": "waiting for measured NPU representative low-activity-multiscale_timed-mixed-n16-d128-k1-d8614748b3-init-2026112001",
+        "evaluation_before": 544,
+        "evaluation_charged": 544,
+        "evaluation_next": 544,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": null,
+        "is_representative": false,
+        "new_job": null,
+        "oom": "allocator",
+        "original_result_sha256": "8dde0ee8e98c3db74c2eebda2ee3340e0b91ac41c7dd275a093a8433a6722799",
+        "original_training_steps": 0,
+        "replay_steps": 0,
+        "resume_step": 0,
+        "status": "waiting_for_representative",
+        "target": null,
+        "task": "low-activity-multiscale_timed-mixed-n16-d128-k1-d8614748b3-init-2026112002"
+      },
+      "1240": {
+        "checkpoint_sha256": null,
+        "current_reason": "waiting for measured NPU representative low-activity-multiscale_timed-mixed-n16-d128-k1-d8614748b3-init-2026112001",
+        "evaluation_before": 544,
+        "evaluation_charged": 544,
+        "evaluation_next": 544,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": null,
+        "is_representative": false,
+        "new_job": null,
+        "oom": "allocator",
+        "original_result_sha256": "0d59650b4dc0b8a0ef34c16872690637668463cc38c68ebe0ab3705a4c2aa667",
+        "original_training_steps": 0,
+        "replay_steps": 0,
+        "resume_step": 0,
+        "status": "waiting_for_representative",
+        "target": null,
+        "task": "low-activity-multiscale_timed-mixed-n16-d128-k1-d8614748b3-init-2026112003"
+      },
+      "1245": {
+        "checkpoint_sha256": "2dcc4eb0ee7a00d689a3d5cd42082f3819dfb65c8199ea96ea1cb82d4cfc0c58",
+        "current_reason": "waiting for peak HBM",
+        "evaluation_before": 544,
+        "evaluation_charged": 544,
+        "evaluation_next": 544,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": 25,
+        "is_representative": false,
+        "new_job": 1472,
+        "oom": "allocator",
+        "original_result_sha256": "9529ec870c67e5f3b1f85c1c258924c0983025b498a5fda0ab1a0feacd83ce00",
+        "original_training_steps": 1,
+        "replay_steps": 0,
+        "resume_step": 1,
+        "status": "queued",
+        "target": "auto",
+        "task": "low-activity-multiscale_timed-checkerboard-n16-d128-k4-4dbde54c4c-init-2026112002"
+      },
+      "1248": {
+        "checkpoint_sha256": null,
+        "current_reason": "waiting for peak HBM",
+        "evaluation_before": 544,
+        "evaluation_charged": 544,
+        "evaluation_next": 544,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": 25,
+        "is_representative": false,
+        "new_job": 1473,
+        "oom": "allocator",
+        "original_result_sha256": "2e436a14adc78a4784615f752504c631aad9b2ea701ff745e90af4da4103810f",
+        "original_training_steps": 0,
+        "replay_steps": 0,
+        "resume_step": 0,
+        "status": "queued",
+        "target": "auto",
+        "task": "low-activity-multiscale_timed-checkerboard-n16-d128-k2-7e9e9f80f5-init-2026112002"
+      },
+      "1249": {
+        "checkpoint_sha256": "d6e4b5fcb179c97eebb0a9aa655825e9f75cb619c763fad0931e70b8e368f28c",
+        "current_reason": "waiting for peak HBM",
+        "evaluation_before": 544,
+        "evaluation_charged": 544,
+        "evaluation_next": 544,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": 25,
+        "is_representative": false,
+        "new_job": 1474,
+        "oom": "allocator",
+        "original_result_sha256": "6416400c81a747e68b24062c9905328dc83b58a5585a56a44aa8ca26436053ab",
+        "original_training_steps": 1,
+        "replay_steps": 0,
+        "resume_step": 1,
+        "status": "queued",
+        "target": "auto",
+        "task": "low-activity-multiscale_timed-checkerboard-n16-d128-k2-7e9e9f80f5-init-2026112003"
+      },
+      "1254": {
+        "checkpoint_sha256": "4c034cf6aa9355d54bf3844eead636337e7f0b49740028b7e64e994c9e86eefb",
+        "current_reason": "waiting for peak HBM",
+        "evaluation_before": 544,
+        "evaluation_charged": 544,
+        "evaluation_next": 544,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": 25,
+        "is_representative": false,
+        "new_job": 1475,
+        "oom": "allocator",
+        "original_result_sha256": "945b01c25be476bbba1248d948f6ab2ef6e26a5e3e32ec8bd437268761a4b899",
+        "original_training_steps": 1,
+        "replay_steps": 0,
+        "resume_step": 1,
+        "status": "queued",
+        "target": "auto",
+        "task": "low-activity-multiscale_timed-checkerboard-n16-d128-k1-9a70e71a2f-init-2026112001"
+      },
+      "1257": {
+        "checkpoint_sha256": null,
+        "current_reason": "waiting for peak HBM",
+        "evaluation_before": 544,
+        "evaluation_charged": 544,
+        "evaluation_next": 544,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": 23,
+        "is_representative": false,
+        "new_job": 1476,
+        "oom": "allocator",
+        "original_result_sha256": "c6f6e972da76d177dc72216d89b0bf704fd7b84357b0a976227720ac9efa3e7f",
+        "original_training_steps": 0,
+        "replay_steps": 0,
+        "resume_step": 0,
+        "status": "queued",
+        "target": "auto",
+        "task": "low-activity-multiscale_timed-shannon-n16-d128-k8-a5e305c7e8-weak-log-v1-init-2026112001"
+      },
+      "1265": {
+        "checkpoint_sha256": null,
+        "current_reason": "waiting for peak HBM",
+        "evaluation_before": 544,
+        "evaluation_charged": 544,
+        "evaluation_next": 544,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": 23,
+        "is_representative": false,
+        "new_job": 1477,
+        "oom": "allocator",
+        "original_result_sha256": "e8d8439bbf83d058ede40c4f073dca082139e314068fe3cf9682fc5f2f58807f",
+        "original_training_steps": 0,
+        "replay_steps": 0,
+        "resume_step": 0,
+        "status": "queued",
+        "target": "auto",
+        "task": "low-activity-multiscale_timed-shannon-n16-d128-k4-f0cc52e3c1-weak-log-v1-init-2026112002"
+      },
+      "1266": {
+        "checkpoint_sha256": "fb3e0dc892d34b79d5e0234745ae82ee7718de45214529f42f123f76e3f346bc",
+        "current_reason": "waiting for peak HBM",
+        "evaluation_before": 544,
+        "evaluation_charged": 544,
+        "evaluation_next": 544,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": 23,
+        "is_representative": false,
+        "new_job": 1478,
+        "oom": "allocator",
+        "original_result_sha256": "5de587b06a6bdc5df78fef6a1bcc180b2f3398cab89a84bf9b838aa381a66fcb",
+        "original_training_steps": 1,
+        "replay_steps": 0,
+        "resume_step": 1,
+        "status": "queued",
+        "target": "auto",
+        "task": "low-activity-multiscale_timed-shannon-n16-d128-k4-f0cc52e3c1-weak-log-v1-init-2026112003"
+      },
+      "1267": {
+        "checkpoint_sha256": "0f31a9eca1aa135b4a35479a016fb8a04c45dff791c6ea5d6451fe5f6191d94f",
+        "current_reason": "waiting for peak HBM",
+        "evaluation_before": 544,
+        "evaluation_charged": 544,
+        "evaluation_next": 544,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": 23,
+        "is_representative": true,
+        "new_job": 1479,
+        "oom": "allocator",
+        "original_result_sha256": "cae2cd7ea078aacea63e2473791f6d4e89c038f8e3ccd86e36668008b75462ba",
+        "original_training_steps": 1,
+        "replay_steps": 0,
+        "resume_step": 1,
+        "status": "queued",
+        "target": "auto",
+        "task": "low-activity-multiscale_timed-shannon-n16-d128-k2-e728e0c7cc-weak-log-v1-init-2026112001"
+      },
+      "1269": {
+        "checkpoint_sha256": "a32d5a334801b7b112c25b689e688324f9705fdbd03f65a4763cb1cd51e29618",
+        "current_reason": "waiting for measured NPU representative low-activity-multiscale_timed-shannon-n16-d128-k2-e728e0c7cc-weak-log-v1-init-2026112001",
+        "evaluation_before": 544,
+        "evaluation_charged": 544,
+        "evaluation_next": 544,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": null,
+        "is_representative": false,
+        "new_job": null,
+        "oom": "allocator",
+        "original_result_sha256": "47bbcf1a5df4ef835307334451f5320dd63c5105e72a5c621d5eb187442ee775",
+        "original_training_steps": 1,
+        "replay_steps": 0,
+        "resume_step": 1,
+        "status": "waiting_for_representative",
+        "target": null,
+        "task": "low-activity-multiscale_timed-shannon-n16-d128-k2-e728e0c7cc-weak-log-v1-init-2026112003"
+      },
+      "1272": {
+        "checkpoint_sha256": "2ccf1e73b007fb61a41ac6735f82ed27c9362524cd40458a6f76a5f0d07f47c0",
+        "current_reason": "waiting for peak HBM",
+        "evaluation_before": 544,
+        "evaluation_charged": 544,
+        "evaluation_next": 544,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": 23,
+        "is_representative": false,
+        "new_job": 1480,
+        "oom": "allocator",
+        "original_result_sha256": "8679c97603f5d2d1cfec9c6fc1ac51393252a38e1874d64e394f0425bbf0006f",
+        "original_training_steps": 1,
+        "replay_steps": 0,
+        "resume_step": 1,
+        "status": "queued",
+        "target": "auto",
+        "task": "low-activity-multiscale_timed-shannon-n16-d128-k1-e6b11ef228-weak-log-v1-init-2026112003"
+      },
+      "1281": {
+        "checkpoint_sha256": null,
+        "current_reason": "waiting for peak HBM",
+        "evaluation_before": 32800,
+        "evaluation_charged": 32800,
+        "evaluation_next": 32800,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": 26,
+        "is_representative": false,
+        "new_job": 1482,
+        "oom": "allocator",
+        "original_result_sha256": "a23547ed29ce6a7b8d3b6cb2a322338df6a57f13b61a69d9482da2d34059faf9",
+        "original_training_steps": 0,
+        "replay_steps": 0,
+        "resume_step": 0,
+        "status": "queued",
+        "target": "auto",
+        "task": "low-activity-multiscale_timed-checkerboard-n16-d128-k8-b71bd8a452-a1-2026112001-r3"
+      },
+      "1282": {
+        "checkpoint_sha256": null,
+        "current_reason": "waiting for peak HBM",
+        "evaluation_before": 32800,
+        "evaluation_charged": 32800,
+        "evaluation_next": 32800,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": 26,
+        "is_representative": false,
+        "new_job": 1483,
+        "oom": "driver",
+        "original_result_sha256": "5b0e9d7bb7c558c4c816a4aec8bc076d4c0e3ccd4bb49048f0056c99ce358544",
+        "original_training_steps": 0,
+        "replay_steps": 0,
+        "resume_step": 0,
+        "status": "queued",
+        "target": "auto",
+        "task": "low-activity-multiscale_timed-checkerboard-n16-d128-k8-b71bd8a452-a1-2026112002-r3"
+      },
+      "1284": {
+        "checkpoint_sha256": "5ab2176a2ef26c131172daca1edb98f3d845272f92a05e2738cabdf2b4128c35",
+        "current_reason": "waiting for peak HBM",
+        "evaluation_before": 32800,
+        "evaluation_charged": 32800,
+        "evaluation_next": 32800,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": 26,
+        "is_representative": false,
+        "new_job": 1484,
+        "oom": "allocator",
+        "original_result_sha256": "cfe6eb09b8e6e19fb292315dfe10aa3bad808cb09fa85af3a2ccd685a6f91b6e",
+        "original_training_steps": 1,
+        "replay_steps": 0,
+        "resume_step": 1,
+        "status": "queued",
+        "target": "auto",
+        "task": "low-activity-multiscale_timed-checkerboard-n16-d128-k8-b71bd8a452-a1-2026112002-r4"
+      },
+      "1285": {
+        "checkpoint_sha256": "a7327f5886ed1a3e4de4213514ad7abf0a2b7b43639a2b0c6062a0fc4ea10e80",
+        "current_reason": "waiting for peak HBM",
+        "evaluation_before": 32800,
+        "evaluation_charged": 32800,
+        "evaluation_next": 32800,
+        "first_retry_update": null,
+        "hbm_gib_at_registration": 26,
+        "is_representative": false,
+        "new_job": 1485,
+        "oom": "allocator",
+        "original_result_sha256": "a9836da10cdce07d013155134df2111df6621044363c1d4290ede730b0b44ee8",
+        "original_training_steps": 1,
+        "replay_steps": 0,
+        "resume_step": 1,
+        "status": "queued",
+        "target": "auto",
+        "task": "low-activity-multiscale_timed-checkerboard-n16-d128-k8-b71bd8a452-a1-2026112001-r5"
+      }
+    },
+    "distinct_shapes": 16,
+    "existing_authorizations": 30,
+    "prior_attempts_retained": true,
+    "ready_shapes": 10,
+    "request_distribution": {
+      "queued": 23,
+      "waiting_for_representative": 11
+    },
+    "reviewed": 34,
+    "source": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/shape-hbm-20261125/reviewed-oom.json",
+      "sha256": "6ef0403f0469cc23835e891bab1d33d17d57fccf3d26bf557e457d10acac569a"
+    },
+    "total_retry_review_list": 64
+  },
+  "schema": "pilot-r3-shape-hbm-recovery-v1",
+  "stage": {
+    "budget": {
+      "deadline_unix": 1797698913.9318287,
+      "device_seconds": 2728833.793200467,
+      "max_device_seconds": 25920000
+    },
+    "counts": {
+      "completed": 1187,
+      "pending": 72,
+      "running": 78,
+      "stopped_budget": 100,
+      "superseded": 8
+    },
+    "cpu_workers": 41,
+    "deferred": 74,
+    "driver_pids_per_card": {
+      "10": 6,
+      "11": 4,
+      "14": 4,
+      "15": 5,
+      "6": 4,
+      "7": 6,
+      "8": 4,
+      "9": 4
+    },
+    "npu_workers": 37,
+    "selected": 182,
+    "snapshot": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/shape-hbm-20261125/live-status.json",
+      "sha256": "4313c5248c87a1f710c595fdd229144f9fe9daa99435d2a87fc1219e2394fb45"
+    },
+    "stage_b": "closed",
+    "status": "running",
+    "subjects": 270,
+    "verified_completed": 1187
+  },
+  "status_observed_at": "2026-11-25T02:11:39.638802+00:00"
+}

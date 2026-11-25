@@ -36,6 +36,24 @@
 
 项目旧队列的 `limits --cards N --auto-card-ids ID ...` 热调自动使用的物理卡。已有外部进程的卡可用 `auto-share ID ... --until-unix TIMESTAMP` 登记当前进程身份和许可截止时间。后续任务沿用这份许可，出现新的外部进程时队列会等待。`auto-share ID ... --clear` 撤回这些卡的自动共享许可。
 
+### 用阶段 A 的观测申请 NPU 显存
+
+本轮项目控制器将 NPU 尝试逐项记入输出目录的 `hbm-profile.sqlite3`。同一冻结 worker 来源、模型配置、精度、确定性、序列长度、流分块数和 batch size 共用一组观测。种子和阶段可以不同。每次尝试分别保存 PyTorch 分配及缓存池峰值、可取得的初始化峰值、与本 worker 服务、PID 和启动时钟匹配的驱动采样峰值，以及 OOM 当时的池大小和申请量。旧 worker 的训练计数从初评结束后开始。首个训练更新前的驱动采样可补充这段记录，采样间隙仍可能漏峰。[资源记录](../pilotlab/hbm_profile3.py) · [worker 度量](../pilotlab/worker3.py)
+
+缺省预约取 `ceil(1.5 × 估算基数/GiB + 0.5)` GiB。估算基数取各次观测峰值、OOM 当时已用量或缓存池加上未满足申请、已登记的代表任务临时依据中的最大值。可分别查看成功峰值、实际观测峰值和 OOM 估算。项目队列再取任务声明、显式下限与形状预约的最大值。派发时从驱动报告的物理空闲量中扣除在跑作业尚未兑现的预约。余量不足时，已有作业继续执行，容量恢复后自动补位。共享进程后续增长和动态输入仍可能导致实际 OOM。[热调与补跑](../pilotlab/runq_campaign.py) · [物理卡准入](../pilotlab/runq_devices.py)
+
+在仓库根目录可用下列入口。变量 `task` 是冻结的 NPU 任务 JSON，`snapshot` 是本次导出的新文件路径。
+
+```bash
+round=.local/pilot-r3/campaign-runq/round
+python -m pilotlab.hbm_profile3 --round "$round" estimate --task "$task"
+python -m pilotlab.hbm_profile3 --round "$round" snapshot --output "$snapshot"
+```
+
+热调系数用 `policy --factor 1.5 --padding-gib 0.5`，运行中的控制器会随驱动采样更新预约。缺少同形状成功样本时，在提交这一组之前用 `trial --task "$task" --basis-gib N` 指定一个正式 NPU 任务，`N` 是加余量前的实测依据。该形状出现带显存读数的成功结果后，其余任务自动放行。失败结果保留原始错误、未满足申请和检查点；该形状继续等待。[代表任务与资源估算](../pilotlab/hbm_profile3.py)
+
+同一输出目录中新建的阶段 B 正式任务会读取匹配的 A 记录。后续批次可向 `python -m pilotlab.prepare_campaign3` 传入 `--hbm-profile "$snapshot"`，计划按路径和 SHA-256 绑定资源表。冻结目录可迁移，跨目录复用时核对项目与基座的全部相对文件名和摘要、数据清单、Python 和依赖版本以及输入形状。对不上时沿用该任务自身的资源依据。正式任务冻结后，重启沿用同一份任务和门禁哈希。[阶段 B 正式任务](../pilotlab/round3.py) · [跨轮冻结入口](../pilotlab/prepare_campaign3.py)
+
 ## 恢复已归档的检查点
 
 2026-11-23 清理的 R1、R2、R3 冷检查点保存在本账号的私有 SFS 目录。恢复清单按原仓库相对路径记录大小、SHA-256、权限和修改时间。原轮次的任务、结果及终态审计仍按原路径引用这些文件。需要重跑某轮的全文件审计时，先在仓库根目录按该轮恢复，再运行原审计命令。[清理和恢复实测](evidence/pilot-r3-r30-storage-cleanup.json) · [恢复程序](../scripts/restore_checkpoint_archive.py)
