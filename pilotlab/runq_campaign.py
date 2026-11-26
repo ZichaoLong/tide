@@ -24,6 +24,20 @@ def queue_hbm(db, owner, task, allowed, observed=0, shape=None):
     return max(declared, observed, floor) or 8 * GIB
 
 
+def signal_evaluation_coverage(config, task, record):
+    """Include the unused part of a carried stage's inherited reservation once."""
+    reserved = record.get("evaluation_reserved_tokens", 0)
+    increments = config.get("migration_evaluation_reservations", {})
+    if task.get("stage_a_migration") and task["id"] in increments:
+        from .followup_migration3 import remaining_evaluation
+        from .source_migration3 import read_bound
+        entry = read_bound(task["stage_a_migration"])
+        if entry["task_id"] != task["id"] or entry["evaluation_additional_reservation_tokens"] != increments[task["id"]]:
+            raise Blocked("signal resume migration accounting changed")
+        reserved += max(0, remaining_evaluation(task, entry) - increments[task["id"]])
+    return reserved
+
+
 def first_update_time(directory):
     path = Path(directory) / "steps.jsonl"
     if path.is_file():
@@ -191,7 +205,8 @@ class QueueSupervisor(SharedSupervisor):
         models = {row["model_id"] for row in records.values()
                   if row["status"] == "running" or (row["status"] == "pending" and row.get("runq_id"))}
         jobs = self.db.execute("""SELECT DISTINCT json_extract(spec, '$.task_id') FROM jobs
-            WHERE state IN ('queued','reserved','starting','running') AND json_extract(spec, '$.owner')=?""",
+            WHERE state IN ('queued','reserved','starting','running') AND json_extract(spec, '$.owner')=?
+            AND COALESCE(json_extract(spec, '$.purpose'), '') != 'deferred_source_review'""",
             (self.owner,))
         for (tid,) in jobs:
             if tid in records:
@@ -317,29 +332,33 @@ class QueueSupervisor(SharedSupervisor):
             return super().reserve_task(task, record,
                 evaluation_increment=receipt["evaluation_additional_reservation_tokens"])
         move = record.get("queue_relocation")
-        if not move:
+        resume = record.get("queue_signal_resume") or move
+        if not resume:
             return super().reserve_task(task, record)
         from .resume3 import bound
         from .resume_adapter3 import build_relay_receipt
         attempts = record["attempts"]
-        if not attempts or len(attempts) != move["next_attempt"]:
-            raise Blocked("relocation predecessor changed")
+        if not attempts or len(attempts) != resume["next_attempt"]:
+            raise Blocked("signal resume predecessor changed")
         previous = attempts[-1]
-        if (previous.get("runq_id") != move["previous_job"] or previous.get("physical_id") != move["from"]
+        if (previous.get("runq_id") != resume["previous_job"]
                 or previous.get("status") != "stopped_budget" or previous.get("reason") != "signal"):
-            raise Blocked("relocation predecessor changed")
+            raise Blocked("signal resume predecessor changed")
         job = lookup(self.db, record["runq_id"])
-        card = self.db.execute("SELECT card FROM leases WHERE id=?", (job["lease"],)).fetchone()
-        if not card or card[0] != move["to"] or job["target"] != f'npu:{move["to"]}':
-            raise Blocked("relocation reserved on the wrong card")
+        if move:
+            card = self.db.execute("SELECT card FROM leases WHERE id=?", (job["lease"],)).fetchone()
+            if (previous.get("physical_id") != move["from"] or not card or card[0] != move["to"]
+                    or job["target"] != f'npu:{move["to"]}'):
+                raise Blocked("relocation reserved on the wrong card")
         task_ref = {"path": record["task_path"], "sha256": sha256(record["task_path"])}
         results = []
         for attempt in attempts:
             path = Path(attempt["path"]) / "result.json"
             results.append({"path": str(path), "sha256": sha256(path)})
         receipt = bound(record["resume_receipt"])
-        if receipt != build_relay_receipt(task_ref, results, record.get("evaluation_reserved_tokens", 0)):
-            raise Blocked("relocation receipt does not match the interrupted attempts")
+        covered = record.get("evaluation_reserved_tokens", 0) if move else signal_evaluation_coverage(self.config, task, record)
+        if receipt != build_relay_receipt(task_ref, results, covered):
+            raise Blocked("signal resume receipt does not match the interrupted attempts")
         super().reserve_task(task, record, evaluation_increment=receipt["evaluation_additional_reservation_tokens"])
 
     def start_ready_tasks(self, tasks, slots):
@@ -442,14 +461,15 @@ class QueueSupervisor(SharedSupervisor):
         from .resume3 import verify_adapter_result
         result = read(record["result_path"])
         move = record.get("queue_relocation")
-        if move:
+        if move or record.get("queue_signal_resume"):
             from .continuation3 import continuation_origin
             adapter = result.get("execution_adapter", {})
-            if (record["attempts"][-1].get("physical_id") != move["to"]
+            runtime = getattr(self, "worker_runtimes", {}).get(task["id"], {})
+            if ((move and record["attempts"][-1].get("physical_id") != move["to"])
                     or adapter.get("schema") != "pilot-r3-execution-adapter-v1"
                     or adapter.get("receipt") != record["resume_receipt"]
-                    or adapter.get("adapter") != self.config["resume_adapter"]):
-                raise Blocked("relocated result does not match its physical card and resume receipt")
+                    or adapter.get("adapter") != runtime.get("adapter", self.config["resume_adapter"])):
+                raise Blocked("signal resume result does not match its physical card or receipt")
             # Follow the interrupted attempt through any earlier source migration.
             continuation_origin(task, result)
             return

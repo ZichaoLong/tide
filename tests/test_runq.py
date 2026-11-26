@@ -54,6 +54,8 @@ def test_pipeline_handoff_rejoins_queue_before_opening_new_models(tmp_path, froz
             # A crash can follow SQLite submission before scheduler.json is saved.
             atomic_json(tmp_path / "tasks" / tid / frozen_name, {"id": tid, "model_id": "k2"})
     submit(supervisor.db, "foreign", {**spec(), "owner": "another-round", "task_id": "other"})
+    submit(supervisor.db, "review", {**spec(), "owner": supervisor.owner, "task_id": "old-subject-probe",
+                                    "purpose": "deferred_source_review", "preparation": True})
     campaign = Campaign.__new__(Campaign)
     campaign.supervisor = supervisor
     campaign.plan = {"config": {"runq_root": str(tmp_path), "max_workers": 4}, "pipeline_model_limit": 1}

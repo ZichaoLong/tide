@@ -27,7 +27,8 @@ def relay_receipt(sample, results=None, reservation=None):
         evaluation_bound(sample["task"]) if reservation is None else reservation)
 
 
-def test_queue_relocation_reuses_pinned_job_and_charges_checkpoint_increment(tmp_path, interrupted):
+@pytest.mark.parametrize("pinned", [True, False])
+def test_queue_signal_resume_placement_and_checkpoint_increment(tmp_path, interrupted, pinned):
     from pilotlab.runq_campaign import QueueSupervisor
     from pilotlab.runq_store import connect, submit
     from pilotlab.scheduler3 import Blocked
@@ -43,18 +44,23 @@ def test_queue_relocation_reuses_pinned_job_and_charges_checkpoint_increment(tmp
     queue.db = connect(tmp_path/"queue")
     previous = {"runq_id": 99, "physical_id": 9, "reason": "signal", "status": "stopped_budget", "path": str(old_output)}
     row = {"attempts": [previous], "task_path": str(sample["task_path"]), "resume_receipt": ref(args.receipt),
-           "queue_relocation": {"from": 9, "to": 7, "previous_job": 99, "next_attempt": 1},
            "evaluation_budget_key": "model", "evaluation_reserved_tokens": evaluation_bound(task)}
+    stamp = {"previous_job": 99, "next_attempt": 1}
+    if pinned:
+        row["queue_relocation"] = {**stamp, "from": 9, "to": 7}
+    else:
+        row["queue_signal_resume"] = stamp
     queue.state = {"tasks": {task["id"]: row}}
     spec = {"owner": queue.owner, "task_id": task["id"], "allowed": ["npu"], "hbm": 10, "ram": {"npu": 10}}
-    job = submit(queue.db, "batch/relocated/1", spec, "npu:7")
+    job = submit(queue.db, "batch/relocated/1", spec, "npu:7" if pinned else "auto")
     assert queue.register_job(task, row) == job
     row["runq_id"] = job
     lease = queue.db.execute("""INSERT INTO leases(card,role,state,trigger_job,grant,created)
                                 VALUES(9,'manual','held',?,'null',0)""", (job,)).lastrowid
     queue.db.execute("UPDATE jobs SET state='reserved',lease=? WHERE id=?", (lease, job))
-    with pytest.raises(Blocked, match="wrong card"):
-        queue.reserve_task(task, row)
+    if pinned:
+        with pytest.raises(Blocked, match="wrong card"):
+            queue.reserve_task(task, row)
     queue.db.execute("UPDATE leases SET card=7 WHERE id=?", (lease,))
     queue.reserve_task(task, row)
     assert row["evaluation_reserved_tokens"] == evaluation_bound(task) + 32 == task["evaluation_token_limit"]
@@ -66,7 +72,10 @@ def test_queue_relocation_reuses_pinned_job_and_charges_checkpoint_increment(tmp
     row["attempts"].append({"runq_id": job, "physical_id": 7, "path": str(args.output), "return_code": 0})
     queue.verify_completed(task, row)
     row["attempts"][-1]["physical_id"] = 9
-    with pytest.raises(Blocked, match="physical card"):
+    if pinned:
+        with pytest.raises(Blocked, match="physical card"):
+            queue.verify_completed(task, row)
+    else:
         queue.verify_completed(task, row)
     queue.db.close()
 
