@@ -1,0 +1,2458 @@
+{
+  "budget": {
+    "budget_ledger": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/budget.json",
+    "deadline_unix": 1797698913.9318287,
+    "max_device_seconds": 25920000,
+    "observed_unix": 1795693825.768025,
+    "remaining_device_seconds": 22018087.322786357,
+    "remaining_preparation_device_seconds": 140555.74052953348,
+    "remaining_preparation_processed_tokens": 37566144,
+    "remaining_wall_seconds": 2005088.1638038158,
+    "started_unix": 1795106913.9318287
+  },
+  "cards": {
+    "0": {
+      "after_peak_reservations_bytes": -11583619072,
+      "physical_free_bytes": 29169287168,
+      "running": 10
+    },
+    "1": {
+      "after_peak_reservations_bytes": -137363456,
+      "physical_free_bytes": 29015146496,
+      "running": 9
+    },
+    "10": {
+      "after_peak_reservations_bytes": 325058560,
+      "physical_free_bytes": 29545725952,
+      "running": 8
+    },
+    "11": {
+      "after_peak_reservations_bytes": 691011584,
+      "physical_free_bytes": 33368834048,
+      "running": 8
+    },
+    "14": {
+      "after_peak_reservations_bytes": -12582912,
+      "physical_free_bytes": 24152899584,
+      "running": 2
+    },
+    "15": {
+      "after_peak_reservations_bytes": -8516534272,
+      "physical_free_bytes": 30396121088,
+      "running": 10
+    },
+    "2": {
+      "after_peak_reservations_bytes": 2085617664,
+      "physical_free_bytes": 24997003264,
+      "running": 2
+    },
+    "3": {
+      "after_peak_reservations_bytes": 1741684736,
+      "physical_free_bytes": 30698110976,
+      "running": 8
+    },
+    "4": {
+      "after_peak_reservations_bytes": 1097859072,
+      "physical_free_bytes": 24348983296,
+      "running": 3
+    },
+    "5": {
+      "after_peak_reservations_bytes": 361758720,
+      "physical_free_bytes": 23947378688,
+      "running": 3
+    },
+    "6": {
+      "after_peak_reservations_bytes": -790626304,
+      "physical_free_bytes": 28718399488,
+      "running": 8
+    },
+    "7": {
+      "after_peak_reservations_bytes": -3750756352,
+      "physical_free_bytes": 29818355712,
+      "running": 9
+    },
+    "8": {
+      "after_peak_reservations_bytes": -9999220736,
+      "physical_free_bytes": 31081889792,
+      "running": 10
+    },
+    "9": {
+      "after_peak_reservations_bytes": -15697182720,
+      "physical_free_bytes": 30565990400,
+      "running": 9
+    }
+  },
+  "current_subjects": 270,
+  "deadline_unix": 1797698913.9318287,
+  "deferred": {
+    "admission": {
+      "path": ".local/pilot-r3/resource-handoffs/signal-and-review-20261126/early/submissions.json",
+      "sha256": "9e66593264033280004d9cacb23135b5b281aec7294ecd3a85f0e3bf211d7052"
+    },
+    "by_backend": {
+      "cpu": {
+        "completed": 11,
+        "queued": 17,
+        "running": 1
+      },
+      "npu": {
+        "queued": 64
+      }
+    },
+    "comparison_reports": {
+      "observations_recorded": 11
+    },
+    "entries": [
+      {
+        "backend": "cpu",
+        "cases": 3,
+        "hbm_bytes": 0,
+        "job": 2046,
+        "model": "multiscale_settle-d64-k-singleton7-121b8d2af3",
+        "reserved_tokens": 2304,
+        "scientific": "observations_recorded",
+        "status": "completed"
+      },
+      {
+        "backend": "cpu",
+        "cases": 2,
+        "hbm_bytes": 0,
+        "job": 2047,
+        "model": "exchange-d64-x-capacity-8d690f89fd",
+        "reserved_tokens": 1024,
+        "scientific": "observations_recorded",
+        "status": "completed"
+      },
+      {
+        "backend": "cpu",
+        "cases": 2,
+        "hbm_bytes": 0,
+        "job": 2048,
+        "model": "exchange-d64-x-narrowwide-124d6d5007",
+        "reserved_tokens": 1024,
+        "scientific": "observations_recorded",
+        "status": "completed"
+      },
+      {
+        "backend": "cpu",
+        "cases": 2,
+        "hbm_bytes": 0,
+        "job": 2049,
+        "model": "exchange-d64-x-pool-f320258724",
+        "reserved_tokens": 1024,
+        "scientific": "observations_recorded",
+        "status": "completed"
+      },
+      {
+        "backend": "cpu",
+        "cases": 6,
+        "hbm_bytes": 0,
+        "job": 2050,
+        "model": "exchange-d64-x_reverse-base-9e2f3f272c",
+        "reserved_tokens": 3072,
+        "scientific": "observations_recorded",
+        "status": "completed"
+      },
+      {
+        "backend": "npu",
+        "cases": 6,
+        "hbm_bytes": 11811160064,
+        "job": 2051,
+        "model": "exchange-d64-x_reverse-base-9e2f3f272c",
+        "reserved_tokens": 98304,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 3,
+        "hbm_bytes": 16106127360,
+        "job": 2052,
+        "model": "exchange-d64-x_reverse-capacity-81be206976",
+        "reserved_tokens": 49152,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 3,
+        "hbm_bytes": 11811160064,
+        "job": 2053,
+        "model": "exchange-d64-x_reverse-independent-a4ab70f0ef",
+        "reserved_tokens": 49152,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 3,
+        "hbm_bytes": 13958643712,
+        "job": 2054,
+        "model": "exchange-d64-x_reverse-narrowwide-5ca5e938b1",
+        "reserved_tokens": 49152,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "cpu",
+        "cases": 4,
+        "hbm_bytes": 0,
+        "job": 2055,
+        "model": "exchange-d64-x_reverse-pool-30533972e6",
+        "reserved_tokens": 2048,
+        "scientific": "observations_recorded",
+        "status": "completed"
+      },
+      {
+        "backend": "cpu",
+        "cases": 4,
+        "hbm_bytes": 0,
+        "job": 2056,
+        "model": "exchange-d64-x_reverse-shannon-67324c396e",
+        "reserved_tokens": 3072,
+        "scientific": "observations_recorded",
+        "status": "completed"
+      },
+      {
+        "backend": "npu",
+        "cases": 1,
+        "hbm_bytes": 34359738368,
+        "job": 2057,
+        "model": "fc-d128-k-base-a22547f0c1",
+        "reserved_tokens": 512,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 1,
+        "hbm_bytes": 34359738368,
+        "job": 2058,
+        "model": "fc-d128-k-depth3-ee10761a61",
+        "reserved_tokens": 512,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 4,
+        "hbm_bytes": 8589934592,
+        "job": 2059,
+        "model": "multiscale_settle-d64-s-mixed9-9bee809995",
+        "reserved_tokens": 2048,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "cpu",
+        "cases": 2,
+        "hbm_bytes": 0,
+        "job": 2060,
+        "model": "multiscale_settle-d64-s-singleton7-bf731dfdae",
+        "reserved_tokens": 1536,
+        "scientific": "observations_recorded",
+        "status": "completed"
+      },
+      {
+        "backend": "cpu",
+        "cases": 2,
+        "hbm_bytes": 0,
+        "job": 2061,
+        "model": "multiscale_settle-d64-x-group5-93d4eaadb7",
+        "reserved_tokens": 1024,
+        "scientific": "observations_recorded",
+        "status": "completed"
+      },
+      {
+        "backend": "cpu",
+        "cases": 4,
+        "hbm_bytes": 0,
+        "job": 2062,
+        "model": "multiscale_settle-d64-x-mixed9-e264e1f819",
+        "reserved_tokens": 2048,
+        "scientific": "observations_recorded",
+        "status": "completed"
+      },
+      {
+        "backend": "cpu",
+        "cases": 4,
+        "hbm_bytes": 0,
+        "job": 2063,
+        "model": "multiscale_settle-d64-x-singleton7-f8b23253cc",
+        "reserved_tokens": 3072,
+        "scientific": "observations_recorded",
+        "status": "completed"
+      },
+      {
+        "backend": "npu",
+        "cases": 3,
+        "hbm_bytes": 11811160064,
+        "job": 2064,
+        "model": "multiscale_settle-d64-x_reverse-group5-f239801b6a",
+        "reserved_tokens": 49152,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 1,
+        "hbm_bytes": 55834574848,
+        "job": 2065,
+        "model": "multiscale_settle-d64-x_reverse-mixed9-ef9a868150",
+        "reserved_tokens": 8192,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 3,
+        "hbm_bytes": 12884901888,
+        "job": 2066,
+        "model": "multiscale_settle-d64-x_reverse-singleton7-315d882b10",
+        "reserved_tokens": 36864,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 4,
+        "hbm_bytes": 8589934592,
+        "job": 2067,
+        "model": "multiscale_timed-d64-k-group5-716f8264e2",
+        "reserved_tokens": 3072,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 12,
+        "hbm_bytes": 10737418240,
+        "job": 2068,
+        "model": "multiscale_timed-d64-k-mixed9-cc3af6a0e9",
+        "reserved_tokens": 4608,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 12,
+        "hbm_bytes": 12884901888,
+        "job": 2069,
+        "model": "multiscale_timed-d64-k-singleton7-1863b5a223",
+        "reserved_tokens": 13824,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 3,
+        "hbm_bytes": 55834574848,
+        "job": 2070,
+        "model": "multiscale_timed-d64-s-group5-241b4441c5",
+        "reserved_tokens": 98304,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 3,
+        "hbm_bytes": 55834574848,
+        "job": 2071,
+        "model": "multiscale_timed-d64-s-mixed9-9be2af0261",
+        "reserved_tokens": 24576,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 3,
+        "hbm_bytes": 55834574848,
+        "job": 2072,
+        "model": "multiscale_timed-d64-s-singleton7-b9f49cccdc",
+        "reserved_tokens": 36864,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 4,
+        "hbm_bytes": 8589934592,
+        "job": 2073,
+        "model": "multiscale_timed-d64-x-group5-60bcff17bd",
+        "reserved_tokens": 5120,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 12,
+        "hbm_bytes": 10737418240,
+        "job": 2074,
+        "model": "multiscale_timed-d64-x-mixed9-7dec813ca3",
+        "reserved_tokens": 4608,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 12,
+        "hbm_bytes": 12884901888,
+        "job": 2075,
+        "model": "multiscale_timed-d64-x-singleton7-355fa1c02f",
+        "reserved_tokens": 13824,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 3,
+        "hbm_bytes": 12884901888,
+        "job": 2076,
+        "model": "multiscale_timed-d64-x_reverse-group5-bdfdc9ceea",
+        "reserved_tokens": 12288,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 1,
+        "hbm_bytes": 17179869184,
+        "job": 2077,
+        "model": "multiscale_timed-d64-x_reverse-mixed9-a70cd9e923",
+        "reserved_tokens": 512,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 3,
+        "hbm_bytes": 18253611008,
+        "job": 2078,
+        "model": "multiscale_timed-d64-x_reverse-singleton7-53aad4746e",
+        "reserved_tokens": 9216,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "cpu",
+        "cases": 12,
+        "hbm_bytes": 0,
+        "job": 2079,
+        "model": "exchange-d64-k-base-8e5f1d5288",
+        "reserved_tokens": 6144,
+        "scientific": null,
+        "status": "running"
+      },
+      {
+        "backend": "npu",
+        "cases": 6,
+        "hbm_bytes": 8589934592,
+        "job": 2080,
+        "model": "exchange-d64-k-base-8e5f1d5288",
+        "reserved_tokens": 49152,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "cpu",
+        "cases": 12,
+        "hbm_bytes": 0,
+        "job": 2081,
+        "model": "exchange-d64-k-capacity-04e50b64a9",
+        "reserved_tokens": 6144,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 6,
+        "hbm_bytes": 8589934592,
+        "job": 2082,
+        "model": "exchange-d64-k-capacity-04e50b64a9",
+        "reserved_tokens": 24576,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "cpu",
+        "cases": 12,
+        "hbm_bytes": 0,
+        "job": 2083,
+        "model": "exchange-d64-k-independent-9af84f69cb",
+        "reserved_tokens": 6144,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 6,
+        "hbm_bytes": 8589934592,
+        "job": 2084,
+        "model": "exchange-d64-k-independent-9af84f69cb",
+        "reserved_tokens": 49152,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "cpu",
+        "cases": 12,
+        "hbm_bytes": 0,
+        "job": 2085,
+        "model": "exchange-d64-k-narrowwide-fdc0f72367",
+        "reserved_tokens": 6144,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 6,
+        "hbm_bytes": 12884901888,
+        "job": 2086,
+        "model": "exchange-d64-k-narrowwide-fdc0f72367",
+        "reserved_tokens": 98304,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "cpu",
+        "cases": 12,
+        "hbm_bytes": 0,
+        "job": 2087,
+        "model": "exchange-d64-k-pool-d1990a0160",
+        "reserved_tokens": 6144,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 6,
+        "hbm_bytes": 8589934592,
+        "job": 2088,
+        "model": "exchange-d64-k-pool-d1990a0160",
+        "reserved_tokens": 49152,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "cpu",
+        "cases": 12,
+        "hbm_bytes": 0,
+        "job": 2089,
+        "model": "exchange-d64-k-shannon-615836a776",
+        "reserved_tokens": 9216,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 6,
+        "hbm_bytes": 8589934592,
+        "job": 2090,
+        "model": "exchange-d64-k-shannon-615836a776",
+        "reserved_tokens": 73728,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "cpu",
+        "cases": 10,
+        "hbm_bytes": 0,
+        "job": 2091,
+        "model": "exchange-d64-s-base-f9310d4300",
+        "reserved_tokens": 5120,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 6,
+        "hbm_bytes": 20401094656,
+        "job": 2092,
+        "model": "exchange-d64-s-base-f9310d4300",
+        "reserved_tokens": 196608,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "cpu",
+        "cases": 10,
+        "hbm_bytes": 0,
+        "job": 2093,
+        "model": "exchange-d64-s-capacity-71f21161e3",
+        "reserved_tokens": 5120,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 6,
+        "hbm_bytes": 16106127360,
+        "job": 2094,
+        "model": "exchange-d64-s-capacity-71f21161e3",
+        "reserved_tokens": 98304,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "cpu",
+        "cases": 10,
+        "hbm_bytes": 0,
+        "job": 2095,
+        "model": "exchange-d64-s-independent-9bdefe8e73",
+        "reserved_tokens": 5120,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 6,
+        "hbm_bytes": 20401094656,
+        "job": 2096,
+        "model": "exchange-d64-s-independent-9bdefe8e73",
+        "reserved_tokens": 196608,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "cpu",
+        "cases": 10,
+        "hbm_bytes": 0,
+        "job": 2097,
+        "model": "exchange-d64-s-narrowwide-b198eda51d",
+        "reserved_tokens": 5120,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 6,
+        "hbm_bytes": 24696061952,
+        "job": 2098,
+        "model": "exchange-d64-s-narrowwide-b198eda51d",
+        "reserved_tokens": 196608,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "cpu",
+        "cases": 10,
+        "hbm_bytes": 0,
+        "job": 2099,
+        "model": "exchange-d64-s-pool-822470137c",
+        "reserved_tokens": 5120,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 6,
+        "hbm_bytes": 20401094656,
+        "job": 2100,
+        "model": "exchange-d64-s-pool-822470137c",
+        "reserved_tokens": 196608,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "cpu",
+        "cases": 10,
+        "hbm_bytes": 0,
+        "job": 2101,
+        "model": "exchange-d64-s-shannon-e8ace058ca",
+        "reserved_tokens": 7680,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 6,
+        "hbm_bytes": 20401094656,
+        "job": 2102,
+        "model": "exchange-d64-s-shannon-e8ace058ca",
+        "reserved_tokens": 294912,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "cpu",
+        "cases": 8,
+        "hbm_bytes": 0,
+        "job": 2103,
+        "model": "exchange-d64-x-base-82bbce7a91",
+        "reserved_tokens": 4096,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 6,
+        "hbm_bytes": 8589934592,
+        "job": 2104,
+        "model": "exchange-d64-x-base-82bbce7a91",
+        "reserved_tokens": 49152,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "cpu",
+        "cases": 8,
+        "hbm_bytes": 0,
+        "job": 2105,
+        "model": "exchange-d64-x-independent-c149ce99df",
+        "reserved_tokens": 4096,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 6,
+        "hbm_bytes": 8589934592,
+        "job": 2106,
+        "model": "exchange-d64-x-independent-c149ce99df",
+        "reserved_tokens": 49152,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "cpu",
+        "cases": 8,
+        "hbm_bytes": 0,
+        "job": 2107,
+        "model": "exchange-d64-x-shannon-6e8bf3fa7f",
+        "reserved_tokens": 6144,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 6,
+        "hbm_bytes": 8589934592,
+        "job": 2108,
+        "model": "exchange-d64-x-shannon-6e8bf3fa7f",
+        "reserved_tokens": 73728,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 16,
+        "hbm_bytes": 11811160064,
+        "job": 2109,
+        "model": "fc-d64-k-base-6a381e00da",
+        "reserved_tokens": 201728,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 16,
+        "hbm_bytes": 8589934592,
+        "job": 2110,
+        "model": "fc-d64-k-depth3-82a8ff2b30",
+        "reserved_tokens": 103424,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 16,
+        "hbm_bytes": 11811160064,
+        "job": 2111,
+        "model": "fc-d64-k-ffn1-ac09385120",
+        "reserved_tokens": 201728,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 16,
+        "hbm_bytes": 11811160064,
+        "job": 2112,
+        "model": "fc-d64-k-shared-6c8fbd0874",
+        "reserved_tokens": 201728,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 16,
+        "hbm_bytes": 11811160064,
+        "job": 2113,
+        "model": "fc-d64-s-base-30a947a88a",
+        "reserved_tokens": 201728,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 16,
+        "hbm_bytes": 12884901888,
+        "job": 2114,
+        "model": "fc-d64-s-depth3-960007ce16",
+        "reserved_tokens": 201728,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 16,
+        "hbm_bytes": 11811160064,
+        "job": 2115,
+        "model": "fc-d64-s-ffn1-ab57ed5c39",
+        "reserved_tokens": 201728,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 16,
+        "hbm_bytes": 11811160064,
+        "job": 2116,
+        "model": "fc-d64-s-shared-7239f57e95",
+        "reserved_tokens": 201728,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 16,
+        "hbm_bytes": 8589934592,
+        "job": 2117,
+        "model": "lattice-d64-k-base-23c0a95fd0",
+        "reserved_tokens": 103424,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 16,
+        "hbm_bytes": 8589934592,
+        "job": 2118,
+        "model": "lattice-d64-k-depth2-417579f46f",
+        "reserved_tokens": 54272,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 16,
+        "hbm_bytes": 8589934592,
+        "job": 2119,
+        "model": "lattice-d64-k-ffn2-f4ae630b9b",
+        "reserved_tokens": 103424,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 16,
+        "hbm_bytes": 8589934592,
+        "job": 2120,
+        "model": "lattice-d64-k-layershared-f07cadf26f",
+        "reserved_tokens": 103424,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 16,
+        "hbm_bytes": 8589934592,
+        "job": 2121,
+        "model": "lattice-d64-k-memoryshared-f296b03e23",
+        "reserved_tokens": 103424,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 16,
+        "hbm_bytes": 8589934592,
+        "job": 2122,
+        "model": "lattice-d64-k-nodes4-1e06d38bdb",
+        "reserved_tokens": 54272,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 16,
+        "hbm_bytes": 9663676416,
+        "job": 2123,
+        "model": "lattice-d64-k-receive128-f163ef6985",
+        "reserved_tokens": 103424,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 16,
+        "hbm_bytes": 8589934592,
+        "job": 2124,
+        "model": "lattice-d64-k-receive64-3c1639c9b9",
+        "reserved_tokens": 103424,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 16,
+        "hbm_bytes": 15032385536,
+        "job": 2125,
+        "model": "lattice-d64-s-base-0895c1ce27",
+        "reserved_tokens": 201728,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 16,
+        "hbm_bytes": 21474836480,
+        "job": 2126,
+        "model": "lattice-d64-s-depth2-5f26693f30",
+        "reserved_tokens": 201728,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 16,
+        "hbm_bytes": 15032385536,
+        "job": 2127,
+        "model": "lattice-d64-s-ffn2-0e362d7071",
+        "reserved_tokens": 201728,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 16,
+        "hbm_bytes": 15032385536,
+        "job": 2128,
+        "model": "lattice-d64-s-layershared-351ff0ef53",
+        "reserved_tokens": 201728,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 16,
+        "hbm_bytes": 15032385536,
+        "job": 2129,
+        "model": "lattice-d64-s-memoryshared-16897885fd",
+        "reserved_tokens": 201728,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 16,
+        "hbm_bytes": 19327352832,
+        "job": 2130,
+        "model": "lattice-d64-s-nodes4-3b597e8e65",
+        "reserved_tokens": 201728,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 16,
+        "hbm_bytes": 16106127360,
+        "job": 2131,
+        "model": "lattice-d64-s-receive128-623981f84d",
+        "reserved_tokens": 201728,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 16,
+        "hbm_bytes": 16106127360,
+        "job": 2132,
+        "model": "lattice-d64-s-receive64-8a0fbc01ad",
+        "reserved_tokens": 201728,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "cpu",
+        "cases": 10,
+        "hbm_bytes": 0,
+        "job": 2133,
+        "model": "multiscale_settle-d64-k-group5-4eb83f52ae",
+        "reserved_tokens": 5120,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 6,
+        "hbm_bytes": 8589934592,
+        "job": 2134,
+        "model": "multiscale_settle-d64-k-group5-4eb83f52ae",
+        "reserved_tokens": 49152,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "cpu",
+        "cases": 10,
+        "hbm_bytes": 0,
+        "job": 2135,
+        "model": "multiscale_settle-d64-k-mixed9-42e89ddc50",
+        "reserved_tokens": 5120,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 6,
+        "hbm_bytes": 8589934592,
+        "job": 2136,
+        "model": "multiscale_settle-d64-k-mixed9-42e89ddc50",
+        "reserved_tokens": 24576,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "cpu",
+        "cases": 10,
+        "hbm_bytes": 0,
+        "job": 2137,
+        "model": "multiscale_settle-d64-s-group5-6e6cec4898",
+        "reserved_tokens": 5120,
+        "scientific": null,
+        "status": "queued"
+      },
+      {
+        "backend": "npu",
+        "cases": 6,
+        "hbm_bytes": 22548578304,
+        "job": 2138,
+        "model": "multiscale_settle-d64-s-group5-6e6cec4898",
+        "reserved_tokens": 196608,
+        "scientific": null,
+        "status": "queued"
+      }
+    ],
+    "jobs": 93,
+    "matrix": {
+      "path": ".local/pilot-r3/resource-handoffs/signal-and-review-20261126/early/matrix.json",
+      "sha256": "e0fb9f1d06908c03b5db5ba841965f839f8966175cfd6f07cb7291011cdbdc59"
+    },
+    "missing_a2_inputs": 78,
+    "missing_a2_retirement_check": {
+      "path": ".local/pilot-r3/resource-handoffs/signal-and-review-20261126/early/missing-a2.json",
+      "sha256": "2dedb27f6dc1f019775691d48f2297dac8aaf6f58aba8a48b83f13326d854903"
+    },
+    "observed_arm_comparisons": {
+      "sample_changed": 24,
+      "sample_exact": 22,
+      "update_error_to_updated": 2
+    },
+    "original_selected": 42,
+    "original_unselected": 32,
+    "prepared_tokens": 6518528,
+    "probes": 813,
+    "reference_foundation": "6e14a6cc90e3ea1972611ee98b9de9bfea3b14fe",
+    "reservation_review": {
+      "path": ".local/pilot-r3/resource-handoffs/signal-and-review-20261126/early/reservation-admission.json",
+      "sha256": "bfd9a1e0afedc3bb60bf4e52446e014566d82aa43ddb525edaf7048870b259a8"
+    },
+    "saved_failure_result": {
+      "path": ".local/pilot-r3/resource-handoffs/signal-and-review-20261126/early/multiscale_settle-d64-k-singleton7-121b8d2af3/cpu/observations/comparison.json",
+      "sha256": "86c7b244c83fe56ce11ca1a06d32802f8cf58496059712fc2488f40154769224"
+    },
+    "source_review": {
+      "path": "docs/evidence/pilot-r3-deferred-74-review.json",
+      "sha256": "b97e8566f16b97fce04777fa439e6a6c908f095c89c5e0056ee014322d966269"
+    },
+    "states_by_model": {
+      "all_probe_jobs_completed": 10,
+      "started": 2,
+      "waiting": 62
+    },
+    "subjects": 74,
+    "subjects_with_missing_a2_inputs": 36,
+    "verdict": "sample evidence only; historical selections and B remain under review",
+    "weak_log_foundation": "e9bd14834df41ddf16c9e4ac30c1f03bad4db1a4"
+  },
+  "dispatcher_invocation": "06928c312d474a6b99b5d0b833b9985d",
+  "driver_sample_unix": 1795693824.1061747,
+  "host_after_reservations": 359963660736,
+  "host_available": 687356686336,
+  "observed_at": "2026-11-26T19:50:25.741773+08:00",
+  "original_workers": {
+    "naturally_completed": 2,
+    "same_pid_and_start_ticks": 55
+  },
+  "other_terminal": {},
+  "owner": ".local/pilot-r3/campaign-runq/round",
+  "previous_invocation": "f96092d4999048fdbad7c6a8ac47696d",
+  "previous_oom_retries": [
+    {
+      "first_step": 513,
+      "health_eligible": true,
+      "job": 1924,
+      "result": {
+        "path": ".local/pilot-r3/campaign-runq/round/tasks/low-activity-multiscale_timed-shannon-n16-d128-k1-e6b11ef228-weak-log-v1-a2-2026112001-r5/attempt-1/result.json",
+        "sha256": "dd2d2e29857f1c8dd737ff7b144b99787c93c56b6772bdcf90ce113528a4c638"
+      }
+    },
+    {
+      "first_step": 513,
+      "health_eligible": true,
+      "job": 1925,
+      "result": {
+        "path": ".local/pilot-r3/campaign-runq/round/tasks/low-activity-multiscale_timed-shannon-n16-d128-k1-e6b11ef228-weak-log-v1-a2-2026112002-r5/attempt-1/result.json",
+        "sha256": "48cc53e5e737ff4a9558fa9d504538737f808a5d27785d40bdca77fb869543cf"
+      }
+    },
+    {
+      "first_step": 1,
+      "health_eligible": true,
+      "job": 1921,
+      "result": {
+        "path": ".local/pilot-r3/campaign-runq/round/tasks/low-activity-multiscale_timed-mixed-n16-d128-k2-e852e73b26-a1-2026112002-r0/attempt-1/result.json",
+        "sha256": "58679679234915237677c4645fd9d84400c72cc25cd9b242b592ca9031de3181"
+      }
+    },
+    {
+      "first_step": 1,
+      "health_eligible": true,
+      "job": 1919,
+      "result": {
+        "path": ".local/pilot-r3/campaign-runq/round/tasks/low-activity-multiscale_timed-mixed-n16-d128-k4-ae78164f7a-a1-2026112002-r0/attempt-1/result.json",
+        "sha256": "5cd8070ebf217e7580bf82fe389b3a8f97af7bd07ba47874c0ba85988cff61a9"
+      }
+    },
+    {
+      "first_step": 1,
+      "health_eligible": true,
+      "job": 1920,
+      "result": {
+        "path": ".local/pilot-r3/campaign-runq/round/tasks/low-activity-multiscale_timed-mixed-n16-d128-k4-ae78164f7a-a1-2026112001-r1/attempt-1/result.json",
+        "sha256": "ce987be012c9463376814cd9d3daa03411133e29ca8a6eed047c0153ee394fe8"
+      }
+    },
+    {
+      "first_step": 1,
+      "health_eligible": true,
+      "job": 1922,
+      "result": {
+        "path": ".local/pilot-r3/campaign-runq/round/tasks/low-activity-multiscale_timed-mixed-n16-d128-k1-d8614748b3-a1-2026112001-r0/attempt-1/result.json",
+        "sha256": "41798c078d073303d2f79854a007bdccf55e3f2a5b37af68bcc76d1282cb7461"
+      }
+    },
+    {
+      "first_step": 1,
+      "health_eligible": true,
+      "job": 1923,
+      "result": {
+        "path": ".local/pilot-r3/campaign-runq/round/tasks/low-activity-multiscale_timed-mixed-n16-d128-k1-d8614748b3-a1-2026112001-r1/attempt-1/result.json",
+        "sha256": "f64e01e7276f32caabc1c996a79a481cd7713639fcc75d3c80b1a3435c610f1c"
+      }
+    }
+  ],
+  "schema": "pilot-r3-signal-resume-and-deferred-probes-v1",
+  "selected_current": 206,
+  "signal": {
+    "admission": {
+      "path": ".local/pilot-r3/resource-handoffs/signal-and-review-20261126/admission.json",
+      "sha256": "8d9de7bf9f1531fed42426ae798b4ff35efcd3411086b817c2e547c9bd437320"
+    },
+    "by_stage": {
+      "a1": {
+        "completed": 4,
+        "queued": 13,
+        "running": 17
+      },
+      "a2": {
+        "running": 48
+      },
+      "a3": {
+        "running": 18
+      }
+    },
+    "entries": [
+      {
+        "additional_eval_tokens": 32,
+        "card": 0,
+        "checkpoint_step": 7245,
+        "first_successor": 7246,
+        "job": 1946,
+        "model": "low-activity-multiscale_settle-checkerboard-n16-d128-k4-00a516afc3",
+        "old_job": 1156,
+        "phase": "a3",
+        "status": "running",
+        "task": "low-activity-multiscale_settle-checkerboard-n16-d128-k4-00a516afc3-a3-2026112002-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 1,
+        "checkpoint_step": 3471,
+        "first_successor": 3472,
+        "job": 1947,
+        "model": "low-activity-exchange-memory_x_reverse-n16-d128-k4-357bd4038f",
+        "old_job": 290,
+        "phase": "a3",
+        "status": "running",
+        "task": "low-activity-exchange-memory_x_reverse-n16-d128-k4-357bd4038f-a3-2026112001-r5"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 2,
+        "checkpoint_step": 3372,
+        "first_successor": 3373,
+        "job": 1948,
+        "model": "low-activity-multiscale_settle-checkerboard-n16-d128-k2-23aa540a44",
+        "old_job": 1157,
+        "phase": "a3",
+        "status": "running",
+        "task": "low-activity-multiscale_settle-checkerboard-n16-d128-k2-23aa540a44-a3-2026112001-r5"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 3,
+        "checkpoint_step": 3251,
+        "first_successor": 3252,
+        "job": 1949,
+        "model": "low-activity-exchange-memory_x_reverse-n16-d128-k4-357bd4038f",
+        "old_job": 291,
+        "phase": "a3",
+        "status": "running",
+        "task": "low-activity-exchange-memory_x_reverse-n16-d128-k4-357bd4038f-a3-2026112002-r5"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 4,
+        "checkpoint_step": 6178,
+        "first_successor": 6179,
+        "job": 1950,
+        "model": "low-activity-exchange-memory_x_reverse-n16-d128-k1-4bee93c901",
+        "old_job": 245,
+        "phase": "a3",
+        "status": "running",
+        "task": "low-activity-exchange-memory_x_reverse-n16-d128-k1-4bee93c901-a3-2026112002-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 5,
+        "checkpoint_step": 6175,
+        "first_successor": 6176,
+        "job": 1951,
+        "model": "low-activity-exchange-memory_x_reverse-n16-d128-k1-4bee93c901",
+        "old_job": 244,
+        "phase": "a3",
+        "status": "running",
+        "task": "low-activity-exchange-memory_x_reverse-n16-d128-k1-4bee93c901-a3-2026112001-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 6,
+        "checkpoint_step": 2909,
+        "first_successor": 2910,
+        "job": 1952,
+        "model": "low-activity-multiscale_settle-checkerboard-n16-d128-k8-897aa71394",
+        "old_job": 1228,
+        "phase": "a3",
+        "status": "running",
+        "task": "low-activity-multiscale_settle-checkerboard-n16-d128-k8-897aa71394-a3-2026112002-r5"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 9,
+        "checkpoint_step": 2826,
+        "first_successor": 2827,
+        "job": 1953,
+        "model": "low-activity-multiscale_settle-mixed-n16-d128-k4-e0f4b08e1b",
+        "old_job": 1273,
+        "phase": "a3",
+        "status": "running",
+        "task": "low-activity-multiscale_settle-mixed-n16-d128-k4-e0f4b08e1b-a3-2026112001-r5"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 11,
+        "checkpoint_step": 5619,
+        "first_successor": 5620,
+        "job": 1954,
+        "model": "low-activity-exchange-independent-n16-d128-k4-2703e595d5",
+        "old_job": 304,
+        "phase": "a3",
+        "status": "running",
+        "task": "low-activity-exchange-independent-n16-d128-k4-2703e595d5-a3-2026112002-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 15,
+        "checkpoint_step": 5580,
+        "first_successor": 5581,
+        "job": 1955,
+        "model": "multiscale_timed-d128-s-mixed9-542e33dbf6",
+        "old_job": 9,
+        "phase": "a3",
+        "status": "running",
+        "task": "multiscale_timed-d128-s-mixed9-542e33dbf6-a3-2026112002-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 14,
+        "checkpoint_step": 5447,
+        "first_successor": 5448,
+        "job": 1956,
+        "model": "low-activity-multiscale_settle-mixed-n16-d128-k8-8d6d1ac268",
+        "old_job": 1221,
+        "phase": "a3",
+        "status": "running",
+        "task": "low-activity-multiscale_settle-mixed-n16-d128-k8-8d6d1ac268-a3-2026112001-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 0,
+        "checkpoint_step": 5420,
+        "first_successor": 5421,
+        "job": 1957,
+        "model": "low-activity-multiscale_settle-mixed-n16-d128-k8-8d6d1ac268",
+        "old_job": 1222,
+        "phase": "a3",
+        "status": "running",
+        "task": "low-activity-multiscale_settle-mixed-n16-d128-k8-8d6d1ac268-a3-2026112002-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 1,
+        "checkpoint_step": 2574,
+        "first_successor": 2575,
+        "job": 1958,
+        "model": "low-activity-multiscale_settle-shannon-n16-d128-k2-3d7b3a8c15",
+        "old_job": 1360,
+        "phase": "a3",
+        "status": "running",
+        "task": "low-activity-multiscale_settle-shannon-n16-d128-k2-3d7b3a8c15-a3-2026112002-r5"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 3,
+        "checkpoint_step": 4848,
+        "first_successor": 4849,
+        "job": 1959,
+        "model": "low-activity-multiscale_settle-shannon-n16-d128-k8-4a9d8c5fb0",
+        "old_job": 1333,
+        "phase": "a3",
+        "status": "running",
+        "task": "low-activity-multiscale_settle-shannon-n16-d128-k8-4a9d8c5fb0-a3-2026112001-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 5,
+        "checkpoint_step": 4657,
+        "first_successor": 4658,
+        "job": 1960,
+        "model": "low-activity-multiscale_settle-shannon-n16-d128-k1-3864591e54",
+        "old_job": 1331,
+        "phase": "a3",
+        "status": "running",
+        "task": "low-activity-multiscale_settle-shannon-n16-d128-k1-3864591e54-a3-2026112001-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 4,
+        "checkpoint_step": 4643,
+        "first_successor": 4644,
+        "job": 1961,
+        "model": "exchange-d256-s-base-05c8908295",
+        "old_job": 506,
+        "phase": "a3",
+        "status": "running",
+        "task": "exchange-d256-s-base-05c8908295-a3-2026112001-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 6,
+        "checkpoint_step": 4542,
+        "first_successor": 4543,
+        "job": 1962,
+        "model": "low-activity-multiscale_settle-shannon-n16-d128-k8-4a9d8c5fb0",
+        "old_job": 1334,
+        "phase": "a3",
+        "status": "running",
+        "task": "low-activity-multiscale_settle-shannon-n16-d128-k8-4a9d8c5fb0-a3-2026112002-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 7,
+        "checkpoint_step": 4530,
+        "first_successor": 4531,
+        "job": 1963,
+        "model": "exchange-d256-s-base-05c8908295",
+        "old_job": 507,
+        "phase": "a3",
+        "status": "running",
+        "task": "exchange-d256-s-base-05c8908295-a3-2026112002-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 8,
+        "checkpoint_step": 1867,
+        "first_successor": 1868,
+        "job": 1964,
+        "model": "low-activity-exchange-shannon-n16-d128-k2-620fe47109",
+        "old_job": 289,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-exchange-shannon-n16-d128-k2-620fe47109-a2-2026112002-r5"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 9,
+        "checkpoint_step": 3606,
+        "first_successor": 3607,
+        "job": 1965,
+        "model": "low-activity-fc-depth3-n16-d128-k1-98601618df",
+        "old_job": 1299,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-fc-depth3-n16-d128-k1-98601618df-a2-2026112001-r1"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 10,
+        "checkpoint_step": 1715,
+        "first_successor": 1716,
+        "job": 1966,
+        "model": "low-activity-exchange-kv64-n16-d128-k4-d09a10a046",
+        "old_job": 352,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-exchange-kv64-n16-d128-k4-d09a10a046-a2-2026112001-r5"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 11,
+        "checkpoint_step": 1615,
+        "first_successor": 1616,
+        "job": 1967,
+        "model": "low-activity-exchange-hub_fixed-n16-d128-k8-6ffe851fb6",
+        "old_job": 356,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-exchange-hub_fixed-n16-d128-k8-6ffe851fb6-a2-2026112001-r5"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 15,
+        "checkpoint_step": 3141,
+        "first_successor": 3142,
+        "job": 1968,
+        "model": "low-activity-fc-depth3-n16-d128-k1-98601618df",
+        "old_job": 1302,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-fc-depth3-n16-d128-k1-98601618df-a2-2026112002-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 0,
+        "checkpoint_step": 1404,
+        "first_successor": 1405,
+        "job": 1969,
+        "model": "low-activity-exchange-kv64-n16-d128-k2-1e8f3a450a",
+        "old_job": 361,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-exchange-kv64-n16-d128-k2-1e8f3a450a-a2-2026112002-r5"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 1,
+        "checkpoint_step": 1366,
+        "first_successor": 1367,
+        "job": 1970,
+        "model": "low-activity-exchange-kv64-n16-d128-k2-1e8f3a450a",
+        "old_job": 360,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-exchange-kv64-n16-d128-k2-1e8f3a450a-a2-2026112001-r5"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 3,
+        "checkpoint_step": 2683,
+        "first_successor": 2684,
+        "job": 1971,
+        "model": "low-activity-fc-depth3-n16-d128-k1-98601618df",
+        "old_job": 1301,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-fc-depth3-n16-d128-k1-98601618df-a2-2026112001-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 6,
+        "checkpoint_step": 1297,
+        "first_successor": 1298,
+        "job": 1972,
+        "model": "low-activity-exchange-hub_fixed-n16-d128-k4-cfdf7264d5",
+        "old_job": 421,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-exchange-hub_fixed-n16-d128-k4-cfdf7264d5-a2-2026112001-r5"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 7,
+        "checkpoint_step": 1285,
+        "first_successor": 1286,
+        "job": 1973,
+        "model": "low-activity-exchange-kv64-n16-d128-k1-66f7e86397",
+        "old_job": 400,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-exchange-kv64-n16-d128-k1-66f7e86397-a2-2026112002-r5"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 8,
+        "checkpoint_step": 1279,
+        "first_successor": 1280,
+        "job": 1974,
+        "model": "low-activity-exchange-hub_fixed-n16-d128-k4-cfdf7264d5",
+        "old_job": 422,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-exchange-hub_fixed-n16-d128-k4-cfdf7264d5-a2-2026112002-r5"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 9,
+        "checkpoint_step": 1267,
+        "first_successor": 1268,
+        "job": 1975,
+        "model": "low-activity-exchange-kv64-n16-d128-k1-66f7e86397",
+        "old_job": 399,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-exchange-kv64-n16-d128-k1-66f7e86397-a2-2026112001-r5"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 10,
+        "checkpoint_step": 2408,
+        "first_successor": 2409,
+        "job": 1976,
+        "model": "low-activity-exchange-kv64-n16-d128-k4-d09a10a046",
+        "old_job": 350,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-exchange-kv64-n16-d128-k4-d09a10a046-a2-2026112001-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 11,
+        "checkpoint_step": 2396,
+        "first_successor": 2397,
+        "job": 1977,
+        "model": "low-activity-exchange-kv64-n16-d128-k4-d09a10a046",
+        "old_job": 351,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-exchange-kv64-n16-d128-k4-d09a10a046-a2-2026112002-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 15,
+        "checkpoint_step": 2335,
+        "first_successor": 2336,
+        "job": 1978,
+        "model": "low-activity-exchange-shannon-n16-d128-k1-fd73891083",
+        "old_job": 331,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-exchange-shannon-n16-d128-k1-fd73891083-a2-2026112001-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 0,
+        "checkpoint_step": 2322,
+        "first_successor": 2323,
+        "job": 1979,
+        "model": "low-activity-exchange-hub_fixed-n16-d128-k8-6ffe851fb6",
+        "old_job": 354,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-exchange-hub_fixed-n16-d128-k8-6ffe851fb6-a2-2026112001-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 1,
+        "checkpoint_step": 1152,
+        "first_successor": 1153,
+        "job": 1980,
+        "model": "low-activity-exchange-hub_fixed-n16-d128-k2-4e923f1605",
+        "old_job": 438,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-exchange-hub_fixed-n16-d128-k2-4e923f1605-a2-2026112002-r5"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 3,
+        "checkpoint_step": 2294,
+        "first_successor": 2295,
+        "job": 1981,
+        "model": "low-activity-fc-depth3-n16-d128-k2-7cf0ffa8b3",
+        "old_job": 1379,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-fc-depth3-n16-d128-k2-7cf0ffa8b3-a2-2026112001-r1"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 6,
+        "checkpoint_step": 1127,
+        "first_successor": 1128,
+        "job": 1982,
+        "model": "low-activity-exchange-hub_fixed-n16-d128-k2-4e923f1605",
+        "old_job": 437,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-exchange-hub_fixed-n16-d128-k2-4e923f1605-a2-2026112001-r5"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 7,
+        "checkpoint_step": 2241,
+        "first_successor": 2242,
+        "job": 1983,
+        "model": "low-activity-exchange-shannon-n16-d128-k1-fd73891083",
+        "old_job": 332,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-exchange-shannon-n16-d128-k1-fd73891083-a2-2026112002-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 8,
+        "checkpoint_step": 2130,
+        "first_successor": 2131,
+        "job": 1984,
+        "model": "low-activity-fc-depth3-n16-d128-k8-dd9f3c5f19",
+        "old_job": 1377,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-fc-depth3-n16-d128-k8-dd9f3c5f19-a2-2026112001-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 9,
+        "checkpoint_step": 2116,
+        "first_successor": 2117,
+        "job": 1985,
+        "model": "low-activity-fc-depth3-n16-d128-k8-dd9f3c5f19",
+        "old_job": 1378,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-fc-depth3-n16-d128-k8-dd9f3c5f19-a2-2026112002-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 10,
+        "checkpoint_step": 2105,
+        "first_successor": 2106,
+        "job": 1986,
+        "model": "low-activity-exchange-hub_fixed-n16-d128-k8-6ffe851fb6",
+        "old_job": 355,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-exchange-hub_fixed-n16-d128-k8-6ffe851fb6-a2-2026112002-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 11,
+        "checkpoint_step": 2071,
+        "first_successor": 2072,
+        "job": 1987,
+        "model": "low-activity-fc-depth3-n16-d128-k2-7cf0ffa8b3",
+        "old_job": 1382,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-fc-depth3-n16-d128-k2-7cf0ffa8b3-a2-2026112002-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 15,
+        "checkpoint_step": 2031,
+        "first_successor": 2032,
+        "job": 1988,
+        "model": "low-activity-exchange-kv64-n16-d128-k2-1e8f3a450a",
+        "old_job": 358,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-exchange-kv64-n16-d128-k2-1e8f3a450a-a2-2026112001-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 0,
+        "checkpoint_step": 2019,
+        "first_successor": 2020,
+        "job": 1989,
+        "model": "low-activity-exchange-kv64-n16-d128-k1-66f7e86397",
+        "old_job": 397,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-exchange-kv64-n16-d128-k1-66f7e86397-a2-2026112001-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 1,
+        "checkpoint_step": 1906,
+        "first_successor": 1907,
+        "job": 1990,
+        "model": "low-activity-exchange-kv64-n16-d128-k2-1e8f3a450a",
+        "old_job": 359,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-exchange-kv64-n16-d128-k2-1e8f3a450a-a2-2026112002-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 3,
+        "checkpoint_step": 1896,
+        "first_successor": 1897,
+        "job": 1991,
+        "model": "low-activity-exchange-hub_fixed-n16-d128-k2-4e923f1605",
+        "old_job": 436,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-exchange-hub_fixed-n16-d128-k2-4e923f1605-a2-2026112002-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 6,
+        "checkpoint_step": 1887,
+        "first_successor": 1888,
+        "job": 1992,
+        "model": "low-activity-exchange-hub_fixed-n16-d128-k4-cfdf7264d5",
+        "old_job": 420,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-exchange-hub_fixed-n16-d128-k4-cfdf7264d5-a2-2026112002-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 7,
+        "checkpoint_step": 1868,
+        "first_successor": 1869,
+        "job": 1993,
+        "model": "low-activity-exchange-hub_fixed-n16-d128-k2-4e923f1605",
+        "old_job": 435,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-exchange-hub_fixed-n16-d128-k2-4e923f1605-a2-2026112001-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 8,
+        "checkpoint_step": 1749,
+        "first_successor": 1750,
+        "job": 1994,
+        "model": "low-activity-fc-depth3-n16-d128-k2-7cf0ffa8b3",
+        "old_job": 1381,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-fc-depth3-n16-d128-k2-7cf0ffa8b3-a2-2026112001-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 9,
+        "checkpoint_step": 1711,
+        "first_successor": 1712,
+        "job": 1995,
+        "model": "low-activity-fc-base-n16-d128-k8-2a7e46028d",
+        "old_job": 544,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-fc-base-n16-d128-k8-2a7e46028d-a2-2026112001-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 10,
+        "checkpoint_step": 1656,
+        "first_successor": 1657,
+        "job": 1996,
+        "model": "low-activity-fc-base-n16-d128-k8-2a7e46028d",
+        "old_job": 542,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-fc-base-n16-d128-k8-2a7e46028d-a2-2026112001-r1"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 11,
+        "checkpoint_step": 1653,
+        "first_successor": 1654,
+        "job": 1997,
+        "model": "low-activity-fc-base-n16-d128-k8-2a7e46028d",
+        "old_job": 543,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-fc-base-n16-d128-k8-2a7e46028d-a2-2026112002-r1"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 15,
+        "checkpoint_step": 1626,
+        "first_successor": 1627,
+        "job": 1998,
+        "model": "low-activity-multiscale_timed-base-n16-d128-k2-b6c1fcc873",
+        "old_job": 1261,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-multiscale_timed-base-n16-d128-k2-b6c1fcc873-a2-2026112002-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 0,
+        "checkpoint_step": 1615,
+        "first_successor": 1616,
+        "job": 1999,
+        "model": "low-activity-multiscale_timed-base-n16-d128-k8-dc4993b3ca",
+        "old_job": 1250,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-multiscale_timed-base-n16-d128-k8-dc4993b3ca-a2-2026112001-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 1,
+        "checkpoint_step": 1499,
+        "first_successor": 1500,
+        "job": 2000,
+        "model": "low-activity-fc-depth3-n16-d128-k4-9f824da109",
+        "old_job": 1389,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-fc-depth3-n16-d128-k4-9f824da109-a2-2026112001-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 3,
+        "checkpoint_step": 731,
+        "first_successor": 732,
+        "job": 2001,
+        "model": "low-activity-multiscale_timed-base-n16-d128-k8-dc4993b3ca",
+        "old_job": 1252,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-multiscale_timed-base-n16-d128-k8-dc4993b3ca-a2-2026112001-r5"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 6,
+        "checkpoint_step": 1404,
+        "first_successor": 1405,
+        "job": 2002,
+        "model": "low-activity-exchange-hub_fixed-n16-d128-k1-d99c58a8d5",
+        "old_job": 439,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-exchange-hub_fixed-n16-d128-k1-d99c58a8d5-a2-2026112001-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 7,
+        "checkpoint_step": 1373,
+        "first_successor": 1374,
+        "job": 2003,
+        "model": "low-activity-exchange-hub_fixed-n16-d128-k1-d99c58a8d5",
+        "old_job": 440,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-exchange-hub_fixed-n16-d128-k1-d99c58a8d5-a2-2026112002-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 11,
+        "checkpoint_step": 599,
+        "first_successor": 600,
+        "job": 2004,
+        "model": "low-activity-multiscale_timed-base-n16-d128-k2-b6c1fcc873",
+        "old_job": 1263,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-multiscale_timed-base-n16-d128-k2-b6c1fcc873-a2-2026112002-r5"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 8,
+        "checkpoint_step": 1195,
+        "first_successor": 1196,
+        "job": 2005,
+        "model": "low-activity-lattice-memory_s-n16-d128-k8-b4c73a72e8",
+        "old_job": 1427,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-lattice-memory_s-n16-d128-k8-b4c73a72e8-a2-2026112001-r1"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 9,
+        "checkpoint_step": 1171,
+        "first_successor": 1172,
+        "job": 2006,
+        "model": "low-activity-lattice-memory_s-n16-d128-k8-b4c73a72e8",
+        "old_job": 1430,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-lattice-memory_s-n16-d128-k8-b4c73a72e8-a2-2026112002-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 15,
+        "checkpoint_step": 1147,
+        "first_successor": 1148,
+        "job": 2007,
+        "model": "exchange-d256-s-independent-c47e3ed498",
+        "old_job": 1412,
+        "phase": "a2",
+        "status": "running",
+        "task": "exchange-d256-s-independent-c47e3ed498-a2-2026112002-r1"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 0,
+        "checkpoint_step": 1137,
+        "first_successor": 1138,
+        "job": 2008,
+        "model": "low-activity-lattice-memory_s-n16-d128-k8-b4c73a72e8",
+        "old_job": 1429,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-lattice-memory_s-n16-d128-k8-b4c73a72e8-a2-2026112001-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 1,
+        "checkpoint_step": 1136,
+        "first_successor": 1137,
+        "job": 2009,
+        "model": "exchange-d256-s-independent-c47e3ed498",
+        "old_job": 1413,
+        "phase": "a2",
+        "status": "running",
+        "task": "exchange-d256-s-independent-c47e3ed498-a2-2026112001-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 3,
+        "checkpoint_step": 1085,
+        "first_successor": 1086,
+        "job": 2010,
+        "model": "low-activity-lattice-memory_s-n16-d128-k8-b4c73a72e8",
+        "old_job": 1428,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-lattice-memory_s-n16-d128-k8-b4c73a72e8-a2-2026112002-r1"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 6,
+        "checkpoint_step": 515,
+        "first_successor": 516,
+        "job": 2011,
+        "model": "low-activity-multiscale_timed-base-n16-d128-k4-1b1144d02a",
+        "old_job": 1330,
+        "phase": "a2",
+        "status": "running",
+        "task": "low-activity-multiscale_timed-base-n16-d128-k4-1b1144d02a-a2-2026112002-r5"
+      },
+      {
+        "additional_eval_tokens": 16160,
+        "card": 7,
+        "checkpoint_step": 1024,
+        "first_successor": null,
+        "job": 2012,
+        "model": "low-activity-multiscale_timed-memory_s-n16-d128-k1-8ed85eb638",
+        "old_job": 1177,
+        "phase": "a1",
+        "status": "completed",
+        "task": "low-activity-multiscale_timed-memory_s-n16-d128-k1-8ed85eb638-a1-2026112002-r1"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 8,
+        "checkpoint_step": 1006,
+        "first_successor": 1007,
+        "job": 2013,
+        "model": "low-activity-multiscale_timed-memory_s-n16-d128-k8-d8d522634a",
+        "old_job": 1120,
+        "phase": "a1",
+        "status": "running",
+        "task": "low-activity-multiscale_timed-memory_s-n16-d128-k8-d8d522634a-a1-2026112001-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 9,
+        "checkpoint_step": 1005,
+        "first_successor": 1006,
+        "job": 2014,
+        "model": "low-activity-lattice-memory_s-n16-d128-k2-f03f0cb004",
+        "old_job": 1368,
+        "phase": "a1",
+        "status": "completed",
+        "task": "low-activity-lattice-memory_s-n16-d128-k2-f03f0cb004-a1-2026112002-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 15,
+        "checkpoint_step": 995,
+        "first_successor": 996,
+        "job": 2015,
+        "model": "low-activity-multiscale_timed-memory_s-n16-d128-k4-a26c4e31cb",
+        "old_job": 1163,
+        "phase": "a1",
+        "status": "running",
+        "task": "low-activity-multiscale_timed-memory_s-n16-d128-k4-a26c4e31cb-a1-2026112002-r0"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 0,
+        "checkpoint_step": 988,
+        "first_successor": 989,
+        "job": 2016,
+        "model": "low-activity-multiscale_timed-memory_s-n16-d128-k4-a26c4e31cb",
+        "old_job": 1162,
+        "phase": "a1",
+        "status": "running",
+        "task": "low-activity-multiscale_timed-memory_s-n16-d128-k4-a26c4e31cb-a1-2026112001-r0"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 10,
+        "checkpoint_step": 988,
+        "first_successor": 989,
+        "job": 2017,
+        "model": "low-activity-multiscale_timed-singleton-n16-d128-k8-ae40078b73",
+        "old_job": 1198,
+        "phase": "a1",
+        "status": "running",
+        "task": "low-activity-multiscale_timed-singleton-n16-d128-k8-ae40078b73-a1-2026112001-r0"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": null,
+        "checkpoint_step": 493,
+        "first_successor": null,
+        "job": 2018,
+        "model": "low-activity-multiscale_timed-checkerboard-n16-d128-k8-b71bd8a452",
+        "old_job": 1286,
+        "phase": "a1",
+        "status": "queued",
+        "task": "low-activity-multiscale_timed-checkerboard-n16-d128-k8-b71bd8a452-a1-2026112002-r5"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 1,
+        "checkpoint_step": 983,
+        "first_successor": 984,
+        "job": 2019,
+        "model": "low-activity-multiscale_timed-memory_s-n16-d128-k2-41e5eb9c54",
+        "old_job": 1187,
+        "phase": "a1",
+        "status": "running",
+        "task": "low-activity-multiscale_timed-memory_s-n16-d128-k2-41e5eb9c54-a1-2026112002-r0"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 7,
+        "checkpoint_step": 974,
+        "first_successor": 975,
+        "job": 2020,
+        "model": "low-activity-multiscale_timed-memory_s-n16-d128-k1-8ed85eb638",
+        "old_job": 1179,
+        "phase": "a1",
+        "status": "running",
+        "task": "low-activity-multiscale_timed-memory_s-n16-d128-k1-8ed85eb638-a1-2026112002-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 10,
+        "checkpoint_step": 968,
+        "first_successor": 969,
+        "job": 2021,
+        "model": "low-activity-multiscale_timed-memory_s-n16-d128-k8-d8d522634a",
+        "old_job": 1118,
+        "phase": "a1",
+        "status": "running",
+        "task": "low-activity-multiscale_timed-memory_s-n16-d128-k8-d8d522634a-a1-2026112001-r1"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 10,
+        "checkpoint_step": 956,
+        "first_successor": 957,
+        "job": 2022,
+        "model": "low-activity-multiscale_timed-memory_s-n16-d128-k2-41e5eb9c54",
+        "old_job": 1186,
+        "phase": "a1",
+        "status": "running",
+        "task": "low-activity-multiscale_timed-memory_s-n16-d128-k2-41e5eb9c54-a1-2026112001-r0"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 7,
+        "checkpoint_step": 942,
+        "first_successor": 943,
+        "job": 2023,
+        "model": "low-activity-multiscale_timed-memory_s-n16-d128-k2-41e5eb9c54",
+        "old_job": 1188,
+        "phase": "a1",
+        "status": "running",
+        "task": "low-activity-multiscale_timed-memory_s-n16-d128-k2-41e5eb9c54-a1-2026112001-r1"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 11,
+        "checkpoint_step": 460,
+        "first_successor": 461,
+        "job": 2024,
+        "model": "low-activity-multiscale_settle-memory_k-n16-d128-k4-1e00fd30bf",
+        "old_job": 485,
+        "phase": "a1",
+        "status": "completed",
+        "task": "low-activity-multiscale_settle-memory_k-n16-d128-k4-1e00fd30bf-a1-2026112002-r3"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": null,
+        "checkpoint_step": 915,
+        "first_successor": null,
+        "job": 2025,
+        "model": "low-activity-multiscale_timed-memory_s-n16-d128-k4-a26c4e31cb",
+        "old_job": 1166,
+        "phase": "a1",
+        "status": "queued",
+        "task": "low-activity-multiscale_timed-memory_s-n16-d128-k4-a26c4e31cb-a1-2026112001-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": null,
+        "checkpoint_step": 911,
+        "first_successor": null,
+        "job": 2026,
+        "model": "low-activity-multiscale_timed-memory_s-n16-d128-k2-41e5eb9c54",
+        "old_job": 1189,
+        "phase": "a1",
+        "status": "queued",
+        "task": "low-activity-multiscale_timed-memory_s-n16-d128-k2-41e5eb9c54-a1-2026112002-r1"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": null,
+        "checkpoint_step": 908,
+        "first_successor": null,
+        "job": 2027,
+        "model": "low-activity-multiscale_timed-memory_s-n16-d128-k4-a26c4e31cb",
+        "old_job": 1167,
+        "phase": "a1",
+        "status": "queued",
+        "task": "low-activity-multiscale_timed-memory_s-n16-d128-k4-a26c4e31cb-a1-2026112002-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 3,
+        "checkpoint_step": 891,
+        "first_successor": 892,
+        "job": 2028,
+        "model": "low-activity-lattice-memory_s-n16-d128-k2-f03f0cb004",
+        "old_job": 1364,
+        "phase": "a1",
+        "status": "completed",
+        "task": "low-activity-lattice-memory_s-n16-d128-k2-f03f0cb004-a1-2026112002-r0"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": null,
+        "checkpoint_step": 836,
+        "first_successor": null,
+        "job": 2029,
+        "model": "low-activity-multiscale_timed-checkerboard-n16-d128-k8-b71bd8a452",
+        "old_job": 1280,
+        "phase": "a1",
+        "status": "queued",
+        "task": "low-activity-multiscale_timed-checkerboard-n16-d128-k8-b71bd8a452-a1-2026112002-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": null,
+        "checkpoint_step": 815,
+        "first_successor": null,
+        "job": 2030,
+        "model": "low-activity-multiscale_timed-checkerboard-n16-d128-k8-b71bd8a452",
+        "old_job": 1279,
+        "phase": "a1",
+        "status": "queued",
+        "task": "low-activity-multiscale_timed-checkerboard-n16-d128-k8-b71bd8a452-a1-2026112001-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 8,
+        "checkpoint_step": 404,
+        "first_successor": 405,
+        "job": 2031,
+        "model": "low-activity-multiscale_settle-memory_k-n16-d128-k2-4f940141f8",
+        "old_job": 497,
+        "phase": "a1",
+        "status": "running",
+        "task": "low-activity-multiscale_settle-memory_k-n16-d128-k2-4f940141f8-a1-2026112002-r3"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 9,
+        "checkpoint_step": 358,
+        "first_successor": 359,
+        "job": 2032,
+        "model": "low-activity-multiscale_settle-memory_k-n16-d128-k2-4f940141f8",
+        "old_job": 501,
+        "phase": "a1",
+        "status": "running",
+        "task": "low-activity-multiscale_settle-memory_k-n16-d128-k2-4f940141f8-a1-2026112002-r5"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 15,
+        "checkpoint_step": 694,
+        "first_successor": 695,
+        "job": 2033,
+        "model": "low-activity-multiscale_settle-memory_k-n16-d128-k4-1e00fd30bf",
+        "old_job": 482,
+        "phase": "a1",
+        "status": "running",
+        "task": "low-activity-multiscale_settle-memory_k-n16-d128-k4-1e00fd30bf-a1-2026112001-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 0,
+        "checkpoint_step": 636,
+        "first_successor": 637,
+        "job": 2034,
+        "model": "low-activity-multiscale_settle-memory_k-n16-d128-k4-1e00fd30bf",
+        "old_job": 478,
+        "phase": "a1",
+        "status": "running",
+        "task": "low-activity-multiscale_settle-memory_k-n16-d128-k4-1e00fd30bf-a1-2026112001-r0"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 8,
+        "checkpoint_step": 549,
+        "first_successor": 550,
+        "job": 2035,
+        "model": "low-activity-multiscale_settle-memory_k-n16-d128-k2-4f940141f8",
+        "old_job": 492,
+        "phase": "a1",
+        "status": "running",
+        "task": "low-activity-multiscale_settle-memory_k-n16-d128-k2-4f940141f8-a1-2026112001-r1"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 9,
+        "checkpoint_step": 155,
+        "first_successor": 156,
+        "job": 2036,
+        "model": "low-activity-multiscale_settle-memory_k-n16-d128-k1-907c2937ac",
+        "old_job": 524,
+        "phase": "a1",
+        "status": "running",
+        "task": "low-activity-multiscale_settle-memory_k-n16-d128-k1-907c2937ac-a1-2026112001-r3"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": null,
+        "checkpoint_step": 148,
+        "first_successor": null,
+        "job": 2037,
+        "model": "low-activity-multiscale_settle-memory_k-n16-d128-k1-907c2937ac",
+        "old_job": 526,
+        "phase": "a1",
+        "status": "queued",
+        "task": "low-activity-multiscale_settle-memory_k-n16-d128-k1-907c2937ac-a1-2026112001-r4"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 15,
+        "checkpoint_step": 159,
+        "first_successor": 160,
+        "job": 2038,
+        "model": "low-activity-multiscale_settle-memory_k-n16-d128-k1-907c2937ac",
+        "old_job": 521,
+        "phase": "a1",
+        "status": "running",
+        "task": "low-activity-multiscale_settle-memory_k-n16-d128-k1-907c2937ac-a1-2026112002-r1"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": null,
+        "checkpoint_step": 23,
+        "first_successor": null,
+        "job": 2039,
+        "model": "multiscale_timed-d256-x_reverse-singleton7-7307401cb8",
+        "old_job": 1402,
+        "phase": "a1",
+        "status": "queued",
+        "task": "multiscale_timed-d256-x_reverse-singleton7-7307401cb8-weak-log-v1-a1-2026112002-r3"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": 11,
+        "checkpoint_step": 64,
+        "first_successor": 65,
+        "job": 2040,
+        "model": "multiscale_settle-d256-x_reverse-singleton7-79bf479cff",
+        "old_job": 1418,
+        "phase": "a1",
+        "status": "running",
+        "task": "multiscale_settle-d256-x_reverse-singleton7-79bf479cff-weak-log-v1-a1-2026112002-r1"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": null,
+        "checkpoint_step": 42,
+        "first_successor": null,
+        "job": 2041,
+        "model": "multiscale_settle-d256-x_reverse-singleton7-79bf479cff",
+        "old_job": 1419,
+        "phase": "a1",
+        "status": "queued",
+        "task": "multiscale_settle-d256-x_reverse-singleton7-79bf479cff-weak-log-v1-a1-2026112001-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": null,
+        "checkpoint_step": 36,
+        "first_successor": null,
+        "job": 2042,
+        "model": "multiscale_timed-d256-x_reverse-singleton7-7307401cb8",
+        "old_job": 1399,
+        "phase": "a1",
+        "status": "queued",
+        "task": "multiscale_timed-d256-x_reverse-singleton7-7307401cb8-weak-log-v1-a1-2026112001-r2"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": null,
+        "checkpoint_step": 33,
+        "first_successor": null,
+        "job": 2043,
+        "model": "multiscale_timed-d256-x_reverse-singleton7-7307401cb8",
+        "old_job": 1398,
+        "phase": "a1",
+        "status": "queued",
+        "task": "multiscale_timed-d256-x_reverse-singleton7-7307401cb8-weak-log-v1-a1-2026112002-r1"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": null,
+        "checkpoint_step": 23,
+        "first_successor": null,
+        "job": 2044,
+        "model": "multiscale_timed-d256-x_reverse-singleton7-7307401cb8",
+        "old_job": 1396,
+        "phase": "a1",
+        "status": "queued",
+        "task": "multiscale_timed-d256-x_reverse-singleton7-7307401cb8-weak-log-v1-a1-2026112002-r0"
+      },
+      {
+        "additional_eval_tokens": 32,
+        "card": null,
+        "checkpoint_step": 1,
+        "first_successor": null,
+        "job": 2045,
+        "model": "multiscale_timed-d256-x_reverse-singleton7-7307401cb8",
+        "old_job": 1397,
+        "phase": "a1",
+        "status": "queued",
+        "task": "multiscale_timed-d256-x_reverse-singleton7-7307401cb8-weak-log-v1-a1-2026112001-r1"
+      }
+    ],
+    "evaluation_increment": 19328,
+    "evidence": {
+      "path": ".local/pilot-r3/resource-handoffs/signal-and-review-20261126/resume-plan.json",
+      "sha256": "1ae347a4b440d32591d512414b57257938f561320da61c8587c40d8c400ffe9b"
+    },
+    "jobs": 100,
+    "new_waves": [
+      {
+        "job": 2141,
+        "model": "low-activity-lattice-memory_s-n16-d128-k2-f03f0cb004",
+        "phase": "a2",
+        "state": "pending",
+        "task": "low-activity-lattice-memory_s-n16-d128-k2-f03f0cb004-a2-2026112001-r1"
+      },
+      {
+        "job": 2142,
+        "model": "low-activity-lattice-memory_s-n16-d128-k2-f03f0cb004",
+        "phase": "a2",
+        "state": "pending",
+        "task": "low-activity-lattice-memory_s-n16-d128-k2-f03f0cb004-a2-2026112002-r1"
+      },
+      {
+        "job": 2143,
+        "model": "low-activity-lattice-memory_s-n16-d128-k2-f03f0cb004",
+        "phase": "a2",
+        "state": "pending",
+        "task": "low-activity-lattice-memory_s-n16-d128-k2-f03f0cb004-a2-2026112001-r2"
+      },
+      {
+        "job": 2144,
+        "model": "low-activity-lattice-memory_s-n16-d128-k2-f03f0cb004",
+        "phase": "a2",
+        "state": "pending",
+        "task": "low-activity-lattice-memory_s-n16-d128-k2-f03f0cb004-a2-2026112002-r2"
+      }
+    ],
+    "newly_selected": [],
+    "phases": {
+      "a1": 34,
+      "a2": 48,
+      "a3": 18
+    },
+    "started_subjects": 42,
+    "states": {
+      "completed": 4,
+      "queued": 13,
+      "running": 83
+    },
+    "subjects": 44,
+    "verified_successor_steps": 86
+  },
+  "source_commit": "e26071e9ea5cfa8cdc3a3decd441943d8a5227ca",
+  "stage_a_tasks": {
+    "completed": 1722,
+    "pending": 23,
+    "running": 138,
+    "superseded": 8
+  },
+  "stage_b_gate": "closed",
+  "storage": {
+    "available_storage_bytes": 72222453760,
+    "filesystem_free_bytes": 931969191936,
+    "observed_unix": 1795693825.7678983,
+    "quota": {
+      "filesystem": "/dev/mapper/ascend_data-data",
+      "grace_epoch": 1795920929,
+      "hard_bytes": 751619276800,
+      "soft_bytes": 322122547200,
+      "used_bytes": 679396823040
+    },
+    "quota_limit_basis": "hard",
+    "scope": "input snapshot headroom only; campaign forecasts all resolved controls before release",
+    "snapshot_source_bytes": 0,
+    "storage_reserve_bytes": 0
+  },
+  "unit": "tide-pilot-r3-signal-resume-20261126.service",
+  "workers_by_backend": {
+    "cpu": 40,
+    "npu": 99
+  }
+}

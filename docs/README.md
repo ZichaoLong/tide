@@ -10,6 +10,8 @@
 | `snapshot_only` | 有调度记录。服务、进程身份或采样期间的指针变化未能把它绑定到当前作业。查看 systemd 的实际状态、控制组和观测错误。 |
 | `unavailable` | 这份检出缺少可用的启动指针或调度记录。最近一次已审阅的采样在交接中，并附时间与证据。 |
 
+本批启动指针还登记了 44 个主体的检查点接续和 74 个早期主体的源码复核。状态命令的 `runtime.queue_additions` 按冻结的入队编号查询这两组作业。接续计入 Stage A 训练，单步复核单独计数。单项复核结果在其计划目录的 `observations/comparison.json`，其中记录原批次、起点、梯度与后继状态的比较。[当前交接](STATUS.md)
+
 ## 接续同一批
 
 先读当前交接的“定位与接续入口”和当前待办。在原工作树从 `.local/pilot-r3/launch.json` 取 `unit`、`plan_path` 与 `plan_sha256`、`prepared_path`、`budget_ledger`、`deadline_unix`、`output` 和 `current_review`。核对计划与冻结源码/数据身份、总账的已消费量、绝对截止、最近发布的检查点、实际首个后继更新及阶段门禁。更换实现时在新目录验收，再将新的采用记录绑定到正式作业。[当前交接](STATUS.md) · [待办](ROADMAP.md) · [活动量和恢复验收](evidence/pilot-r3-r26-activity-readiness.json)
