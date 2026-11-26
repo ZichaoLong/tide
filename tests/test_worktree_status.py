@@ -109,3 +109,27 @@ def test_pointer_replacement_during_sampling_downgrades_live(tmp_path, host, mon
     view = runtime.observe(tmp_path)
     assert view["kind"] == "snapshot_only"
     assert view["next_check"] == "python scripts/status.py"
+
+
+def test_resume_and_review_counts_bind_the_two_manifests_to_their_queue(tmp_path):
+    from pilotlab.prepare_resume3 import reference
+    from pilotlab.runq_store import connect, submit
+    from pilotlab.scheduler3 import freeze_json
+
+    root = tmp_path/"queue"
+    db = connect(root)
+    spec = {"allowed":["cpu"], "ram":{"cpu":256}, "hbm":0, "owner":"campaign"}
+    a = submit(db, "resume", {**spec, "task_id":"model-a3"})
+    b = submit(db, "review", {**spec, "task_id":"early-review-old-model-cpu", "purpose":"deferred_source_review"})
+    db.execute("UPDATE jobs SET state='running' WHERE id=?", (a,))
+    db.close()
+    resumed = freeze_json(tmp_path/"resumes.json", {"new_jobs":{"model-a3":a}})
+    reviewed = freeze_json(tmp_path/"reviews.json", {"jobs":{"old-model/cpu":{"job":b}}})
+    launch = {"output":"campaign", "runq_root":str(root), "last_signal_admission":reference(resumed),
+              "deferred_source_review":{"submissions":reference(reviewed)}}
+    out = {"summary":"", "sources":[]}
+    runtime.observe_queue_additions(launch, out)
+    assert out["queue_additions"] == {"signal_resumes":{"running":1}, "deferred_source_reviews":{"queued":1}}
+    incorrect = {"summary":"", "sources":[]}
+    runtime.observe_queue_additions({**launch, "output":"another campaign"}, incorrect)
+    assert "queue_additions" not in incorrect and "不可核验" in incorrect["summary"]

@@ -1,7 +1,10 @@
 """Read the current experimental launch, its scheduler and its host observations."""
+from collections import Counter
+from contextlib import closing
 import json
 from pathlib import Path
 import shlex
+import sqlite3
 import subprocess
 
 from pilotlab.audit3 import cgroup_observation, json_observation, systemd_observation
@@ -9,6 +12,45 @@ from pilotlab.report3 import build_report
 
 REPOSITORY = "tide-learning-lab"
 LAUNCH = Path(".local/pilot-r3/launch.json")
+
+
+def observe_queue_additions(launch, result):
+    from pilotlab.source_migration3 import read_bound
+
+    manifest = launch.get("deferred_source_review")
+    if not manifest:
+        return
+    try:
+        path = Path(launch["runq_root"]) / "queue.sqlite3"
+        result["sources"].extend([str(path), manifest["submissions"]["path"]])
+        groups = {"signal_resumes": read_bound(launch["last_signal_admission"])["new_jobs"],
+                  "deferred_source_reviews": {key: item["job"] for key, item in
+                       read_bound(manifest["submissions"])["jobs"].items()}}
+        stats = {}
+        review_workers = Counter()
+        with closing(sqlite3.connect(path.as_uri() + "?mode=ro", uri=True)) as db:
+            db.execute("BEGIN")
+            for group, jobs in groups.items():
+                counts = Counter()
+                for key, ident in jobs.items():
+                    row = db.execute("""SELECT state, json_extract(spec,'$.owner'), json_extract(spec,'$.task_id'),
+                        json_extract(spec,'$.purpose'), backend FROM jobs WHERE id=?""", (ident,)).fetchone()
+                    review = group == "deferred_source_reviews"
+                    tid = "early-review-" + key.replace("/", "-") if review else key
+                    if (not row or row[1:3] != (launch["output"], tid)
+                            or review != (row[3] == "deferred_source_review")):
+                        raise ValueError(f"入队凭据与作业 {ident} 不一致")
+                    counts[row[0]] += 1
+                    if review and row[0] == "running":
+                        review_workers[row[4]] += 1
+                stats[group] = dict(counts)
+        result["queue_additions"] = stats
+        result["review_workers_by_backend"] = dict(review_workers)
+        result["summary"] += (f" · 暂停接续={stats['signal_resumes']}"
+                              f" · 早期主体复核作业={stats['deferred_source_reviews']}"
+                              f" (CPU {review_workers['cpu']}, NPU {review_workers['npu']})")
+    except (OSError, KeyError, TypeError, ValueError, sqlite3.Error) as error:
+        result["summary"] += f" · 接续与复核队列不可核验 ({error})"
 
 
 def driver_processes():
@@ -67,7 +109,7 @@ def observe_round(root, launch, result):
         "unit", "foundation_commit", "plan_path", "plan_sha256", "prepared_path", "current_review",
         "output", "log", "budget_ledger", "deadline_unix",
     )}
-    for key in ("fresh_shannon", "temporary_card_window"):
+    for key in ("fresh_shannon", "temporary_card_window", "last_signal_admission", "deferred_source_review"):
         if key in launch:
             result["binding"][key] = launch[key]
     try:
@@ -102,6 +144,7 @@ def observe_round(root, launch, result):
                          f"tasks={report['execution']['task_counts']} B={report['gates']['stage_b_recorded']} "
                          f"blocker={report['blocking_reason']} "
                          f"· systemd={props.get('ActiveState', 'unknown')} cgroup={group['status']}")
+    observe_queue_additions(launch, result)
     if not isinstance(recorded_service, dict):
         result["summary"] += " · 启动指针中的服务身份无效"
         return
@@ -143,7 +186,7 @@ def observe_round(root, launch, result):
                 workers["cpu" if row["device"] == "cpu" else "npu"].append(identity["pid"])
                 members.add(identity["pid"])
             result["worker_units"] = workers
-            result["summary"] += f" · CPU workers={len(workers['cpu'])} NPU workers={len(workers['npu'])}"
+            result["summary"] += f" · Stage A CPU workers={len(workers['cpu'])} NPU workers={len(workers['npu'])}"
         by_card = {}
         for card, pids in devices.items():
             owned = members.intersection(pids)
