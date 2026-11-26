@@ -1,0 +1,149 @@
+{
+  "absolute_deadline": "2026-12-20T00:48:33.931829+08:00",
+  "active_submissions": {
+    "path": ".local/pilot-r3/resource-handoffs/review-deadline-20261126/submissions.json",
+    "sha256": "4dcb86b4087a5e245480947d1247ab94a28dc433c8e0f961a9f9c2d5de9795e5"
+  },
+  "controller": "3a4a35645009427db798e7b0dbdd109a",
+  "deadline_unix": 1797698913.9318287,
+  "dispatcher": "06928c312d474a6b99b5d0b833b9985d",
+  "frozen_runner": {
+    "path": ".local/pilot-r3/resource-handoffs/review-deadline-20261126/deferred_source_probe.py",
+    "sha256": "357a971dc97f8df722f3d88bb8866917183eeb4d2e6a8cb8701ffa9c234cbabe"
+  },
+  "jobs": [
+    {
+      "attempt": {
+        "path": ".local/pilot-r3/resource-handoffs/review-deadline-20261126/multiscale_settle-d64-x_reverse-mixed9-ef9a868150/npu/attempt.json",
+        "sha256": "bef9289a58ee21d0ff92e963119ed324e04c70922757c0982758a3d84dfd9cc8"
+      },
+      "attempt_tokens": 8192,
+      "hbm_gib": 52,
+      "job": 2065,
+      "original_job": 2065,
+      "reason": "waiting for peak HBM",
+      "state": "queued"
+    },
+    {
+      "attempt": {
+        "path": ".local/pilot-r3/resource-handoffs/review-deadline-20261126/multiscale_timed-d64-k-singleton7-1863b5a223/npu/attempt.json",
+        "sha256": "289d816185267024a62b75fe8436b8aa9bdb6c33ae6992b7c8a72255cf6f3793"
+      },
+      "attempt_tokens": 2048,
+      "comparison": {
+        "path": ".local/pilot-r3/resource-handoffs/review-deadline-20261126/multiscale_timed-d64-k-singleton7-1863b5a223/npu/observations/comparison.json",
+        "sha256": "414841d296e6e3cc7b1a0a98a6fa1e51ff81148bca10572abc3d750dfb26ffa5"
+      },
+      "hbm_gib": 12,
+      "job": 2209,
+      "merged": {
+        "historical": 12,
+        "reference": 12,
+        "weak_log": 12
+      },
+      "missing_points_run": [
+        "multiscale_timed-d64-k-singleton7-1863b5a223-a1-2026112002-r1/checkpoint_successor",
+        "multiscale_timed-d64-k-singleton7-1863b5a223-a1-2026112002-r2/checkpoint_successor",
+        "multiscale_timed-d64-k-singleton7-1863b5a223-a1-2026112002-r3/prior_generation_successor",
+        "multiscale_timed-d64-k-singleton7-1863b5a223-a1-2026112002-r4/prior_generation_successor",
+        "multiscale_timed-d64-k-singleton7-1863b5a223-a1-2026112002-r5/prior_generation_successor"
+      ],
+      "new_observed_tokens": 2048,
+      "old_observed_tokens": 11776,
+      "old_reserved_tokens": 13824,
+      "original_job": 2069,
+      "physical_card": 7,
+      "previous_card": 1,
+      "reason": null,
+      "reused": {
+        "historical": 12,
+        "reference": 12,
+        "weak_log": 7
+      },
+      "runtime_seconds": 93.44,
+      "sample_outcomes": {
+        "reference": {
+          "sample_changed": 12
+        },
+        "weak_log": {
+          "sample_changed": 12
+        }
+      },
+      "state": "completed"
+    },
+    {
+      "attempt": {
+        "path": ".local/pilot-r3/resource-handoffs/review-deadline-20261126/multiscale_timed-d64-s-group5-241b4441c5/npu/attempt.json",
+        "sha256": "62a5742d2d0fcf0d493a9ec4b799f690d1be0a4c28e777e25b01c76d672474ce"
+      },
+      "attempt_tokens": 98304,
+      "hbm_gib": 52,
+      "job": 2070,
+      "original_job": 2070,
+      "reason": "waiting for peak HBM",
+      "state": "queued"
+    },
+    {
+      "attempt": {
+        "path": ".local/pilot-r3/resource-handoffs/review-deadline-20261126/multiscale_timed-d64-s-mixed9-9be2af0261/npu/attempt.json",
+        "sha256": "c5a069412ce8dec031106b03275232839cfd375e2971ec37b7842f72d35f130e"
+      },
+      "attempt_tokens": 24576,
+      "hbm_gib": 52,
+      "job": 2071,
+      "original_job": 2071,
+      "reason": "waiting for peak HBM",
+      "state": "queued"
+    },
+    {
+      "attempt": {
+        "path": ".local/pilot-r3/resource-handoffs/review-deadline-20261126/multiscale_timed-d64-s-singleton7-b9f49cccdc/npu/attempt.json",
+        "sha256": "e7b32fd1837e0784658a313b58ffcdb80092a642811133d7da03d129567512d2"
+      },
+      "attempt_tokens": 36864,
+      "hbm_gib": 52,
+      "job": 2072,
+      "original_job": 2072,
+      "reason": "waiting for peak HBM",
+      "state": "queued"
+    }
+  ],
+  "logical_reviews": {
+    "completed": 89,
+    "queued": 4
+  },
+  "observed_at": "2026-11-26T23:04:15.032616+08:00",
+  "original_submissions": {
+    "path": ".local/pilot-r3/resource-handoffs/signal-and-review-20261126/early/submissions.json",
+    "sha256": "9e66593264033280004d9cacb23135b5b281aec7294ecd3a85f0e3bf211d7052"
+  },
+  "previous_workers_by_current_state": {
+    "running": 119
+  },
+  "remaining_preparation_device_hours": 36.313967757952504,
+  "remaining_unreserved_preparation_tokens": 37564096,
+  "schema": "pilot-r3-deferred-review-deadline-v1",
+  "storage_admission_bytes": 107480285184,
+  "training_snapshot": {
+    "current_workers": {
+      "cpu": 40,
+      "npu": 79
+    },
+    "scheduler_updated_unix": 1795705454.1344602,
+    "selected": 213,
+    "signal_resumes": {
+      "completed": 67,
+      "running": 33
+    },
+    "stage_b_gate": "closed",
+    "tasks": {
+      "completed": 1812,
+      "pending": 16,
+      "running": 119,
+      "superseded": 8
+    }
+  },
+  "verified_reports": {
+    "observations_recorded": 89
+  }
+}
