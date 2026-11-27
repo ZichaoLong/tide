@@ -45,6 +45,31 @@ python3 -B scripts/tide_batch.py aggregate --frozen "$BATCH_DIR/payload/frozen" 
   --output "$REVIEW_DIR/aggregate.json"
 ```
 
+换到新客户端时，在已安装账户 `maflow` 的机器进入实验仓维护分支。下面的命令用批次 ID 从贵阳持久前缀取回全部尝试和冻结输入，适用于 `make_tide_batch.py` 默认的 `tide-workers` 组。
+
+```bash
+mkdir -p "$HOME/.local/state/tide-reviews"
+REVIEW_DIR=$(mktemp -d "$HOME/.local/state/tide-reviews/$BATCH.XXXXXXXX")
+maflow collect "$BATCH" --site modelarts --to "$REVIEW_DIR/download" --inputs --json > "$REVIEW_DIR/checkout.json"
+python3 - "$REVIEW_DIR" <<'PY'
+import json
+from pathlib import Path
+import subprocess
+import sys
+
+review = Path(sys.argv[1])
+checkout = json.loads((review / "checkout.json").read_text())["checkout"]
+source = checkout["source_archives"]["tide-workers"]
+subprocess.run(["tar", "-xzf", source, "-C", str(review), "frozen"], check=True)
+command = [sys.executable, "-B", "scripts/tide_batch.py", "aggregate", "--frozen", str(review / "frozen")]
+for directory in checkout["attempt_roots"]:
+    command.extend(["--attempt-root", directory])
+subprocess.run(command + ["--output", str(review / "aggregate.json")], check=True)
+PY
+```
+
+`$REVIEW_DIR/aggregate.json` 记录任务状态、缺项、冲突以及已验证的本地证据路径。保留该目录即可再次审阅。只关心特定任务时，可给 `collect` 重复传 `--task 任务ID` 以下载其完整尝试链；整组汇总会将未下载的任务列入 `missing`。
+
 完成项的 `evidence` 可交给 `pilotlab.gate3.read_evidence` 及上层科学审阅。复核时用本地副本核对原 worker 结果声明的检查点 SHA-256。原 worker 的绝对路径与原始结果文件仍可从制品追溯。
 
 同一 A2/A3 任务跨尝试时，`portable_attempts` 按顺序绑定每份实际结果、尝试回执和检查点。审阅读回每段的中断原因、私有状态摘要、真实起始步、token 暴露量和父尝试。阶段门禁据此恢复该梯级的最初起点，末次尝试的实际计数按原记录保留。
