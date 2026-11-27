@@ -338,8 +338,15 @@ def cluster(root):
 
 def aggregate(frozen_dir, roots):
     frozen = Frozen(frozen_dir)
+    project_root = Path(__file__).resolve().parents[1]
+    source = project_root if (project_root/"pilotlab/gate3.py").is_file() else frozen.directory/"source"
+    sys.path.insert(0, str(source))
+    try:
+        from pilotlab.gate3 import read_evidence
+    finally:
+        sys.path.pop(0)
     expected = frozen.manifest["tasks"]
-    receipts, evidence, problems = {}, {}, []
+    receipts, evidence, locations, problems = {}, {}, {}, []
     for root in map(Path, roots):
         for f in sorted((root / "products/tasks").glob("*.json")):
             try:
@@ -395,6 +402,20 @@ def aggregate(frozen_dir, roots):
                 old = receipts.get(instance)
                 require(old is None or old == rec, "conflicting receipt for one attempt")
                 receipts[instance] = rec
+                if rec["status"] in ("completed", "interrupted"):
+                    locations.setdefault(
+                        instance,
+                        {
+                            "receipt": {"path": str(f.resolve()), "sha256": sha(f)},
+                            **{
+                                role: {
+                                    "path": str(relative(root, artifacts[role]["path"])),
+                                    "sha256": artifacts[role]["sha256"],
+                                }
+                                for role in ("checkpoint", "result")
+                            },
+                        },
+                    )
                 if rec["status"] == "completed":
                     evidence.setdefault(
                         instance,
@@ -418,6 +439,7 @@ def aggregate(frozen_dir, roots):
         successful = [r for r in selected if r["status"] == "completed"]
         if len(successful) > 1:
             problems.append({"task": key, "error": "multiple completed attempts"})
+        parents = {}
         for rec in selected:
             parent = rec.get("resume_from")
             if parent:
@@ -437,12 +459,40 @@ def aggregate(frozen_dir, roots):
                     problems.append(
                         {"task": key, "error": "missing or ambiguous predecessor", "attempt": rec["attempt"]}
                     )
+                else:
+                    parents[rec["attempt"]] = hits[0]["attempt"]
         summary[key] = {
             "status": "completed" if len(successful) == 1 else "missing" if not selected else "incomplete",
             "attempts": [{"attempt": r["attempt"], "status": r["status"]} for r in selected],
         }
         if len(successful) == 1:
-            summary[key]["evidence"] = evidence[(key, successful[0]["attempt"])]
+            aid = successful[0]["attempt"]
+            item = evidence[(key, aid)]
+            original_task = read(item["task_path"])
+            if parents or original_task.get("resume_checkpoint"):
+                chain = []
+                seen = set()
+                while aid not in seen:
+                    seen.add(aid)
+                    chain.append(locations[(key, aid)])
+                    if aid not in parents:
+                        break
+                    aid = parents[aid]
+                else:
+                    problems.append({"task": key, "error": "cyclic portable attempt ancestry"})
+                item["portable_attempts"] = chain[::-1]
+                if original_task.get("resume_checkpoint"):
+                    old = original_task["resume_checkpoint"]
+                    item["initial_checkpoint"] = {
+                        "original": old,
+                        "path": str(frozen.path(old)),
+                        "sha256": original_task["resume_checkpoint_sha256"],
+                    }
+            summary[key]["evidence"] = item
+            try:
+                read_evidence(item, checkpoint=True)
+            except (OSError, ValueError, TypeError, KeyError) as error:
+                problems.append({"task":key,"error":"project evidence check: "+str(error)})
     return {
         "schema": "tide-aggregate/v1",
         "tasks": summary,

@@ -40,6 +40,10 @@ def read_evidence(entry, *, checkpoint=False, retired_checkpoints=None):
         raise ValueError("selected task or result differs from its evidence receipt")
     evidence = {"task_path": entry["task_path"], "task_sha256": task_hash,
                 "result_path": entry["result_path"], "result_sha256": result_hash}
+    if "portable_attempts" in entry:
+        from .continuation3 import read_attempt_chain
+        result = read_attempt_chain(task, result, entry)
+        evidence.update({k:entry[k] for k in ("portable_attempts","initial_checkpoint") if k in entry})
     if checkpoint:
         cp = result.get("checkpoint") or {}
         if not cp.get("path") or not cp.get("sha256"):
@@ -58,6 +62,11 @@ def read_evidence(entry, *, checkpoint=False, retired_checkpoints=None):
         else:
             raise ValueError("selected checkpoint missing or corrupt")
         evidence.update(checkpoint_path=str(path), checkpoint_sha256=cp["sha256"])
+        if "checkpoint_path" in entry and str(path) != cp["path"]:
+            from .continuation3 import RelocatedCheckpointResult
+            if not isinstance(result, RelocatedCheckpointResult):
+                result = RelocatedCheckpointResult(result)
+            result.relocated_checkpoint = str(path)
     return task, result, evidence
 
 
@@ -419,16 +428,19 @@ def audit_stage_a(manifest, selected, matches, *, remaining_resources_ok):
 def continuation_matches(parent, task, result):
     previous_task, previous_result = parent
     checkpoint = previous_result.get("checkpoint") or {}
+    if not checkpoint.get("sha256") or not task.get("resume_checkpoint"):
+        return False
     try:
         from .continuation3 import continuation_origin
         origin = continuation_origin(task, result)
     except (OSError, ValueError, KeyError, TypeError):
         return False
     resume = origin.get("resume") or {}
+    paths = {checkpoint.get("path"), getattr(previous_result, "relocated_checkpoint", checkpoint.get("path"))}
     return (all(previous_task.get(key) == task.get(key) for key in (*RECIPE_FIELDS, "seed", "source_identity"))
-            and task.get("resume_checkpoint") == checkpoint.get("path")
+            and task.get("resume_checkpoint") in paths
             and task.get("resume_checkpoint_sha256") == checkpoint.get("sha256")
-            and resume.get("path") == checkpoint.get("path")
+            and resume.get("path") == task.get("resume_checkpoint")
             and resume.get("sha256") == checkpoint.get("sha256")
             and resume.get("from_tokens") == previous_task["target_tokens"])
 

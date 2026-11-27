@@ -35,6 +35,8 @@ python3 -B scripts/tide_batch.py aggregate --frozen "$BATCH_DIR/payload/frozen" 
 
 完成项的 `evidence` 可交给 `pilotlab.gate3.read_evidence` 及上层科学审阅。复核时用本地副本核对原 worker 结果声明的检查点 SHA-256。原 worker 的绝对路径与原始结果文件仍可从制品追溯。
 
+同一 A2/A3 任务跨尝试时，`portable_attempts` 按顺序绑定每份实际结果、尝试回执和检查点。审阅读回每段的中断原因、私有状态摘要、真实起始步、token 暴露量和父尝试。阶段门禁据此恢复该梯级的最初起点，末次尝试的实际计数按原记录保留。
+
 ## 两份短作业验收
 
 生成时省略 `--task` 和 `--data` 会建立一份独立的 R3 迁移验收批，使用固定的合成整数 token 和两个真实项目模型。第一份双实例各跑一个任务。TIDE 在第一个完整更新保存后中断，独立 Transformer 完成三个更新。第二份单实例仅恢复未完的 TIDE 任务，累计完成三个更新。每项任务的原始 target 均为 12 个 token。首份可留最多 300 秒检查两个节点，向本作业 OBS 写入 `control/client-confirmed.json`，内容为 `{"attempt":"当前作业名"}`，可提前结束这个窗口。两份作业分别使用自己的截止。验收只覆盖这组小输入的执行、转移和接续。

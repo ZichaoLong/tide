@@ -169,3 +169,51 @@ def test_changed_chain_never_qualifies_from_end_checkpoint_readback_alone(chain,
     if damage != "unrelated_parent":
         assert g.eligible(task,result,require_resume=True)
     assert not g.continuation_matches(parent,task,result)
+
+
+@pytest.mark.parametrize("damage", [None, "parent", "raw-exposure", "state"])
+def test_relocated_maflow_attempts_preserve_real_rung_origin(chain, tmp_path, damage):
+    task, completed, parent, start = chain
+    final = deepcopy(completed)
+    original = final["execution_adapter"]["original_task"]
+    raws = [g.load(tmp_path/f"partial-{i}.json") for i in range(2)] + [final]
+    for row in raws:
+        row.pop("execution_adapter", None)
+    original_cp = Path(task["resume_checkpoint"])
+    raws[0]["resume"].update(path="/first-job/local/input",fallback_used=False)
+    if damage == "raw-exposure":
+        raws[-1]["training"]["segment_steps"] += 1
+    if damage == "state":
+        raws[-1]["resume"]["state_sha256"] = "unrelated"
+    records = []
+    last = None
+    for i, raw in enumerate(raws, 1):
+        incoming = None
+        if last:
+            raw["resume"]["path"] = "/entirely/different/workdir/resume.pt"
+            incoming = {"parent":"unrelated" if damage=="parent" and i==3 else str(i-1),
+                        "sha256":last["sha256"],"step":last["steps"],"size":Path(last["path"]).stat().st_size}
+        location = tmp_path/f"restored-{i}.pt"
+        location.write_bytes(Path(raw["checkpoint"]["path"]).read_bytes())
+        cp_ref = reference(location)
+        final_ref = reference(write_json(tmp_path/f"raw-{i}.json",raw))
+        receipt = {"schema":"maflow-task-result/v1","batch":"batch","project":"p","plan_sha256":"d"*64,
+                   "attempt":str(i),"task":task["id"],"fingerprint":original["sha256"],
+                   "status":"completed" if i==3 else "interrupted","resume_from":incoming,
+                   "artifacts":{"result":{"sha256":final_ref["sha256"]},"checkpoint":{"sha256":cp_ref["sha256"],"size":location.stat().st_size}}}
+        records.append({"receipt":reference(write_json(tmp_path/f"maflow-{i}.json",receipt)),
+                        "result":final_ref,"checkpoint":cp_ref})
+        last=raw["checkpoint"]
+    entry={"task_path":original["path"],"task_sha256":original["sha256"],
+           "result_path":final_ref["path"],"result_sha256":final_ref["sha256"],
+           "checkpoint_path":cp_ref["path"],"checkpoint_sha256":cp_ref["sha256"],"portable_attempts":records,
+           "initial_checkpoint":{**reference(original_cp),"original":str(original_cp)}}
+    if damage:
+        with pytest.raises(ValueError):
+            g.read_evidence(entry,checkpoint=True)
+    else:
+        _, verified, evidence=g.read_evidence(entry,checkpoint=True)
+        assert g.eligible(task,verified,require_resume=True)==[]
+        assert g.continuation_matches(parent,task,verified)
+        assert continuation_origin(task,verified)["training"]["from_tokens"]==start
+        assert verified==final and evidence["portable_attempts"]==records
