@@ -34,13 +34,21 @@ def read_evidence(entry, *, checkpoint=False, retired_checkpoints=None):
     task_hash = sha256(entry["task_path"])
     if result.get("task_sha256") != task_hash:
         raise ValueError("worker result does not bind the frozen task")
+    result_hash = sha256(entry["result_path"])
+    if (entry.get("task_sha256", task_hash) != task_hash or
+            entry.get("result_sha256", result_hash) != result_hash):
+        raise ValueError("selected task or result differs from its evidence receipt")
     evidence = {"task_path": entry["task_path"], "task_sha256": task_hash,
-                "result_path": entry["result_path"], "result_sha256": sha256(entry["result_path"])}
+                "result_path": entry["result_path"], "result_sha256": result_hash}
     if checkpoint:
         cp = result.get("checkpoint") or {}
         if not cp.get("path") or not cp.get("sha256"):
             raise ValueError("selected checkpoint missing or corrupt")
         path = Path(cp["path"])
+        if "checkpoint_path" in entry:
+            if entry.get("checkpoint_sha256") != cp["sha256"]:
+                raise ValueError("relocated checkpoint does not bind the worker's original generation")
+            path = Path(entry["checkpoint_path"])
         retired = (retired_checkpoints or {}).get(str(path.resolve()))
         if path.exists():
             if sha256(path) != cp["sha256"]:
@@ -49,7 +57,7 @@ def read_evidence(entry, *, checkpoint=False, retired_checkpoints=None):
             evidence["checkpoint_state"] = "retired_after_verified_continuation"
         else:
             raise ValueError("selected checkpoint missing or corrupt")
-        evidence.update(checkpoint_path=cp["path"], checkpoint_sha256=cp["sha256"])
+        evidence.update(checkpoint_path=str(path), checkpoint_sha256=cp["sha256"])
     return task, result, evidence
 
 
