@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import fcntl
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -20,13 +21,18 @@ from tide_portable import Frozen, ident, read, relative, require, sha, write
 def export(path, obs, name):
     destination = relative(obs, name)
     destination.parent.mkdir(parents=True, exist_ok=True)
-    expected = sha(path)
-    if destination.exists():
-        require(sha(destination) == expected, "existing artifact differs: " + name)
-    else:
+    digest = hashlib.sha256()
+    md5 = hashlib.md5(usedforsecurity=False)
+    with path.open("rb") as source:
+        for block in iter(lambda: source.read(1024 * 1024), b""):
+            digest.update(block)
+            md5.update(block)
+    expected = digest.hexdigest()
+    if not destination.exists():
         shutil.copyfile(path, destination)
     require(sha(destination) == expected, "published artifact differs: " + name)
-    return {"path": name, "size": destination.stat().st_size, "sha256": expected}
+    return {"path": name, "size": destination.stat().st_size, "sha256": expected,
+            "content_md5": md5.hexdigest()}
 
 
 def run_local(root, attempt):

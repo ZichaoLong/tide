@@ -9,8 +9,23 @@ from pilotlab.gate3 import read_evidence
 from pilotlab.io import sha256
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
-from tide_batch import aggregate
+from tide_batch import aggregate, export
 from tide_portable import Frozen, module_binding, pack, read, write
+
+
+def test_export_binds_sha256_and_single_part_obs_etag_to_the_same_bytes(tmp_path):
+    source = tmp_path / "input"
+    source.write_bytes(b"abc")
+    target = tmp_path / "obs"
+    receipt = export(source, target, "products/output")
+    assert receipt == {
+        "path": "products/output", "size": 3, "sha256": sha256(source),
+        "content_md5": "900150983cd24fb0d6963f7d28e17f72",
+    }
+    assert export(source, target, "products/output") == receipt
+    source.write_bytes(b"xyz")
+    with pytest.raises(ValueError, match="published artifact differs"):
+        export(source, target, "products/output")
 
 
 def project_fixture(tmp):
