@@ -1,0 +1,380 @@
+{
+  "all_queued_retained": 192,
+  "budget_ledger": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/one-hour-drain-20261127T144850/budget-final.json",
+    "sha256": "1ecf60a05b474dc21d7c047766cb598b8f689c958c1fcf8c8261d8bacd7468c2"
+  },
+  "checkpoint_bytes_preserved_as_hardlinks": 8602524197,
+  "checkpointed_jobs": [
+    934,
+    1942,
+    1943,
+    1945,
+    2139,
+    2140,
+    2197,
+    2198,
+    2199,
+    2200,
+    2226,
+    2227,
+    2234,
+    2235,
+    2236,
+    2237,
+    2240,
+    2242,
+    2243,
+    2254,
+    2255,
+    2260,
+    2261,
+    2265,
+    2268,
+    2372,
+    2581,
+    2582,
+    2583,
+    2584,
+    2585,
+    2586,
+    2685,
+    2686,
+    2687,
+    2688,
+    2689,
+    2690,
+    2691,
+    2692,
+    2693,
+    2694,
+    2695,
+    2696,
+    2895,
+    2897,
+    2898,
+    2899,
+    2900,
+    2901,
+    2904,
+    2906,
+    2907,
+    2908,
+    2909,
+    2914,
+    2915,
+    2916,
+    2935,
+    2936,
+    2943,
+    2944,
+    2946,
+    2967,
+    3015,
+    3041,
+    3042,
+    3043,
+    3044
+  ],
+  "classification_unix": 1795762172.2038558,
+  "controller_stop_requested_unix": 1795762130.7158291,
+  "groups": {
+    "deferred": {
+      "cgroup_released": true,
+      "controller": "tide-pilot-r3-deferred-followup-20261127.service",
+      "device_seconds": 45916.21337103844,
+      "dispatch_permit": 0,
+      "prior_invocation": "8c8cef9a8fe140dbbfae399c5e5c73e5",
+      "raw_worker_outcomes": {
+        "checkpointed_on_signal": 43,
+        "completed_naturally": 63
+      },
+      "retained_queued": 184,
+      "scheduler": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/one-hour-drain-20261127T144850/scheduler-final-deferred.json",
+        "sha256": "02bb1a9103f4ee749474b76eba6acd27930ca52a4a5213df1b9fe7a934f37322"
+      },
+      "scheduler_counts": {
+        "completed": 575,
+        "pending": 184,
+        "stopped_budget": 43
+      },
+      "scheduler_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/round",
+      "selected_recipes": 3,
+      "stage_b_gate": "closed",
+      "terminal_npu_profiles_verified": 84
+    },
+    "primary": {
+      "cgroup_released": true,
+      "controller": "tide-pilot-r3-dev14-relay-20261127.service",
+      "device_seconds": 3015246.670293331,
+      "dispatch_permit": 0,
+      "prior_invocation": "43d3403f74e84f0e86f0926561b72943",
+      "raw_worker_outcomes": {
+        "checkpointed_on_signal": 26,
+        "completed_naturally": 3
+      },
+      "retained_queued": 8,
+      "scheduler": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/one-hour-drain-20261127T144850/scheduler-final-primary.json",
+        "sha256": "d90a9bfac9825de96ca2131369bf68e9813f192d850684a40ac85080a7bb2dd8"
+      },
+      "scheduler_counts": {
+        "completed": 1981,
+        "pending": 8,
+        "stopped_budget": 26,
+        "superseded": 8
+      },
+      "scheduler_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-runq/round",
+      "selected_recipes": 255,
+      "stage_b_gate": "closed",
+      "terminal_npu_profiles_verified": 11
+    }
+  },
+  "host_artifacts": {
+    "audit.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/one-hour-drain-20261127T144850/audit.py",
+      "sha256": "831d3d31210532413a23e33cc63fca478a06c7525b7ad1b98be65c7b03165531"
+    },
+    "classification.json": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/one-hour-drain-20261127T144850/classification.json",
+      "sha256": "f906db9484e2f6ae925791cb3198d04b12b7e872886cc399fbdb3be7c2087dec"
+    },
+    "controller-stop-request.json": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/one-hour-drain-20261127T144850/controller-stop-request.json",
+      "sha256": "3139576862772b4f0338f298e022f3109ad37355bbb97d1794d769039ca72056"
+    },
+    "estimate.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/one-hour-drain-20261127T144850/estimate.py",
+      "sha256": "aabde7b6c5d63856c73d0194e68340e25ba51b9fdc909ae9f183a3fabce1423c"
+    },
+    "paused-checkpoints.json": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/one-hour-drain-20261127T144850/paused-checkpoints.json",
+      "sha256": "84a232d6541bcc9fa7b695df563ca01cc6c9fecf22052ac1c95d3ee7de1161e7"
+    },
+    "progress-final.json": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/one-hour-drain-20261127T144850/progress-final.json",
+      "sha256": "0e7679d739366bbfcb6e88f6e212b59bafed07c8476804bbf8c29d44cf0c287c"
+    },
+    "reconcile.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/one-hour-drain-20261127T144850/reconcile.py",
+      "sha256": "e2e54f2814db44af6ae049d8701c21d3e336bc91a05a1604fa5bbd73be67c659"
+    },
+    "signal_long.py": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/one-hour-drain-20261127T144850/signal_long.py",
+      "sha256": "abbb3b67926af34db3d8ad1aa86a89821fd7df678f9bdf5d45854def58b39464"
+    },
+    "worker-receipts.json": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/one-hour-drain-20261127T144850/worker-receipts.json",
+      "sha256": "ce7cb1e825feacb0328584d0af5fdee33b33cfd31749a98dd6de2a0520f7067b"
+    },
+    "worker-signals.jsonl": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/one-hour-drain-20261127T144850/worker-signals.jsonl",
+      "sha256": "f9d3bf8e10dd58c25277b53738fb229b3a581587a390a3e6b0825ae022fbc4f1"
+    }
+  },
+  "important_checkpoints": {
+    "2237": {
+      "preserved_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/one-hour-drain-20261127T144850/paused-checkpoints/2237.pt",
+      "sha256": "8f826873d69916a3547d9af9c2cc3230f56fda7b8b7cc8df7ecff27898fb97fc",
+      "steps": 1312,
+      "tokens": 671744
+    },
+    "2372": {
+      "preserved_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/one-hour-drain-20261127T144850/paused-checkpoints/2372.pt",
+      "sha256": "aa7ecf412b149e7fe6e0be9172db66bb587101c247f730640f5895c0d3d606ed",
+      "steps": 7350,
+      "tokens": 1881600
+    }
+  },
+  "last_natural_worker_finished_unix": 1795764013.073891,
+  "last_signal_worker_finished_unix": 1795762268.1455169,
+  "naturally_finished_jobs": [
+    1944,
+    2225,
+    2269,
+    2565,
+    2587,
+    2588,
+    2589,
+    2590,
+    2591,
+    2592,
+    2667,
+    2668,
+    2669,
+    2670,
+    2671,
+    2672,
+    2676,
+    2677,
+    2678,
+    2792,
+    2793,
+    2794,
+    2795,
+    2796,
+    2813,
+    2814,
+    2815,
+    2816,
+    2831,
+    2870,
+    2875,
+    2876,
+    2877,
+    2878,
+    2896,
+    2902,
+    2903,
+    2905,
+    2910,
+    2912,
+    2913,
+    2933,
+    2934,
+    2939,
+    2940,
+    2945,
+    2951,
+    2952,
+    2953,
+    2954,
+    2955,
+    2956,
+    2961,
+    2962,
+    2968,
+    2969,
+    2970,
+    2971,
+    2972,
+    3016,
+    3017,
+    3018,
+    3019,
+    3020,
+    3021,
+    3022
+  ],
+  "observed_unix": 1795764046.106268,
+  "post_cutoff_starts": 0,
+  "project_driver_pids_after_drain": {},
+  "project_npu_leases": [
+    {
+      "acquired": 1795509685.2570598,
+      "card": 7,
+      "id": 10,
+      "released": 1795763058.2916563,
+      "state": "released"
+    },
+    {
+      "acquired": 1795511342.7214098,
+      "card": 8,
+      "id": 11,
+      "released": 1795763659.4310682,
+      "state": "released"
+    },
+    {
+      "acquired": 1795511349.8454368,
+      "card": 9,
+      "id": 12,
+      "released": 1795763194.914942,
+      "state": "released"
+    },
+    {
+      "acquired": 1795511532.851973,
+      "card": 10,
+      "id": 14,
+      "released": 1795763707.2949367,
+      "state": "released"
+    },
+    {
+      "acquired": 1795523611.9952815,
+      "card": 6,
+      "id": 16,
+      "released": 1795763347.3224354,
+      "state": "released"
+    },
+    {
+      "acquired": 1795671994.687453,
+      "card": 3,
+      "id": 40,
+      "released": 1795762802.1469545,
+      "state": "released"
+    },
+    {
+      "acquired": 1795677317.7987282,
+      "card": 0,
+      "id": 42,
+      "released": 1795764013.3799417,
+      "state": "released"
+    },
+    {
+      "acquired": 1795690546.1882296,
+      "card": 5,
+      "id": 46,
+      "released": 1795762585.4321253,
+      "state": "released"
+    },
+    {
+      "acquired": 1795690811.0970726,
+      "card": 4,
+      "id": 47,
+      "released": 1795763377.336038,
+      "state": "released"
+    },
+    {
+      "acquired": 1795729422.0685885,
+      "card": 2,
+      "id": 48,
+      "released": 1795763304.802019,
+      "state": "released"
+    },
+    {
+      "acquired": 1795733245.7641816,
+      "card": 15,
+      "id": 49,
+      "released": 1795762226.8607337,
+      "state": "released"
+    },
+    {
+      "acquired": 1795746279.7774112,
+      "card": 14,
+      "id": 50,
+      "released": 1795763258.7984624,
+      "state": "released"
+    },
+    {
+      "acquired": 1795755070.8063164,
+      "card": 1,
+      "id": 51,
+      "released": 1795763870.997498,
+      "state": "released"
+    },
+    {
+      "acquired": 1795755070.8128307,
+      "card": 11,
+      "id": 52,
+      "released": 1795763173.8960562,
+      "state": "released"
+    }
+  ],
+  "schema": "pilot-r3-stage-a-one-hour-drain-v1",
+  "stage_b_gate": "closed",
+  "status": "drained",
+  "subjects_with_carried_recipes": 4,
+  "threshold_seconds": 3600,
+  "total_workers": 135,
+  "worker_cgroups_released": 135,
+  "worker_outcomes": {
+    "checkpointed_on_signal": {
+      "cpu": 28,
+      "npu": 41
+    },
+    "completed_naturally": {
+      "cpu": 12,
+      "npu": 54
+    }
+  }
+}
