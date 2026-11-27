@@ -1,7 +1,6 @@
-# 当前待办
+# Stage A 当前待办
 
-1. 跟进运行中的 270 个主体及匹配对照。用 `python scripts/status.py` 查经核验的选方与完成记录，用 `python -m pilotlab.runq --root ~/.local/state/tide-runq status` 查本批已入队作业。待整理后续阶段时核对已完成、在途、预算和依赖，再决定资源申请与自动或手动放置。继续跟进 Exchange/d256/S/independent、Timed/K/singleton7 的终态和 pool 保底统计，按实际训练样本复核弱余量 quad 的边界与梯度。收尾时结合剩余步数、已发布检查点、跨设备梯度一致性和预计节时逐项决定迁移。[现场与恢复首步](evidence/pilot-r3-runq-live.json) · [派发操作](README.md#自动补位与手动派发) · [跨设备验证](evidence/pilot-r3-r23-cpu-npu-handoff.json)
-2. 在项目旧队列收集 74 个早期主体的最后 4 份源码复核报告（2065、2070、2071、2072，各等单卡 52 GiB）。其余 89 份已齐，2069 的完整报告由 2209 合并。42 个有旧选方，逐个检查赢家与竞争配方。32 个从最早缺口着手，涉及容量 4 个、初始化 10 个、A1 比较 5 个、A2 比较 7 个、A3 确认 6 个。将同一批更新的输入、状态、离散活动量、梯度和损失变化与原种子、等量曝光下的排名对照。36 个主体的 78 条 A2 轨迹已核对退役记录与私有归档，必要时由完整上游轨迹重建比较。历史预算沿用逐模型清单，单步复核另计准备预算。[逐主体清单](evidence/pilot-r3-deferred-74-review.json) · [已核报告与等待作业](evidence/pilot-r3-deferred-review-deadline-20261126.json)
-3. 待全部 344 个主体与匹配对照有逐项结论后，核验完整 A 门禁、选参证据、匹配质量与正式运行资源。按最终冻结的 B worker 来源和输入形状导出最新 A 资源表。按 11 月 25 日的统一源码预构造，93 个 NPU 确认配方里有 49 个缺少该 B 来源的同形状成功记录；逐项采用相同来源的实测或给新来源安排代表后再确定共享预约。[逐模型匹配](evidence/pilot-r3-shape-hbm-recovery-20261125.json) · [资源表用法](README.md#用阶段-a-的观测申请-npu-显存)
-4. 跟进 44 个已恢复主体的 100 个检查点接续（1946–2045），核对尚在等待的首步和后续 A1/A2 决策、A3 两种子确认。跟进显存申请高于现有余量的单项。按训练轨迹核对峰值上调和实际容量错误。[首步、资源与队列编号](evidence/pilot-r3-signal-and-deferred-20261126.json)
-5. 跟进 7 个采用 `weak-log-v1` 的新种子组。比较验证损失、排序与完工时间时核对种子、曝光和前缀策略。队列已将 55 项窗口退场作业与此前 45 项让卡作业从各自检查点接回。[运行交接](STATUS.md) · [配方与定时回收](evidence/pilot-r3-weak-log-window-20261124.json) · [短窗比较](pilot-r3-weak-mass-comparison.md)
+1. 用 `python scripts/status.py --json` 分别查看 270 主体主队列、74 主体判定，以及其中 70 个主体的目标源码补跑。补跑由持久控制器按种子和父检查点自动生成后继。首批 CPU 102 项已入队，新增 NPU 的触发条件绑定主队列作业 2237 的实际启动。查看 `deferred_followup.npu_release`、`by_backend`、`blocking_reason` 及训练日志核对进度。[当前交接](STATUS.md) · [运行快照](evidence/pilot-r3-deferred-followup-20261127.json)
+2. 逐主体收齐所需训练与确认。49 个比较两个入围配方，2 个确认旧赢家，19 个重做六配方，4 个保留带旧源码标识的配方。重点核验 Settle/K/singleton7 的完整 A3、两种子的精确恢复和活动量。对执行或数值失败保留错误、来源、检查点及剩余预算，其他独立轨迹继续推进。[逐主体处置及依据](pilot-r3-deferred-dispositions.md)
+3. 收齐全部 344 个主体与匹配对照的逐项结论后，联合核对 A 门禁、选方证据、匹配质量、来源差异及正式运行预算。根据最终 B worker 的源码和输入形状导出 A 阶段资源表，缺少同形状成功记录的配置按既定方法实测或复核预约。[显存数据与形状匹配](evidence/pilot-r3-shape-hbm-recovery-20261125.json) · [资源表用法](README.md#用阶段-a-的观测申请-npu-显存)
+4. 跟进 270 主体内其余 A2、A3 及对照。按各自种子、曝光与来源复核原 44 个暂停主体的最终选方、7 个弱质量配方组、pool 保底统计及低余量 quad 的边界与梯度。收尾迁移结合剩余步数、可用检查点、同卡并发与整批关键路径逐项决定。[原 44 主体接续与队列](evidence/pilot-r3-signal-and-deferred-20261126.json) · [弱质量比较](pilot-r3-weak-mass-comparison.md)

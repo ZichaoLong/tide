@@ -1,0 +1,499 @@
+{
+  "allocated_limits": {
+    "budget": {
+      "budget_ledger": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/budget.json",
+      "deadline_unix": 1797698913.9318287,
+      "max_device_seconds": 25920000,
+      "observed_unix": 1795745538.311193,
+      "remaining_device_seconds": 21294141.764084604,
+      "remaining_preparation_device_seconds": 130038.39693665132,
+      "remaining_preparation_processed_tokens": 37564096,
+      "remaining_wall_seconds": 1953375.620635748,
+      "started_unix": 1795106913.9318287
+    },
+    "capacity_still_to_measure": 4,
+    "queue_limits": {
+      "auto_card_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        14,
+        15
+      ],
+      "cards": 14,
+      "cpu": 40,
+      "granted_cards": [
+        "10",
+        "15"
+      ]
+    },
+    "storage": {
+      "available_storage_bytes": 144752336896,
+      "filesystem_free_bytes": 944736841728,
+      "observed_unix": 1795745538.311147,
+      "quota": {
+        "filesystem": "/dev/mapper/ascend_data-data",
+        "grace_epoch": 1795920929,
+        "hard_bytes": 751619276800,
+        "soft_bytes": 322122547200,
+        "used_bytes": 606866939904
+      },
+      "quota_limit_basis": "hard",
+      "scope": "input snapshot headroom only; campaign forecasts all resolved controls before release",
+      "snapshot_source_bytes": 1419084,
+      "storage_reserve_bytes": 0
+    },
+    "sum_largest_checkpoint_known_rerun_models_bytes": 3274264160,
+    "upper_estimate_at_two_generations_per_12_a1_and_3_init": 98227924800
+  },
+  "cards": {
+    "0": {
+      "free_after_reservations_gib": 0.897,
+      "jobs": [
+        2225,
+        2265,
+        2268
+      ],
+      "physical_free_gib": 25.841
+    },
+    "1": {
+      "free_after_reservations_gib": 7.459,
+      "jobs": [
+        2253
+      ],
+      "physical_free_gib": 18.223
+    },
+    "10": {
+      "free_after_reservations_gib": 23.842,
+      "jobs": [
+        2255,
+        2262
+      ],
+      "physical_free_gib": 38.853
+    },
+    "11": {
+      "free_after_reservations_gib": 16.269,
+      "jobs": [
+        2263
+      ],
+      "physical_free_gib": 22.785
+    },
+    "14": {
+      "free_after_reservations_gib": 50.954,
+      "jobs": [
+        2264
+      ],
+      "physical_free_gib": 54.997
+    },
+    "15": {
+      "free_after_reservations_gib": 6.23,
+      "jobs": [
+        2236
+      ],
+      "physical_free_gib": 27.298
+    },
+    "2": {
+      "free_after_reservations_gib": 2.961,
+      "jobs": [
+        2184,
+        2258
+      ],
+      "physical_free_gib": 24.697
+    },
+    "3": {
+      "free_after_reservations_gib": 10.299,
+      "jobs": [
+        2182,
+        2254
+      ],
+      "physical_free_gib": 33.614
+    },
+    "4": {
+      "free_after_reservations_gib": 2.975,
+      "jobs": [
+        2183,
+        2259
+      ],
+      "physical_free_gib": 23.874
+    },
+    "5": {
+      "free_after_reservations_gib": 35.228,
+      "jobs": [
+        2256
+      ],
+      "physical_free_gib": 45.151
+    },
+    "6": {
+      "free_after_reservations_gib": 7.021,
+      "jobs": [
+        934,
+        2224,
+        2240
+      ],
+      "physical_free_gib": 30.219
+    },
+    "7": {
+      "free_after_reservations_gib": 0.34,
+      "jobs": [
+        2241,
+        2252,
+        2266
+      ],
+      "physical_free_gib": 24.124
+    },
+    "8": {
+      "free_after_reservations_gib": 18.96,
+      "jobs": [
+        2267,
+        2269
+      ],
+      "physical_free_gib": 34.051
+    },
+    "9": {
+      "free_after_reservations_gib": 8.296,
+      "jobs": [
+        2251,
+        2257
+      ],
+      "physical_free_gib": 30.961
+    }
+  },
+  "check_at_1100": {
+    "calendar": "2026-11-27 03:00:00 UTC",
+    "observation_program": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/prelaunch-checks/observe.py",
+      "sha256": "6b78b8d44bbb234cbf4aa17074395d936dd88a7e054ef2e2caf16f12e9ec7480"
+    },
+    "program": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/prelaunch-checks/check_at_1100.py",
+      "sha256": "db72394267ff7024000040bbaf7049978d68fa418eaeab923889a688f4046f49"
+    },
+    "timer": "tide-pilot-r3-check-2237-20261127.timer"
+  },
+  "cohort": {
+    "early": 74,
+    "modes": {
+      "carry_recipe": 4,
+      "compare_finalists": 49,
+      "confirm_historical_winner": 2,
+      "six_recipe_selection": 19
+    },
+    "original": 344,
+    "original_paused_within_primary": 44,
+    "primary": 270,
+    "reviewed_manifest": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-deferred-dispositions-20261127.json",
+      "sha256": "922ec992a861125243bb4c5f01d365b30705ff9c2c27bbdece536a4fc8c4b4fc"
+    },
+    "supplied_source_reports": 93
+  },
+  "cpu_first_wave": {
+    "jobs": {
+      "cpu": {
+        "count": 102,
+        "highest": 2371,
+        "lowest": 2270
+      }
+    },
+    "live": {
+      "cpu": 15
+    },
+    "pending_npu_before_submission": 364,
+    "predecessor": {
+      "generation": 0,
+      "id": 2237,
+      "job_key": "r3-campaign-runq/low-activity-multiscale_timed-mixed-n16-d128-k1-d8614748b3-a2-2026112002-r5/0",
+      "lease": null,
+      "pid": null,
+      "reason": "waiting for peak HBM",
+      "started": null,
+      "state": "queued",
+      "target": "auto",
+      "ticks": null
+    },
+    "verified_first_updates": 15
+  },
+  "first_updates_by_backend": {
+    "cpu": 15,
+    "npu": 0
+  },
+  "followup": {
+    "budget": {
+      "budget_ledger": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/budget.json",
+      "deadline_unix": 1797698913.9318287,
+      "max_device_seconds": 25920000,
+      "observed_unix": 1795745569.5232234,
+      "remaining_device_seconds": 21293748.587772634,
+      "remaining_preparation_device_seconds": 130038.39693665132,
+      "remaining_preparation_processed_tokens": 37564096,
+      "remaining_wall_seconds": 1953344.4086053371,
+      "started_unix": 1795106913.9318287
+    },
+    "invocation": "8c8cef9a8fe140dbbfae399c5e5c73e5",
+    "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/campaign.log",
+    "original_invocations": {
+      "tide-pilot-r3-signal-resume-20261126.service": "3a4a35645009427db798e7b0dbdd109a",
+      "tide-runq-25fe5df65a-dispatcher.service": "06928c312d474a6b99b5d0b833b9985d"
+    },
+    "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/round",
+    "plan": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/plan.json",
+      "sha256": "6870c733d9c80ced7d9d1c46eecde460ccadb66b5880228a7eee328f67e10ff3"
+    },
+    "predecessor": {
+      "job": 2237,
+      "job_key": "r3-campaign-runq/low-activity-multiscale_timed-mixed-n16-d128-k1-d8614748b3-a2-2026112002-r5/0",
+      "minimum_generation": 1,
+      "owner": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-runq/round",
+      "task_id": "low-activity-multiscale_timed-mixed-n16-d128-k1-d8614748b3-a2-2026112002-r5"
+    },
+    "primary_workers_ended": [],
+    "primary_workers_same_pid": [
+      934,
+      1858,
+      1935,
+      1936,
+      1937,
+      1942,
+      1943,
+      1944,
+      1945,
+      2139,
+      2140,
+      2145,
+      2146,
+      2160,
+      2182,
+      2183,
+      2184,
+      2197,
+      2198,
+      2199,
+      2200,
+      2224,
+      2225,
+      2226,
+      2227,
+      2234,
+      2235,
+      2236,
+      2240,
+      2241,
+      2242,
+      2243,
+      2251,
+      2252,
+      2253,
+      2254,
+      2255,
+      2256,
+      2257,
+      2258,
+      2259,
+      2260,
+      2261,
+      2262,
+      2263,
+      2264,
+      2265,
+      2266,
+      2267,
+      2268,
+      2269
+    ],
+    "review": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/review.json",
+      "sha256": "7a6b9cf2fbfe1e0efe61d80c979fcda65f021bb83a17318e8520eb1a818fced3"
+    },
+    "storage": {
+      "available_storage_bytes": 143932063744,
+      "filesystem_free_bytes": 941968236544,
+      "observed_unix": 1795745569.539372,
+      "quota": {
+        "filesystem": "/dev/mapper/ascend_data-data",
+        "grace_epoch": 1795920929,
+        "hard_bytes": 751619276800,
+        "soft_bytes": 322122547200,
+        "used_bytes": 607687213056
+      },
+      "quota_limit_basis": "hard",
+      "scope": "input snapshot headroom only; campaign forecasts all resolved controls before release",
+      "snapshot_source_bytes": 0,
+      "storage_reserve_bytes": 0
+    },
+    "submitted_unix": 1795745570.401832,
+    "unit": "tide-pilot-r3-deferred-followup-20261127.service"
+  },
+  "observed_local": "2026-11-27T10:15:36.911861+08:00",
+  "original_services": {
+    "tide-pilot-r3-deferred-followup-20261127.service": {
+      "active": "active",
+      "cgroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-deferred-followup-20261127.service",
+      "invocation": "8c8cef9a8fe140dbbfae399c5e5c73e5",
+      "main_pid": "836592",
+      "members": [
+        836592
+      ]
+    },
+    "tide-pilot-r3-signal-resume-20261126.service": {
+      "active": "active",
+      "cgroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-signal-resume-20261126.service",
+      "invocation": "3a4a35645009427db798e7b0dbdd109a",
+      "main_pid": "2607468",
+      "members": [
+        2607468
+      ]
+    },
+    "tide-runq-25fe5df65a-dispatcher.service": {
+      "active": "active",
+      "cgroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-runq-25fe5df65a-dispatcher.service",
+      "invocation": "06928c312d474a6b99b5d0b833b9985d",
+      "main_pid": "1383298",
+      "members": [
+        1383298
+      ]
+    }
+  },
+  "original_workers_preserved_during_submission": 51,
+  "planned_phase_counts": {
+    "a1": 428,
+    "a2": 276,
+    "a3": 140,
+    "capacity": 12,
+    "init": 210
+  },
+  "predecessor": {
+    "generation": 0,
+    "id": 2237,
+    "job_key": "r3-campaign-runq/low-activity-multiscale_timed-mixed-n16-d128-k1-d8614748b3-a2-2026112002-r5/0",
+    "lease": null,
+    "pid": null,
+    "reason": "waiting for peak HBM",
+    "started": null,
+    "state": "queued",
+    "target": "auto",
+    "ticks": null
+  },
+  "primary_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-runq/round",
+  "release": null,
+  "runq_root": "/mi/data2T/zlong/home/.local/state/tide-runq",
+  "schema": "pilot-r3-deferred-followup-admission-v1",
+  "source": {
+    "reference": {
+      "adapter": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r26-final/source/pilotlab/resume_adapter3.py",
+        "sha256": "2d55e1e94075f199ad4672385e36ba1d4c9c4e4cec39121749fae7684c0b769d"
+      },
+      "foundation": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r26-final/foundation",
+      "identity": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/signal-and-review-20261126/early/reference-identity.json",
+        "sha256": "e575e49d26e9e575f75fa0bace432f3578ada530598aa18f8d06070ba25af308"
+      },
+      "source": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r26-final/source"
+    },
+    "weak_log": {
+      "adapter": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/timed-backward-range-20261124/comparison-final/worker/source/pilotlab/resume_adapter3.py",
+        "sha256": "c4427068a5d1bec73af70d23de8c2cea2512e133d8619508142d2e67b8294aa3"
+      },
+      "foundation": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/timed-backward-range-20261124/comparison-final/worker/foundation",
+      "identity": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/timed-backward-range-20261124/comparison-final/worker/identity.json",
+        "sha256": "eac452495091112232e5b5ff913eb49bb451ef61366b9631b74161113c6c3075"
+      },
+      "source": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/timed-backward-range-20261124/comparison-final/worker/source"
+    }
+  },
+  "stage_a": {
+    "followup": {
+      "current_queue": {
+        "cpu/queued": 87,
+        "cpu/running": 15
+      },
+      "failed_queue_ids": [],
+      "healthy_examples": [],
+      "live": {
+        "cpu": 15
+      },
+      "queue_ids": {
+        "cpu": {
+          "count": 102,
+          "highest": 2371,
+          "lowest": 2270
+        }
+      },
+      "reason": null,
+      "scheduler": "running",
+      "selected": 0,
+      "task_counts": {
+        "pending": 451,
+        "running": 15
+      }
+    },
+    "main": {
+      "current_queue": {
+        "cpu/running": 25,
+        "npu/queued": 1,
+        "npu/running": 26
+      },
+      "failed_queue_ids": [],
+      "healthy_examples": [],
+      "live": {
+        "cpu": 25,
+        "npu": 26
+      },
+      "queue_ids": {},
+      "reason": null,
+      "scheduler": "running",
+      "selected": 247,
+      "task_counts": {
+        "completed": 1955,
+        "pending": 1,
+        "running": 51,
+        "superseded": 8
+      }
+    }
+  },
+  "stage_b_gate": "closed",
+  "submission_observation": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/prelaunch-checks/cpu-admission.json",
+    "sha256": "0c43118b0308a89639ec4b28b4fd74230cf21eea2b79590555235d64371c8329"
+  },
+  "updated_observation": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/prelaunch-checks/cpu-admission.json",
+    "sha256": "0c43118b0308a89639ec4b28b4fd74230cf21eea2b79590555235d64371c8329"
+  },
+  "validated_requests": {
+    "first_wave": {
+      "a1/cpu": 98,
+      "a1/npu:0": 162,
+      "capacity-cpu/cpu": 4,
+      "capacity-small/npu:0": 4,
+      "init/npu:0": 198
+    },
+    "npu_request_range_bytes": [
+      2147483648,
+      55834574848
+    ],
+    "plan": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/plan.json",
+      "sha256": "6870c733d9c80ced7d9d1c46eecde460ccadb66b5880228a7eee328f67e10ff3"
+    },
+    "same_original_recipe": {
+      "historical_task_match": 466
+    },
+    "source_validation": {
+      "reference": 385,
+      "weak_log": 81
+    }
+  }
+}

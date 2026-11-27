@@ -492,6 +492,31 @@ def test_pipeline_failure_closes_gate_and_does_not_admit_later_models(simulation
     assert campaign.subjects[2]["id"] not in {task["model_id"] for task in campaign.supervisor.journal["physical_tasks"]}
 
 
+def test_one_recipe_confirmation_still_requires_fresh_init_and_both_exact_seed_chains(simulation, monkeypatch):
+    campaign = simulation()
+    model = campaign.subjects[0]
+    campaign.profile([model])
+    recipe = campaign.recipes(model)[2]
+    monkeypatch.setattr(campaign, "recipes", lambda _: [recipe])
+    flow = campaign.training_flow([model], overlap_initialization=True, a2_recipe_count=1)
+    first = next(flow)
+    assert [r["stage"] for r in first] == ["init", "a1"]
+    answers = {}
+    for request in first:
+        answers.update(campaign.supervisor.run(request["stage"], request["tasks"]))
+    for stage, exposure in (("a2", r.MI // 4), ("a3", r.MI)):
+        request, = flow.send(answers)
+        assert request["stage"] == stage and {t["seed"] for t in request["tasks"]} == set(r.TUNING_SEEDS)
+        assert all(t["recipe_id"] == recipe["recipe_id"] and t["evaluation_start_tokens"] == exposure
+                   and Path(t["resume_checkpoint"]).is_file() for t in request["tasks"])
+        answers = campaign.supervisor.run(stage, request["tasks"])
+    with pytest.raises(StopIteration):
+        flow.send(answers)
+    choice = campaign.selected[model["id"]]
+    assert choice["recipe_id"] == recipe["recipe_id"] and len(choice["diagnostics"]) == 3
+    assert len(choice["confirmation"]) == 2 and not (campaign.output / "stage-b-gate.json").exists()
+
+
 def test_pipeline_retains_control_capacity_forecast_and_whole_a_gate(simulation, monkeypatch):
     campaign = simulation()
     campaign.plan.update(pipeline_stage_a=True, pipeline_model_limit=2)

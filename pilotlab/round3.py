@@ -76,13 +76,13 @@ def mean_activity(results, tasks=None):
 
 
 class Campaign:
-    def __init__(self, plan, output):
+    def __init__(self, plan, output, *, queue_supervisor=None):
         self.plan = plan
         from .hbm_profile3 import frozen_profile
         inherited_hbm = frozen_profile(plan.get("hbm_profile"), plan["source_identity"])
         if plan["config"].get("runq_root"):
             from .runq_campaign import QueueSupervisor
-            self.supervisor = QueueSupervisor(plan["config"], output, inherited_hbm=inherited_hbm)
+            self.supervisor = (queue_supervisor or QueueSupervisor)(plan["config"], output, inherited_hbm=inherited_hbm)
         elif plan["config"].get("shared_execution"):
             from .scheduler_shared3 import SharedSupervisor
             self.supervisor = SharedSupervisor(plan["config"], output)
@@ -399,7 +399,7 @@ class Campaign:
     def train_group(self, models):
         self.drain_flow(self.training_flow(models))
 
-    def training_flow(self, models, *, per_model_decisions=False):
+    def training_flow(self, models, *, per_model_decisions=False, overlap_initialization=False, a2_recipe_count=2):
         models = [model for model in models if model["id"] not in self.selected]
         if not models:
             return
@@ -408,7 +408,17 @@ class Campaign:
             batch_size=max(self.resources[model["id"]]["batches"]), eval_tokens=256,
             eval_interval_tokens=0, health_interval_tokens=8192), target=32768)
             for model in models for seed in DIAGNOSTIC_SEEDS]
-        initialized = yield [self.request("init", diagnostics)]
+        def initial_trials():
+            return [self.task(model, "a1", seed, recipe=recipe, target=MI//4, suffix="-"+recipe["recipe_id"])
+                    for model in models for recipe in self.recipes(model) for seed in TUNING_SEEDS]
+
+        requests = [self.request("init", diagnostics)]
+        if overlap_initialization:
+            # Previously qualified initialization can be rechecked alongside independent fresh seeds.
+            # Selection below still requires every new initialization result to pass.
+            a1 = initial_trials()
+            requests.append(self.request("a1", a1))
+        initialized = yield requests
         for task in diagnostics:
             if eligible(task, initialized[task["id"]]):
                 raise Blocked(f'initialization_not_qualified:{task["id"]}')
@@ -419,16 +429,19 @@ class Campaign:
         freeze_json(self.output/"decisions"/f'{prefix}-{models[0]["id"]}.json',
                     {"diagnostics": [self.evidence(task) for task in diagnostics], "status": "passed"})
         self.prune(diagnostics, reason="successful initialization diagnostics recorded; no checkpoint consumer")
-        a1 = [self.task(model, "a1", seed, recipe=recipe, target=MI//4, suffix="-"+recipe["recipe_id"])
-              for model in models for recipe in self.recipes(model) for seed in TUNING_SEEDS]
-        first = yield [self.request("a1", a1)]
+        if overlap_initialization:
+            first = initialized
+        else:
+            a1 = initial_trials()
+            first = yield [self.request("a1", a1)]
         kept1, a2 = [], []
         for model in models:
             trials = [task for task in a1 if task["model_id"] == model["id"]]
-            selection = choose_recipes(trials, first, TUNING_SEEDS, keep=2)
+            selection = choose_recipes(trials, first, TUNING_SEEDS, keep=a2_recipe_count)
             freeze_json(self.output/"decisions"/(model["id"]+"-a1.json"), selection)
-            if len(selection["selected"]) != 2:
-                raise Blocked(f'no_two_qualified_recipe_groups:{model["id"]}')
+            if len(selection["selected"]) != a2_recipe_count:
+                reason = "no_two_qualified_recipe_groups" if a2_recipe_count == 2 else "no_qualified_recipe_group"
+                raise Blocked(f'{reason}:{model["id"]}')
             ids = {row["recipe_id"] for row in selection["selected"]}
             for parent in trials:
                 if parent["recipe_id"] not in ids:

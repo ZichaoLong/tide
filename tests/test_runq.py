@@ -399,6 +399,12 @@ def test_physical_time_on_mixed_lease(tmp_path):
         db.execute("UPDATE jobs SET lease=?,assigned=?,finished=?,state='completed' WHERE id=?",(lease,begin,end,key))
     assert device_cost(db,"round",42)==21
     assert device_cost(db,"other",42)==10
+    assert device_cost(db,"other",42,alongside="round")==9  # Together they own the complete 30-second lease.
+    db.execute("UPDATE jobs SET spec=json_set(spec,'$.preparation',1) WHERE id IN (?,?)", (b, c))
+    assert device_cost(db, "other", 42, preparation=True, alongside="round") == 8
+    external = submit(db, "external", dict(spec(), owner="outside"))
+    db.execute("UPDATE jobs SET lease=?,assigned=31,finished=36,state='completed' WHERE id=?", (lease, external))
+    assert device_cost(db, "other", 42, alongside="round") == 8
 
 
 def test_eight_regular_cards_ninth_manual_and_promotion(tmp_path):

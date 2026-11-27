@@ -65,6 +65,81 @@ def driver_processes():
     return {card: entry.process_ids for card, entry in helper.parse_status(raw, mapping).items()}
 
 
+def observe_deferred_followup(root, launch, result):
+    link = launch.get("deferred_followup")
+    if not link:
+        return
+    from pilotlab.runq_devices import process_unit
+    from pilotlab.runq_store import unit
+    from pilotlab.scheduler3 import live
+    from pilotlab.source_migration3 import read_bound
+
+    try:
+        local = (root / ".local").resolve()
+        if any(not Path(link[k]["path"]).resolve().is_relative_to(local) for k in ("plan", "review")):
+            raise ValueError("补跑指针位于另一工作树")
+        plan = read_bound(link["plan"])
+        review = read_bound(link["review"])
+        directory = Path(link["output"])
+        queue = Path(launch["runq_root"])
+        if (not directory.resolve().is_relative_to(local)
+                or plan["output"] != str(directory) or plan["review"] != link["review"] or plan["unit"] != link["unit"]
+                or plan["config"]["runq_root"] != str(queue) or plan["config"]["predecessor"] != link["predecessor"]
+                or link["predecessor"]["owner"] != launch["output"]):
+            raise ValueError("补跑计划与启动指针不符")
+        state, _ = json_observation(directory / "scheduler.json")
+        if not state or state["config"] != plan["config"]:
+            raise ValueError("补跑调度记录与冻结配置不符")
+        gate = link["predecessor"]
+        receipt = read_bound(state["npu_release"]) if state.get("npu_release") else None
+        if receipt and receipt["predecessor"] != gate:
+            raise ValueError("补跑放行凭据与前置作业不符")
+        counts, running, cards = Counter(), Counter(), Counter()
+        by_backend = {"cpu": Counter(), "npu": Counter()}
+        with closing(sqlite3.connect((queue / "queue.sqlite3").as_uri() + "?mode=ro", uri=True)) as db:
+            db.execute("BEGIN")
+            pred = db.execute("""SELECT job_key,state,started,json_extract(spec,'$.owner'),json_extract(spec,'$.task_id')
+                                 FROM jobs WHERE id=?""", (gate["job"],)).fetchone()
+            if not pred or (pred[0], pred[3], pred[4]) != (gate["job_key"], gate["owner"], gate["task_id"]):
+                raise ValueError("前置作业的队列身份不符")
+            rows = db.execute("""SELECT j.id,j.generation,j.state,COALESCE(j.backend,json_extract(j.spec,'$.allowed[0]')),
+                             j.pid,j.ticks,l.card FROM jobs j LEFT JOIN leases l ON j.lease=l.id
+                             WHERE json_extract(j.spec,'$.owner')=?""", (str(directory),))
+            for ident, generation, status, backend, pid, ticks, card in rows:
+                counts[status] += 1
+                by_backend[backend][status] += 1
+                if (status == "running" and live({"pid": pid, "start_ticks": ticks})
+                        and process_unit(pid) == unit(queue, "job", ident, generation)):
+                    running[backend] += 1
+                    if card is not None:
+                        cards[card] += 1
+        service = systemd_observation(link["unit"])
+        props = service["properties"]
+        identity = state["controller_identity"]
+        controller_live = (props.get("ActiveState") == "active" and props.get("InvocationID") == link["invocation"]
+                           and str(identity["pid"]) == props.get("MainPID") and live(identity)
+                           and identity["pid"] in cgroup_observation(service)["members"])
+        choices, detail = json_observation(directory / "selected.json")
+        if choices is None and detail.get("status") != "missing":
+            raise ValueError("无法读取补跑选方")
+        waiting = sum(r["status"] == "pending" and r["device"] == "npu:0" and not r.get("runq_id")
+                      for r in state["tasks"].values())
+        result["deferred_followup"] = dict(output=str(directory), unit=link["unit"], controller_live=controller_live,
+            status=state["status"], blocking_reason=state.get("blocking_reason"), stage_b_gate=state["stage_b_gate"],
+            plan=link["plan"], review=link["review"], dispositions=review["modes"], planned_tasks=review["phase_counts"],
+            selected_on_target=len(choices or {}), queue_counts=dict(counts), by_backend=by_backend,
+            live_workers=dict(running), npu_workers_by_card=dict(cards), planned_ready_npu_without_queue_job=waiting,
+            predecessor=dict(id=gate["job"], state=pred[1], started=pred[2]), npu_release=receipt)
+        result["sources"].extend([link["plan"]["path"], link["review"]["path"], str(directory / "scheduler.json"),
+                                  "systemctl --user show " + link["unit"]])
+        gate_text = "已放行" if receipt else "等待启动"
+        result["summary"] += (f" · 早期补跑选方={len(choices or {})}，队列={dict(counts)}"
+                              f" (CPU {running['cpu']}，NPU {running['npu']}) · {gate['job']}={pred[1]}，补跑 NPU {gate_text}"
+                              f" · 补跑控制器={props.get('ActiveState')}，B={state['stage_b_gate']}")
+    except (OSError, KeyError, TypeError, ValueError, sqlite3.Error, subprocess.SubprocessError) as error:
+        result["summary"] += f" · 早期补跑不可核验 ({error})"
+
+
 def observe(root):
     path = root / LAUNCH
     launch, pointer = json_observation(path)
@@ -80,6 +155,7 @@ def observe(root):
         result["summary"] = f"启动指针含无效数值 ({error})"
         return result
     observe_round(root, launch, result)
+    observe_deferred_followup(root, launch, result)
     _, after = json_observation(path)
     if after.get("sha256") != pointer["sha256"]:
         if result["kind"] == "live":

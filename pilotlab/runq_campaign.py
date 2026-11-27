@@ -48,7 +48,7 @@ def first_update_time(directory):
     return None
 
 
-def device_cost(db, owner, now, preparation=False):
+def device_cost(db, owner, now, preparation=False, *, alongside=None):
     """Charge a campaign's dedicated lease once, and union its spans on mixed leases."""
     rows = db.execute("""SELECT l.id,l.acquired,l.released,l.state,l.trigger_job,j.id AS job,j.assigned,
         j.finished,json_extract(j.spec,'$.owner') AS owner,json_extract(j.spec,'$.preparation') AS prep
@@ -57,28 +57,36 @@ def device_cost(db, owner, now, preparation=False):
     groups = defaultdict(list)
     for r in rows:
         groups[r["id"]].append(r)
-    total = 0.
-    for group in groups.values():
-        mine = [r for r in group if r["owner"] == owner and (not preparation or r["prep"])]
+    def duration(group, mine):
         if not mine:
-            continue
+            return 0.
         first = group[0]
         # A lost broker's surviving worker retains the underlying physical fd.
         end = first["released"] or now
         if first["state"] == "lost":
             end = max(end, *(r["finished"] or now for r in group))
         if len(mine) == len(group):
-            total += max(0., end-first["acquired"])
-            continue
+            return max(0., end-first["acquired"])
         cursor = first["acquired"]
         intervals = []
         for r in mine:
             begin = first["acquired"] if r["job"] == r["trigger_job"] else r["assigned"]
             if begin is not None:
                 intervals.append((begin,min(end,r["finished"] or now)))
+        total = 0.
         for a,b in sorted(intervals):
             total += max(0.,b-max(cursor,a))
             cursor = max(cursor,b)
+        return total
+
+    total = 0.
+    for group in groups.values():
+        mine = [r for r in group if r["owner"] == owner and (not preparation or r["prep"])]
+        if not mine:
+            continue
+        primary = [r for r in group if r["owner"] == alongside and (not preparation or r["prep"])] if alongside else []
+        # The original controller already charges its own spans. Bill only the increment to their union.
+        total += duration(group, mine + primary) - duration(group, primary)
     return total
 
 

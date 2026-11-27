@@ -1,23 +1,26 @@
-# Stage A 的 44 个暂停主体已接续，早期主体复核已收齐 89/93 份报告
+# Stage A 的 74 个早期主体已逐项复核，70 个进入补跑
 
-北京时间 2026-11-26 23:04，项目旧队列运行 79 个 NPU worker 和 40 个 CPU worker。270 个主体中已有 213 个选定配方。训练调度记录有 1,812 个完成、119 个运行、16 个待派和 8 个已替换。B 门禁关闭，批次截止为北京时间 2026-12-20 00:48:33。[队列与复核快照](evidence/pilot-r3-deferred-review-deadline-20261126.json)
+北京时间 2026-11-27 10:15，270 个主队列主体已有 247 个选定配方，23 个仍在推进。此前暂停的 44 个包含在这 270 个内，100 项接续全部完成，其中 34 个主体已选方。另有 74 个早期主体与主队列无交集。4 个可有限沿用旧配方，70 个需要目标源码补跑。全批仍为 344 个主体，B 门禁关闭，绝对截止为北京时间 2026-12-20 00:48:33。[逐主体判定表](pilot-r3-deferred-dispositions.md) · [原始主体清单](evidence/pilot-r3-deferred-74-review.json)
 
-## 44 个主体的训练接续
+## 逐项判定
 
-100 个接续作业的编号为 1946–2045，按 A3 的 18 项、A2 的 48 项、A1 的 34 项依次登记。已有 67 个完成，33 个运行。恢复使用原训练程序、后端、父状态和阶段初评，86 份训练日志此前已核实首步等于检查点步数加一。按原逐主体预算，只在取得执行资源时合计追加 19,328 个评估 token。Lattice/S、d128、k2 主体已选出 r2、r1，控制器自动生成两个配方各两种子的 A2 任务（2141–2144）。[队列快照](evidence/pilot-r3-deferred-review-deadline-20261126.json) · [逐项接续证据](evidence/pilot-r3-signal-and-deferred-20261126.json)
+93 份最终源码复核报告覆盖 813 个原比较点、907 项版本比较。对实际将用于补跑的版本，151 个单步逐项一致，661 个返回有限更新但有差异，1 个旧 CPU 失败批次在目标版成功更新。同一批次的参考版也完成更新。已用原始训练结果重新生成 55 份 A1、48 份 A2 排名，并核对 42 个旧选方的两种子 A3 检查点。[单步、排名、检查点及预算凭据](evidence/pilot-r3-deferred-dispositions-20261127.json)
 
-44 个主体接续时切换了实验控制器，队列派发器沿用原 systemd InvocationID。当时 57 个 worker 中，55 个以原 PID 和启动时钟继续运行，2 个正常完成。自动使用物理卡 0–11、14、15，CPU 自动目标为 40 个 worker。新作业按驱动物理空闲显存扣除已有任务尚未兑现的峰值预约后准入。[训练接续与资源设置](evidence/pilot-r3-signal-and-deferred-20261126.json)
+| 处置 | 主体 | 执行范围 |
+|---|---:|---|
+| 沿用旧配方 | 4 | Exchange/d64/K 的 base、independent、pool、shannon 均沿用 r2。两个种子的 A1 入围边界、A2 两强与赢家 A3 的单步一致，原末态继续标记旧源码。 |
+| 重比两个入围配方 | 49 | 38 个原有选方、7 个原 A2 未完成、4 个原 A3 未完成。47 个比较 r2/r1，2 个比较 r2/r5。每个配方从两个原种子重建 A1，等量比较 A2，再对赢家做 A3。 |
+| 复验旧赢家 | 2 | Exchange/d64/X/pool、Settle/d64/X/group5 的两个 A3 后继单步一致。只用 r2，在目标源码上从种子起点逐阶段确认。 |
+| 重做六配方 | 19 | 原容量缺口 4 个、初始化缺口 10 个、A1 比较缺口 5 个。按原容量、初始化、六配方规则完成选方。 |
 
-## 74 个早期主体的源码复核
+36 个主体的 78 条 A2 比较缺少父状态及可用检查点。补跑沿用原种子、后端、批量与累计训练曝光，A1 为 0.25 Mi token，A2 为 1 Mi，A3 为 2 Mi。每个补跑主体重新进行三种子初始化。具有完整旧初始化证据的 56 个可并行开始独立的 A1，做选择时仍须新初始化通过。每主体 1 Mi 评估 token 硬限额累加历史预约。[处置阈值与逐项预算](evidence/pilot-r3-deferred-dispositions-20261127.json)
 
-93 份复核计划（初始队列编号 2046–2138）中有 64 份使用 NPU，29 份使用 CPU。813 个比较点覆盖旧选方及其竞争配方，或尚未选方主体的首个缺口。每个版本在原后端用同一批输入比较损失、梯度与后继状态，12 个 Shannon 主体另测弱质量配方。原计划预记 6,518,528 个准备 token。[复核矩阵与原始入队凭据](evidence/pilot-r3-signal-and-deferred-20261126.json)
+## 队列与接续
 
-89 份报告已经落盘。Timed/K/singleton7 作业 2069 在 900 秒时中断，接续作业 2209 在 Device 7 复用 31 条观测，只补 `weak_log` 种子 2026112002 的 r1–r5，独立结算 2,048 个 token。三个版本各 12 条更新已齐。2065、2070、2071、2072 已在原队列编号上更新执行命令，各等单卡 52 GiB。复核按比较点保存结果，运行时间受批次绝对截止和准备预算约束。[接续、合并与当前预约](evidence/pilot-r3-deferred-review-deadline-20261126.json)
+补跑与 270 个主体共用项目旧队列的同一个派发器、物理卡和 CPU 上限。补跑控制器独立运行，按依赖生成作业，预计容量 12 项、初始化 210 项、A1 428 项、A2 276 项、A3 140 项。首批已就绪 466 项，其中 CPU 102 项已入队，NPU 364 项暂存项目计划，放行条件为原队列的 2237 在 NPU 上实际启动。一次放行后由控制器自动续填。51 个原 worker 在此次接入前后保持 PID 和启动时钟。[入队与运行观测](evidence/pilot-r3-deferred-followup-20261127.json)
 
-Settle/K/singleton7 的 CPU 失败批次在旧版再次触发分配梯度溢出。冻结参考基座 `6e14a6cc` 和弱质量基座 `e9bd1483` 均完成第 7,354 次更新。两种子的单步结果不能单独确认完整轨迹或配方排名。36 个主体还有 78 条 A2 比较缺少父状态及本阶段两代检查点，已逐项核对退役记录与私有归档清单。[历史排名与缺口](evidence/pilot-r3-deferred-74-review.json) · [本次队列与逐项证据](evidence/pilot-r3-signal-and-deferred-20261126.json)
+10:15 的样本中，主队列在跑 25 个 CPU、26 个 NPU worker，新增 CPU 在跑 15 个，均已写出训练步，另有 87 个 CPU 作业排队。自动物理卡为 0–11、14、15，CPU 自动目标为 40。2237 申请 55 GiB，当时仍在自动择卡。[运行快照](evidence/pilot-r3-deferred-followup-20261127.json)
 
-## 定位与接续入口
+11:00 已安排一次独立检查，记录 2237 的 PID 和租约、各卡扣除预约后的可用显存，以及同主体 CPU、NPU 轨迹最近 15、30、60 分钟的步速。若 2237 仍在等卡，据此评估提前腾卡能否缩短该主体的完工时间。NPU 补跑始终按工作进程的实际启动事件放行。[定时检查与入队凭据](evidence/pilot-r3-deferred-followup-20261127.json)
 
-运行 `python scripts/status.py` 或加 `--json` 查询两组作业。运行 `python -m pilotlab.runq --root ~/.local/state/tide-runq show 2209` 查询单项。启动指针在 `.local/pilot-r3/launch.json`。其中 `last_signal_admission` 绑定训练接续编号，`deferred_source_review.submissions` 指向逐模型的有效复核编号与结果目录，`original_submissions` 指回首次提交。每项报告为 `comparison.json`，有 `observations` 字段时取该目录，否则取原计划旁的 `observations/`。[队列操作](README.md#自动补位与手动派发)
-
-此前 7 项显存失败的补跑均已完成，健康与因果检查通过。其两项 A2 精确恢复后首步均为 513，另五项 A1 首步均为 1。[原补跑计划](evidence/pilot-r3-oom-seven-20261126.json) · [本次队列与逐项证据](evidence/pilot-r3-signal-and-deferred-20261126.json)
+运行 `python scripts/status.py` 查看主队列和补跑，`--json` 中的 `runtime.deferred_followup` 给出放行凭据、各后端已入队状态与有活动进程的 worker。启动指针 `.local/pilot-r3/launch.json` 的 `deferred_followup` 绑定冻结计划、独立输出、服务、日志与 2237 的身份。单项可用 `python -m pilotlab.runq --root ~/.local/state/tide-runq show 2237` 查询。[队列操作](README.md#自动补位与手动派发)

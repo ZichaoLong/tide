@@ -133,3 +133,34 @@ def test_resume_and_review_counts_bind_the_two_manifests_to_their_queue(tmp_path
     incorrect = {"summary":"", "sources":[]}
     runtime.observe_queue_additions({**launch, "output":"another campaign"}, incorrect)
     assert "queue_additions" not in incorrect and "不可核验" in incorrect["summary"]
+
+
+def test_early_followup_keeps_unreleased_npu_requests_distinct_from_submitted_work(tmp_path, monkeypatch):
+    from pilotlab.io import atomic_json
+    from pilotlab.prepare_resume3 import reference
+    from pilotlab.runq_store import connect, submit
+    local = tmp_path / ".local"
+    owner, primary = str(local / "early" / "round"), str(local / "main")
+    queue = tmp_path / "queue"
+    db = connect(queue)
+    gate = dict(owner=primary, job_key="main/a/0", task_id="a")
+    gate["job"] = submit(db, gate["job_key"], dict(owner=primary, task_id="a", allowed=["npu"], hbm=16, ram={"npu": 8}))
+    review_file, plan_file = local / "review.json", local / "plan.json"
+    atomic_json(review_file, dict(modes={"compare_finalists": 1}, phase_counts={"a1": 4}))
+    config = dict(predecessor=gate, runq_root=str(queue))
+    plan = dict(config=config, review=reference(review_file), unit="early.service", output=owner)
+    atomic_json(plan_file, plan)
+    link = dict(unit=plan["unit"], invocation="test", plan=reference(plan_file), output=owner,
+                review=plan["review"], predecessor=gate)
+    atomic_json(local / "early/round/scheduler.json", dict(config=config, status="running", stage_b_gate="closed",
+                controller_identity=dict(pid=77, start_ticks=7),
+                tasks={"cpu": dict(status="pending", device="cpu", runq_id=2), "npu": dict(status="pending", device="npu:0")}))
+    submit(db, "early/cpu/0", dict(owner=owner, task_id="cpu", allowed=["cpu"], ram={"cpu": 8}))
+    monkeypatch.setattr(runtime, "systemd_observation", lambda _: {"properties": {"ActiveState": "inactive"}})
+    data = dict(summary="", sources=[])
+    launch = dict(runq_root=str(queue), output=primary, deferred_followup=link)
+    runtime.observe_deferred_followup(tmp_path, launch, data)
+    view = data["deferred_followup"]
+    assert view["queue_counts"] == {"queued": 1} and view["by_backend"]["npu"] == {}
+    assert view["planned_ready_npu_without_queue_job"] == 1 and view["npu_release"] is None
+    assert view["controller_live"] is False and view["predecessor"]["state"] == "queued"
