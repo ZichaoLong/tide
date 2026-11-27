@@ -12,5 +12,6 @@
 |---|---|
 | 查当前阶段、作业或阻断 | [状态命令](scripts/status.py) · [当前交接](docs/STATUS.md) |
 | 接续同一批 | [当前待办](docs/ROADMAP.md) · [本机与干净检出](docs/README.md#接续同一批) |
+| 在本机、ModelArts 或两处执行冻结任务 | [生成计划、发现批次、跨作业恢复与项目复核](docs/portable-execution.md) |
 | 定位失败、修改并验证 | [源码与测试](docs/README.md#定位和修改) · [r24 从故障到正式采用](docs/requests/pilot-r3-r24-quad.md) |
 | 开一个新周期 | [新周期工作规则](AGENTS.md#新周期工作规则) |

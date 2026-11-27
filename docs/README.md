@@ -93,4 +93,4 @@ python scripts/restore_checkpoint_archive.py \
 
 ## 跨位置执行
 
-从本机、ModelArts 或两处运行同一份冻结 R3 任务时，按项目协议生成计划、恢复完整检查点并复核原始证据。[冻结、跨作业恢复与汇总](portable-execution.md)
+从本机、ModelArts 或两处运行冻结 R3 任务时，用项目脚本生成计划，交给 `maflow run --site` 提交。接手已有批次先用 `maflow batches` 找 ID，再用 `maflow status`、`collect`、`resume` 查看进度、收取证据和补跑。项目根据原始结果、检查点及尝试链复核完成项。[冻结、跨作业恢复与汇总](portable-execution.md)

@@ -1,6 +1,6 @@
 # 在本机和 ModelArts 接续冻结的 R3 任务
 
-项目负责冻结原始任务、源码、数据、科学门禁和检查点。账户的 `maflow batch` 负责批次、地点、作业、尝试编号、区域制品和资源释放。两者使用同一个任务 ID 及原始 `task.json` 字节的 SHA-256。
+项目负责冻结原始任务、源码、数据、科学门禁和检查点。账户工具 `maflow` 记录执行地点、作业、尝试编号、区域制品和资源回收情况。两者使用同一个任务 ID 及原始 `task.json` 字节的 SHA-256。
 
 ## 准备已有任务
 
@@ -15,7 +15,19 @@
   --nodes 1 --ram-mib 8192 --hbm-mib 8192 --worker-seconds 420 --run-seconds 900
 ```
 
-按每项实际配方填写申请量与时限。对同一冻结来源的多项任务可重复使用 `--task`。本机使用 `--site local`，`--python-command` 可指定目标解释器。混合运行时，把分别准备好的组放在同一个计划中，为组指定各自的地点、输入目录和唯一任务 ID。云组内 runq 使用已获配的实例与卡，本机组沿用账户 runq 已分配的设备。运行、查询、接续从 `maflow batch --help` 接手。
+按每项实际配方填写申请量与时限。对同一冻结来源的多项任务可重复使用 `--task`。本机使用 `--site local`，`--python-command` 可指定目标解释器。混合运行时，把分别准备好的组放在同一个计划中，为组指定各自的地点、输入目录和唯一任务 ID。云组内 runq 使用已获配的实例与卡，本机组沿用账户 runq 已分配的设备。
+
+以下命令中的 `SITE` 取本批约定的 `modelarts`、`local` 或 `hybrid`。`run --dry-run` 显示任务分组，去掉该选项后提交。`batches` 可从已登记的计划找回批次 ID。`status` 查看逐任务状态，`collect` 将结果与检查点收妥到持久位置。接手同一批时用 `resume --dry-run` 查看还需补跑的条目，用 `resume` 派发。
+
+```bash
+maflow run --site "$SITE" --plan "$BATCH_DIR/plan.json" --dry-run
+maflow run --site "$SITE" --plan "$BATCH_DIR/plan.json"
+maflow batches --site "$SITE" --project "$PROJECT"
+maflow status "$BATCH" --site "$SITE" --json
+maflow collect "$BATCH" --site "$SITE"
+maflow resume "$BATCH" --site "$SITE" --dry-run
+maflow resume "$BATCH" --site "$SITE"
+```
 
 `payload/frozen/freeze.json` 将原路径映射到包内相对路径，并列出文件大小和 SHA-256。原始 JSON 中的路径、原始字节及源码身份继续参与校验。运行适配只在该 worker 子进程内将已登记的路径解析到本地副本。原任务声明的 Python、依赖、后端与训练轨迹约束均由冻结的 worker 再次检查。原配方绑定的运行时版本与云镜像不兼容时，在项目中单独审阅新配方。已有任务继续以冻结字节为准，`release.json` 还登记适配程序、runq 与用于交接的 Git 修订。
 
