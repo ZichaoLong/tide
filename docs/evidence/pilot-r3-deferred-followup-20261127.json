@@ -73,76 +73,89 @@
       "physical_free_gib": 18.223
     },
     "10": {
-      "free_after_reservations_gib": 23.842,
+      "free_after_reservations_gib": -0.217,
       "jobs": [
         2255,
-        2262
+        2262,
+        2377,
+        2383,
+        2386
       ],
-      "physical_free_gib": 38.853
+      "physical_free_gib": 37.535
     },
     "11": {
       "free_after_reservations_gib": 16.269,
       "jobs": [
         2263
       ],
-      "physical_free_gib": 22.785
+      "physical_free_gib": 22.643
     },
     "14": {
-      "free_after_reservations_gib": 50.954,
+      "free_after_reservations_gib": -1.996,
       "jobs": [
-        2264
+        2237,
+        2404
       ],
-      "physical_free_gib": 54.997
+      "physical_free_gib": 25.98
     },
     "15": {
-      "free_after_reservations_gib": 6.23,
+      "free_after_reservations_gib": -1.71,
       "jobs": [
-        2236
+        2236,
+        2628
       ],
-      "physical_free_gib": 27.298
+      "physical_free_gib": 26.759
     },
     "2": {
-      "free_after_reservations_gib": 2.961,
+      "free_after_reservations_gib": -4.991,
       "jobs": [
         2184,
-        2258
+        2258,
+        2626
       ],
-      "physical_free_gib": 24.697
+      "physical_free_gib": 24.15
     },
     "3": {
-      "free_after_reservations_gib": 10.299,
+      "free_after_reservations_gib": 2.354,
       "jobs": [
         2182,
-        2254
+        2254,
+        2629
       ],
-      "physical_free_gib": 33.614
+      "physical_free_gib": 33.074
     },
     "4": {
-      "free_after_reservations_gib": 2.975,
+      "free_after_reservations_gib": -4.983,
       "jobs": [
         2183,
-        2259
+        2259,
+        2627
       ],
-      "physical_free_gib": 23.874
+      "physical_free_gib": 23.321
     },
     "5": {
-      "free_after_reservations_gib": 35.228,
+      "free_after_reservations_gib": 1.438,
       "jobs": [
-        2256
+        2256,
+        2372,
+        2378,
+        2384,
+        2390
       ],
-      "physical_free_gib": 45.151
+      "physical_free_gib": 38.181
     },
     "6": {
-      "free_after_reservations_gib": 7.021,
+      "free_after_reservations_gib": -0.929,
       "jobs": [
         934,
         2224,
-        2240
+        2240,
+        2379
       ],
-      "physical_free_gib": 30.219
+      "physical_free_gib": 29.86
     },
     "7": {
-      "free_after_reservations_gib": 0.34,
+      "free_after_reservations_gib": 0.341,
       "jobs": [
         2241,
         2252,
@@ -151,20 +164,24 @@
       "physical_free_gib": 24.124
     },
     "8": {
-      "free_after_reservations_gib": 18.96,
+      "free_after_reservations_gib": -0.89,
       "jobs": [
         2267,
-        2269
+        2269,
+        2385,
+        2391,
+        2644
       ],
-      "physical_free_gib": 34.051
+      "physical_free_gib": 31.625
     },
     "9": {
-      "free_after_reservations_gib": 8.296,
+      "free_after_reservations_gib": 0.347,
       "jobs": [
         2251,
-        2257
+        2257,
+        2376
       ],
-      "physical_free_gib": 30.961
+      "physical_free_gib": 30.604
     }
   },
   "check_at_1100": {
@@ -176,6 +193,16 @@
     "program": {
       "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/prelaunch-checks/check_at_1100.py",
       "sha256": "db72394267ff7024000040bbaf7049978d68fa418eaeab923889a688f4046f49"
+    },
+    "superseded_before_fire": {
+      "at": 1795746350.0933607,
+      "reason": "User requested immediate device migration. Job 2237 started on Device 14 before 11:00.",
+      "release": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/round/npu-release.json",
+        "sha256": "8d576f32259c1da158cfe1d9c75866a3830ac9566d0ff1918f274db4fb28f3d4"
+      },
+      "state": "inactive",
+      "stopped_timer": "tide-pilot-r3-check-2237-20261127.timer"
     },
     "timer": "tide-pilot-r3-check-2237-20261127.timer"
   },
@@ -223,8 +250,8 @@
     "verified_first_updates": 15
   },
   "first_updates_by_backend": {
-    "cpu": 15,
-    "npu": 0
+    "cpu": 14,
+    "npu": 15
   },
   "followup": {
     "budget": {
@@ -333,7 +360,7 @@
     "submitted_unix": 1795745570.401832,
     "unit": "tide-pilot-r3-deferred-followup-20261127.service"
   },
-  "observed_local": "2026-11-27T10:15:36.911861+08:00",
+  "observed_local": "2026-11-27T10:28:18.477438+08:00",
   "original_services": {
     "tide-pilot-r3-deferred-followup-20261127.service": {
       "active": "active",
@@ -372,19 +399,35 @@
     "init": 210
   },
   "predecessor": {
-    "generation": 0,
+    "generation": 1,
     "id": 2237,
     "job_key": "r3-campaign-runq/low-activity-multiscale_timed-mixed-n16-d128-k1-d8614748b3-a2-2026112002-r5/0",
-    "lease": null,
-    "pid": null,
-    "reason": "waiting for peak HBM",
-    "started": null,
-    "state": "queued",
+    "lease": 50,
+    "pid": 898407,
+    "reason": null,
+    "started": 1795746290.6688497,
+    "state": "running",
     "target": "auto",
-    "ticks": null
+    "ticks": 2333246137
   },
   "primary_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-runq/round",
-  "release": null,
+  "release": {
+    "generation": 1,
+    "lease": 50,
+    "observed_unix": 1795746292.698826,
+    "physical_card": 14,
+    "pid": 898407,
+    "predecessor": {
+      "job": 2237,
+      "job_key": "r3-campaign-runq/low-activity-multiscale_timed-mixed-n16-d128-k1-d8614748b3-a2-2026112002-r5/0",
+      "minimum_generation": 1,
+      "owner": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-runq/round",
+      "task_id": "low-activity-multiscale_timed-mixed-n16-d128-k1-d8614748b3-a2-2026112002-r5"
+    },
+    "started": 1795746290.6688497,
+    "state": "running",
+    "ticks": 2333246137
+  },
   "runq_root": "/mi/data2T/zlong/home/.local/state/tide-runq",
   "schema": "pilot-r3-deferred-followup-admission-v1",
   "source": {
@@ -416,40 +459,155 @@
   "stage_a": {
     "followup": {
       "current_queue": {
-        "cpu/queued": 87,
-        "cpu/running": 15
+        "cpu/completed": 3,
+        "cpu/queued": 84,
+        "cpu/running": 15,
+        "npu/completed": 15,
+        "npu/queued": 333,
+        "npu/running": 16
       },
       "failed_queue_ids": [],
-      "healthy_examples": [],
+      "healthy_examples": [
+        {
+          "backend": "cpu",
+          "job": 2274,
+          "phase": "a1",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/round/tasks/exchange-d64-k-narrowwide-fdc0f72367-a1-2026112001-r1/attempt-0/result.json",
+            "sha256": "6957e8b15609381d114e8e6f2a7274cdf7ae08154446d11e8292b752abc5bd08"
+          },
+          "task": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/round/tasks/exchange-d64-k-narrowwide-fdc0f72367-a1-2026112001-r1/task.json",
+            "sha256": "d16705b7ce47fbcfb597716c4200e5bec386bd21ff979c5cae9cdf24e0aead41"
+          }
+        },
+        {
+          "backend": "cpu",
+          "job": 2279,
+          "phase": "a1",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/round/tasks/multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112002-r1/attempt-0/result.json",
+            "sha256": "5159daacdc4953cc740a1189b0edd899247ab821037fcf6dee235247f5cf1b4c"
+          },
+          "task": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/round/tasks/multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112002-r1/task.json",
+            "sha256": "9cc98fa540b69c8607f5ab03c35fe73b1588564d8a4aa52a774d6fc52fa96755"
+          }
+        },
+        {
+          "backend": "cpu",
+          "job": 2281,
+          "phase": "a1",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/round/tasks/multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112002-r2/attempt-0/result.json",
+            "sha256": "af8fec65206e5535a43e88781d9d8ad5f89ef987f301f74d33cfa671e30c1e0c"
+          },
+          "task": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/round/tasks/multiscale_settle-d64-k-group5-4eb83f52ae-a1-2026112002-r2/task.json",
+            "sha256": "45287922f91fb2c75b77a486bd5c60fe42543a054d293194afe167b338ad3974"
+          }
+        },
+        {
+          "backend": "npu",
+          "job": 2373,
+          "phase": "init",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/round/tasks/fc-d64-k-base-6a381e00da-init-2026112001/attempt-0/result.json",
+            "sha256": "f649a5b52805d8c8096c6551a3afb85a60a5c6ec0c01fbf71ba2fafae3c1ffa1"
+          },
+          "task": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/round/tasks/fc-d64-k-base-6a381e00da-init-2026112001/task.json",
+            "sha256": "5eab0124302acf36455ceb5ae995a53b4804bb629f04ba8cd91c90d37aa36268"
+          }
+        },
+        {
+          "backend": "npu",
+          "job": 2374,
+          "phase": "init",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/round/tasks/fc-d64-k-base-6a381e00da-init-2026112002/attempt-0/result.json",
+            "sha256": "9ed68a295221e2b723cbcef928a3abfcd750ead53f9a5a4b0af277c2fac1c6b1"
+          },
+          "task": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/round/tasks/fc-d64-k-base-6a381e00da-init-2026112002/task.json",
+            "sha256": "5406fb83d13561d93b0791ffe79164eb89eb0246b33266e14c7fc3dff49521d7"
+          }
+        },
+        {
+          "backend": "npu",
+          "job": 2375,
+          "phase": "init",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/round/tasks/fc-d64-k-base-6a381e00da-init-2026112003/attempt-0/result.json",
+            "sha256": "10141e921ca47a4ff6f381f34625415db1bbc337e52742ade3845e382bdb9e19"
+          },
+          "task": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/round/tasks/fc-d64-k-base-6a381e00da-init-2026112003/task.json",
+            "sha256": "2f7c89a5c9e6c8f16ec0a7e7498c9d2539417cb391ac89b0df0ed25973a8a907"
+          }
+        },
+        {
+          "backend": "npu",
+          "job": 2380,
+          "phase": "init",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/round/tasks/fc-d64-k-depth3-82a8ff2b30-init-2026112001/attempt-0/result.json",
+            "sha256": "734611ab2adc14cdade4a4517f0780a8883430d86377ded19cb6bacdfece5eb0"
+          },
+          "task": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/round/tasks/fc-d64-k-depth3-82a8ff2b30-init-2026112001/task.json",
+            "sha256": "a0c2e3d418983bb3aec6cd37e70c57328eba79dcbd7b44ce590f526456c70dc2"
+          }
+        },
+        {
+          "backend": "npu",
+          "job": 2381,
+          "phase": "init",
+          "result": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/round/tasks/fc-d64-k-depth3-82a8ff2b30-init-2026112002/attempt-0/result.json",
+            "sha256": "9572be76523db4c901ad0a27c794767a65b7f1e5caac0b2f0b54efd413396872"
+          },
+          "task": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/round/tasks/fc-d64-k-depth3-82a8ff2b30-init-2026112002/task.json",
+            "sha256": "dcb85839cad2e308fe1ee51b6550d976d64cbca582c2fb9b5d9c06839a545c58"
+          }
+        }
+      ],
       "live": {
-        "cpu": 15
+        "cpu": 15,
+        "npu": 16
       },
       "queue_ids": {
         "cpu": {
           "count": 102,
           "highest": 2371,
           "lowest": 2270
+        },
+        "npu": {
+          "count": 364,
+          "highest": 2736,
+          "lowest": 2373
         }
       },
       "reason": null,
       "scheduler": "running",
       "selected": 0,
       "task_counts": {
-        "pending": 451,
-        "running": 15
+        "completed": 18,
+        "pending": 417,
+        "running": 31
       }
     },
     "main": {
       "current_queue": {
         "cpu/running": 25,
-        "npu/queued": 1,
-        "npu/running": 26
+        "npu/running": 27
       },
       "failed_queue_ids": [],
       "healthy_examples": [],
       "live": {
         "cpu": 25,
-        "npu": 26
+        "npu": 27
       },
       "queue_ids": {},
       "reason": null,
@@ -457,8 +615,7 @@
       "selected": 247,
       "task_counts": {
         "completed": 1955,
-        "pending": 1,
-        "running": 51,
+        "running": 52,
         "superseded": 8
       }
     }
@@ -469,8 +626,8 @@
     "sha256": "0c43118b0308a89639ec4b28b4fd74230cf21eea2b79590555235d64371c8329"
   },
   "updated_observation": {
-    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/prelaunch-checks/cpu-admission.json",
-    "sha256": "0c43118b0308a89639ec4b28b4fd74230cf21eea2b79590555235d64371c8329"
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/prelaunch-checks/after-release.json",
+    "sha256": "56dfb964d510d0dd46f28f8a6c098ec570fd7ce09f85ee856306ef7a27b796fe"
   },
   "validated_requests": {
     "first_wave": {
