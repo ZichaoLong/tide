@@ -254,6 +254,23 @@ def generate(a):
             **tasks[0]["resources"],
             "threads": max(t["resources"]["threads"] for t in tasks),
         }
+    group = plan["groups"][0]
+    if a.authority:
+        plan["authority"] = a.authority
+    if a.target or a.spec or a.interactive:
+        require(a.site == "modelarts", "a cloud target, spec or interactive window needs a ModelArts group")
+        if a.target:
+            group["target"] = a.target
+        if a.spec:
+            group["spec"] = a.spec
+        if a.interactive:
+            group["interactive"] = True
+    if a.queue_seconds is not None:
+        require(a.queue_seconds > 0, "queue budget must be positive")
+        group["queue_seconds"] = a.queue_seconds
+    if a.resume_run_seconds is not None:
+        require(a.resume_run_seconds > a.worker_seconds, "resume budget must fit a worker")
+        group["resume_run_seconds"] = a.resume_run_seconds
     write(output / "plan.json", plan)
     return output / "plan.json"
 
@@ -277,6 +294,12 @@ if __name__ == "__main__":
     p.add_argument("--data", type=Path)
     p.add_argument("--evidence", type=Path, action="append", default=[])
     p.add_argument("--site", choices=("local", "modelarts"), default="modelarts")
+    p.add_argument("--authority", help="the batch's authoritative OBS alias, or local")
+    p.add_argument("--target", help="configured ModelArts compute target")
+    p.add_argument("--spec", help="configured ModelArts resource specification")
+    p.add_argument("--interactive", action="store_true", help="keep the job available after task receipts until finish or deadline")
+    p.add_argument("--queue-seconds", type=int)
+    p.add_argument("--resume-run-seconds", type=int)
     p.add_argument("--nodes", type=int)
     p.add_argument("--run-seconds", type=int, default=900)
     p.add_argument("--worker-seconds", type=int, default=420)

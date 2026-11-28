@@ -93,4 +93,4 @@ python scripts/restore_checkpoint_archive.py \
 
 ## 跨位置执行
 
-从本机、ModelArts 或两处运行冻结 R3 任务时，用项目脚本生成计划，交给 `maflow run --site` 提交。接手已有批次先用 `maflow batches` 找 ID，再用 `maflow status`、`collect`、`resume` 查看进度、收取证据和补跑。项目根据原始结果、检查点及尝试链复核完成项。[冻结、跨作业恢复与汇总](portable-execution.md)
+从本机、ModelArts 或两处运行冻结 R3 任务时，用项目脚本生成计划，交给 `maflow project run --plan` 提交。接手已有批次先用 `maflow project list` 找项目和批次，再用 `maflow project show`、`collect`、`resume` 查看进度、收取证据和补跑。项目根据原始结果、检查点及尝试链复核完成项。[冻结、跨作业恢复与汇总](portable-execution.md)

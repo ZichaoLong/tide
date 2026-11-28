@@ -12,7 +12,7 @@
 | 查状态 | 只读运行 `python scripts/status.py` 或加 `--json`。本机适配器读取 `.local/pilot-r3/launch.json`，用指针的 unit 核对 systemd、控制组实际进程和驱动 PID。读数带采样时间。[状态说明](docs/README.md#查状态) |
 | 手动派发或调整自动并发 | 运行 `scripts/runq status --state queued` 查看可派 ID，用 `pin` 定卡或派到 CPU，用 `limits` 调整自动目标。已运行的 worker 持续执行。[队列操作](docs/README.md#自动补位与手动派发) |
 | 接续同一批 | 对照交接和待办，核对冻结计划、数据、已消费预算、绝对截止、检查点和阶段门禁。在新目录冻结通过验收的改动。[当前交接](docs/STATUS.md) · [当前待办](docs/ROADMAP.md) |
-| 在本机与 ModelArts 之间分工或接续 | 从项目生成冻结计划，再用 `maflow batches`、`status`、`collect`、`resume` 找到已有批次、检查逐项证据并接续。[跨位置执行](docs/portable-execution.md) |
+| 在本机与 ModelArts 之间分工或接续 | 生成冻结计划，用 `maflow project list` 找项目和批次，再用同组的 `show`、`collect`、`resume` 检查逐项证据并接续。[跨位置执行](docs/portable-execution.md) |
 | 定位和修改 | 从失败任务、原始证据和独立回归找到维护源码。实验调度、训练封装、选方与报告归本仓 `pilotlab/`。模型算子、梯度和状态修复落在用户指定的基座，数学定义对照用户指定的语义仓库。正式作业冻结验收过的基座版本。[定位入口](docs/README.md#定位和修改) |
 | 开新周期 | 从本线程选定的研究问题和来源起步，按下文确定验证范围与当次授权。[新周期工作规则](#新周期工作规则) |
 
