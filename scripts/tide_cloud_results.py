@@ -86,6 +86,7 @@ def ingest(area, cache, region, east, prefix, claim, state):
     selected = claim.get("receipt_key", canonical)
     require(selected in {canonical, "products/reconciled/" + a + ".json"}, "invalid receipt recovery scope")
     receipt = out / ("receipt.json" if selected == canonical else "receipt-reconciled.json")
+    location_suffix = ".location.json" if selected == canonical else ".reconciled.location.json"
     expected = claim.get("receipt_sha256")
     if not receipt.exists():
         region.download(prefix + "/" + selected, receipt, sha256=expected)
@@ -109,7 +110,7 @@ def ingest(area, cache, region, east, prefix, claim, state):
         if name.endswith(".pt"):
             target = object_key(h)
             path = cache / h
-            location = out / (name + ".location.json")
+            location = out / (name + location_suffix)
             if not location.exists():
                 checkpoint_object(region, key, target, artifact, node)
                 observed = readback(region, target, h, size, node)
@@ -156,7 +157,7 @@ def ingest(area, cache, region, east, prefix, claim, state):
                 "runtime_plan_path": str(path), "receipt_path": str(receipt), "checkpoint_path": results.get("checkpoint.pt"),
                 "task_path": claim["row"]["path"], "runq_status": status}
     if "checkpoint.pt" in results:
-        location = out / "checkpoint.pt.location.json"
+        location = out / ("checkpoint.pt" + location_suffix)
         evidence["checkpoint_receipt"] = {"path": str(location), "sha256": sha(location)}
     if status == "interrupted":
         claim["status"] = "interrupted"
