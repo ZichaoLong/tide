@@ -163,10 +163,14 @@ def test_one_authenticated_host_call_per_batch_and_lost_response_replays_same_ro
     from tide_cloud_allocation import Store
     a, region = allocation, Region()
     claims = [a.entry("npu"), a.entry("cpu")]
+    for c in claims:
+        leaf = "inputs/authority/" + c["attempt"] + ".json"
+        region.objects[a.node["prefix"] + "/" + leaf] = (a.obs / leaf).read_bytes()
     monkeypatch.setattr(Store, "named", lambda site: region)
     sent = []
     def run(cmd, **kwargs):
-        sent.append(cmd)
+        assert cmd[-1] == "-" and kwargs["input"]
+        sent.append((cmd, kwargs["input"]))
         assert cmd[3:11] == ["job", "exec", "--json", "--node", "0", "guiyang/job-37", "--", "python3"]
         if len(sent) == 1:
             raise subprocess.TimeoutExpired("ssh", 5)
@@ -175,10 +179,25 @@ def test_one_authenticated_host_call_per_batch_and_lost_response_replays_same_ro
             "job_id": a.node["id"], "node": 0, "exit_code": 0, "stdout": json.dumps(response)}))
     monkeypatch.setattr(subprocess, "run", run)
     assert {v["status"] for v in submit.submit_batch(a.node, claims).values()} == {"retry"}
-    assert len(region.objects) == 2 and all("/routes/" in key for key in region.objects)
+    assert sum("/routes/" in key for key in region.objects) == len(claims)
     assert {v["status"] for v in submit.submit_native(a.node, [dict(c, transport="obs") for c in claims], region).values()} == {"rejected"}
     assert {v["status"] for v in submit.submit_batch(a.node, claims).values()} == {"submitted"}
     assert len(sent) == 2 and sent[0] == sent[1]
+
+
+def test_ssh_submission_uses_the_verified_descriptor_when_fuse_cannot_see_new_directories(allocation):
+    a, region = allocation, Region()
+    c = a.entry("npu")
+    leaf = "inputs/authority/" + c["attempt"] + ".json"
+    region.objects[a.node["prefix"] + "/" + leaf] = (a.obs / leaf).read_bytes()
+    (a.obs / leaf).unlink()
+    (a.obs / "inputs/routes" / (c["attempt"] + ".json")).unlink()
+    ready, replies = submit.prepare(a.node, [c], region, "ssh")
+    assert not replies and len(ready) == 1
+    def run(cmd, **kwargs):
+        return SimpleNamespace(returncode=0, stdout=json.dumps({"key":c["attempt"], "worker":0}))
+    assert a.batch(ready, run)[c["attempt"]]["status"] == "submitted"
+    assert (a.native / "envelopes" / (c["attempt"] + ".json")).read_bytes() == region.objects[a.node["prefix"] + "/" + leaf]
 
 
 def test_native_fallback_is_idempotent_handles_uncertain_put_and_prior_legacy_envelope(allocation):

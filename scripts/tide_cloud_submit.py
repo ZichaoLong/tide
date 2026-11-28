@@ -115,11 +115,16 @@ def remote_batch(node, claims, work, obs, shared, *, mount_check=os.path.ismount
         attempt = claim["attempt"]
         try:
             ident = identity(node, claim, "ssh")
-            route = relay.read(relay.member(obs, "inputs/routes/" + attempt + ".json"))
+            delivery = claim.get("delivery")
+            if delivery:
+                route = delivery["route"]
+                body = base64.b64decode(delivery["body"], validate=True)
+            else:
+                route = relay.read(relay.member(obs, "inputs/routes/" + attempt + ".json"))
+                body = relay.member(obs, "inputs/authority/" + attempt + ".json").read_bytes()
             if route != ticket(ident, node["id"]):
-                results[attempt] = reply("retry", "mounted route has not exposed the authenticated regional ticket")
+                results[attempt] = reply("retry", "regional ticket does not identify this SSH request")
                 continue
-            body = relay.member(obs, "inputs/authority/" + attempt + ".json").read_bytes()
             if hashlib.sha256(body).hexdigest() != ident["digest"]:
                 results[attempt] = reply("retry", "mounted authority has not exposed the authenticated descriptor bytes")
                 continue
@@ -171,13 +176,16 @@ def prepare(node, claims, region, transport):
             if transport == "ssh" and not region.head(route) and region.head(dispatch):
                 relay.check_descriptor(region.get_bytes(dispatch), ident)
                 return ident, reply("submitted", "identical descriptor already published through legacy OBS")
-            put_immutable(route, wire(ticket(ident, node["id"])))
+            route_ticket = ticket(ident, node["id"])
+            put_immutable(route, wire(route_ticket))
+            raw = region.get_bytes(prefix + "/inputs/authority/" + ident["attempt"] + ".json")
+            relay.check_descriptor(raw, ident)
             if transport == "obs":
-                raw = region.get_bytes(prefix + "/inputs/authority/" + ident["attempt"] + ".json")
-                relay.check_descriptor(raw, ident)
                 put_immutable(dispatch, raw)
                 return ident, reply("submitted", "native OBS descriptor is published for the frozen scanner")
-            return ident, None
+            # The original ModelArts object mount can keep negative directory entries
+            # after the regional API accepted them. Carry the fixed bytes over SSH.
+            return {**ident, "delivery":{"route":route_ticket, "body":base64.b64encode(raw).decode()}}, None
         except (FileExistsError, ValueError, KeyError, TypeError) as exc:
             return c, reply("rejected", str(exc))
         except (OSError, RuntimeError, http.client.HTTPException) as exc:
@@ -202,7 +210,7 @@ def remote_call(node, claims, *, probe=False):
     # The allocated payload remains immutable; this command lasts only for this batch.
     bootstrap = (
         "import base64,json,sys,types,zlib;"
-        "v=json.loads(zlib.decompress(base64.b64decode(sys.argv[1])));"
+        "v=json.loads(zlib.decompress(base64.b64decode(sys.argv[1] if sys.argv[1]!='-' else sys.stdin.read())));"
         "m=types.ModuleType('tide_cloud_relay');sys.modules[m.__name__]=m;exec(v['relay'],m.__dict__);"
         "p={'__name__':'tide_cloud_submit'};exec(v['submit'],p);"
         "c=v['node'];paths=m.runtime_paths(c['name'],c['id']);"
@@ -212,10 +220,11 @@ def remote_call(node, claims, *, probe=False):
     package = {"relay": Path(relay.__file__).read_text(), "submit": Path(__file__).read_text(),
                "node": {k: node[k] for k in ("name", "id")}, "claims": claims, "probe": probe}
     encoded = base64.b64encode(zlib.compress(wire(package))).decode()
-    relay.require(len(encoded) < 110_000, "batch exceeds the SSH argument size")
+    inline = probe
     cmd = [sys.executable, "-B", str(MAFLOW), "job", "exec", "--json", "--node", "0", "guiyang/" + node["id"], "--",
-           "python3", "-I", "-B", "-c", bootstrap, encoded]
-    result = subprocess.run(cmd, capture_output=True, text=True, timeout=35 if probe else 90 + 22 * len(claims))
+           "python3", "-I", "-B", "-c", bootstrap, encoded if inline else "-"]
+    result = subprocess.run(cmd, input=None if inline else encoded, capture_output=True, text=True,
+                            timeout=35 if probe else 90 + 22 * len(claims))
     relay.require(result.stdout, "ModelArts SSH command unavailable: " + result.stderr[-400:])
     response = json.loads(result.stdout)
     relay.require(response["job_id"] == node["id"] and response.get("node") == 0,
