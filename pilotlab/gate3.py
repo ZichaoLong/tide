@@ -8,6 +8,7 @@ from pathlib import Path
 import statistics
 
 from .io import sha256
+from .stage_sources3 import chain_model, gate_path_for_source, matches_stage_source, stage_source_contract
 from .scheduler3 import freeze_json
 
 MI = 2**20
@@ -46,6 +47,41 @@ def read_evidence(entry, *, checkpoint=False, retired_checkpoints=None):
         from .runtime_migration3 import reviewed_result
         result = reviewed_result(task, result, entry)
         evidence["runtime_plan"] = dict(entry["runtime_plan"])
+    if "cloud_receipt" in entry:
+        from .source_migration3 import read_bound
+        receipt, verdict = read_bound(entry["cloud_receipt"]), read_bound(entry["cloud_verdict"])
+        artifacts = receipt["artifacts"]
+        if (receipt.get("schema") != "tide-cloud-result/v1" or receipt["task"] != task["id"]
+                or receipt["fingerprint"] != task_hash or verdict["fingerprint"] != task_hash
+                or verdict["task"] != task["id"] or receipt["status"] != verdict["status"]
+                or artifacts["result.json"]["sha256"] != result_hash
+                or artifacts["project-verdict.json"]["sha256"] != entry["cloud_verdict"]["sha256"]
+                or verdict.get("execution_runtime") != result.get("execution_runtime")
+                or receipt.get("job") != result["execution_runtime"]["run"]
+                or result.get("checkpoint") and artifacts["checkpoint.pt"]["sha256"] != result["checkpoint"]["sha256"]):
+            raise ValueError("cloud receipt, worker verdict or task artifacts differ")
+        evidence.update(cloud_receipt=entry["cloud_receipt"], cloud_verdict=entry["cloud_verdict"])
+    remote = None
+    if "checkpoint_receipt" in entry:
+        if "cloud_receipt" not in entry or "runtime_plan" not in entry:
+            raise ValueError("remote checkpoint requires the bound cloud producer and runtime plan")
+        remote = read_bound(entry["checkpoint_receipt"])
+        cp = result.get("checkpoint") or {}
+        product = receipt["artifacts"]["checkpoint.pt"]
+        producer = {"job": receipt["job"], "attempt": receipt["attempt"], "fingerprint": task_hash,
+                    "receipt_sha256": entry["cloud_receipt"]["sha256"]}
+        if (remote.get("schema") != "tide-cloud-checkpoint/v1" or remote.get("producer") != producer
+                or not cp.get("sha256") or not isinstance(remote.get("uri"), str)
+                or not remote["uri"].startswith("obs://") or remote["uri"].rsplit("/", 1)[-1] != cp["sha256"]
+                or remote.get("verified_sha256") != remote.get("sha256") or remote["sha256"] != cp["sha256"]
+                or remote["sha256"] != product["sha256"] or remote.get("size") != cp.get("size_bytes")
+                or product["size"] != remote["size"] or type(remote["size"]) is not int or remote["size"] <= 0
+                or remote.get("path") != entry.get("checkpoint_path") or not remote.get("path")
+                or not isinstance(remote.get("verified_unix"), (int, float)) or not math.isfinite(remote["verified_unix"])
+                or remote["verified_unix"] <= 0):
+            raise ValueError("remote checkpoint readback, raw endpoint or producer receipt differs")
+        evidence.update(checkpoint_receipt=dict(entry["checkpoint_receipt"]), checkpoint_path=remote["path"],
+                        checkpoint_sha256=remote["sha256"])
     if "portable_attempts" in entry:
         if "runtime_plan" in entry:
             raise ValueError("runtime migration already includes the ordered attempt history")
@@ -65,6 +101,8 @@ def read_evidence(entry, *, checkpoint=False, retired_checkpoints=None):
         if path.exists():
             if sha256(path) != cp["sha256"]:
                 raise ValueError("selected checkpoint missing or corrupt")
+        elif remote:
+            evidence["checkpoint_state"] = "remote_payload_verified_by_sha256"
         elif retired and retired.get("sha256") == cp["sha256"] and retired.get("phase") in {"a1", "a2"}:
             evidence["checkpoint_state"] = "retired_after_verified_continuation"
         else:
@@ -216,34 +254,18 @@ def audit_stage_a(manifest, selected, matches, *, remaining_resources_ok):
     model_ids = set(model_by_id)
     blockers, evidence, eligible_models, measured_activity = [], [], [], {}
     chain_receipts, retired_checkpoint_count = {}, 0
-    transferred_identities = {}
-    fresh_identities = {}
-    transfer = None
     try:
         subject_limit, control_limit = catalog_limits(manifest)
     except (KeyError, TypeError, ValueError) as exc:
         subject_limit, control_limit = 216, 648
         blockers.append(f"invalid_catalog_contract:{exc}")
-    if "stage_a_transfer" in manifest:
-        try:
-            from .transfer3 import verify_stage_a_transfer
-            transfer = verify_stage_a_transfer(manifest["stage_a_transfer"], manifest=manifest, selected=selected)
-            transferred_identities = transfer["model_source_identities"]
-        except (KeyError, ValueError, OSError, TypeError, SyntaxError) as exc:
-            blockers.append(f"stage_a_transfer_evidence_error:{type(exc).__name__}:{exc}")
-    if "fresh_shannon" in manifest:
-        from .shannon_recipes3 import cohort_subjects, verify_cohort
-        from .source_migration3 import read_bound
-        try:
-            rollout = read_bound(manifest["fresh_shannon"])
-            if cohort_subjects(manifest["subjects"], rollout) != manifest["subjects"]:
-                raise ValueError("declared Shannon model and cohort disagree")
-            fresh = verify_cohort(rollout, identity)
-            if set(rollout["model_ids"]) & set(transferred_identities):
-                raise ValueError("a fresh seed group also claims transferred evidence")
-            fresh_identities = dict.fromkeys(rollout["model_ids"], fresh)
-        except (KeyError, ValueError, OSError, TypeError) as exc:
-            blockers.append(f"fresh_shannon_evidence_error:{type(exc).__name__}:{exc}")
+    try:
+        contract = stage_source_contract(manifest, selected)
+    except (KeyError, ValueError, OSError, TypeError, SyntaxError) as exc:
+        blockers.append(f"stage_source_evidence_error:{type(exc).__name__}:{exc}")
+        contract = {"models": {}, "transfer": None, "mixed_ids": set(), "original_choices": {}}
+    transfer = contract["transfer"]
+    transferred = set(transfer["model_ids"]) if transfer else set()
     for label, seeds, count in (("tuning", expected_seeds, 2), ("diagnostic", expected_diag, 3)):
         if len(seeds) != count or len(set(seeds)) != count or any(type(s) is not int or s < 0 for s in seeds):
             blockers.append(f"invalid_{label}_seed_contract")
@@ -263,18 +285,18 @@ def audit_stage_a(manifest, selected, matches, *, remaining_resources_ok):
         blockers.append("selection_does_not_cover_model_manifest")
     for model_id in sorted(model_ids):
         choice = selected.get(model_id)
-        if choice is None:
+        if choice is None or model_id not in contract["models"]:
             continue
-        stage_a_identity = fresh_identities.get(model_id, transferred_identities.get(model_id, identity))
         local = []
         retired_checkpoints = {}
         if "chain_receipt" in choice:
             try:
-                if model_id in transferred_identities:
+                if model_id in transferred:
                     raise ValueError("transferred old stage-A checkpoints must remain available")
                 from .chain_receipt3 import verify_model_chain_receipt
-                receipt = verify_model_chain_receipt(choice["chain_receipt"], model=model_by_id[model_id], choice=choice,
-                    source_identity=stage_a_identity, tuning_seeds=expected_seeds, diagnostic_seeds=expected_diag)
+                receipt_model, receipt_source = chain_model(contract, model_by_id[model_id], choice)
+                receipt = verify_model_chain_receipt(choice["chain_receipt"], model=receipt_model, choice=choice,
+                    source_identity=receipt_source, tuning_seeds=expected_seeds, diagnostic_seeds=expected_diag)
                 retired_checkpoints = receipt["authorized_retirements"]
                 chain_receipts[model_id] = receipt["receipt"]
                 retired_checkpoint_count += len(receipt["retired_checkpoints"])
@@ -291,16 +313,16 @@ def audit_stage_a(manifest, selected, matches, *, remaining_resources_ok):
                 try:
                     task, result, item = read_evidence(entry, checkpoint=True, retired_checkpoints=retired_checkpoints)
                     if (task["model_id"] != model_id or task["phase"] != phase or task["target_tokens"] != target
-                            or task["model"] != model_by_id[model_id]["model"]
+                            or not matches_stage_source(contract, task, item)
                             or task["init_recipe"] != choice["init_recipe"]
-                            or task["source_identity"] != stage_a_identity or task["recipe_id"] != choice["recipe_id"]):
+                            or task["recipe_id"] != choice["recipe_id"]):
                         local.append("invalid_selected_learning_chain")
                     local.extend(eligible(task, result, require_resume=phase == "a2"))
                     if task["seed"] in group:
                         local.append("duplicate_selected_chain_seed")
                     if phase == "a2":
                         previous = parents.get("a1", {}).get(task["seed"])
-                        if previous is None or not continuation_matches(previous, task, result):
+                        if previous is None or not continuation_matches(previous, task, result, mixed=model_id in contract["mixed_ids"]):
                             local.append("a2_not_from_selected_a1_checkpoint")
                     group[task["seed"]] = (task, result)
                     evidence.append(item)
@@ -314,13 +336,12 @@ def audit_stage_a(manifest, selected, matches, *, remaining_resources_ok):
                 task, result, item = read_evidence(entry, checkpoint=True)
                 if task["model_id"] != model_id or task["phase"] != "a3" or task["target_tokens"] != 2*MI:
                     local.append("invalid_confirmation_task")
-                if (task["source_identity"] != stage_a_identity or task["recipe_id"] != choice["recipe_id"]
-                        or task["model"] != model_by_id[model_id]["model"]
+                if (not matches_stage_source(contract, task, item) or task["recipe_id"] != choice["recipe_id"]
                         or task["init_recipe"] != choice["init_recipe"]):
                     local.append("confirmation_identity_mismatch")
                 local.extend(eligible(task, result, require_resume=True))
                 previous = parents.get("a2", {}).get(task["seed"])
-                if previous is None or not continuation_matches(previous, task, result):
+                if previous is None or not continuation_matches(previous, task, result, mixed=model_id in contract["mixed_ids"]):
                     local.append("a3_not_from_selected_a2_checkpoint")
                 observed_seeds.append(task["seed"])
                 activity_rows.append(last_activity(result, task))
@@ -340,7 +361,7 @@ def audit_stage_a(manifest, selected, matches, *, remaining_resources_ok):
                     task, result, item = read_evidence(entry, checkpoint=True)
                 if task["model_id"] != model_id or task["phase"] != "init" or task["init_recipe"] != choice["init_recipe"]:
                     local.append("invalid_initialization_diagnostic")
-                if task["source_identity"] != stage_a_identity or task["model"] != model_by_id[model_id]["model"]:
+                if not matches_stage_source(contract, task, item):
                     local.append("diagnostic_identity_mismatch")
                 local.extend(eligible(task, result))
                 observed_diag.append(task["seed"])
@@ -428,12 +449,13 @@ def audit_stage_a(manifest, selected, matches, *, remaining_resources_ok):
             "matches": reviewed_matches, "measured_activity": measured_activity,
             "manifest_content_sha256": manifest_digest(manifest), "remaining_resources_ok": remaining_resources_ok,
             "selected": selected,
+            **({"stage_a_dispositions": manifest["stage_a_dispositions"]} if "stage_a_dispositions" in manifest else {}),
             "stage_a_transfer": transfer["report"] if transfer else None,
             "transferred_model_ids": transfer["model_ids"] if transfer else [],
             "chain_receipts": chain_receipts, "retired_parent_checkpoint_count": retired_checkpoint_count}
 
 
-def continuation_matches(parent, task, result):
+def continuation_matches(parent, task, result, *, mixed=False):
     previous_task, previous_result = parent
     checkpoint = previous_result.get("checkpoint") or {}
     if not checkpoint.get("sha256") or not task.get("resume_checkpoint"):
@@ -445,7 +467,8 @@ def continuation_matches(parent, task, result):
         return False
     resume = origin.get("resume") or {}
     paths = {checkpoint.get("path"), getattr(previous_result, "relocated_checkpoint", checkpoint.get("path"))}
-    return (all(previous_task.get(key) == task.get(key) for key in (*RECIPE_FIELDS, "seed", "source_identity"))
+    fields = tuple(key for key in RECIPE_FIELDS if key != "model") if mixed else (*RECIPE_FIELDS, "source_identity")
+    return (all(previous_task.get(key) == task.get(key) for key in (*fields, "seed"))
             and task.get("resume_checkpoint") in paths
             and task.get("resume_checkpoint_sha256") == checkpoint.get("sha256")
             and resume.get("path") == task.get("resume_checkpoint")
@@ -471,10 +494,12 @@ def create_gate(path, *, manifest_path, report_path, task_paths, gate_kind="form
             or len(model_ids) != len(manifest["models"]) or not subject_ids <= model_ids
             or len(model_ids-subject_ids) > control_limit):
         raise ValueError("stage B manifest exceeds or violates the authorized finite catalog")
+    if report.get("stage_a_dispositions") != manifest.get("stage_a_dispositions"):
+        raise ValueError("stage A report differs from its dispositions")
+    contract = stage_source_contract(manifest, report["selected"])
     transferred = set()
-    if "stage_a_transfer" in manifest:
-        from .transfer3 import verify_stage_a_transfer
-        transfer = verify_stage_a_transfer(manifest["stage_a_transfer"], manifest=manifest, selected=report["selected"])
+    if contract["transfer"]:
+        transfer = contract["transfer"]
         if report.get("stage_a_transfer") != transfer["report"] or report.get("transferred_model_ids") != transfer["model_ids"]:
             raise ValueError("stage A report does not bind the independently verified transfer")
         transferred = set(transfer["model_ids"])
@@ -495,8 +520,9 @@ def create_gate(path, *, manifest_path, report_path, task_paths, gate_kind="form
         if model_id in transferred:
             raise ValueError("transferred old stage-A checkpoints must remain available")
         from .chain_receipt3 import verify_model_chain_receipt
-        receipt = verify_model_chain_receipt(choice["chain_receipt"], model=models[model_id], choice=choice,
-            source_identity=manifest["source_identity"], tuning_seeds=manifest["tuning_seeds"],
+        receipt_model, receipt_source = chain_model(contract, models[model_id], choice)
+        receipt = verify_model_chain_receipt(choice["chain_receipt"], model=receipt_model, choice=choice,
+            source_identity=receipt_source, tuning_seeds=manifest["tuning_seeds"],
             diagnostic_seeds=manifest["diagnostic_seeds"])
         retired_checkpoints.update(receipt["authorized_retirements"])
         chain_receipts[model_id] = receipt["receipt"]
@@ -504,11 +530,13 @@ def create_gate(path, *, manifest_path, report_path, task_paths, gate_kind="form
         raise ValueError("stage A report does not bind the independently verified chain receipts")
     for entry in report["evidence"]:
         if "runtime_plan" in entry or "execution_runtime" in load(entry["result_path"]):
-            read_evidence(entry)
+            read_evidence(entry, checkpoint="checkpoint_path" in entry)
         for field in ("task", "result", "checkpoint"):
             path_key, hash_key = f"{field}_path", f"{field}_sha256"
             if field == "checkpoint" and path_key not in entry:
                 continue
+            if field == "checkpoint" and "checkpoint_receipt" in entry and not Path(entry[path_key]).exists():
+                continue  # read_evidence verified the remote payload and its producer above.
             retired = retired_checkpoints.get(str(Path(entry[path_key]).resolve())) if entry.get(path_key) else None
             if field == "checkpoint" and retired and not Path(entry[path_key]).exists():
                 if retired["sha256"] != entry.get(hash_key):
@@ -517,13 +545,15 @@ def create_gate(path, *, manifest_path, report_path, task_paths, gate_kind="form
             if not entry.get(path_key) or sha256(entry[path_key]) != entry.get(hash_key):
                 raise ValueError(f"stage A {field} evidence changed after audit")
     hashes = {}
+    source_groups = {}
     pairs = set()
     actual_models = []
     for task_path in task_paths:
         task = load(task_path)
         if task["id"] in hashes or not task["phase"].startswith("b"):
             raise ValueError("invalid or duplicate stage B task")
-        if task["source_identity"] != manifest["source_identity"] or task["target_tokens"] != 12*MI:
+        target = contract["models"][task["model_id"]]
+        if task["source_identity"] != target["b_source"] or task["target_tokens"] != 12*MI:
             raise ValueError("stage B source or token contract differs")
         if task["model_id"] not in report["eligible_models"]:
             raise ValueError("stage B contains an unqualified model")
@@ -531,7 +561,8 @@ def create_gate(path, *, manifest_path, report_path, task_paths, gate_kind="form
         if not choice or not choice.get("confirmation"):
             raise ValueError("stage B lacks selected recipe evidence")
         selected_task = load(choice["confirmation"][0]["task_path"])
-        if any(task.get(key) != selected_task.get(key) for key in RECIPE_FIELDS):
+        if (task.get("model") != target["b_model"]
+                or any(task.get(key) != selected_task.get(key) for key in RECIPE_FIELDS if key != "model")):
             raise ValueError("stage B changed the selected model or training recipe")
         pair = (task["model_id"], task["seed"])
         if pair in pairs:
@@ -552,6 +583,11 @@ def create_gate(path, *, manifest_path, report_path, task_paths, gate_kind="form
         else:
             raise ValueError("unknown gate kind")
         hashes[task["id"]] = sha256(task_path)
+        group_path = gate_path_for_source(path, target["b_source"], manifest["source_identity"])
+        if group_path != Path(path) and Path(task.get("gate_file") or task.get("stage_b_gate") or "").resolve() != group_path.resolve():
+            raise ValueError("stage B task does not point to its source-specific gate")
+        group = source_groups.setdefault(group_path, {"source_identity": target["b_source"], "task_sha256": {}})
+        group["task_sha256"][task["id"]] = hashes[task["id"]]
     if not hashes:
         raise ValueError("no stage B tasks")
     if gate_kind == "formal" and (set(actual_models) != set(report["eligible_models"]) or len(actual_models) != len(set(actual_models))):
@@ -563,5 +599,9 @@ def create_gate(path, *, manifest_path, report_path, task_paths, gate_kind="form
             "manifest_path": str(Path(manifest_path).resolve()), "manifest_sha256": sha256(manifest_path),
             "report_path": str(Path(report_path).resolve()), "report_sha256": sha256(report_path),
             "allowed_task_ids": sorted(hashes), "task_sha256": hashes}
+    for group_path, group in source_groups.items():
+        if group_path != Path(path):
+            freeze_json(group_path, {**gate, **group, "allowed_task_ids": sorted(group["task_sha256"]),
+                                      "campaign_task_set_sha256": manifest_digest(hashes)})
     freeze_json(path, gate)
     return gate
