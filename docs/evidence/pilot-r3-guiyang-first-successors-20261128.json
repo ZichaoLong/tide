@@ -1,0 +1,311 @@
+{
+  "allocation_sample": {
+    "node_cpu_threads": 300,
+    "occupied_logical_chips": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "occupied_physical_boards": 8,
+    "platform_job": "c4a30523-cc7d-42c6-9b60-0ef3f4143ccc",
+    "queue_counts": {
+      "completed": 9,
+      "queued": 25,
+      "running": 75
+    },
+    "queue_sample_utc": "2026-11-28T12:50:20.919006+00:00",
+    "running_by_backend": {
+      "cpu": 40,
+      "npu": 35
+    },
+    "running_npu_workers_per_board": {
+      "0": 5,
+      "1": 5,
+      "2": 5,
+      "3": 4,
+      "4": 4,
+      "5": 4,
+      "6": 4,
+      "7": 4
+    },
+    "runq_commit": "7f644c6ee65632df57f0a4532e3d3e5e5c9be8ee",
+    "sum_running_thread_requests": 300
+  },
+  "archived_snapshot": {
+    "sha256": "cbc97634467b30c92da4612ebec7e83464ff02681a0ec1c3fda4d6e1c3320f06",
+    "size": 88368,
+    "uri": "obs://meta-intelligence/l00580095/tide-learning-lab/production/r3-20261128/science/snapshots/cbc97634467b30c92da4612ebec7e83464ff02681a0ec1c3fda4d6e1c3320f06.tgz"
+  },
+  "controller_update": {
+    "controller_commit": "190a89d858bc432863f266505c7b60ae9f05de61",
+    "examples": [
+      {
+        "attempt": "r3-f296054d757867c758fce81911d4ff2d500c91d3140f999e62331cfb62e79e24-1",
+        "backend": "npu",
+        "legacy_id": 2237,
+        "pid": 5711,
+        "runq_id": 1,
+        "started_unix": 1795868243.4641137
+      },
+      {
+        "attempt": "r3-cab0c55ec8f72e16689d40f08fb1ba2f926a87073ab687d1ead60e2508c59631-1",
+        "backend": "cpu",
+        "legacy_id": 2907,
+        "pid": 5684,
+        "runq_id": 2,
+        "started_unix": 1795868240.5228882
+      },
+      {
+        "attempt": "r3-40c899abce169a46be7a7dc70e8aae19fa57acdd164a49d563e4c7f233653bec-1",
+        "backend": "npu",
+        "legacy_id": 2236,
+        "pid": 1799718,
+        "runq_id": 10,
+        "started_unix": 1795868711.939753
+      }
+    ],
+    "identity_encoding": "Compact UTF-8 JSON arrays [attempt key, runq id, pid, start time], sorted by attempt key.",
+    "observations": [
+      {
+        "counts": {
+          "completed": 9,
+          "queued": 91,
+          "running": 75
+        },
+        "observed_utc": "2026-11-28T13:01:38.618328+00:00",
+        "sorted_running_identities_sha256": "1c1c326b5544fd2ba0de934f53590abee0e988c33459b5306316c10fa733f83f",
+        "sum_running_thread_requests": 300
+      },
+      {
+        "counts": {
+          "completed": 9,
+          "queued": 91,
+          "running": 75
+        },
+        "observed_utc": "2026-11-28T13:02:04.305676+00:00",
+        "sorted_running_identities_sha256": "1c1c326b5544fd2ba0de934f53590abee0e988c33459b5306316c10fa733f83f",
+        "sum_running_thread_requests": 300
+      }
+    ],
+    "platform_job": "c4a30523-cc7d-42c6-9b60-0ef3f4143ccc",
+    "running_with_same_identity": 75
+  },
+  "decision": {
+    "member": "decisions/init-model-multiscale_timed-d64-s-mixed9-9be2af0261.json",
+    "sha256": "63d0d27e7700fa897e538591dbf3e3027ea3459616b8bea0d22101f4de145fc1",
+    "status": "passed"
+  },
+  "initialization_evidence": [
+    {
+      "result": "completed",
+      "result_sha256": "010f9075f67399108ca115d59d86781ef240ba9794e0c6709db86754f2d43566",
+      "source": "pre_migration",
+      "task": "multiscale_timed-d64-s-mixed9-9be2af0261-init-2026112001",
+      "task_sha256": "a822eb3d6a5b66b38d6784fff19c478cbb67ee5a283d73271af3e9ab5870cdd4"
+    },
+    {
+      "attempt": "r3-6add0e34de5352189c3e8a129839de9913c9d77ae6fb57fcbe72637854bc8cbe-1",
+      "legacy_id": 2631,
+      "raw_receipt_sha256": "c0c9328e034a7a430fd6f857312580af6b02ebd7ee9d14bab56992f191086205",
+      "result": "completed",
+      "result_sha256": "2f6892f47328d630fd5dad684923829eab2f95da55252c7f1756ecfa0dbc28b2",
+      "source": "guiyang",
+      "task": "multiscale_timed-d64-s-mixed9-9be2af0261-init-2026112002",
+      "task_sha256": "6add0e34de5352189c3e8a129839de9913c9d77ae6fb57fcbe72637854bc8cbe"
+    },
+    {
+      "attempt": "r3-3c1cb8cea53e00532883091bafe06e54494381d398847ef53493fd213279bd27-1",
+      "legacy_id": 2632,
+      "raw_receipt_sha256": "044e0f0b631f09b029f6dd160717819c2ba7ae5148c4a8fa8aaf47b7bc4c395e",
+      "result": "completed",
+      "result_sha256": "e6b1b9b6dc107bcff1768bd2e70ca326924b13ed5d1b34703112d6e15c4cd695",
+      "source": "guiyang",
+      "task": "multiscale_timed-d64-s-mixed9-9be2af0261-init-2026112003",
+      "task_sha256": "3c1cb8cea53e00532883091bafe06e54494381d398847ef53493fd213279bd27"
+    }
+  ],
+  "model": "multiscale_timed-d64-s-mixed9-9be2af0261",
+  "new_a1_tasks": [
+    {
+      "backend": "npu",
+      "recipe": "r0",
+      "seed": 2026112001,
+      "sha256": "5ece9879f51612d94bfb4a714578c9b683f1a5e10a03e0628dad132a652adf2f",
+      "task": "multiscale_timed-d64-s-mixed9-9be2af0261-a1-2026112001-r0"
+    },
+    {
+      "backend": "npu",
+      "recipe": "r1",
+      "seed": 2026112001,
+      "sha256": "2de3b6add301597cea3558b29b1f9d70ff43eeaf611f330d1dfcb6d7913742dd",
+      "task": "multiscale_timed-d64-s-mixed9-9be2af0261-a1-2026112001-r1"
+    },
+    {
+      "backend": "npu",
+      "recipe": "r2",
+      "seed": 2026112001,
+      "sha256": "c57e9af73fcd3ac968ef6502685d40d5ea503246f8ac74007310eb672ba6d2e8",
+      "task": "multiscale_timed-d64-s-mixed9-9be2af0261-a1-2026112001-r2"
+    },
+    {
+      "backend": "npu",
+      "recipe": "r3",
+      "seed": 2026112001,
+      "sha256": "69b6078ae22673da1ffc268817c465fba6b0cd7492cfea3c6e00f4513d3425c7",
+      "task": "multiscale_timed-d64-s-mixed9-9be2af0261-a1-2026112001-r3"
+    },
+    {
+      "backend": "npu",
+      "recipe": "r4",
+      "seed": 2026112001,
+      "sha256": "3dce60495e1a4d0009b73433d0f713338d9943c400f3eeeb78aa58f0ff4adb83",
+      "task": "multiscale_timed-d64-s-mixed9-9be2af0261-a1-2026112001-r4"
+    },
+    {
+      "backend": "npu",
+      "recipe": "r5",
+      "seed": 2026112001,
+      "sha256": "df211fb7db89032d58dd488f7aaf3ba2c6c8d7e482d5e5608144529411d5233a",
+      "task": "multiscale_timed-d64-s-mixed9-9be2af0261-a1-2026112001-r5"
+    },
+    {
+      "backend": "npu",
+      "recipe": "r0",
+      "seed": 2026112002,
+      "sha256": "a00707f602b77a2496c4c22bf7b7c1cbf7e9d7cac04681abc73df5b061beb67a",
+      "task": "multiscale_timed-d64-s-mixed9-9be2af0261-a1-2026112002-r0"
+    },
+    {
+      "backend": "npu",
+      "recipe": "r1",
+      "seed": 2026112002,
+      "sha256": "aef7d082dfe9780f79ee307f497b037ba411365d6cb4988fa83843b4cf4df762",
+      "task": "multiscale_timed-d64-s-mixed9-9be2af0261-a1-2026112002-r1"
+    },
+    {
+      "backend": "npu",
+      "recipe": "r2",
+      "seed": 2026112002,
+      "sha256": "41f98bbd6e0425b99266d2e420e84164441ed97056cea29775d0f4cce0b3c297",
+      "task": "multiscale_timed-d64-s-mixed9-9be2af0261-a1-2026112002-r2"
+    },
+    {
+      "backend": "npu",
+      "recipe": "r3",
+      "seed": 2026112002,
+      "sha256": "6327c4da39cc36f08b4444c642a24cdaabf7041fa7f76792a6678b1d6d5452ad",
+      "task": "multiscale_timed-d64-s-mixed9-9be2af0261-a1-2026112002-r3"
+    },
+    {
+      "backend": "npu",
+      "recipe": "r4",
+      "seed": 2026112002,
+      "sha256": "660e14aedd768466ae084547ea948b1afeb13c31b0d6defb2dc04e017b374518",
+      "task": "multiscale_timed-d64-s-mixed9-9be2af0261-a1-2026112002-r4"
+    },
+    {
+      "backend": "npu",
+      "recipe": "r5",
+      "seed": 2026112002,
+      "sha256": "b10a17f417d408d03e87e4f5ceb5d3f96168a1e17d6912366266f57a11e54f92",
+      "task": "multiscale_timed-d64-s-mixed9-9be2af0261-a1-2026112002-r5"
+    }
+  ],
+  "observed_utc": "2026-11-28T12:48:20.581065+00:00",
+  "runq_observation": {
+    "tide-r3-20261128-1": {
+      "platform_job": "c4a30523-cc7d-42c6-9b60-0ef3f4143ccc",
+      "queue_sample_utc": "2026-11-28T12:49:01.061802+00:00",
+      "visible_children": [
+        {
+          "backend": "npu",
+          "id": 75,
+          "key": "r3-5ece9879f51612d94bfb4a714578c9b683f1a5e10a03e0628dad132a652adf2f-1",
+          "physical_card": 3,
+          "pid": 2692163,
+          "started": 1795870012.0748763,
+          "state": "running"
+        },
+        {
+          "backend": "npu",
+          "id": 86,
+          "key": "r3-2de3b6add301597cea3558b29b1f9d70ff43eeaf611f330d1dfcb6d7913742dd-1",
+          "physical_card": 2,
+          "pid": 3489667,
+          "started": 1795870083.9016538,
+          "state": "running"
+        },
+        {
+          "id": 88,
+          "key": "r3-c57e9af73fcd3ac968ef6502685d40d5ea503246f8ac74007310eb672ba6d2e8-1",
+          "state": "queued"
+        },
+        {
+          "backend": "npu",
+          "id": 73,
+          "key": "r3-69b6078ae22673da1ffc268817c465fba6b0cd7492cfea3c6e00f4513d3425c7-1",
+          "physical_card": 5,
+          "pid": 983132,
+          "started": 1795869987.0495517,
+          "state": "running"
+        },
+        {
+          "backend": "npu",
+          "id": 70,
+          "key": "r3-3dce60495e1a4d0009b73433d0f713338d9943c400f3eeeb78aa58f0ff4adb83-1",
+          "physical_card": 2,
+          "pid": 965883,
+          "started": 1795869986.853538,
+          "state": "running"
+        },
+        {
+          "id": 87,
+          "key": "r3-df211fb7db89032d58dd488f7aaf3ba2c6c8d7e482d5e5608144529411d5233a-1",
+          "state": "queued"
+        },
+        {
+          "backend": "npu",
+          "id": 71,
+          "key": "r3-6327c4da39cc36f08b4444c642a24cdaabf7041fa7f76792a6678b1d6d5452ad-1",
+          "physical_card": 4,
+          "pid": 974607,
+          "started": 1795869986.9481058,
+          "state": "running"
+        },
+        {
+          "backend": "npu",
+          "id": 78,
+          "key": "r3-660e14aedd768466ae084547ea948b1afeb13c31b0d6defb2dc04e017b374518-1",
+          "physical_card": 1,
+          "pid": 2705021,
+          "started": 1795870012.2618723,
+          "state": "running"
+        },
+        {
+          "backend": "npu",
+          "id": 77,
+          "key": "r3-b10a17f417d408d03e87e4f5ceb5d3f96168a1e17d6912366266f57a11e54f92-1",
+          "physical_card": 0,
+          "pid": 2697174,
+          "started": 1795870012.1915195,
+          "state": "running"
+        }
+      ]
+    }
+  },
+  "schema": "tide-r3-guiyang-first-scientific-successors/v1",
+  "scope": "Each A1 result and subject selection needs its own native evidence."
+}

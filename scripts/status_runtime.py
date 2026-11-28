@@ -55,12 +55,13 @@ def observe_cloud(root):
                       phase=snapshot["phase"], counts=snapshot["counts"], canaries=snapshot["canaries"],
                       physical_budget=snapshot["physical_budget"], gate_blockers=snapshot["gate_blockers"],
                       budget_blockers=snapshot["budget_blockers"], errors=snapshot["errors"])
-        for field in ("initial_known_tasks", "original_signals", "native_ready_tasks", "pending_candidates",
+        for field in ("selected_controls", "initial_known_tasks", "original_signals", "native_ready_tasks", "pending_candidates",
                       "preparation_budget", "drained", "finished"):
             if field in snapshot:
                 result[field] = snapshot[field]
         phases = "、".join(n["secondary_phase"] or n["phase"] or "未知" for n in result["records"])
-        result["summary"] = (f'贵阳 {snapshot["phase"]} · 已选 {snapshot.get("selected_subjects")}/344'
+        controls = f' · 已选对照 {snapshot["selected_controls"]}' if snapshot.get("selected_controls") is not None else ""
+        result["summary"] = (f'贵阳 {snapshot["phase"]} · 已选主体 {snapshot.get("selected_subjects")}/344{controls}'
                              f' · 作业 {phases} · 首步恢复 {len(snapshot["canaries"])}/2'
                              f' · 平台数据采于 {result["snapshot_observed_at"]}')
     return result

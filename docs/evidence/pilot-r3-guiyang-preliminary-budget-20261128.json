@@ -1,0 +1,80 @@
+{
+  "absolute_deadline_utc": "2026-12-19T16:48:33.931829+00:00",
+  "accepted_attempts": 9,
+  "accepted_fingerprints": [
+    "288474c8bbdcf2498c839ac32c9bfc5ddc16ded525dead3647725440a9154f85",
+    "3c1cb8cea53e00532883091bafe06e54494381d398847ef53493fd213279bd27",
+    "46427438d56d23986de8a42cff5f6bd4933592121b0a1efe4573cc631921ab96",
+    "6add0e34de5352189c3e8a129839de9913c9d77ae6fb57fcbe72637854bc8cbe",
+    "7d95d91a481244f2fbd47c36ae207e0aa29e7d37ae37cd5ea3239a75902bce01",
+    "94972b4fd335132a479e0c3dec6dfdb3a8d473a908ce2d9db782f3be26cb0d91",
+    "b4cda02618dd77fb202b0d117726dc35804710636e138a742dab78016c9438bb",
+    "bda89a385b4dd98a18b6dbee43daad8805d3c0c0f14ac0aba1044ba3bf61bdb5",
+    "bfd8fafc6249fda920b20d9c6ffe4ee54b90010737cfa4924b83250e6c1d55da"
+  ],
+  "allocated_board_seconds_range": [
+    49497765.81995639,
+    70451125.35902476
+  ],
+  "forecast_commit": "190a89d858bc432863f266505c7b60ae9f05de61",
+  "gate_effect": "Read-only projection during stage-a-subjects. The campaign recomputes the full forecast at the control and Stage B admission gates.",
+  "logical_chips": 16,
+  "matched_runtime_speed_ratios": {},
+  "matched_selected_shapes": 0,
+  "method": "pilotlab.cloud_campaign3.cloud_forecast(selected, physical_budget, accepted=accepted)",
+  "node_measurements": {
+    "tide-r3-20261128-1": {
+      "backends": {
+        "cpu": {
+          "basis": "available hardware, one worker per slot",
+          "workers": 0
+        },
+        "npu": {
+          "conservative_parallelism": 9.141233556205105,
+          "observed_chips": 8,
+          "observed_concurrent_workers": 2.6357864866660674,
+          "optimistic_parallelism": 13.010894139078076,
+          "training_worker_seconds": 2840.1164833996445,
+          "wall_seconds": 1077.5214524269104,
+          "workers": 9
+        }
+      },
+      "boards": 8,
+      "logical_chips": 16,
+      "threads": 300
+    }
+  },
+  "node_phases": {
+    "tide-r3-20261128-1": "Running",
+    "tide-r3-20261128-2": "OSQueuing"
+  },
+  "observed_utc": "2026-11-28T13:03:58.993587+00:00",
+  "parallelism_by_backend": {
+    "cpu": [
+      75.0,
+      75.0
+    ],
+    "npu": [
+      9.141233556205105,
+      13.010894139078076
+    ]
+  },
+  "physical_boards_charged": 8,
+  "reasons": [
+    "conservative allocated physical-board seconds exceed the remaining campaign budget",
+    "conservative makespan estimate exceeds the absolute campaign deadline"
+  ],
+  "remaining_device_seconds": 21030242.13083842,
+  "remaining_wall_seconds": 1827874.9382419586,
+  "resource_observed_utc": "2026-11-28T13:03:42.893922+00:00",
+  "schema": "tide-r3-preliminary-selected-only-resource-forecast/v1",
+  "scope": "Partial projection over selected subjects only, with the original repeat allowance and margin, using the single allocated node. Remaining subjects, matched controls and their Stage A work are outside this calculation.",
+  "selected_count": 268,
+  "selected_json_sha256": "139473f08bf7458012f5005eb06ea378508184a0d8498548fa320464ab3b3ca5",
+  "total_subjects": 344,
+  "training_observations": 9,
+  "wall_seconds_range": [
+    6187220.727494549,
+    8806390.669878095
+  ]
+}

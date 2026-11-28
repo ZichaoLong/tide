@@ -13,7 +13,7 @@
 | `snapshot_only` | 有调度记录。服务、进程身份或采样期间的指针变化未能把它绑定到当前作业。查看 systemd 的实际状态、控制组和观测错误。 |
 | `unavailable` | 这份检出缺少可用的启动指针或调度记录。最近一次已审阅的采样在交接中，并附时间与证据。 |
 
-原本机启动指针登记了 44 个主体的检查点接续和 74 个早期主体的源码复核。本机适配器的 `runtime.queue_additions` 对应这两组历史作业。贵阳适配器返回两份作业各自的 `running_by_backend` 与 `queue_observed_unix`。全批已选配方数见 `runtime.selected_subjects`。单项复核报告为 `comparison.json`，沿原计划可找到已复用观测的哈希及新尝试。[当前交接](STATUS.md)
+原本机启动指针登记了 44 个主体的检查点接续和 74 个早期主体的源码复核。本机适配器的 `runtime.queue_additions` 对应这两组历史作业。贵阳适配器返回两份作业各自的 `running_by_backend` 与 `queue_observed_unix`。已选出配方的主体数和对照数分别见 `runtime.selected_subjects` 与 `runtime.selected_controls`。单项复核报告为 `comparison.json`，沿原计划可找到已复用观测的哈希及新尝试。[当前交接](STATUS.md)
 
 ## 接续同一批
 
