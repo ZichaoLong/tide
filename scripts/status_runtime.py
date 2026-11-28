@@ -38,9 +38,15 @@ def observe_cloud(root):
         n = (snapshot or {}).get("nodes", {}).get(name, {})
         platform, q = n.get("platform", {}), n.get("queue") or {}
         active = Counter(t.get("backend") for t in q.get("tasks", []) if t.get("state") == "running")
+        workers = [w for w in q.get("workers", []) if w.get("state") == "serving"]
+        cards = [card for w in workers for card in w.get("cards", {}).values()]
         result["records"].append({"job":name, "id":(admission or {}).get("id"), "phase":platform.get("phase"),
                                   "secondary_phase":platform.get("secondary_phase"), "runq_counts":q.get("counts", {}),
-                                  "running_by_backend":dict(active), "queue_observed_unix":q.get("at")})
+                                  "running_by_backend":dict(active), "queue_observed_unix":q.get("at"),
+                                  "observed_boards":len(cards) if cards else None,
+                                  "observed_chips":sum(len(c.get("chips",{})) for c in cards) if cards else None,
+                                  "observed_threads":sum(w["capacity"]["threads"] for w in workers) if workers else None,
+                                  "queue_source":n.get("queue_source"), "observation_error":n.get("observation_error")})
     if snapshot:
         ts = snapshot["observed_unix"]
         result.update(snapshot_observed_at=datetime.fromtimestamp(ts, timezone.utc).isoformat(),

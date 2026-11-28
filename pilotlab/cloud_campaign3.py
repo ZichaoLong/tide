@@ -707,4 +707,5 @@ def advance(state_dir, initial_inventory, accepted):
                 return campaign.stages(read(state_dir / "resources.json"))
         except (Blocked, ValueError, KeyError, OSError) as exc:
             campaign.blocked.append(str(exc))
-            return campaign.response("stage-a-or-b-evidence")
+            return {**campaign.response("stage-a-or-b-evidence"),
+                    "blocker_kind":"scientific" if isinstance(exc, Blocked) else "evidence_read"}

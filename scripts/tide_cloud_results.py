@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import math
 from pathlib import Path
+import subprocess
 import time
 
 from tide_cloud_allocation import PREFIX, PROJECT, wire
@@ -39,6 +40,45 @@ def canary(area, state, region, prefix, claim):
                              "sha256": sha(path), "steps": proof["steps"], "state_sha256": proof["state_sha256"]}
 
 
+def readback(region, key, h, size, node):
+    before = region.head(key)
+    require(before and before["size"] == size and before.get("sha256") in {None, h},
+            "regional object metadata differs from native evidence")
+    if node:
+        from tide_cloud_submit import verify_object
+        try:
+            proof = verify_object(node, region, key, h, size)
+        except (OSError, ValueError, RuntimeError, subprocess.SubprocessError):
+            pass
+        else:
+            require(proof == {"sha256":h, "size":size}, "allocated node returned a different readback")
+            after = region.head(key)
+            require(after and (after["size"], after["etag"], after.get("version")) ==
+                    (size, before["etag"], before.get("version")), "regional object changed during node readback")
+            return {**after, "verified_on":"guiyang/" + node["id"]}
+    return {**region.stream(key, expected=h, etag=before["etag"]), "verified_on":"client"}
+
+
+def checkpoint_object(region, key, target, artifact, node):
+    h, size = artifact["sha256"], artifact["size"]
+    if region.head(target):
+        return
+    src = region.head(key)
+    require(src and src["size"] == size and src.get("sha256") in (None,h), "published checkpoint metadata differs")
+    if src.get("sha256") == h or src["etag"].lower() == artifact["content_md5"].lower():
+        region.copy_verified(key, target, h, size, content_md5=artifact["content_md5"])
+        return
+    source = readback(region, key, h, size, node)
+    try:
+        region.copy_verified(key, target, None, size, service={
+            "store":region.side, "etag":source["etag"], "version":source.get("version"),
+            "operation":"tide-native-checkpoint-" + h})
+    except FileExistsError:
+        # Another attempt can publish identical weights. The caller verifies the actual destination body.
+        if not region.head(target):
+            raise
+
+
 def ingest(area, cache, region, east, prefix, claim, state):
     a, fp = claim["attempt"], claim["fingerprint"]
     out = area / "attempts" / a
@@ -57,6 +97,8 @@ def ingest(area, cache, region, east, prefix, claim, state):
             rec["job"] == claim["job"] and rec["descriptor_sha256"] == claim["digest"]
             and rec["runq"] == frozen["runq_commit"], "mismatched cloud receipt")
     east.put_file(PREFIX + "/attempts/" + a + "/" + receipt.name, receipt)
+    platform = area / "allocations" / claim["job"] / "submitted.json"
+    node = {"id":read(platform)["id"], "name":claim["job"]} if platform.is_file() else None
     results = {}
     for name, artifact in rec["artifacts"].items():
         key = prefix + "/" + artifact["path"]
@@ -66,15 +108,15 @@ def ingest(area, cache, region, east, prefix, claim, state):
         require(len(h) == 64 and all(c in "0123456789abcdef" for c in h), "invalid output digest")
         if name.endswith(".pt"):
             target = object_key(h)
-            region.copy_verified(key, target, h, size, content_md5=artifact["content_md5"])
             path = cache / h
             location = out / (name + ".location.json")
             if not location.exists():
-                observed = region.stream(target, expected=h)
+                checkpoint_object(region, key, target, artifact, node)
+                observed = readback(region, target, h, size, node)
                 require(observed["size"] == size, "regional checkpoint body length differs")
                 record = {"schema":"tide-cloud-checkpoint/v1", "key": target, "sha256": h, "size": size,
                           "path": str(path), "uri": region.uri(target), "etag":observed["etag"], "version":observed.get("version"),
-                          "verified_sha256":h, "verified_unix": time.time(),
+                          "verified_sha256":h, "verified_unix": time.time(), "verified_on":observed["verified_on"],
                           "producer":{"job":claim["job"], "attempt":a, "fingerprint":fp,
                                       "receipt_sha256":sha(receipt)}}
                 write(location, record)

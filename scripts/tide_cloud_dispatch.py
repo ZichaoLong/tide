@@ -266,11 +266,17 @@ def publish_claim(area, region, east, job_prefix, state, row, d, plan, *, transp
         return claim
     require(claim["digest"] == h and claim["job"] == d["job"], "attempt dispatch bytes changed")
     (location / "runtime-plan.json").write_bytes(wire(plan))
-    east.put_bytes(PREFIX + "/attempts/" + attempt + "/runtime-plan.json", wire(plan))
-    east.put_bytes(PREFIX + "/attempts/" + attempt + "/task.json", base64.b64decode(d["task_bytes"], validate=True))
-    east.put_bytes(PREFIX + "/dispatch/" + attempt + ".json", payload)
-    folder = "authority" if transport else "dispatch"
-    region.put_bytes(job_prefix + "/inputs/" + folder + "/" + attempt + ".json", payload)
+    publications = [(east, PREFIX + "/attempts/" + attempt + "/runtime-plan.json", wire(plan)),
+                    (east, PREFIX + "/attempts/" + attempt + "/task.json", base64.b64decode(d["task_bytes"], validate=True)),
+                    (east, PREFIX + "/dispatch/" + attempt + ".json", payload)]
+    if transport:
+        publications.append((region, job_prefix + "/inputs/authority/" + attempt + ".json", payload))
+    with ThreadPoolExecutor(max_workers=len(publications)) as pool:
+        futures = [pool.submit(store.put_bytes, key, body) for store,key,body in publications]
+        for future in futures:
+            future.result()
+    if not transport:
+        region.put_bytes(job_prefix + "/inputs/dispatch/" + attempt + ".json", payload)
     claim["status"] = "awaiting_submission" if transport else "dispatched"
     claim["submitted"] = time.time()
     write(area / "state.json", state)

@@ -81,6 +81,21 @@ def test_reconciliation_accepts_only_the_exact_cached_sfs_descriptor_or_original
         run()
 
 
+def test_missing_input_before_training_is_a_provable_zero_exposure_attempt(frozen):
+    claim, obs, area, queue, run = frozen
+    area.mkdir(parents=True)
+    (area / "worker.lock").touch()
+    store(queue, {"key":claim["attempt"], "state":"failed", "started":1})
+    missing = obs / "inputs/objects" / ("a"*64)
+    identity = {k:claim[k] for k in ("task","job","attempt","fingerprint")}
+    store(area / "receipt.json", {**identity, "status":"failed", "runq":"frozen", "artifacts":{},
+          "descriptor_sha256":claim["digest"], "error":"frozen = hydrate(area, obs, d)\nwith src.open('rb')\n"
+          + f"FileNotFoundError: [Errno 2] No such file or directory: '{missing}'\n"})
+    assert run()["status"] == "never_started"
+    store(area / "runtime-plan.json", {})
+    assert run()["status"] == "published"
+
+
 def test_reconciliation_preserves_failure_and_uses_only_finished_native_outputs(frozen):
     claim, obs, area, q, run = frozen
     area.mkdir(parents=True)

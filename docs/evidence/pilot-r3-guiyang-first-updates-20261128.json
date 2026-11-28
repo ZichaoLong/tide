@@ -1,0 +1,86 @@
+{
+  "checks": {
+    "2237": {
+      "attempt": "r3-f296054d757867c758fce81911d4ff2d500c91d3140f999e62331cfb62e79e24-1",
+      "backend": "npu",
+      "checkpoint_reload": "exact",
+      "fingerprint": "f296054d757867c758fce81911d4ff2d500c91d3140f999e62331cfb62e79e24",
+      "first_update_sha256": "2bf2ee996a592ee9c273ad1795a3a398923473cf77e6a67193fb4b6cb721a9aa",
+      "from_steps": 1312,
+      "grad_norm": 0.9436801075935364,
+      "job": "tide-r3-20261128-1",
+      "loss": 5.501080513000488,
+      "node_device": null,
+      "original_plan_sha256": "d9d93feb64e0f7bb82d2ae36abf22810dd5c616bd70d37a4b81541e4f7dc6fc8",
+      "raw_uri": "obs://meta-intelligence/l00580095/tide-learning-lab/production/r3-20261128/first-updates/r3-f296054d757867c758fce81911d4ff2d500c91d3140f999e62331cfb62e79e24-1.json",
+      "reloaded_state_sha256": "35df86e9e66f2fc9dc0733559d2d7b345a3b7d2732928403b3454a17d2d4b9d8",
+      "restored_checkpoint_sha256": "8f826873d69916a3547d9af9c2cc3230f56fda7b8b7cc8df7ecff27898fb97fc",
+      "runtime": {
+        "numpy": "1.26.4",
+        "python": "3.12.3",
+        "torch": "2.10.0",
+        "torch-npu": "2.10.0.post4"
+      },
+      "state_sha256": "35df86e9e66f2fc9dc0733559d2d7b345a3b7d2732928403b3454a17d2d4b9d8",
+      "steps": 1313,
+      "task": "low-activity-multiscale_timed-mixed-n16-d128-k1-d8614748b3-a2-2026112002-r5"
+    },
+    "2907": {
+      "attempt": "r3-cab0c55ec8f72e16689d40f08fb1ba2f926a87073ab687d1ead60e2508c59631-1",
+      "backend": "cpu",
+      "checkpoint_reload": "exact",
+      "fingerprint": "cab0c55ec8f72e16689d40f08fb1ba2f926a87073ab687d1ead60e2508c59631",
+      "first_update_sha256": "62d27fde242ecebcb254e49066c7691f81fc76704940d34e7d4cdbdd93867d04",
+      "from_steps": 1770,
+      "grad_norm": 1.3360328674316406,
+      "job": "tide-r3-20261128-1",
+      "loss": 6.34049654006958,
+      "node_device": null,
+      "original_plan_sha256": "103b06b6925fcbc1576dd06409a2863c1f3868d2e5aad135a7cbc8c806ac3c92",
+      "raw_uri": "obs://meta-intelligence/l00580095/tide-learning-lab/production/r3-20261128/first-updates/r3-cab0c55ec8f72e16689d40f08fb1ba2f926a87073ab687d1ead60e2508c59631-1.json",
+      "reloaded_state_sha256": "be706fd62841624c05a6c3ca163d0e8975b3956dda2d89b133cf8edea2c4aa31",
+      "restored_checkpoint_sha256": "b0e8cbd11f7d69f87edbe273ee5a695c0907c28f7310eeccf7e2198fbf718117",
+      "runtime": {
+        "numpy": "1.26.4",
+        "python": "3.12.3",
+        "torch": "2.10.0",
+        "torch-npu": "2.10.0.post4"
+      },
+      "state_sha256": "be706fd62841624c05a6c3ca163d0e8975b3956dda2d89b133cf8edea2c4aa31",
+      "steps": 1771,
+      "task": "exchange-d64-s-shannon-e8ace058ca-a2-2026112001-r1"
+    }
+  },
+  "image_digest": "sha256:99442d9e494fd9b7c7dd0c666c2598bcd076cf3084429a5f0967d4b6b1472c7f",
+  "job": "tide-r3-20261128-1",
+  "method": "Independent validation of both native cross-runtime records and finite next update, original checkpoint and exact saved-state reload in fresh model and optimizer instances.",
+  "node": {
+    "chip_hbm_mib": [
+      65536,
+      65536,
+      65536,
+      65536,
+      65536,
+      65536,
+      65536,
+      65536,
+      65536,
+      65536,
+      65536,
+      65536,
+      65536,
+      65536,
+      65536,
+      65536
+    ],
+    "observed_unix": 1795868343.5050716,
+    "physical_boards": 8,
+    "ram_limit_bytes": 2024000000000,
+    "threads": 300
+  },
+  "observed_at": "2026-11-28T12:19:20.591229+00:00",
+  "platform_id": "c4a30523-cc7d-42c6-9b60-0ef3f4143ccc",
+  "platform_start_ms": 1795867855000,
+  "runq": "7f644c6ee65632df57f0a4532e3d3e5e5c9be8ee",
+  "schema": "tide-r3-real-first-updates/v1"
+}

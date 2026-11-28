@@ -153,6 +153,18 @@ def relay_locked(area, obs, claim, queue, identity):
         require(bound(source, identity) and source.get("status") in {"completed", "interrupted", "failed"},
                 "SFS terminal receipt identity differs")
     files, checksums, verdict = native_paths(area, claim)
+    if (source and source["status"] == "failed" and not source.get("artifacts") and not files and not verdict
+            and not (area / "runtime-plan.json").exists() and not (area / "output").exists()):
+        # Frozen run_one hydrates every input before writing the plan, opening the worker
+        # log, or starting a scientific child. A closed wrapper can prove zero exposure.
+        error = source.get("error") or ""
+        absent = re.search(r"""FileNotFoundError: \[Errno 2\] No such file or directory: ['"]([^'"]+)['"]\s*$""", error)
+        if absent and "frozen = hydrate(area, obs, d)" in error and "with src.open" in error:
+            path = Path(absent[1])
+            h = path.name
+            if re.fullmatch(r"[0-9a-f]{64}", h) and path == member(obs, "inputs/objects/" + h):
+                return {"status":"never_started", "reason":"verified missing staged input before scientific worker creation",
+                        "missing_input_sha256":h, "receipt_sha256":digest(area / "receipt.json")}
     if not source and not verdict:
         return {"status": "incomplete", "reason": "SFS attempt has no terminal receipt or native verdict/result"}
     status = verdict["status"] if verdict else source["status"]

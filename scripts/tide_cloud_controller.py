@@ -12,6 +12,7 @@ import http.client
 import json
 import math
 from pathlib import Path
+import shlex
 import subprocess
 import sys
 import time
@@ -23,8 +24,9 @@ from tide_cloud_dispatch import (CANARIES, descriptor, known_objects, object_key
                                  publish_claim, stage_objects, starting_budget)
 from tide_cloud_results import archive_outputs, canary, ingest
 from tide_portable import read, require, sha, write
-from ma_jobs import status_ref, stop_ref
+from ma_jobs import rundir, status_ref, stop_ref
 from ma_obs import ObsError
+from job_access import alias_base
 import ma_oms
 
 ACTIVE = {"claimed", "awaiting_submission", "dispatched"}
@@ -58,6 +60,42 @@ def snapshot(region, key):
         raise
 
 
+def queue_over_ssh(name, platform_id):
+    """Use maflow's already host-key-pinned access to read the actual job-local cluster."""
+    with target_context("guiyang"):
+        alias = alias_base(platform_id)
+        config = rundir(name) / "ssh" / (alias + ".conf")
+    if not config.is_file():
+        return None
+    code = """import json,os,pathlib,re,subprocess,sys,time
+name, job_id = sys.argv[1:]
+if os.environ.get('MAFLOW_RUN') != name or os.environ.get('MAFLOW_WORKER') != 'worker-0':
+    raise ValueError('wrong job or worker')
+for field in ('MA_JOB_ID','MODELARTS_JOB_ID'):
+    value = os.environ.get(field,'')
+    if re.fullmatch('[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}',value) and value.lower() != job_id.lower():
+        raise ValueError('wrong platform allocation')
+work = pathlib.Path(os.environ['MAFLOW_WORK'])
+reg = json.loads((work/'runq-project.json').read_bytes())
+shared = pathlib.Path(os.environ['MAFLOW_SHARED'])/'tide-r3/runq'
+if reg['mode'] != 'project' or pathlib.Path(reg['shared']) != shared:
+    raise ValueError('wrong project queue')
+data = json.loads(subprocess.check_output([os.environ['MAFLOW_RUNQ'],'--json','cluster','status','--shared',str(shared)],timeout=15))
+counts = {}
+for row in data['tasks']:
+    counts[row['state']] = counts.get(row['state'],0) + 1
+print(json.dumps(dict(at=time.time(), counts=counts, workers=data['workers'], tasks=data['tasks'],
+    job=name, runq=os.environ['MAFLOW_RUNQ_COMMIT'], deadline=reg['deadline'])))
+"""
+    command = ["ssh", "-F", str(config), "-o", "BatchMode=yes", alias + "-0",
+               shlex.join(["python3","-I","-B","-c",code,name,platform_id])]
+    try:
+        r = subprocess.run(command, capture_output=True, timeout=24)
+        return json.loads(r.stdout) if r.returncode == 0 else None
+    except (OSError, ValueError, subprocess.TimeoutExpired):
+        return None
+
+
 def observe_allocations(area, spec, region):
     def observe(name):
         directory = area / "allocations" / name
@@ -67,19 +105,28 @@ def observe_allocations(area, spec, region):
         m, receipt = read(manifest), read(directory / "submitted.json")
         previous = directory / "last-platform.json"
         error = None
+        queue, queue_source = None, None
         try:
             with target_context("guiyang"):
                 platform = status_ref(receipt["id"])
             require(platform["name"] == name and platform["nodes"] == 1
                     and platform["flavor"] == "modelarts.pool.visual.16xlarge", "allocation identity differs")
             write(previous, platform)
-            queue = snapshot(region, m["prefix"] + "/products/tide-status.json")
-            if queue:
-                require(queue["job"] == name and queue["runq"] == spec["runq_commit"], "queue release differs")
         except (ValueError, OSError, RuntimeError, KeyError, http.client.HTTPException) as exc:
             platform = read(previous) if previous.is_file() else {"phase":"Unknown", "id":receipt["id"], "name":name}
             error = str(exc)
-            queue = None
+        if platform["phase"].lower() == "running":
+            try:
+                queue = queue_over_ssh(name, receipt["id"])
+                queue_source = "job-local runq via maflow SSH"
+                if queue is None:
+                    queue = snapshot(region, m["prefix"] + "/products/tide-status.json")
+                    queue_source = "OBS heartbeat"
+                if queue:
+                    require(queue["job"] == name and queue["runq"] == spec["runq_commit"], "queue release differs")
+            except (ValueError, OSError, RuntimeError, KeyError, http.client.HTTPException) as exc:
+                error = str(exc)
+                queue = None
         now = time.time()
         phase = platform["phase"].lower()
         started = stamp(platform.get("started"))
@@ -88,7 +135,7 @@ def observe_allocations(area, spec, region):
         if started and not terminal:
             elapsed = max(elapsed, now - started)
         return name, {"name": name, "id": receipt["id"], "prefix": m["prefix"], "platform": platform,
-                      "platform_project": m["project"], "queue": queue, "elapsed_seconds": elapsed,
+                      "platform_project": m["project"], "queue": queue, "queue_source":queue_source, "elapsed_seconds": elapsed,
                       "observation_error":error, "terminal": terminal,
                       "ready":bool(phase == "running" and queue and -5 <= now - queue["at"] < 150
                                    and any(w.get("state") == "serving" and -5 <= now-w.get("at",0) < 150
@@ -124,6 +171,8 @@ def idle_review_reason(dag, state, nodes, expected_nodes):
         return None
     if state["blocked"]:
         return "awaiting_scientific_review"
+    if dag.get("blocker_kind") == "scientific" and dag["blocked"]:
+        return "awaiting_scientific_review"
     if len(nodes) != expected_nodes or any(n.get("observation_error") or not (n["ready"] or n["terminal"])
                                           for n in nodes.values()):
         return None
@@ -150,6 +199,14 @@ def normalized(item):
     require(row["ram_mib"] > 0 and row["threads"] > 0 and (backend == "cpu" or row["hbm_mib"] > 0),
             "missing required native resource reservation for " + t["id"])
     return row
+
+
+def queued_window(node, backend, threads):
+    workers = node["queue"]["workers"]
+    if backend == "cpu":
+        return max(1, sum(w["capacity"]["threads"] for w in workers) // threads)
+    chips = sum(len(c.get("chips", {})) for w in workers for c in w.get("cards", {}).values())
+    return max(1, chips)
 
 
 def restore_input(area, source, h, size, east, region):
@@ -375,6 +432,10 @@ class Controller:
         return True
 
     def transport(self, node):
+        if (node.get("queue_source") == "job-local runq via maflow SSH" or any(
+                c["job"] == node["name"] and c.get("transport") == "ssh" and
+                (c.get("last_ingress") or {}).get("status") == "submitted" for c in self.state["attempts"].values())):
+            return "ssh"
         cached = self.transport_cache.get(node["id"])
         if cached and time.monotonic() < cached[1]:
             return cached[0]
@@ -386,7 +447,7 @@ class Controller:
         return mode
 
     def deliver(self, nodes):
-        from tide_cloud_submit import submit_batch, submit_native
+        from tide_cloud_submit import refresh_native, submit_batch, submit_native
         for slot,future in list(self.submissions.items()):
             if not future.done():
                 continue
@@ -398,6 +459,10 @@ class Controller:
                 continue
             for attempt, result in reply.items():
                 c = self.state["attempts"][attempt]
+                if slot[1] == "refresh":
+                    c["last_native_refresh"] = result
+                    c["retry_native_after"] = time.time() + 90
+                    continue
                 if c["status"] != "awaiting_submission":
                     continue
                 c["last_ingress"] = result
@@ -413,9 +478,16 @@ class Controller:
             if not node["ready"]:
                 continue
             visible = {task["key"] for task in node["queue"]["tasks"]}
-            per_mode = {"ssh":[], "obs":[]}
+            per_mode = {"ssh":[], "obs":[], "refresh":[]}
             for attempt,c in self.state["attempts"].items():
-                if c["job"] != name or c["status"] != "awaiting_submission":
+                if c["job"] != name:
+                    continue
+                if c.get("transport") == "obs" and c["status"] == "dispatched" and attempt not in visible:
+                    if (node.get("queue_source") == "job-local runq via maflow SSH" and
+                            time.time() >= c.get("retry_native_after", c["submitted"] + 60)):
+                        per_mode["refresh"].append(dict(c))
+                    continue
+                if c["status"] != "awaiting_submission":
                     continue
                 if attempt in visible:
                     c.update(status="dispatched", submitted=time.time())
@@ -424,7 +496,8 @@ class Controller:
             for mode,items in per_mode.items():
                 if items and (name,mode) not in self.submissions:
                     batch = sorted(items, key=lambda c:-priority(c["row"]))[:24]
-                    func, args = (submit_batch, ()) if mode == "ssh" else (submit_native, (self.region,))
+                    func, args = {"ssh":(submit_batch, (self.area,)), "obs":(submit_native, (self.region,)),
+                                  "refresh":(refresh_native, (self.area,))}[mode]
                     self.submissions[name,mode] = self.submission_pool.submit(func, node, batch, *args)
 
     def send(self, row, node, available, existing=None):
@@ -503,6 +576,8 @@ class Controller:
             if c["status"] == "claimed" and c["job"] in ready:
                 self.send(c["row"], ready[c["job"]], available, a)
         counts, loads = Counter(), Counter()
+        running = Counter((k,t["backend"]) for k,n in ready.items() for t in n["queue"]["tasks"]
+                          if t["state"] == "running" and t.get("backend"))
         for c in self.state["attempts"].values():
             if c["status"] in ACTIVE:
                 slot = c["job"], c["backend"]
@@ -512,8 +587,10 @@ class Controller:
             if time.monotonic() >= next_observation:
                 break
             backend = row["backend"]
-            usable = [k for k,n in ready.items() if counts[k,backend] < max(
-                2, 2 * n["queue"]["workers"][0]["capacity"]["threads"] // row["threads"])]
+            # Keep at most one hardware-width wave waiting behind active workers.
+            # Longer-running attempts stay on their owner while late nodes can claim unassigned work.
+            usable = [k for k,n in ready.items()
+                      if counts[k,backend] - running[k,backend] < queued_window(n, backend, row["threads"])]
             if not usable:
                 continue
             usable = [k for k in usable if k not in row.get("unstarted_on", ())] or usable

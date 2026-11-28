@@ -172,3 +172,40 @@ def test_live_heartbeat_reads_metadata_and_body_in_one_get():
             return {"size":len(body), "sha256":hashlib.sha256(body).hexdigest()}
 
     assert snapshot(UpdatingStatus(), "heartbeat") == {"at":30}
+
+
+def test_waiting_npu_window_follows_physical_chip_map_and_cpu_follows_threads():
+    if not shutil.which("maflow") and not (Path.home() / ".local/bin/maflow").is_file():
+        pytest.skip("maflow account client")
+    from tide_cloud_controller import queued_window
+    worker = {"capacity":{"threads":40}, "cards":{"0":{"chips":{"0":{}, "1":{}}},
+                                                  "1":{"chips":{"2":{}, "3":{}}}}}
+    node = {"queue":{"workers":[worker]}}
+    assert queued_window(node, "npu", 4) == 4
+    assert queued_window(node, "cpu", 4) == 10
+
+
+def test_output_hash_uses_a_pinned_cloud_body_with_a_local_fallback(monkeypatch):
+    if not shutil.which("maflow") and not (Path.home() / ".local/bin/maflow").is_file():
+        pytest.skip("maflow account client")
+    import tide_cloud_submit
+    from tide_cloud_results import readback
+    digest = "a"*64
+    node = {"id":"allocated-job"}
+
+    class Store:
+        def head(self, key):
+            return {"etag":"v1", "version":"1", "size":70}
+
+        def stream(self, key, *, expected, etag):
+            assert expected == digest and etag == "v1"
+            return self.head(key)
+
+    def remote(node, store, key, checksum, size):
+        return {"sha256":checksum, "size":size}
+    monkeypatch.setattr(tide_cloud_submit, "verify_object", remote)
+    assert readback(Store(), "key", digest, 70, node)["verified_on"] == "guiyang/allocated-job"
+    def unavailable(*args):
+        raise ConnectionError()
+    monkeypatch.setattr(tide_cloud_submit, "verify_object", unavailable)
+    assert readback(Store(), "key", digest, 70, node)["verified_on"] == "client"
