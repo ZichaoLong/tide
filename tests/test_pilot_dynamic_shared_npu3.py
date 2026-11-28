@@ -31,13 +31,16 @@ if config.get('orphan'):
     (out/'orphan.pid').write_text(str(pid))
 tokens=0
 end=time.monotonic()+config.get('sleep',.3)
-while time.monotonic()<end:
+finish_after=Path(config['finish_after']) if 'finish_after' in config else None
+while time.monotonic()<end and (finish_after is None or not finish_after.exists()):
     tokens+=32
     p=out/'heartbeat.tmp'
     p.write_text(json.dumps({'task_id':task['id'],'pid':os.getpid(),'updated_unix':time.time(),
                             'status':'training','tokens':tokens}))
     p.replace(out/'heartbeat.json')
     time.sleep(.01)
+if finish_after is not None and not finish_after.exists():
+    raise TimeoutError('concurrent worker did not start before the fixture deadline')
 result={'id':task['id'],'model_id':task['model_id'],'phase':task['phase'],
         'status':config.get('status','completed'),'source_identity':task['source_identity'],
         'task_sha256':hashlib.sha256(task_path.read_bytes()).hexdigest(),
@@ -134,7 +137,10 @@ raise SystemExit(2)
 
 
 def test_append_backfills_held_card_and_publishes_individual_completion_before_drain(tmp_path):
-    value, path, workers = request(tmp_path, [{"sleep": .45}, {"sleep": 1.1}, {"sleep": .15}])
+    later_heartbeat = tmp_path / "worker-2/heartbeat.json"
+    value, path, workers = request(tmp_path, [
+        {"sleep": .45}, {"sleep": 10, "finish_after": str(later_heartbeat)}, {"sleep": .15},
+    ])
     instance = runner(value, path, tmp_path)
     observed, errors = [], []
     def producer():

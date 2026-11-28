@@ -20,7 +20,7 @@ maflow job queue status guiyang/tide-r3-20261128-2 --json
 
 客户端的用户服务为 `tide-r3-guiyang-controller-20261128.service`。控制器按任务 SHA 和尝试号在华东预约一次，并行发布已预约尝试的描述符和运行计划。它验证节点的 SSH、挂载及 runq 身份，将任务送入该节点的私有 SFS 队列。仅 OBS 可达的节点使用作业内置扫描器。每次尝试固定入口和任务键。挂载尚未显示的输入可用该文件专属的短时 GET 在节点取回，核对完整 SHA-256 与长度后进入私有缓存。队列终态的原始产物可恢复迟到的项目回执。提交控制器修订后运行 `bash scripts/tide_cloud_service.sh`，在途 worker 继续由原贵阳作业管理。[服务入口](../scripts/tide_cloud_service.sh) · [队列派发](../scripts/tide_cloud_submit.py) · [回执恢复](../scripts/tide_cloud_relay.py)
 
-控制器结合历史耗时、HBM 预约和阶段依赖排序，按两节点已分配的工作量选择目标。每节点给尚未开工的 NPU 任务预留一轮逻辑芯片宽度，CPU 窗口按线程申请计算。节点内 runq 为长时或大 HBM 任务保护一颗芯片的开工机会，其他任务按可用资源及预计结束时间补位。第二份作业获配后自行接单。卡时按获配的物理板与实际时间结算，同卡并发和 CPU 作业另列。每份作业的平台运行上限为 365 小时。[派发优先级](../scripts/tide_cloud_dispatch.py) · [跨节点分工及预算](../scripts/tide_cloud_controller.py)
+控制器结合历史耗时、HBM 预约和阶段依赖排序，按两节点已分配的工作量选择目标。每节点给尚未开工的 NPU 任务预留一轮逻辑芯片宽度。CPU 等待名额按主机线程计算，扣除在跑 NPU worker 占用的线程预约。节点内 runq 为长时或大 HBM 任务保护一颗芯片的开工机会，其他任务按可用资源及预计结束时间补位。第二份作业获配后自行接单。卡时按获配的物理板与实际时间结算，同卡并发和 CPU 作业另列。每份作业的平台运行上限为 365 小时。[派发优先级](../scripts/tide_cloud_dispatch.py) · [跨节点分工及预算](../scripts/tide_cloud_controller.py)
 
 华东权威前缀为 `east:/tide-learning-lab/production/r3-20261128/`。`control/rollout.json` 绑定两份平台作业，`control/status.json` 给出最近观察，`control/state.json` 记录已预约与已收的尝试。`dispatch/` 保存原任务字节和有序的断点历史，`attempts/` 保存原始结果、运行时计划和逐项产物凭证。热输入经 OMS 进入贵阳，每个节点按摘要取用。新检查点在贵阳读取正文复核，随后由 OMS 回传华东。`science/current.json` 标识最近一次原生选方、评估报告和门禁快照。新客户端可以先取以下轻量文件。
 

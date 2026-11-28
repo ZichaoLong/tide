@@ -232,6 +232,29 @@ def test_waiting_npu_window_follows_physical_chip_map_and_cpu_follows_threads():
     node = {"queue":{"workers":[worker]}}
     assert queued_window(node, "npu", 4) == 4
     assert queued_window(node, "cpu", 4) == 10
+    assert queued_window(node, "cpu", 4, running_npu_threads=16) == 6
+    assert queued_window(node, "cpu", 4, running_npu_threads=40) == 1
+
+
+def test_restored_inputs_clear_only_their_node_error_even_with_a_full_queue(tmp_path, monkeypatch):
+    if not shutil.which("maflow") and not (Path.home() / ".local/bin/maflow").is_file():
+        pytest.skip("maflow account client")
+    import tide_cloud_controller as controller
+    ctl = controller.Controller.__new__(controller.Controller)
+    ctl.area, ctl.spec, ctl.stage_futures = tmp_path, {}, {}
+    ctl.state = {"errors":{"staging:one:fp":"timeout", "staging:two:fp":"timeout", "publish:fp":"timeout"}}
+    monkeypatch.setattr(controller, "descriptor", lambda *_: ({}, {}))
+    monkeypatch.setattr(controller, "objects_needed", lambda *_: {"a":(5, None), "b":(6, None)})
+    rows = {"fp":{}}
+    nodes = {"one":{"prefix":"job-1"}, "two":{"prefix":"job-2"}}
+    for name in nodes:
+        write(tmp_path / "staged" / name / "a", {"sha256":"a", "size":5, "key":"job-1/inputs/objects/a", "etag":"v1"})
+        write(tmp_path / "staged" / name / "b", {"sha256":"b", "size":6, "key":"job-2/inputs/objects/b", "etag":"v2"})
+    ctl.reconcile_staging_errors(rows, nodes)
+    assert len(ctl.state["errors"]) == 3
+    write(tmp_path / "staged/one/b", {"sha256":"b", "size":6, "key":"job-1/inputs/objects/b", "etag":"v3"})
+    ctl.reconcile_staging_errors(rows, nodes)
+    assert ctl.state["errors"] == {"staging:two:fp":"timeout", "publish:fp":"timeout"}
 
 
 def test_output_hash_uses_a_pinned_cloud_body_with_a_local_fallback(monkeypatch):

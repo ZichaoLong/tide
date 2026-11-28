@@ -203,10 +203,11 @@ def normalized(item):
     return row
 
 
-def queued_window(node, backend, threads):
+def queued_window(node, backend, threads, running_npu_threads=0):
     workers = node["queue"]["workers"]
     if backend == "cpu":
-        return max(1, sum(w["capacity"]["threads"] for w in workers) // threads)
+        capacity = sum(w["capacity"]["threads"] for w in workers)
+        return max(1, (capacity - running_npu_threads) // threads)
     chips = sum(len(c.get("chips", {})) for w in workers for c in w.get("cards", {}).values())
     return max(1, chips)
 
@@ -412,11 +413,35 @@ class Controller:
             row = normalized(t)
             rows.setdefault(row["fingerprint"], row)
         rows.update(self.state["retries"])
+        self.reconcile_staging_errors(rows, nodes)
         if len(self.state["canaries"]) < len(CANARIES):
             rows = {k:r for k,r in rows.items() if r.get("legacy_id") in CANARIES}
         skip = {c["fingerprint"] for c in self.state["attempts"].values() if c["status"] not in {"interrupted","not_started"}}
         skip.update(self.state["blocked"])
         return sorted([r for k,r in rows.items() if k not in skip], key=lambda r: (-priority(r),r["id"]))
+
+    def reconcile_staging_errors(self, rows, nodes):
+        # An input can finish staging while its target node has no dispatch window.
+        errors = self.state.get("errors", {})
+        for key in tuple(errors):
+            kind, _, location = key.partition(":")
+            if kind != "staging":
+                continue
+            name, _, fp = location.partition(":")
+            if name not in nodes or fp not in rows or (name, fp) in self.stage_futures:
+                continue
+            try:
+                d, _ = descriptor(self.area, rows[fp], name, "staging-check", self.spec)
+                for digest, (size, _) in objects_needed(self.area, d).items():
+                    receipt = read(self.area / "staged" / name / digest)
+                    if (receipt.get("sha256") != digest or receipt.get("size") != size
+                            or receipt.get("key") != nodes[name]["prefix"] + "/inputs/objects/" + digest
+                            or not receipt.get("etag")):
+                        break
+                else:
+                    del errors[key]
+            except (OSError, ValueError, RuntimeError, KeyError):
+                continue
 
     def inputs(self, expected, available):
         for h, (size, path) in expected.items():
@@ -614,8 +639,16 @@ class Controller:
             if c["status"] == "claimed" and c["job"] in ready:
                 self.send(c["row"], ready[c["job"]], available, a)
         counts, loads = Counter(), Counter()
-        running = Counter((k,t["backend"]) for k,n in ready.items() for t in n["queue"]["tasks"]
-                          if t["state"] == "running" and t.get("backend"))
+        running, npu_threads = Counter(), Counter()
+        for name,node in ready.items():
+            for task in node["queue"]["tasks"]:
+                backend = task.get("backend")
+                if task["state"] != "running" or not backend:
+                    continue
+                running[name,backend] += 1
+                claim = self.state["attempts"].get(task["key"])
+                if backend == "npu" and claim:
+                    npu_threads[name] += claim["row"]["threads"]
         for c in self.state["attempts"].values():
             if c["status"] in ACTIVE:
                 slot = c["job"], c["backend"]
@@ -627,8 +660,8 @@ class Controller:
             backend = row["backend"]
             # Keep at most one hardware-width wave waiting behind active workers.
             # Longer-running attempts stay on their owner while late nodes can claim unassigned work.
-            usable = [k for k,n in ready.items()
-                      if counts[k,backend] - running[k,backend] < queued_window(n, backend, row["threads"])]
+            usable = [k for k,n in ready.items() if counts[k,backend] - running[k,backend]
+                      < queued_window(n, backend, row["threads"], npu_threads[k])]
             if not usable:
                 continue
             usable = [k for k in usable if k not in row.get("unstarted_on", ())] or usable
