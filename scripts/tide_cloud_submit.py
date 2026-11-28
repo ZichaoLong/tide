@@ -269,11 +269,12 @@ def read_on_node(node, request, work, obs, shared, *, mount_check=os.path.ismoun
     native, *_ = verified_queue(node, work, obs, shared, mount_check)
     if request["action"] == "cache":
         return blobs.ensure_inputs(native, obs, request["objects"], request.get("grants", {}))
-    relay.require(request["action"] == "verify", "unsupported private input operation")
-    h, size = request["sha256"], request["size"]
-    blobs.validate(h, size)
+    relay.require(request["action"] in {"verify", "verify_many"}, "unsupported private input operation")
     if request.get("background"):
         os.nice(15)
+    if request["action"] == "verify_many":
+        return {h: blobs.read_signed(row["url"], h, row["size"]) for h, row in request["objects"].items()}
+    h, size = request["sha256"], request["size"]
     return {"sha256": h, "size": blobs.read_signed(request["url"], h, size)}
 
 
@@ -377,6 +378,17 @@ def verify_object(node, store, key, sha256, size, *, background=False):
         request["background"] = True
     result = remote_call(node, [], files=request)
     relay.require(result == {"sha256":sha256, "size":size}, "regional verification acknowledgement differs")
+    return result
+
+
+def verify_objects(node, store, objects):
+    """Read a batch sequentially at background priority using one authenticated connection."""
+    grants = {}
+    for h, row in objects.items():
+        blobs.validate(h, row["size"])
+        grants[h] = {"size": row["size"], "url": blobs.signed_get(store, row["key"])}
+    result = remote_call(node, [], files={"action": "verify_many", "background": True, "objects": grants})
+    relay.require(result == {h: row["size"] for h, row in objects.items()}, "regional batch acknowledgement differs")
     return result
 
 

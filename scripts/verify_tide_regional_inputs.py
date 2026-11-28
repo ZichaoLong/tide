@@ -1,14 +1,16 @@
 """Hash R3's delivered Guiyang inputs on an existing allocation and save per-version receipts."""
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import argparse
 import fcntl
 import json
 from pathlib import Path
 import sqlite3
+import subprocess
+import time
 
 from tide_cloud_allocation import REPO, Store
 from tide_cloud_dispatch import object_key
-from tide_cloud_submit import pinned_ssh, verify_object
+from tide_cloud_submit import pinned_ssh, verify_objects
 from tide_portable import read, require, write
 from ma_ledger import timestamp
 import ma_oms
@@ -83,34 +85,55 @@ def verify(storage, node, workers):
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         prior = prior_receipts(storage, region, targets)
 
-        def check(item):
-            h, row = item
-            key, size = row["key"], row["size"]
-            before = region.head(key)
-            require(before and before["size"] == size and before.get("sha256") in (None, h), "destination changed: " + h)
-            saved = prior.get(h)
-            if matches_version(saved, before):
-                receipt = {**saved, **row}
-                outcome = "reused"
-            else:
-                accepted = verify_object(node, region, key, h, size, background=True)
-                after = region.head(key)
-                require(accepted == {"sha256":h, "size":size} and matches_version(before, after)
-                        and after.get("sha256") in (None, h), "destination changed during regional readback: " + h)
-                receipt = {**row, "etag":after["etag"], "version":after.get("version"), "verified_at":timestamp(),
-                           "method":"regional full SHA-256 over signed GET on pinned ModelArts SSH",
-                           "job":node["name"], "platform_id":node["id"]}
-                outcome = "node"
-            write(directory / (h + ".json"), receipt)
-            return outcome, size
+        def check(batch):
+            outcomes, pending, heads = [], {}, {}
+            for h, row in batch:
+                heads[h] = region.head(row["key"])
+                before = heads[h]
+                require(before and before["size"] == row["size"] and before.get("sha256") in (None, h),
+                        "destination changed: " + h)
+                if matches_version(prior.get(h), before):
+                    write(directory / (h + ".json"), {**prior[h], **row})
+                    outcomes.append(("reused", row["size"]))
+                else:
+                    pending[h] = row
+            if pending:
+                for attempt in range(4):
+                    try:
+                        accepted = verify_objects(node, region, pending)
+                        break
+                    except (ValueError, OSError, RuntimeError, subprocess.SubprocessError):
+                        if attempt == 3:
+                            raise
+                        time.sleep(2 ** (attempt + 1))
+                for h, row in pending.items():
+                    after = region.head(row["key"])
+                    require(accepted[h] == row["size"] and matches_version(heads[h], after)
+                            and after.get("sha256") in (None, h), "destination changed during regional readback: " + h)
+                    write(directory / (h + ".json"), {**row, "etag":after["etag"], "version":after.get("version"),
+                          "verified_at":timestamp(), "method":"regional full SHA-256 over signed GET on pinned ModelArts SSH",
+                          "job":node["name"], "platform_id":node["id"]})
+                    outcomes.append(("node", row["size"]))
+            return outcomes
 
         # Check still-unread large objects first. Every foreground training worker keeps its own allocation.
         ordered = sorted(targets.items(), key=lambda it: (it[0] in prior, -it[1]["size"]))
         counts, sizes = {}, {}
+        failed = []
         with ThreadPoolExecutor(max_workers=workers) as executor:
-            for method, size in executor.map(check, ordered):
-                counts[method] = counts.get(method, 0) + 1
-                sizes[method] = sizes.get(method, 0) + size
+            futures = {executor.submit(check, ordered[i:i+6]): i for i in range(0, len(ordered), 6)}
+            for completed in as_completed(futures):
+                try:
+                    outcomes = completed.result()
+                except (ValueError, OSError, RuntimeError, subprocess.SubprocessError) as exc:
+                    # Other batches can finish and remain usable after a single transport failure.
+                    reason = "destination changed during regional readback" if str(exc).startswith("destination changed") else type(exc).__name__
+                    failed.append((futures[completed], reason))
+                    continue
+                for method, size in outcomes:
+                    counts[method] = counts.get(method, 0) + 1
+                    sizes[method] = sizes.get(method, 0) + size
+        require(not failed, "unverified regional batches: " + str(failed))
         return dict(completed=timestamp(), destination=region.side, job=node["name"], platform_id=node["id"],
                     workers=workers, objects=len(ordered), bytes=sum(sizes.values()), by_method=counts, bytes_by_method=sizes)
 
