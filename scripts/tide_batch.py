@@ -220,6 +220,7 @@ def cluster(root):
     executable = Path(os.environ["MAFLOW_RUNQ"])
     require(executable.is_absolute() and os.access(executable, os.X_OK), "cloud runq is not executable")
     ctl = [str(executable), "--json"]
+    queue.mkdir(mode=0o700, exist_ok=True)
     write(Path(os.environ["MAFLOW_RUNQ_QUEUE_FILE"]), {"mode": "project", "shared": str(queue), "deadline": deadline})
     ent = area / f"node-{rank}.json"
     write(
