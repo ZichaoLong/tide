@@ -1,0 +1,120 @@
+{
+  "archive": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/modelarts-r3/storage/remaining-checkpoints-proof.json",
+    "sha256": "e0ba50f1d563ea6ef548195f5586a23922363c597a9c9167ca16d7ae0ef19038"
+  },
+  "archive_inventory_sha256": "13f4f9040ac35f986c6d33e5c9527c9d705147c37ad1f2d03d955a69b5619015",
+  "archived_candidate_observations": {
+    "observations_a1": 385,
+    "observations_a2": 124,
+    "observations_a3": 2,
+    "observations_init": 215,
+    "observations_preflight": 18,
+    "replayed_ranking_a1": 55,
+    "replayed_ranking_a2": 28
+  },
+  "candidate_parents": {
+    "candidate_receipts_sha256": "dd74936089acc58e74db0a7e7e19d9c29c8813e77a49bc3934ea93c5013a352c",
+    "diagnostic_or_capacity_observations": 233,
+    "diagnostic_payloads_archived": 36,
+    "diagnostics_sha256": "6b36ee48e98cbddc09d504a9b6cdc19697198c5b1d14e0c9286e842a8de00586",
+    "diagnostics_without_payload_and_without_continuation_consumer": 197,
+    "excluded_by_replayed_ranking": 256,
+    "excluded_tasks_sha256": "3dcd93a904affda95ee29cb5040818b15d03469ba4c6697c3d030601ad49d62d",
+    "potential_parent_tasks": 255
+  },
+  "controls": {
+    "historical_control_tasks": 0,
+    "matching_input": "A3 activity aggregates for all 344 subjects",
+    "next_phase": "fresh matched-control capacity and Stage A",
+    "original_barrier": "control_matching_requires_all_subject_A3_pairs: 76 missing"
+  },
+  "dispatch": {
+    "counts": {
+      "a1": 127,
+      "a2": 92,
+      "a3": 54,
+      "cpu": 126,
+      "init": 2,
+      "newly_released": 20,
+      "npu": 155,
+      "paused": 69,
+      "preflight": 6,
+      "retained_queue": 261
+    },
+    "data_or_auxiliary_files": 14,
+    "descriptors_sha256": "511b7d4e2ce364d673e8af3e1e711547873cc3f336715d975930cf95b03e7166",
+    "required_object_hashes_and_sizes_sha256": "ff2bcaee57246901bc4a8022a50077bb11d86237cc96b6ae0bd8f31e46948ad6",
+    "required_objects": 229,
+    "source_identities": [
+      "add132a5053b177165a3a62574e369a7931375a7df61ac6025fdde02fd35f82e",
+      "fb82cd0676f05e2aed1ae54d38aa2c6d3b1f3a70ac3cc508f56f1108641efebb"
+    ],
+    "subjects": 76,
+    "tasks": 281
+  },
+  "initial_inventory": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/modelarts-r3/control/initial-tasks.json",
+    "sha256": "ff4962d24e23792df57a4993ecdf5dc49c35f81de5ec2b6375640c4be9b3e945"
+  },
+  "method": "Simulated eviction of every local .pt at pathlib stat/open. Ran the production DAG, frozen descriptor and plan validators; independently replayed complete candidate rankings and all possible next-stage parent loads.",
+  "observed_at": "2026-11-28T11:59:36.383547+00:00",
+  "outstanding_subjects": 76,
+  "previously_selected_admitted": 268,
+  "rejected_attempts_to_open_local_checkpoint": 0,
+  "schema": "tide-r3-candidate-archive-frontier/v1",
+  "science_inputs": {
+    "deferred_plan": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/plan.json",
+      "sha256": "6870c733d9c80ced7d9d1c46eecde460ccadb66b5880228a7eee328f67e10ff3"
+    },
+    "groups": {
+      "deferred": {
+        "original_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/round",
+        "resources": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/round/model-resources.json",
+          "sha256": "beac8a170f541cc96e2d2f445c2ca564ae8814444af5db653113501d26fde0c2"
+        },
+        "scheduler": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/one-hour-drain-20261127T144850/scheduler-final-deferred.json",
+          "sha256": "02bb1a9103f4ee749474b76eba6acd27930ca52a4a5213df1b9fe7a934f37322"
+        },
+        "selected": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/round/selected.json",
+          "sha256": "2aab876ccbc7a1ce02b954ccce242573dd5d658c649907a671b7075dc2414b8b"
+        }
+      },
+      "primary": {
+        "original_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-runq/round",
+        "resources": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-runq/round/model-resources.json",
+          "sha256": "8321f91f0dcfb54648b721b08457b843241b0cb6518ae1017561e343e9f5fccd"
+        },
+        "scheduler": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/one-hour-drain-20261127T144850/scheduler-final-primary.json",
+          "sha256": "d90a9bfac9825de96ca2131369bf68e9813f192d850684a40ac85080a7bb2dd8"
+        },
+        "selected": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-runq/round/selected.json",
+          "sha256": "a9e8505dfe641c6ba19ad2f588b086a0cf5097c700fcfb58aa17bd049c335673"
+        }
+      }
+    },
+    "pause": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-stage-a-checkpoint-pause-20261127.json",
+      "sha256": "c6ac13ca8ad700a8f3fb3470bf115d90c2b5b36ca0b1e826547e66b6bbf8ea13"
+    },
+    "primary_plan": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/signal-and-review-20261126/controller/campaign-plan.json",
+      "sha256": "f4e857b9fabcc2f9232f4c8c1187946b03db5e1795be50f86b5df9cdf24d06ac"
+    },
+    "review": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/review.json",
+      "sha256": "7a6b9cf2fbfe1e0efe61d80c979fcda65f021bb83a17318e8520eb1a818fced3"
+    }
+  },
+  "selected_audit_scope": "No matched controls or resource approval supplied.",
+  "selected_subjects": 268,
+  "simulated_missing_file_stats": 4199,
+  "stage_b_gate": "closed"
+}

@@ -44,6 +44,20 @@ def _read_catalog(ref):
     return data, prefix
 
 
+def archive_proofs(directory):
+    """Resolve the currently complete inventory or its original staged predecessor set."""
+    directory = Path(directory)
+    complete = directory / "remaining-checkpoints-proof.json"
+    if complete.is_file():
+        files = [complete]
+    else:
+        chain = directory / "selected-chain-proof.json"
+        files = [chain if chain.is_file() else directory / "selected-hot-proof.json",
+                 directory / "selected-collateral-proof.json", directory / "selected-frontier-proof.json"]
+    from .io import sha256
+    return [{"path": str(f.resolve()), "sha256": sha256(f)} for f in files if f.is_file()]
+
+
 @contextlib.contextmanager
 def checkpoint_reads(refs, *, authoritative=False):
     """Missing files can be verified by archive. Explicit remote review can select that copy directly."""

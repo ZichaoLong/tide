@@ -17,7 +17,7 @@ import time
 
 from .gate3 import (MI, audit_stage_a, create_gate, eligible, gate_path_for_source,
                     manifest_digest, read_evidence, stage_source_contract)
-from .checkpoint_archive3 import checkpoint_reads
+from .checkpoint_archive3 import archive_proofs, checkpoint_reads
 from .hbm_profile3 import DEFAULT_POLICY, HbmProfile, hbm_shape, reservation
 from .io import atomic_json, sha256
 from .prepare_resume3 import reference
@@ -99,15 +99,7 @@ class CloudCampaign(Campaign):
         sealed = read(output / "model-manifest.json", {})
         self.archives = sealed.get("checkpoint_archives", [])
         if not sealed:
-            store = REPO / ".local/modelarts-r3/storage"
-            for name in ("selected-chain-proof.json", "selected-hot-proof.json"):
-                if (store / name).is_file():
-                    self.archives = [reference(store / name)]
-                    break
-            for name in ("selected-collateral-proof.json", "selected-frontier-proof.json"):
-                supplement = store / name
-                if supplement.is_file():
-                    self.archives.append(reference(supplement))
+            self.archives = archive_proofs(REPO / ".local/modelarts-r3/storage")
         self.plan = fixed(self.inputs["primary_plan"])
         self.deferred = fixed(self.inputs["deferred_plan"])
         self.review = fixed(self.inputs["review"])
@@ -195,6 +187,12 @@ class CloudCampaign(Campaign):
 
     def evidence(self, task):
         return self.entries[task["id"]]
+
+    def controls(self):
+        missing = [m["id"] for m in self.subjects if m["id"] not in self.selected]
+        if missing:
+            raise Blocked(f"control_matching_requires_all_subject_A3_pairs: {len(missing)} missing")
+        return super().controls()
 
     def manifest(self):
         return {**super().manifest(), "stage_a_dispositions": self.inputs["review"],

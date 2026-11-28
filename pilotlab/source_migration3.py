@@ -89,7 +89,9 @@ def inherited_activity(task, result):
                        or training.get("from_"+k) != cp[k] or end.get(k) != cp[k] for k in ("steps","tokens"))
                 or end.get("state_sha256") != cp["state_sha256"] or not cp["state_sha256"]):
             raise ValueError("activity inheritance requires the same final state without training")
-        checked(end, "zero-step final checkpoint")
+        from .checkpoint_archive3 import archive_record
+        if not archive_record(end["path"], end["sha256"], end.get("size_bytes")):
+            checked(end, "zero-step final checkpoint")
         old = read_bound(receipt["original_task"])
         previous = _result(receipt["result"], old, receipt["original_task"]["sha256"])
         if old["model"] != task["model"] or previous.get("parameters") != result.get("parameters"):

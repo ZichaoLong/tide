@@ -208,3 +208,26 @@ def test_forecast_uses_matched_shape_concurrency_and_charges_physical_boards(tmp
     assert estimate["wall_seconds_range"] == estimate["allocated_board_seconds_range"]
     resources["remaining_device_seconds"] = 10
     assert not cloud.cloud_forecast(selected, resources, accepted=accepted)["fits"]
+
+
+def test_complete_archive_replaces_the_staged_indices_for_candidate_and_dispatch(tmp_path):
+    from pilotlab.checkpoint_archive3 import archive_proofs
+
+    old = tmp_path / "selected-hot-proof.json"
+    frontier = tmp_path / "selected-frontier-proof.json"
+    whole = tmp_path / "remaining-checkpoints-proof.json"
+    write(old, {"index": "hot"})
+    write(frontier, {"index": "frontier"})
+    assert [Path(ref["path"]).name for ref in archive_proofs(tmp_path)] == [old.name, frontier.name]
+    expected = write(whole, {"index": "complete"})
+    assert archive_proofs(tmp_path) == [{"path": str(whole), "sha256": expected}]
+
+
+def test_control_matching_waits_for_real_subject_activity_before_catalog_generation(tmp_path):
+    from pilotlab.scheduler3 import Blocked
+
+    c = cloud.CloudCampaign.__new__(cloud.CloudCampaign)
+    c.output, c.subjects, c.selected = tmp_path, [{"id":"ready"}, {"id":"pending"}], {"ready": {}}
+    with pytest.raises(Blocked, match="1 missing"):
+        c.controls()
+    assert not (tmp_path / "control-catalog.json").exists()
