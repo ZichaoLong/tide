@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import argparse
 import concurrent.futures
-import hashlib
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -14,8 +14,8 @@ import time
 
 from tide_portable import read, require, sha, write
 
-REPO = Path(__file__).resolve().parents[1]
-MAFLOW = Path(shutil.which("maflow") or "maflow").resolve()
+REPO = Path(os.environ.get("TIDE_CLOUD_PROJECT_ROOT", Path(__file__).resolve().parents[1])).resolve()
+MAFLOW = Path(shutil.which("maflow") or Path.home() / ".local/bin/maflow").resolve(strict=True)
 sys.path.insert(0, str(MAFLOW.parent))
 from ma_locations import target_context
 from ma_obs import Store
@@ -68,7 +68,7 @@ def allocation(area, spec, release, name):
     path.mkdir(parents=True, exist_ok=True)
     with target_context("guiyang"):
         store, east = Store.named("guiyang"), Store.named("east")
-        opts = [str(MAFLOW), "job", "submit", "--json", "--target", "guiyang", "--spec", spec["spec"],
+        opts = [sys.executable, "-B", str(MAFLOW), "job", "submit", "--json", "--target", "guiyang", "--spec", spec["spec"],
                 "--nodes", "1", "--name", name, "--for", str(spec["run_seconds"]), "--queue", str(spec["queue_seconds"]),
                 "--runq-manifest", str(release), "--payload", str(area / "payload")]
         program = ["--", "python3", "-B", "-u", "tide_cloud_node.py", "serve"]
