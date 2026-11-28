@@ -249,6 +249,9 @@ class Controller:
                 "restored authority state belongs to a different campaign")
         self.initial = read(area / "initial-tasks.json")
         self.hot = read(area.parent / "storage/hot.json")["objects"]
+        # A late parent may occupy an OMS wait for an hour. Keep result archiving
+        # and scientific snapshots responsive while those transfers are in flight.
+        self.input_pool = ThreadPoolExecutor(max_workers=4)
         self.background = ThreadPoolExecutor(max_workers=5)
         self.input_futures, self.archive_future = {}, None
         self.prestage_futures = {}
@@ -431,7 +434,7 @@ class Controller:
                     self.log_error("input:" + h, exc)
                 self.input_futures.pop(h)
             if h not in self.input_futures:
-                self.input_futures[h] = self.background.submit(restore_input, self.area, path, h, size, self.east, self.region)
+                self.input_futures[h] = self.input_pool.submit(restore_input, self.area, path, h, size, self.east, self.region)
             return False
         return True
 
