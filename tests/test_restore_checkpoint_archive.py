@@ -1,11 +1,13 @@
 import hashlib
+import json
 from pathlib import Path
 import stat
 import subprocess
 import tempfile
 import unittest
+from unittest.mock import patch
 
-from scripts.restore_checkpoint_archive import object_path, read_object, restore
+from scripts.restore_checkpoint_archive import main, object_path, read_object, restore
 
 
 class CheckpointArchiveTests(unittest.TestCase):
@@ -45,6 +47,35 @@ class CheckpointArchiveTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             restore(self.root, self.entry, self.blob)
         self.assertEqual(self.target.read_bytes(), b"a different checkpoint")
+
+    def test_region_manifest_and_store_use_original_bytes_and_hash(self):
+        base = "east:/project/archive"
+        manifest = json.dumps({
+            "schema": "tide-checkpoint-archive-v1", "stores": {"sfs": "/old/private"},
+            "files": [dict(self.entry, store="sfs")],
+        }).encode()
+        manifest_sha = hashlib.sha256(manifest).hexdigest()
+        sources = {base + "/recovery-manifest.json": manifest,
+                   object_path(base, self.entry["sha256"]): self.blob.read_bytes()}
+
+        def fetch(args, **unused):
+            self.assertEqual(args[:3], ["maflow", "fs", "cp"])
+            self.assertEqual(args[args.index("--control") + 1], "east")
+            Path(args[4]).write_bytes(sources[args[3]])
+
+        argv = ["restore", "--manifest", base + "/recovery-manifest.json",
+                "--manifest-sha256", manifest_sha, "--store", "sfs=" + base,
+                "--root", str(self.root), "--under", self.entry["path"]]
+        with patch("sys.argv", argv), patch("subprocess.run", side_effect=fetch) as transfer:
+            main()
+            self.assertEqual(self.target.read_bytes(), self.payload)
+            self.assertEqual(transfer.call_count, 2)
+            main()
+            self.assertEqual(transfer.call_count, 3)
+            sources[argv[2]] += b" "
+            with self.assertRaises(SystemExit):
+                main()
+            self.assertEqual(transfer.call_count, 4)
 
     def test_wrong_content_and_truncated_frame_leave_no_output(self):
         self.compress(b"x" * len(self.payload))

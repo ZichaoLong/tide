@@ -1,5 +1,7 @@
 # 实验仓导航
 
+贵阳 R3 正式续跑沿用本机冻结的任务、配方和检查点。两份 8 卡作业分别运行 runq，作业编号、继续派发与阶段门禁见云端交接。[贵阳 R3 正式续跑](portable-execution.md#贵阳-r3-正式续跑)
+
 ## 查状态
 
 在仓库根目录运行 `python scripts/status.py`。两个分支使用同一个只读入口，`--json` 输出当前分支、提交、工作树修改、采样起止时间、交接原文和 `runtime`。本仓的 `runtime.kind` 按下表解释。记录中的门禁、选方和完成计数来自调度与验收文件。详细任务、心跳和观测错误可沿 `runtime.next_check` 查看。[状态入口](../scripts/status.py) · [实验状态采样](../scripts/status_runtime.py) · [调度报告](../pilotlab/report3.py)
@@ -58,19 +60,20 @@ python -m pilotlab.hbm_profile3 --round "$round" snapshot --output "$snapshot"
 
 ## 恢复已归档的检查点
 
-2026-11-23 清理的 R1、R2、R3 冷检查点保存在本账号的私有 SFS 目录。恢复清单按原仓库相对路径记录大小、SHA-256、权限和修改时间。原轮次的任务、结果及终态审计仍按原路径引用这些文件。需要重跑某轮的全文件审计时，先在仓库根目录按该轮恢复，再运行原审计命令。[清理和恢复实测](evidence/pilot-r3-r30-storage-cleanup.json) · [恢复程序](../scripts/restore_checkpoint_archive.py)
+2026-11-23 归档的 R1、R2、R3 检查点共有 1,830 个原路径、1,818 份不同内容。华东 OBS 沿用原恢复清单及压缩对象结构。清单按原仓库相对路径记录解压后的字节数、SHA-256、权限和纳秒修改时间。原轮次的全文件审计按路径读取这些文件，可以先恢复所需的轮次或单个检查点。[原归档记录](evidence/pilot-r3-r30-storage-cleanup.json) · [恢复程序](../scripts/restore_checkpoint_archive.py)
 
-下面的命令将一个已抽查的检查点放回原路径，要求本机有 Python 3.9+ 和 `zstd`。
+配好本账户的 `maflow`、Python 3.9+ 和 `zstd` 后，可从任一客户机恢复下列检查点。用 `--root` 指定空目录可做隔离恢复。
 
 ```bash
-archive=/mi/sfs_turbo/zlong/tide-learning-lab-archive/storage-20261123-r30
-(cd "$archive" && sha256sum -c recovery-manifest.sha256)
+archive=east:/tide-learning-lab/production/r3-20261128/legacy/storage-20261123-r30
 checkpoint=.local/pilot-r3/campaign-r09/round/tasks/exchange-d128-k-base-4aac2dcb10-a2-2026112001-r2/attempt-0/checkpoints/step-000002300-40220a07fa.pt
 python scripts/restore_checkpoint_archive.py \
-  --manifest "$archive/recovery-manifest.json" --under "$checkpoint" --root "$PWD"
+  --manifest "$archive/recovery-manifest.json" \
+  --manifest-sha256 33df9e2b4d050117636f3e612d7e83635de891af13694a4deef446f1e87a67fa \
+  --store local="$archive" --store sfs="$archive" --under "$checkpoint" --root "$PWD"
 ```
 
-`--under` 也接受轮次目录，如 `.local/pilot-r3/campaign-r09/round`。使用 `--verify-only` 可逐文件解压并核对哈希。用 `--root` 指定空目录可做隔离恢复。目标已有相同内容时跳过，遇到不同内容时保留现场并报错。私有目录自带恢复程序。若整个归档搬到新目录，将 `archive` 指向新位置，恢复时加 `--store local="$archive" --store sfs="$archive"`。
+`--under` 也接受轮次目录，如 `.local/pilot-r3/campaign-r09/round`。`--verify-only` 逐文件解压并核对哈希。目标已有相同内容时可重复执行，遇到不同内容时保留现场并报错。本地或 SFS 上的归档可继续用目录作为 `--manifest` 和 `--store` 的位置。
 
 另有 89 个重复文件在清理时改用硬链接，共用保留文件的修改时间。归档目录内的 `dedup-events.jsonl` 保存了每个原路径、内容哈希及去重前的纳秒修改时间 `prior_mtime_ns`。
 
