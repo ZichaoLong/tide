@@ -45,12 +45,12 @@ python3 -B scripts/tide_batch.py aggregate --frozen "$BATCH_DIR/payload/frozen" 
   --output "$REVIEW_DIR/aggregate.json"
 ```
 
-换到新客户端时，在已安装账户 `maflow` 的机器进入实验仓维护分支。下面的命令用批次 ID 从贵阳持久前缀取回全部尝试和冻结输入，适用于 `make_tide_batch.py` 默认的 `tide-workers` 组。
+换到新客户端时，在已安装账户 `maflow` 的机器进入实验仓维护分支。下面的命令从所选权威存储取回默认 `tide-workers` 组的全部尝试和冻结输入，适用于单地点及混合批次。独立 CPU 检查、其他项目模型等同批分组各自使用其项目的验收程序。
 
 ```bash
 mkdir -p "$HOME/.local/state/tide-reviews"
 REVIEW_DIR=$(mktemp -d "$HOME/.local/state/tide-reviews/$BATCH.XXXXXXXX")
-maflow project collect "$PROJECT/$BATCH" --site modelarts --to "$REVIEW_DIR/download" --inputs --json > "$REVIEW_DIR/checkout.json"
+maflow project collect "$PROJECT/$BATCH" --site "$SITE" --group tide-workers --to "$REVIEW_DIR/download" --inputs --json > "$REVIEW_DIR/checkout.json"
 python3 - "$REVIEW_DIR" <<'PY'
 import json
 from pathlib import Path
