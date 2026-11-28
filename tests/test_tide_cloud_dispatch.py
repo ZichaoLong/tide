@@ -113,6 +113,31 @@ def test_preparation_cloud_hours_merge_two_chips_on_one_physical_board(tmp_path,
     assert next_observation["remaining_seconds"] == 440 and not next_observation["registrations"]
 
 
+def test_only_completed_publications_can_advance_reserved_attempts(tmp_path):
+    if not shutil.which("maflow") and not (Path.home() / ".local/bin/maflow").is_file():
+        pytest.skip("maflow account client")
+    from concurrent.futures import Future
+    from tide_cloud_controller import Controller
+    from tide_portable import read
+    ctl = Controller.__new__(Controller)
+    ctl.area = tmp_path
+    ctl.state = {"attempts":{k:{"fingerprint":k, "status":"claimed"} for k in ("slow","ready","retry")},
+                 "retries":{k:{} for k in ("slow","ready","retry")}}
+    ctl.publications = {k:Future() for k in ctl.state["attempts"]}
+    ctl.publications["ready"].set_result({"status":"awaiting_submission", "published":10})
+    ctl.publications["retry"].set_exception(TimeoutError("regional write"))
+    ctl.finish_publications()
+    saved = read(tmp_path / "state.json")
+    assert saved["attempts"]["ready"]["status"] == "awaiting_submission"
+    assert saved["attempts"]["slow"]["status"] == saved["attempts"]["retry"]["status"] == "claimed"
+    assert set(saved["retries"]) == {"slow", "retry"} and set(ctl.publications) == {"slow"}
+    assert "publish:retry" in saved["errors"]
+    ctl.publications["retry"] = Future()
+    ctl.publications["retry"].set_result({"status":"awaiting_submission", "published":20})
+    ctl.finish_publications()
+    assert "publish:retry" not in ctl.state["errors"] and ctl.state["retries"] == {"slow":{}}
+
+
 def test_positive_no_start_proof_reuses_eval_reservation_and_removes_the_global_claim(tmp_path):
     if not shutil.which("maflow") and not (Path.home() / ".local/bin/maflow").is_file():
         pytest.skip("maflow account client")

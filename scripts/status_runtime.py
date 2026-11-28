@@ -46,7 +46,8 @@ def observe_cloud(root):
                                   "observed_boards":len(cards) if cards else None,
                                   "observed_chips":sum(len(c.get("chips",{})) for c in cards) if cards else None,
                                   "observed_threads":sum(w["capacity"]["threads"] for w in workers) if workers else None,
-                                  "queue_source":n.get("queue_source"), "observation_error":n.get("observation_error")})
+                                  "queue_source":n.get("queue_source"), "platform_observed_unix":n.get("platform_observed_unix"),
+                                  "observation_error":n.get("observation_error")})
     if snapshot:
         ts = snapshot["observed_unix"]
         result.update(snapshot_observed_at=datetime.fromtimestamp(ts, timezone.utc).isoformat(),

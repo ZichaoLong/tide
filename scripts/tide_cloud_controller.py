@@ -21,15 +21,15 @@ import traceback
 from tide_cloud_allocation import BOARDS, MAFLOW, PREFIX, PROJECT, REPO, Store, target_context, wire
 from tide_cloud_evidence import preparation_budget, snapshot_campaign
 from tide_cloud_dispatch import (CANARIES, descriptor, known_objects, object_key, objects_needed, priority,
-                                 publish_claim, stage_objects, starting_budget)
+                                 publish_claim_files, reserve_claim, stage_objects, starting_budget)
 from tide_cloud_results import archive_outputs, canary, ingest
 from tide_portable import read, require, sha, write
-from ma_jobs import rundir, status_ref, stop_ref
+from ma_jobs import status_ref, stop_ref
 from ma_obs import ObsError
-from job_access import alias_base
 import ma_oms
 
 ACTIVE = {"claimed", "awaiting_submission", "dispatched"}
+PUBLISHERS = 8
 
 
 def stamp(value):
@@ -62,10 +62,9 @@ def snapshot(region, key):
 
 def queue_over_ssh(name, platform_id):
     """Use maflow's already host-key-pinned access to read the actual job-local cluster."""
-    with target_context("guiyang"):
-        alias = alias_base(platform_id)
-        config = rundir(name) / "ssh" / (alias + ".conf")
-    if not config.is_file():
+    from tide_cloud_submit import pinned_ssh
+    pinned = pinned_ssh({"name":name, "id":platform_id})
+    if pinned is None:
         return None
     code = """import json,os,pathlib,re,subprocess,sys,time
 name, job_id = sys.argv[1:]
@@ -87,8 +86,7 @@ for row in data['tasks']:
 print(json.dumps(dict(at=time.time(), counts=counts, workers=data['workers'], tasks=data['tasks'],
     job=name, runq=os.environ['MAFLOW_RUNQ_COMMIT'], deadline=reg['deadline'])))
 """
-    command = ["ssh", "-F", str(config), "-o", "BatchMode=yes", alias + "-0",
-               shlex.join(["python3","-I","-B","-c",code,name,platform_id])]
+    command = [*pinned, shlex.join(["python3","-I","-B","-c",code,name,platform_id])]
     try:
         r = subprocess.run(command, capture_output=True, timeout=24)
         return json.loads(r.stdout) if r.returncode == 0 else None
@@ -105,15 +103,18 @@ def observe_allocations(area, spec, region):
         m, receipt = read(manifest), read(directory / "submitted.json")
         previous = directory / "last-platform.json"
         error = None
+        platform_seen = None
         queue, queue_source = None, None
         try:
             with target_context("guiyang"):
                 platform = status_ref(receipt["id"])
             require(platform["name"] == name and platform["nodes"] == 1
                     and platform["flavor"] == "modelarts.pool.visual.16xlarge", "allocation identity differs")
+            platform_seen = time.time()
             write(previous, platform)
         except (ValueError, OSError, RuntimeError, KeyError, http.client.HTTPException) as exc:
             platform = read(previous) if previous.is_file() else {"phase":"Unknown", "id":receipt["id"], "name":name}
+            platform_seen = previous.stat().st_mtime if previous.is_file() else None
             error = str(exc)
         if platform["phase"].lower() == "running":
             try:
@@ -135,6 +136,7 @@ def observe_allocations(area, spec, region):
         if started and not terminal:
             elapsed = max(elapsed, now - started)
         return name, {"name": name, "id": receipt["id"], "prefix": m["prefix"], "platform": platform,
+                      "platform_observed_unix":platform_seen,
                       "platform_project": m["project"], "queue": queue, "queue_source":queue_source, "elapsed_seconds": elapsed,
                       "observation_error":error, "terminal": terminal,
                       "ready":bool(phase == "running" and queue and -5 <= now - queue["at"] < 150
@@ -257,6 +259,8 @@ class Controller:
         self.relay_work = {}
         self.science_future = None
         self.transport_cache = {}
+        self.publication_pool = ThreadPoolExecutor(max_workers=PUBLISHERS)
+        self.publications = {}
         self.submission_pool = ThreadPoolExecutor(max_workers=4)
         self.submissions = {}
         self.dag = {"phase": "stage-a-subjects", "finished":False, "blocked": [], "tasks": [], "selected_subjects":262}
@@ -448,6 +452,7 @@ class Controller:
 
     def deliver(self, nodes):
         from tide_cloud_submit import refresh_native, submit_batch, submit_native
+        self.finish_publications()
         for slot,future in list(self.submissions.items()):
             if not future.done():
                 continue
@@ -500,6 +505,26 @@ class Controller:
                                   "refresh":(refresh_native, (self.area,))}[mode]
                     self.submissions[name,mode] = self.submission_pool.submit(func, node, batch, *args)
 
+    def finish_publications(self):
+        changed = False
+        for attempt, future in list(self.publications.items()):
+            if not future.done():
+                continue
+            del self.publications[attempt]
+            claim = self.state["attempts"][attempt]
+            try:
+                publication = future.result()
+            except Exception as exc:
+                self.log_error("publish:" + attempt, exc)
+                continue
+            self.state.get("errors", {}).pop("publish:" + attempt, None)
+            if claim["status"] == "claimed":
+                claim.update(publication)
+                self.state["retries"].pop(claim["fingerprint"], None)
+                changed = True
+        if changed:
+            write(self.area / "state.json", self.state)
+
     def send(self, row, node, available, existing=None):
         error = "dispatch:" + node["name"] + ":" + row["fingerprint"]
         try:
@@ -512,6 +537,8 @@ class Controller:
 
     def send_ready(self, row, node, available, existing):
         fp, name = row["fingerprint"], node["name"]
+        if existing in self.publications or len(self.publications) >= PUBLISHERS:
+            return False
         count = sum(c["fingerprint"] == fp for c in self.state["attempts"].values())
         attempt = existing or f"r3-{fp}-{count+1}"
         d, plan = descriptor(self.area, row, name, attempt, self.spec)
@@ -526,16 +553,16 @@ class Controller:
             return False
         mode = self.state["attempts"][attempt].get("transport") if existing else self.transport(node)
         try:
-            result = publish_claim(self.area, self.region, self.east, node["prefix"], self.state, row, d, plan,
-                                   transport=mode)
+            claim = reserve_claim(self.area, self.east, self.state, row, d, plan, transport=mode)
         except ValueError as exc:
             if str(exc).startswith(("evaluation_token_limit", "preparation_token_limit")):
                 self.state["blocked"][fp] = str(exc)
                 return False
             raise
-        if result["status"] == "claimed":
+        if claim["status"] != "claimed" or claim["job"] != name or claim.get("transport") != mode:
             return False
-        self.state["retries"].pop(fp, None)
+        self.publications[attempt] = self.publication_pool.submit(
+            publish_claim_files, self.area, self.region, self.east, node["prefix"], dict(claim), d, plan)
         return True
 
     def dispatch(self, nodes, rows):
@@ -673,7 +700,9 @@ class Controller:
                     with target_context("guiyang"):
                         stop_ref(n["id"])
                 self.state["drained"][k]=reason or "confirmation_tail"
-        snapshot = {"observed_unix":time.time(), "phase":self.dag["phase"], "finished": self.dag["finished"],
+        samples = [n["platform_observed_unix"] for n in nodes.values() if n["platform_observed_unix"]]
+        snapshot = {"observed_unix":min(samples, default=time.time()), "published_unix":time.time(),
+                    "phase":self.dag["phase"], "finished": self.dag["finished"],
                     "selected_subjects":self.dag.get("selected_subjects"), "selected_controls":self.dag.get("selected_controls"),
                     "nodes": nodes, "physical_budget": resources, "counts":dict(counts), "canaries":self.state["canaries"],
                     "pending_candidates":len(rows), "initial_known_tasks":len(self.initial),

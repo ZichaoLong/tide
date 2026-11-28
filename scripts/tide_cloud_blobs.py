@@ -126,20 +126,24 @@ def ensure_one(native, obs, digest, size, url):
     private_directory(proofs)
     dest = relay.member(cache, digest)
     proof = relay.member(proofs, digest)
-    # The original worker may be actively hydrating this object. Let the rest of the batch proceed.
+
+    def verified():
+        try:
+            current = stamp(dest)
+            return current[2] == size and current == relay.optional(proof)
+        except (FileNotFoundError, ValueError, UnicodeError):
+            return False
+
+    # Other workers can hash or link the same immutable inode under their own lock.
+    if verified():
+        return "cache"
     with relay.member(cache, digest + ".lock").open("a") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        if verified():
+            return "cache"
         source = None
-        if dest.exists():
-            previous = stamp(dest)
-            try:
-                verified = relay.optional(proof)
-            except (ValueError, UnicodeError):
-                verified = None
-            if previous[2] == size and previous == verified:
-                return "cache"
-            if previous[2] == size and relay.digest(dest) == digest:
-                source = "cache"
+        if dest.exists() and stamp(dest)[2] == size and relay.digest(dest) == digest:
+            source = "cache"
         if source is None:
             with tempfile.NamedTemporaryFile(dir=cache, prefix=".hydrate-", delete=False) as target:
                 temp = Path(target.name)

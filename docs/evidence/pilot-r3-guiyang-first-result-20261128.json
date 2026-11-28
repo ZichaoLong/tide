@@ -1,0 +1,48 @@
+{
+  "attempt": "r3-b4cda02618dd77fb202b0d117726dc35804710636e138a742dab78016c9438bb-1",
+  "checkpoint_bytes": 21904367,
+  "checkpoint_sha256": "16da050a0a4f2b624799f5a63565a2238763e702032b9ad07efe2a1cd156a52b",
+  "checkpoint_state": "remote_payload_verified_by_sha256",
+  "controller_status": "accepted",
+  "east": {
+    "etag": "4d6ea6d68fa7f9cb6b7e0e2941c30b94",
+    "independent_readback": "2026-11-28T12:36:02.990+00:00",
+    "oms": "261106803417397",
+    "sha256": "16da050a0a4f2b624799f5a63565a2238763e702032b9ad07efe2a1cd156a52b",
+    "size": 21904367,
+    "uri": "obs://meta-intelligence/l00580095/tide-learning-lab/production/r3-20261128/objects/sha256/16da050a0a4f2b624799f5a63565a2238763e702032b9ad07efe2a1cd156a52b",
+    "verified": "2026-11-28T12:31:29.830+00:00"
+  },
+  "fingerprint": "b4cda02618dd77fb202b0d117726dc35804710636e138a742dab78016c9438bb",
+  "guiyang": {
+    "etag": "4d6ea6d68fa7f9cb6b7e0e2941c30b94",
+    "uri": "obs://obs-gy1-gz/l00580095/tide-learning-lab/production/r3-20261128/objects/sha256/16da050a0a4f2b624799f5a63565a2238763e702032b9ad07efe2a1cd156a52b",
+    "verified_on": "guiyang/c4a30523-cc7d-42c6-9b60-0ef3f4143ccc",
+    "verified_unix": 1795868952.876476
+  },
+  "job": "tide-r3-20261128-1",
+  "legacy_id": 2733,
+  "native_eligibility_reasons": [],
+  "native_status": "completed",
+  "next_dependency": {
+    "phase": "preflight",
+    "same_subject_cpu_task": 2368,
+    "scope": "Native capacity selection consumes both the small NPU and the CPU observations before it sizes the next probe."
+  },
+  "observed_utc": "2026-11-28T12:36:02.990854+00:00",
+  "phase": "preflight",
+  "raw_evidence": {
+    "prefix": "obs://meta-intelligence/l00580095/tide-learning-lab/production/r3-20261128/attempts/r3-b4cda02618dd77fb202b0d117726dc35804710636e138a742dab78016c9438bb-1/",
+    "sha256": {
+      "project-verdict.json": "acc7d578ee961d90b934f564b43a98b4c07943e54683d773e4b2201fef8b1bf7",
+      "receipt.json": "c7269b4e52892fb3f44e72aab485ed67a2593b3c1f1962580c1b68ff2c10a0d0",
+      "result.json": "ecf5322f8fa9b4dff8663a789910958c6b731abbe43599a02b656db57e155ad4",
+      "runtime-plan.json": "63be5955e36247f336c57cbaaf1e05374c8f01d89b170dc4cb4f8e6a70416d49"
+    }
+  },
+  "schema": "tide-r3-guiyang-first-accepted-result/v1",
+  "steps": 16,
+  "task": "multiscale_settle-d64-x_reverse-mixed9-ef9a868150-preflight-2026112021-capacity-small",
+  "tokens": 4096,
+  "validation_nll": 9.019214630126953
+}

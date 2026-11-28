@@ -221,12 +221,10 @@ def stage_objects(area, region, job_prefix, objects, job, verified):
         list(pool.map(copy, objects.items()))
 
 
-def publish_claim(area, region, east, job_prefix, state, row, d, plan, *, transport=None):
+def reserve_claim(area, east, state, row, d, plan, *, transport=None):
+    """Commit the node, route and budget before making this attempt available to a queue."""
     attempt, fp = d["attempt"], d["fingerprint"]
-    location = area / "attempts" / attempt
-    location.mkdir(parents=True, exist_ok=True)
-    payload = wire(d)
-    h = hashlib.sha256(payload).hexdigest()
+    h = hashlib.sha256(wire(d)).hexdigest()
     task = read(row["path"])
     evaluation_key = task.get("evaluation_budget_key")
     extra = plan["evaluation"]["additional_reservation"] if evaluation_key else 0
@@ -262,11 +260,20 @@ def publish_claim(area, region, east, job_prefix, state, row, d, plan, *, transp
         state["budget"]["preparation"] += prep_charge
         state["attempts"][attempt] = claim
         write(area / "state.json", state)
-    if claim["job"] != d["job"] or claim.get("transport") != transport:
-        return claim
-    require(claim["digest"] == h and claim["job"] == d["job"], "attempt dispatch bytes changed")
-    (location / "runtime-plan.json").write_bytes(wire(plan))
-    publications = [(east, PREFIX + "/attempts/" + attempt + "/runtime-plan.json", wire(plan)),
+    return claim
+
+
+def publish_claim_files(area, region, east, job_prefix, claim, d, plan):
+    """Publish only the immutable bytes for an already reserved attempt. Safe to replay."""
+    attempt, transport = claim["attempt"], claim.get("transport")
+    payload = wire(d)
+    require(claim["job"] == d["job"] and attempt == d["attempt"] and claim["fingerprint"] == d["fingerprint"]
+            and claim["digest"] == hashlib.sha256(payload).hexdigest(), "attempt dispatch bytes changed")
+    location = area / "attempts" / attempt
+    location.mkdir(parents=True, exist_ok=True)
+    plan_bytes = wire(plan)
+    (location / "runtime-plan.json").write_bytes(plan_bytes)
+    publications = [(east, PREFIX + "/attempts/" + attempt + "/runtime-plan.json", plan_bytes),
                     (east, PREFIX + "/attempts/" + attempt + "/task.json", base64.b64decode(d["task_bytes"], validate=True)),
                     (east, PREFIX + "/dispatch/" + attempt + ".json", payload)]
     if transport:
@@ -277,7 +284,13 @@ def publish_claim(area, region, east, job_prefix, state, row, d, plan, *, transp
             future.result()
     if not transport:
         region.put_bytes(job_prefix + "/inputs/dispatch/" + attempt + ".json", payload)
-    claim["status"] = "awaiting_submission" if transport else "dispatched"
-    claim["submitted"] = time.time()
-    write(area / "state.json", state)
+        return {"status":"dispatched", "submitted":time.time()}
+    return {"status":"awaiting_submission", "published":time.time()}
+
+
+def publish_claim(area, region, east, job_prefix, state, row, d, plan, *, transport=None):
+    claim = reserve_claim(area, east, state, row, d, plan, transport=transport)
+    if claim["status"] == "claimed" and claim["job"] == d["job"] and claim.get("transport") == transport:
+        claim.update(publish_claim_files(area, region, east, job_prefix, claim, d, plan))
+        write(area / "state.json", state)
     return claim

@@ -101,7 +101,12 @@ def test_signed_object_uses_native_lock_atomic_cache_and_manifest_hash(tmp_path,
         assert (native / "objects" / second).read_bytes() == contents[1]
         result = blobs.ensure_inputs(native, obs, objects, {first:"unneeded", second:"unneeded"})
         assert result["ready"] == {first:"cache", second:"cache"} and downloaded == [second, second]
-        (native / "objects" / ".verified" / second).write_text("{")
+        with (native / "objects" / (second + ".lock")).open("a") as hashing:
+            fcntl.flock(hashing, fcntl.LOCK_EX)
+            assert blobs.ensure_one(native, obs, second, len(contents[1]), None) == "cache"
+            (native / "objects" / ".verified" / second).write_text("{")
+            with pytest.raises(BlockingIOError):
+                blobs.ensure_one(native, obs, second, len(contents[1]), None)
         assert blobs.ensure_one(native, obs, second, len(contents[1]), None) == "cache"
 
 
