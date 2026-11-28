@@ -13,11 +13,11 @@
 | `snapshot_only` | 有调度记录。服务、进程身份或采样期间的指针变化未能把它绑定到当前作业。查看 systemd 的实际状态、控制组和观测错误。 |
 | `unavailable` | 这份检出缺少可用的启动指针或调度记录。最近一次已审阅的采样在交接中，并附时间与证据。 |
 
-本批启动指针还登记了 44 个主体的检查点接续和 74 个早期主体的源码复核。状态命令的 `runtime.queue_additions` 按当前入队清单查询这两组作业。接续计入 Stage A 训练，每份复核计划按当前尝试计一次。单项报告为 `comparison.json`，优先取清单指定的 `observations` 目录，否则取原计划旁的 `observations/`。接续报告绑定原计划、已复用观测的哈希和新尝试。[当前交接](STATUS.md)
+原本机启动指针登记了 44 个主体的检查点接续和 74 个早期主体的源码复核。本机适配器的 `runtime.queue_additions` 对应这两组历史作业。贵阳适配器返回两份作业各自的 `running_by_backend` 与 `queue_observed_unix`。全批已选配方数见 `runtime.selected_subjects`。单项复核报告为 `comparison.json`，沿原计划可找到已复用观测的哈希及新尝试。[当前交接](STATUS.md)
 
 ## 接续同一批
 
-先读当前交接的“定位与接续入口”和当前待办。在原工作树从 `.local/pilot-r3/launch.json` 取 `unit`、`plan_path` 与 `plan_sha256`、`prepared_path`、`budget_ledger`、`deadline_unix`、`output` 和 `current_review`。核对计划与冻结源码/数据身份、总账的已消费量、绝对截止、最近发布的检查点、实际首个后继更新及阶段门禁。更换实现时在新目录验收，再将新的采用记录绑定到正式作业。[当前交接](STATUS.md) · [待办](ROADMAP.md) · [活动量和恢复验收](evidence/pilot-r3-r26-activity-readiness.json)
+当前 R3 从贵阳两份作业、华东的尝试账本和科学快照接续。冻结计划、两套 worker 源码、各尝试的断点历史、累计预算和原绝对截止都随该批保留。原本机 `.local/pilot-r3/launch.json` 可定位迁移前使用的计划、预算和审阅记录。在新目录验收实现变更后，将采用记录绑定到后续作业。[贵阳 R3 正式续跑](portable-execution.md#贵阳-r3-正式续跑) · [当前交接](STATUS.md) · [待办](ROADMAP.md)
 
 干净检出可以定位当时采用的源码、计划摘要、检查点哈希和首步。r26 正式采样的 `plan` 指向整批调度计划，四项首步核验的 `plan` 指向抽查计划。两份记录通过同一 `launch.sha256` 和 `unit` 对接，再按任务 ID 核对检查点哈希与首个后继步。运行中的账本、数据、完整检查点、冻结安装与日志在原工作树。可按交接给出的路径和哈希找回这些输入，再按当次授权恢复。同一批内保留已消费预算和原截止。[r26 正式采样](evidence/pilot-r3-main-r26-handoff.json) · [四项首步核验](evidence/pilot-r3-r26-resume-first-steps.json)
 

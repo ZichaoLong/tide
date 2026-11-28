@@ -138,6 +138,30 @@ def test_only_completed_publications_can_advance_reserved_attempts(tmp_path):
     assert "publish:retry" not in ctl.state["errors"] and ctl.state["retries"] == {"slow":{}}
 
 
+def test_slow_ingress_batch_leaves_a_second_slot_on_its_node(tmp_path):
+    if not shutil.which("maflow") and not (Path.home() / ".local/bin/maflow").is_file():
+        pytest.skip("maflow account client")
+    from concurrent.futures import Future
+    from types import SimpleNamespace
+    from tide_cloud_controller import Controller
+    ctl = Controller.__new__(Controller)
+    ctl.area, ctl.region, ctl.publications, ctl.submissions = tmp_path, None, {}, {}
+    ctl.submission_pool = SimpleNamespace(submit=lambda *args: Future())
+    attempts = {str(i):{"attempt":str(i), "job":"n", "transport":"ssh", "status":"awaiting_submission",
+                        "row":{"priority":i}} for i in range(17)}
+    ctl.state = {"attempts":attempts}
+    nodes = {"n":{"ready":True, "id":"node-id", "queue":{"tasks":[]}}}
+    ctl.deliver(nodes)
+    slow, fast = list(ctl.submissions)
+    assert slow[2] == tuple(map(str,range(16,10,-1))) and fast[2] == tuple(map(str,range(10,4,-1)))
+    ctl.deliver(nodes)
+    assert list(ctl.submissions) == [slow,fast]
+    ctl.submissions[fast].set_result({a:{"status":"submitted"} for a in fast[2]})
+    ctl.deliver(nodes)
+    assert all(attempts[a]["status"] == "dispatched" for a in fast[2])
+    assert list(ctl.submissions) == [slow, ("n","ssh",tuple(map(str,range(4,-1,-1))))]
+
+
 def test_positive_no_start_proof_reuses_eval_reservation_and_removes_the_global_claim(tmp_path):
     if not shutil.which("maflow") and not (Path.home() / ".local/bin/maflow").is_file():
         pytest.skip("maflow account client")

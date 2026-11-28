@@ -10,7 +10,7 @@
 | 用户任务 | 从哪里接手 |
 |---|---|
 | 查状态 | 只读运行 `python scripts/status.py` 或加 `--json`。贵阳 R3 读取两个平台作业、各自 runq 的最近采样和本机控制器 unit。原本机队列从 `.local/pilot-r3/launch.json` 核对 systemd、控制组和驱动 PID。[贵阳作业与接续](docs/portable-execution.md#贵阳-r3-正式续跑) · [状态说明](docs/README.md#查状态) |
-| 手动派发或调整自动并发 | 运行 `scripts/runq status --state queued` 查看可派 ID，用 `pin` 定卡或派到 CPU，用 `limits` 调整自动目标。已运行的 worker 持续执行。[队列操作](docs/README.md#自动补位与手动派发) |
+| 手动派发或调整自动并发 | 贵阳 R3 由项目控制器预约，每份作业各有自己的 runq，用 `maflow job queue status guiyang/作业名 --json` 查看。原本机队列的 `scripts/runq status --state queued`、`pin`、`limits` 只作用于本机。已运行的 worker 由所在作业管理。[贵阳派发](docs/portable-execution.md#贵阳-r3-正式续跑) · [本机队列操作](docs/README.md#自动补位与手动派发) |
 | 接续同一批 | 对照交接和待办，核对冻结计划、数据、已消费预算、绝对截止、检查点和阶段门禁。在新目录冻结通过验收的改动。[当前交接](docs/STATUS.md) · [当前待办](docs/ROADMAP.md) |
 | 在本机与 ModelArts 之间分工或接续 | 生成冻结计划，用 `maflow project list` 找项目和批次，再用同组的 `show`、`collect`、`resume` 检查逐项证据并接续。[跨位置执行](docs/portable-execution.md) |
 | 定位和修改 | 从失败任务、原始证据和独立回归找到维护源码。实验调度、训练封装、选方与报告归本仓 `pilotlab/`。模型算子、梯度和状态修复落在用户指定的基座，数学定义对照用户指定的语义仓库。正式作业冻结验收过的基座版本。[定位入口](docs/README.md#定位和修改) |

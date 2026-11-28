@@ -167,7 +167,7 @@ def test_one_authenticated_host_call_per_batch_and_lost_response_replays_same_ro
     for c in claims:
         leaf = "inputs/authority/" + c["attempt"] + ".json"
         region.objects[a.node["prefix"] + "/" + leaf] = (a.obs / leaf).read_bytes()
-    monkeypatch.setattr(Store, "named", lambda site: region)
+    monkeypatch.setattr(Store, "named", lambda site, timeout: region)
     sent = []
     def run(cmd, **kwargs):
         assert cmd[-1] == "-" and kwargs["input"]

@@ -16,9 +16,11 @@ maflow job queue status guiyang/tide-r3-20261128-1 --json
 maflow job queue status guiyang/tide-r3-20261128-2 --json
 ```
 
-恢复先用 2237 的 NPU 第 1,312 步和 2907 的 CPU 第 1,770 步。每项都要验证旧末态、执行下一步有限更新、保存后用新的模型和优化器对象重载。两份回执到齐，控制器就会持续向已经获配的节点分派后继工作。它保留原任务的种子、后端、配方、累计曝光和逐主体评估预约。每张物理板每小时计一张卡时，逻辑芯片、CPU 工时和同卡并发数另列。长时或大 HBM 任务可在 runq 保护一个芯片开工窗口，其余任务根据真实余量和预计结束时间补位。[运行时迁移](../pilotlab/runtime_migration3.py) · [派发与预约](../scripts/tide_cloud_dispatch.py)
+2237 在贵阳 NPU 从第 1,312 步前进到 1,313 步，2907 在贵阳 CPU 从第 1,770 步前进到 1,771 步。两项均通过旧末态验证、有限更新、保存与模型及优化器重载。第一次完整验收的是 2733 的 NPU 容量测量，控制器已读回原始结果、更新记录和健康指标，贵阳与华东已分别校验其 21,904,367 字节的检查点。后继批次沿用各任务的种子、后端、配方、累计曝光和逐主体评估预约。[双后端真实恢复](evidence/pilot-r3-guiyang-first-updates-20261128.json) · [首次完整结果与跨区回传](evidence/pilot-r3-guiyang-first-result-20261128.json)
 
-客户端的用户服务为 `tide-r3-guiyang-controller-20261128.service`。控制器按任务 SHA 和尝试号在华东预约一次。验证到节点的 SSH、挂载及 runq 身份后，它把一批原始任务送入该节点的私有 SFS 队列；只有 OBS 可达时，它使用作业内置的 OBS 派发入口。每次尝试记录所用入口，断线后用同一任务键重试。若队列已结束、项目结果迟到，控制器可从该节点的原始产物补回回执。维护者可在同一分支提交控制器修订后运行 `bash scripts/tide_cloud_service.sh`，在途 worker 由所在的贵阳作业继续管理。[服务入口](../scripts/tide_cloud_service.sh) · [队列派发](../scripts/tide_cloud_submit.py) · [回执恢复](../scripts/tide_cloud_relay.py)
+客户端的用户服务为 `tide-r3-guiyang-controller-20261128.service`。控制器按任务 SHA 和尝试号在华东预约一次，并行发布已预约尝试的描述符和运行计划。它验证节点的 SSH、挂载及 runq 身份，将任务送入该节点的私有 SFS 队列。仅 OBS 可达的节点使用作业内置扫描器。每次尝试固定入口和任务键。挂载尚未显示的输入可用该文件专属的短时 GET 在节点取回，核对完整 SHA-256 与长度后进入私有缓存。队列终态的原始产物可恢复迟到的项目回执。提交控制器修订后运行 `bash scripts/tide_cloud_service.sh`，在途 worker 继续由原贵阳作业管理。[服务入口](../scripts/tide_cloud_service.sh) · [队列派发](../scripts/tide_cloud_submit.py) · [回执恢复](../scripts/tide_cloud_relay.py)
+
+控制器结合历史耗时、HBM 预约和阶段依赖排序，按两节点已分配的工作量选择目标。每节点给尚未开工的 NPU 任务预留一轮逻辑芯片宽度，CPU 窗口按线程申请计算。节点内 runq 为长时或大 HBM 任务保护一颗芯片的开工机会，其他任务按可用资源及预计结束时间补位。第二份作业获配后自行接单。卡时按获配的物理板与实际时间结算，同卡并发和 CPU 作业另列。每份作业的平台运行上限为 365 小时。[派发优先级](../scripts/tide_cloud_dispatch.py) · [跨节点分工及预算](../scripts/tide_cloud_controller.py)
 
 华东权威前缀为 `east:/tide-learning-lab/production/r3-20261128/`。`control/rollout.json` 绑定两份平台作业，`control/status.json` 给出最近观察，`control/state.json` 记录已预约与已收的尝试。`dispatch/` 保存原任务字节和有序的断点历史，`attempts/` 保存原始结果、运行时计划和逐项产物凭证。热输入经 OMS 进入贵阳，每个节点按摘要取用。新检查点在贵阳读取正文复核，随后由 OMS 回传华东。`science/current.json` 标识最近一次原生选方、评估报告和门禁快照。新客户端可以先取以下轻量文件。
 

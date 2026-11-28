@@ -261,7 +261,7 @@ class Controller:
         self.transport_cache = {}
         self.publication_pool = ThreadPoolExecutor(max_workers=PUBLISHERS)
         self.publications = {}
-        self.submission_pool = ThreadPoolExecutor(max_workers=4)
+        self.submission_pool = ThreadPoolExecutor(max_workers=6)
         self.submissions = {}
         self.dag = {"phase": "stage-a-subjects", "finished":False, "blocked": [], "tasks": [], "selected_subjects":262}
         self.dag_version = None
@@ -462,6 +462,7 @@ class Controller:
             except Exception as exc:
                 self.log_error("ingress:" + slot[0], exc)
                 continue
+            self.state.get("errors", {}).pop("ingress:" + slot[0], None)
             for attempt, result in reply.items():
                 c = self.state["attempts"][attempt]
                 if slot[1] == "refresh":
@@ -479,13 +480,14 @@ class Controller:
                     c["retry_ingress_after"] = time.time() + 20
                     self.transport_cache.pop(nodes[slot[0]]["id"], None)
             write(self.area / "state.json", self.state)
+        in_flight = {attempt for _, _, batch in self.submissions for attempt in batch}
         for name,node in nodes.items():
             if not node["ready"]:
                 continue
             visible = {task["key"] for task in node["queue"]["tasks"]}
             per_mode = {"ssh":[], "obs":[], "refresh":[]}
             for attempt,c in self.state["attempts"].items():
-                if c["job"] != name:
+                if c["job"] != name or attempt in in_flight:
                     continue
                 if c.get("transport") == "obs" and c["status"] == "dispatched" and attempt not in visible:
                     if (node.get("queue_source") == "job-local runq via maflow SSH" and
@@ -499,11 +501,17 @@ class Controller:
                 elif time.time() >= c.get("retry_ingress_after", 0):
                     per_mode[c["transport"]].append(dict(c))
             for mode,items in per_mode.items():
-                if items and (name,mode) not in self.submissions:
-                    batch = sorted(items, key=lambda c:-priority(c["row"]))[:24]
-                    func, args = {"ssh":(submit_batch, (self.area,)), "obs":(submit_native, (self.region,)),
-                                  "refresh":(refresh_native, (self.area,))}[mode]
-                    self.submissions[name,mode] = self.submission_pool.submit(func, node, batch, *args)
+                slots = (2 if mode == "ssh" else 1) - sum(k[:2] == (name,mode) for k in self.submissions)
+                if not items or slots <= 0:
+                    continue
+                # One slow checkpoint or regional request should hold only its own small batch.
+                ordered = sorted(items, key=lambda c:-priority(c["row"]))
+                func, args = {"ssh":(submit_batch, (self.area,)), "obs":(submit_native, (self.region,)),
+                              "refresh":(refresh_native, (self.area,))}[mode]
+                for start in range(0, min(len(ordered), slots*6), 6):
+                    batch = ordered[start:start+6]
+                    slot = name, mode, tuple(c["attempt"] for c in batch)
+                    self.submissions[slot] = self.submission_pool.submit(func, node, batch, *args)
 
     def finish_publications(self):
         changed = False

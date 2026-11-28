@@ -396,7 +396,7 @@ def submit_batch(node, claims, area=None):
     """Return per-attempt results. A lost SSH response retries the identical SFS argv and key."""
     from tide_cloud_allocation import Store
     try:
-        region = Store.named("guiyang")
+        region = Store.named("guiyang", timeout=15)
         ready, results = prepare(node, claims, region, "ssh")
     except (OSError, ValueError, KeyError, RuntimeError, http.client.HTTPException) as exc:
         return {c["attempt"]: reply("retry", str(exc)) for c in claims}
@@ -406,7 +406,7 @@ def submit_batch(node, claims, area=None):
 def refresh_native(node, claims, area):
     """Make a published native descriptor visible on its original mount, leaving admission to the frozen scanner."""
     from tide_cloud_allocation import Store
-    region = Store.named("guiyang")
+    region = Store.named("guiyang", timeout=15)
     ready, results = [], {}
     for c in claims:
         try:
