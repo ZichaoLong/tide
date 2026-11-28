@@ -7,6 +7,7 @@ import math
 from pathlib import Path
 import statistics
 
+from .checkpoint_archive3 import archive_record, checkpoint_reads
 from .io import sha256
 from .stage_sources3 import chain_model, gate_path_for_source, matches_stage_source, stage_source_contract
 from .scheduler3 import freeze_json
@@ -98,7 +99,10 @@ def read_evidence(entry, *, checkpoint=False, retired_checkpoints=None):
                 raise ValueError("relocated checkpoint does not bind the worker's original generation")
             path = Path(entry["checkpoint_path"])
         retired = (retired_checkpoints or {}).get(str(path.resolve()))
-        if path.exists():
+        archived = archive_record(path, cp["sha256"], cp.get("size_bytes")) if not remote else None
+        if archived:
+            evidence["checkpoint_state"] = "original_verified_in_archive"
+        elif path.exists():
             if sha256(path) != cp["sha256"]:
                 raise ValueError("selected checkpoint missing or corrupt")
         elif remote:
@@ -246,6 +250,11 @@ def catalog_limits(manifest):
 
 def audit_stage_a(manifest, selected, matches, *, remaining_resources_ok):
     """Re-read decisive artifacts; summaries and exit codes are not sufficient."""
+    with checkpoint_reads(manifest.get("checkpoint_archives", [])):
+        return _audit_stage_a(manifest, selected, matches, remaining_resources_ok=remaining_resources_ok)
+
+
+def _audit_stage_a(manifest, selected, matches, *, remaining_resources_ok):
     identity = manifest["source_identity"]
     expected_seeds = sorted(manifest["tuning_seeds"])
     expected_diag = sorted(manifest["diagnostic_seeds"])
@@ -477,6 +486,12 @@ def continuation_matches(parent, task, result, *, mixed=False):
 
 
 def create_gate(path, *, manifest_path, report_path, task_paths, gate_kind="formal"):
+    with checkpoint_reads(load(manifest_path).get("checkpoint_archives", [])):
+        return _create_gate(path, manifest_path=manifest_path, report_path=report_path, task_paths=task_paths,
+                            gate_kind=gate_kind)
+
+
+def _create_gate(path, *, manifest_path, report_path, task_paths, gate_kind):
     manifest, report = load(manifest_path), load(report_path)
     if report.get("status") != "passed" or report.get("blocking_reasons"):
         raise ValueError("stage A has not passed")
@@ -537,6 +552,8 @@ def create_gate(path, *, manifest_path, report_path, task_paths, gate_kind="form
                 continue
             if field == "checkpoint" and "checkpoint_receipt" in entry and not Path(entry[path_key]).exists():
                 continue  # read_evidence verified the remote payload and its producer above.
+            if field == "checkpoint" and archive_record(entry[path_key], entry[hash_key]):
+                continue
             retired = retired_checkpoints.get(str(Path(entry[path_key]).resolve())) if entry.get(path_key) else None
             if field == "checkpoint" and retired and not Path(entry[path_key]).exists():
                 if retired["sha256"] != entry.get(hash_key):

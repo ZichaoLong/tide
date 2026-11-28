@@ -4,7 +4,7 @@ import re
 import json
 from pathlib import Path
 
-from .io import sha256
+from .checkpoint_archive3 import checkpoint_matches
 from .prepare_resume3 import reference
 from .resume_adapter3 import _result
 from .scheduler3 import evaluate_outcome
@@ -89,7 +89,7 @@ def completed_on_exit(audit, scheduler_ref, *, reason):
                 or not result["finished_unix"] <= heartbeat["updated_unix"] <= worker["finished_unix"]
                 or {worker["result_sha256"], row["result_sha256"]} != {result_ref["sha256"]}
                 or {worker["result_path"], row["result_path"]} != {result_ref["path"]}
-                or cp != result["checkpoint"] or sha256(cp["path"]) != cp["sha256"]
+                or cp != result["checkpoint"] or not checkpoint_matches(cp)
                 or task["target_tokens"] != cp["tokens"] or recovery["status"] != "exact"
                 or cp["state_sha256"] != recovery["state_sha256"]
                 or any(record[k] != cp[k] for record in (heartbeat, result["training"], recovery)
@@ -127,7 +127,7 @@ def unpublished_signal(audit, state, finding):
             or worker["pid"] != last["worker_process"]["pid"] or task["id"] != tid or heartbeat["task_id"] != tid
             or result["status"] != heartbeat["status"] or result["status"] != "budget_exhausted"
             or result["stop_reason"] != heartbeat["stop_reason"] or result["stop_reason"] != "signal"
-            or result.get("failure_class") or cp != index["current"] or sha256(cp["path"]) != cp["sha256"]
+            or result.get("failure_class") or cp != index["current"] or not checkpoint_matches(cp)
             or any(cp[k] != result["training"][k] or cp[k] != heartbeat[k] for k in ("steps","tokens"))):
         raise ValueError("unpublished owner receipt lacks its observed worker, terminal heartbeat or checkpoint: " + tid)
     return result_ref
@@ -203,7 +203,7 @@ def initial_check_replays(audit, state, *, memory_failure):
                 raise ValueError("unclosed initial check has published progress: " + tid)
         elif result.get("stop_reason") == "signal" and result["status"] == "budget_exhausted":
             cp = result["checkpoint"]
-            if (read_bound(reference(path / "checkpoint.json"))["current"] != cp or sha256(cp["path"]) != cp["sha256"]
+            if (read_bound(reference(path / "checkpoint.json"))["current"] != cp or not checkpoint_matches(cp)
                     or any(cp[k] != (prior[k] if prior else 0) or cp[k] != hb[k] for k in ("steps", "tokens"))):
                 raise ValueError("interrupted initial check advanced past its origin: " + tid)
         else:
@@ -245,7 +245,7 @@ def group_prefix_replays(audit, state):
                 or owner["group"].get("reason") != "signal_15" or worker["output"] != str(path)
                 or worker["start_ticks"] != process["start_ticks"] or worker["pid"] != process["pid"]
                 or hb["pid"] != worker["pid"] or hb["task_id"] != tid or result.get("checkpoint")
-                or sha256(cp["path"]) != cp["sha256"] or Path(cp["path"]).parent != path/"checkpoints"
+                or not checkpoint_matches(cp) or Path(cp["path"]).parent != path/"checkpoints"
                 or (path/"validation.jsonl").exists() or steps[-1]["tokens"] >= task["target_tokens"]
                 or any(s["step"] != start["steps"]+i or
                        s["tokens"] != start["tokens"]+i*task["sequence_length"]*task["batch_size"]

@@ -17,6 +17,7 @@ import time
 
 from .gate3 import (MI, audit_stage_a, create_gate, eligible, gate_path_for_source,
                     manifest_digest, read_evidence, stage_source_contract)
+from .checkpoint_archive3 import checkpoint_reads
 from .hbm_profile3 import DEFAULT_POLICY, HbmProfile, hbm_shape, reservation
 from .io import atomic_json, sha256
 from .prepare_resume3 import reference
@@ -95,12 +96,25 @@ class CloudCampaign(Campaign):
         self.output = output
         self.output.mkdir(parents=True, exist_ok=True)
         self.inputs = initial_sources(output)
+        sealed = read(output / "model-manifest.json", {})
+        self.archives = sealed.get("checkpoint_archives", [])
+        if not sealed:
+            store = REPO / ".local/modelarts-r3/storage"
+            for name in ("selected-chain-proof.json", "selected-hot-proof.json"):
+                if (store / name).is_file():
+                    self.archives = [reference(store / name)]
+                    break
+            for name in ("selected-collateral-proof.json", "selected-frontier-proof.json"):
+                supplement = store / name
+                if supplement.is_file():
+                    self.archives.append(reference(supplement))
         self.plan = fixed(self.inputs["primary_plan"])
         self.deferred = fixed(self.inputs["deferred_plan"])
         self.review = fixed(self.inputs["review"])
         self.identity, self.protocol = self.plan["source_identity"], self.plan["protocol"]
         self.resources, self.selected, self.records, self.original_tasks = {}, {}, {}, {}
         self.inherited_hbm, self.peaks, self.entries, self.pending, self.blocked = {}, {}, {}, {}, []
+        self.hbm_evidence = {}
         self.accepted = accepted
         self.initial = {row["id"]: row for row in initial}
         self.supervisor = None
@@ -128,6 +142,11 @@ class CloudCampaign(Campaign):
                 try:
                     for shape, meta in profile.summaries().items():
                         self.inherited_hbm[shape] = max(meta["reservation_bytes"], self.inherited_hbm.get(shape, 0))
+                        if meta.get("successful") and meta.get("success_peak_bytes", 0):
+                            self.hbm_evidence[shape] = {"basis": "same_source_and_shape_stage_a_profile",
+                                "profile": str(profile.path), "shape": shape, "successful": meta["successful"],
+                                "observed_bytes": meta["observed_peak_bytes"], "oom_sizing_bytes": meta["oom_sizing_bytes"],
+                                "reservation_bytes": self.inherited_hbm[shape]}
                 finally:
                     profile.db.close()
         self.resources.update(read(output / "model-resources.json", {}))
@@ -178,9 +197,10 @@ class CloudCampaign(Campaign):
         return self.entries[task["id"]]
 
     def manifest(self):
-        return {**super().manifest(), "stage_a_dispositions": self.inputs["review"]}
+        return {**super().manifest(), "stage_a_dispositions": self.inputs["review"],
+                **({"checkpoint_archives": self.archives} if self.archives else {})}
 
-    def remember_measurement(self, task, result):
+    def remember_measurement(self, task, result, evidence=None):
         key = hbm_shape(task), task["device"].split(":")[0]
         observation = self.peaks.setdefault(key, {"training": {}, "device_memory": {}})
         rate = result.get("training", {}).get("tokens_per_second")
@@ -191,12 +211,24 @@ class CloudCampaign(Campaign):
             if (name.startswith(("npu_peak_", "npu_startup_peak_")) or name == "cpu_rss_peak_bytes") and value:
                 memory = observation["device_memory"]
                 memory[name] = max(value, memory.get(name, 0))
+        peak = max((v or 0 for k, v in result.get("device_memory", {}).items()
+                    if k.startswith(("npu_peak_", "npu_startup_peak_"))), default=0)
+        if evidence and key[1] == "npu" and result["status"] == "completed" and peak:
+            request = max(reservation(peak, *DEFAULT_POLICY), self.inherited_hbm.get(key[0], 0))
+            previous = self.hbm_evidence.get(key[0], {})
+            if not previous or request > previous["reservation_bytes"] or (request == previous["reservation_bytes"]
+                    and peak >= previous["observed_bytes"]):
+                self.hbm_evidence[key[0]] = dict(shape=key[0], observed_bytes=peak, reservation_bytes=request,
+                    basis="same_source_and_shape_capacity_probe" if task.get("purpose") == "stage_b_capacity" else
+                          "same_source_and_shape_training", result_path=evidence["result_path"],
+                    result_sha256=evidence["result_sha256"], task_id=task["id"],
+                    inherited_shape_floor_bytes=self.inherited_hbm.get(key[0], 0))
 
     def consume(self, task, entry):
         """Expose a relocated checkpoint to the old generator without editing raw evidence."""
-        _, result, _ = read_evidence(entry)
+        _, result, measured = read_evidence(entry)
         self.entries[task["id"]] = entry
-        self.remember_measurement(task, result)
+        self.remember_measurement(task, result, measured)
         cp = result.get("checkpoint")
         if cp and entry.get("checkpoint_path"):
             result["checkpoint"] = {**cp, "path": entry["checkpoint_path"]}
@@ -316,14 +348,70 @@ class CloudCampaign(Campaign):
             item = contract["models"][model["id"]]
             path = gate_path_for_source(gate, item["b_source"], self.identity)
             for observation in self.selected[model["id"]]["confirmation"]:
-                selected_task, selected_result, _ = read_evidence(observation)
-                self.remember_measurement(selected_task, selected_result)
+                selected_task, selected_result, measured = read_evidence(observation)
+                self.remember_measurement(selected_task, selected_result, measured)
             for seed in seeds:
                 task = self.formal_task(model, seed, phase, path)
                 task.update(source_identity=item["b_source"], model=item["b_model"])
                 task.pop("stage_a_migration", None)
                 tasks.append(task)
         return tasks
+
+    def formal_hbm(self, tasks, resources, label):
+        """Warm a target shape on an idle logical chip when its measured peak is missing."""
+        missing = False
+        reservations = {}
+        for task in tasks:
+            if not task["device"].startswith("npu"):
+                continue
+            shape = hbm_shape(task)
+            if shape not in self.hbm_evidence:
+                plan_path = self.output / "stage-b-capacity" / (shape + ".json")
+                placement = read(plan_path)
+                if placement is None:
+                    placement = idle_chip_envelope(resources)
+                    if not placement:
+                        self.blocked.append("awaiting measured idle chip for the Stage B capacity probe: " + task["model_id"])
+                        missing = True
+                        continue
+                    freeze_json(plan_path, placement)
+                probe = {**task, "id": task["model_id"] + "-preflight-2026112021-stage-b-" + shape[:12],
+                         "phase": "preflight", "seed": 2026112021, "evaluation_start_tokens": 0,
+                         "eval_interval_tokens": 0, "eval_tokens": task["sequence_length"] * 2,
+                         "target_tokens": task["batch_size"] * task["sequence_length"] * task["stream_chunks"] * 2,
+                         "purpose": "stage_b_capacity", "reserved_hbm_bytes": placement["hbm_mib"] * MIB}
+                for key in ("gate_file", "stage_b_gate", "evaluation_budget_key", "evaluation_token_limit",
+                            "allow_confirmation", "resume_checkpoint", "resume_checkpoint_sha256", "confirmation_authorization"):
+                    probe.pop(key, None)
+                try:
+                    result = self.resolution(probe)
+                except (ValueError, KeyError, OSError, Blocked) as error:
+                    self.blocked.append(f"{probe['id']}: {error}")
+                    missing = True
+                    continue
+                if result is None:
+                    self.pending[probe["id"]].update(hbm_mib=placement["hbm_mib"], reserve_chip=True,
+                        hbm_basis="measured idle single-chip capacity for unprofiled Stage B shape")
+                    missing = True
+                    continue
+                if eligible(probe, result) or shape not in self.hbm_evidence:
+                    self.blocked.append("Stage B capacity probe lacks an eligible update and measured HBM: " + probe["id"])
+                    missing = True
+                    continue
+            measurement = self.hbm_evidence[shape]
+            original = read(self.output / "tasks" / task["id"] / "task.json")
+            if original is None:
+                task["reserved_hbm_bytes"] = max(task.get("reserved_hbm_bytes", 0), measurement["reservation_bytes"])
+            else:
+                task["reserved_hbm_bytes"] = original["reserved_hbm_bytes"]
+            reservations[task["id"]] = {**measurement, "frozen_request_bytes": task["reserved_hbm_bytes"],
+                                        "source_sha256": manifest_digest(task["source_identity"])}
+        if not missing:
+            catalog = self.output / ("stage-b-" + label + "-hbm.json")
+            if not catalog.exists():
+                freeze_json(catalog, {"scope": "per-target-source, shape and backend; CPU tasks have no HBM request",
+                                      "reservations": reservations})
+        return not missing
 
     def permit(self, gate, phase, tasks, manifest_path, report_path):
         paths = [freeze_json(self.output / "tasks" / t["id"] / "task.json", t) for t in tasks]
@@ -382,6 +470,8 @@ class CloudCampaign(Campaign):
         contract = stage_source_contract(manifest, self.selected)
         gate = self.output / "stage-b-gate.json"
         formal = self.formal_tasks(self.models, [FORMAL_SEED], "b", gate, contract)
+        if not self.formal_hbm(formal, resources, "formal"):
+            return self.response("stage-b-capacity")
         self.permit(gate, "formal", formal, manifest_path, report_path)
         first = self.run_all(formal)
         if len(first) < len(formal):
@@ -394,6 +484,8 @@ class CloudCampaign(Campaign):
         selection = freeze_json(self.output / "repeat-selection.json", {"representatives": reps,
             "model_ids": sorted(repeated_ids), "task_ids": [t["id"] for t in repeated], "coverage_slots": REPEAT_SLOTS,
             "formal_evidence": {t["id"]: self.evidence(t) for t in formal}})
+        if not self.formal_hbm(repeated, resources, "repeat"):
+            return self.response("stage-b-capacity")
         self.permit(repeat_gate, "repeat", repeated, manifest_path, report_path)
         second = self.run_all(repeated)
         if len(second) < len(repeated):
@@ -411,6 +503,8 @@ class CloudCampaign(Campaign):
                 "gate_file": str(path), "allow_confirmation": True, "confirmation_tokens": 131072,
                 "eval_tokens": 256, "evaluation_start_tokens": 12*MI, "resume_checkpoint": cp["path"],
                 "resume_checkpoint_sha256": cp["sha256"], "confirmation_authorization": auth})
+        if not self.formal_hbm(confirmed, resources, "confirmation"):
+            return self.response("stage-b-capacity")
         self.permit(gate, "confirmation", confirmed, manifest_path, report_path)
         final = self.run_all(confirmed)
         if len(final) < len(confirmed):
@@ -420,6 +514,31 @@ class CloudCampaign(Campaign):
             subjects=len(self.subjects), controls=len(controls),
             confirmation_evidence={t["id"]: self.evidence(t) for t in confirmed}))
         return self.response("completed")
+
+
+def idle_chip_envelope(resources):
+    if not resources or time.time() - resources.get("observed_unix", 0) > 180:
+        return None
+    choices = []
+    for job, node in resources.get("node_capacity", {}).items():
+        if node.get("phase", "").lower() != "running":
+            continue
+        for worker in node.get("workers", []):
+            if worker.get("state") != "serving" or time.time() - worker.get("at", 0) > 180:
+                continue
+            for board, card in worker.get("cards", {}).items():
+                if not card.get("process_table_observed"):
+                    continue
+                for chip, info in card.get("chips", {}).items():
+                    if info.get("health") == "OK" and info.get("processes") == []:
+                        free = max(0, (info["total"] - info["used"]) // MIB)
+                        if free:
+                            choices.append((free, job, board, chip))
+    if not choices:
+        return None
+    free, job, board, chip = max(choices)
+    return dict(hbm_mib=free, observed_on_job=job, physical_board=board, logical_chip=chip,
+                observed_unix=resources["observed_unix"], scope="whole observed idle chip; sizing probe only")
 
 
 def cloud_samples(accepted):
@@ -586,7 +705,8 @@ def advance(state_dir, initial_inventory, accepted):
         fcntl.flock(lock, fcntl.LOCK_EX)
         campaign = CloudCampaign(state_dir / "campaign", inventory, accepted)
         try:
-            return campaign.stages(read(state_dir / "resources.json"))
+            with checkpoint_reads(campaign.archives, authoritative=True):
+                return campaign.stages(read(state_dir / "resources.json"))
         except (Blocked, ValueError, KeyError, OSError) as exc:
             campaign.blocked.append(str(exc))
             return campaign.response("stage-a-or-b-evidence")

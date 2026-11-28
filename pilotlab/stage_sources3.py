@@ -118,6 +118,15 @@ def matches_stage_source(contract, task, evidence):
     approved = contract["models"][task["model_id"]]
     if task["model"] == approved["a_model"] and task["source_identity"] == approved["a_source"]:
         return True
+    parent_id = task["id"].replace("-a3-", "-a2-") if task["phase"] == "a3" else task["id"]
+    repaired = contract.get("repairs", {}).get(parent_id)
+    if repaired and repaired["model_id"] == task["model_id"] and repaired["source_identity"] == task["source_identity"]:
+        if task["phase"] == "a2":
+            return task == repaired
+        if task["phase"] == "a3" and task["model"] == approved["a_model"]:
+            from .source_migration3 import verify_recipe
+            verify_recipe(repaired, task, parent=True)
+            return True
     return matches_primary_evidence(contract, task, evidence)
 
 

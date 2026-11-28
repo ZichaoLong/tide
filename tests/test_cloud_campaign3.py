@@ -1,5 +1,4 @@
 """CPU-only scientific frontier, archive and physical/logic resource contracts."""
-from copy import deepcopy
 from pathlib import Path
 import time
 
@@ -8,6 +7,7 @@ import pytest
 from pilotlab import cloud_campaign3 as cloud, gate3, round3, worker3
 from pilotlab.scheduler3 import freeze_json, read
 from test_pilot_round3 import simulation
+from test_pilot_chain_receipt3 import chain
 from test_pilot_gate3 import campaign, formal_inputs, write_json
 from test_runtime_migration3 import inputs, write
 
@@ -81,7 +81,7 @@ def test_portable_frontier_reaches_all_native_phases(simulation, monkeypatch):
     c.__dict__.update(vars(native))
     c.subjects = [dict(m, effective_key=m["model_key"]) for m in c.subjects]
     c.fresh, c.review, c.records, c.original_tasks = set(), {"subjects": {}}, {}, {}
-    c.initial, c.accepted, c.peaks, c.entries = {}, {}, {}, {}
+    c.initial, c.accepted, c.peaks, c.entries, c.hbm_evidence = {}, {}, {}, {}, {}
     monkeypatch.setattr(c, "manifest", lambda: round3.Campaign.manifest(c))
     monkeypatch.setattr(c, "forecast", lambda resources: {"fits": True, "reasons": []})
     monkeypatch.setattr(cloud, "audit_stage_a", round3.audit_stage_a)
@@ -115,3 +115,96 @@ def test_portable_frontier_reaches_all_native_phases(simulation, monkeypatch):
                            "stage-b-formal", "stage-b-repeat", "stage-b-confirmation", "completed"}
     final = read(c.output / "report.json")
     assert final["formal"] == 9 and final["repeats"] == 18 and final["confirmed"] == 27
+
+
+def test_unseen_formal_shape_profiles_the_whole_idle_chip_before_formal(tmp_path):
+    c = cloud.CloudCampaign.__new__(cloud.CloudCampaign)
+    c.output, c.hbm_evidence, c.pending, c.blocked = tmp_path, {}, {}, []
+    spec = dict(id="model-b", model_id="model", device="npu:0", source_identity={"source":"v2"},
+                model={"family":"tide"}, batch_size=2, sequence_length=128, stream_chunks=4, phase="b",
+                cpu_threads=4, seed=round3.FORMAL_SEED, target_tokens=12*gate3.MI, eval_tokens=16384)
+    def pending(probe):
+        c.pending[probe["id"]] = {"scientific_task": probe}
+    c.resolution = pending
+    now = time.time()
+    chip = {"health": "OK", "total": 64*2**30, "used": 2**30, "processes": []}
+    nodes = {"one": {"phase":"Running", "workers":[{"state":"serving","at":now,
+        "cards":{"0":{"process_table_observed":True, "chips":{"1":chip}}}}]}}
+    assert not c.formal_hbm([spec], {"observed_unix":now, "node_capacity":nodes}, "formal")
+    row, = c.pending.values()
+    task = row["scientific_task"]
+    assert task["phase"] == "preflight" and task["seed"] != round3.FORMAL_SEED and not task.get("gate_file")
+    assert task["target_tokens"] == 2*128*4*2 and row["reserve_chip"] is True and row["hbm_mib"] == 63*1024
+    assert not (tmp_path / "stage-b-formal-hbm.json").exists()
+    shape = cloud.hbm_shape(spec)
+    c.hbm_evidence[shape] = {"reservation_bytes": 14*2**30, "observed_bytes": 9*2**30, "shape": shape,
+                             "basis": "same_source_and_shape_capacity_probe"}
+    assert c.formal_hbm([spec], {}, "formal") and spec["reserved_hbm_bytes"] == 14*2**30
+
+
+def test_bound_archive_reconstructs_an_evicted_original_chain_without_weakening_other_paths(chain, tmp_path):
+    import gzip
+    import json
+    from pilotlab.checkpoint_archive3 import checkpoint_reads
+    from test_pilot_chain_receipt3 import verify
+    old = read(chain["reference"]["path"])
+    row = old["retained_checkpoints"][0]
+    cp = Path(row["path"])
+    checksum = gate3.sha256(cp)
+    key = "prod/objects/sha256/" + checksum
+    size = cp.stat().st_size
+    stamp = "2026-11-28T11:00:00+00:00"
+    item = {"key":key,"size":size,"sha256":checksum}
+    index = {"schema":"tide-r3-verified-inputs/v1","east_region":"cn-east-4","east_bucket":"archive",
+             "east_suffix_prefix":"a/", "published_selection":{"passed":True},
+             "paths":{str(cp):item},
+             "objects":{checksum:{**item,"etag":"remote-generation","uri":"obs://archive/a/"+key,
+                                  "content_read_at":stamp,"verified":stamp}}}
+    packed = tmp_path / "archive.gz"
+    packed.write_bytes(gzip.compress(json.dumps(index).encode()))
+    proof = {"schema":"tide-r3-verified-index/v1","source":str(packed), "verified":stamp,"etag":"index-generation",
+             "paths":1,"objects":1,"key":"index.gz","uri":"obs://archive/a/index.gz",
+             "size":packed.stat().st_size, "sha256":gate3.sha256(packed)}
+    proof_path = tmp_path / "proof.json"
+    entries = [{"path": str(proof_path), "sha256": write(proof_path, proof)}]
+    cp.unlink()
+    with pytest.raises(ValueError, match="missing"):
+        verify(chain)
+    with checkpoint_reads(entries):
+        assert verify(chain)["receipt"] == chain["reference"]
+        assert gate3.read_evidence(chain["args"]["choice"]["confirmation"][0], checkpoint=True)[2]["checkpoint_state"] == "original_verified_in_archive"
+    packed.write_bytes(b"replacement")
+    with pytest.raises(ValueError, match="verified archive index changed"):
+        with checkpoint_reads(entries):
+            verify(chain)
+
+
+def test_forecast_uses_matched_shape_concurrency_and_charges_physical_boards(tmp_path):
+    now = time.time()
+    shape = dict(source_identity={"dataset":"frozen"}, model={"family":"tide"}, model_id="same",
+                 device="npu:0", batch_size=2, sequence_length=32, stream_chunks=4, cpu_threads=2)
+    local = tmp_path / "source-task"
+    write(local, shape)
+    historical = tmp_path / "seed"
+    write(historical, {"training":{"tokens_per_second": 100.}})
+    selected = {"same":{"confirmation":[{"task_path":str(local),"result_path":str(historical)}]}}
+    accepted = {}
+    for i in range(4):
+        tid, task, raw, receipt = str(i), tmp_path/f"task{i}", tmp_path/f"result{i}", tmp_path/f"receipt{i}"
+        fp = write(task, {**shape,"id":tid,"phase":"a3"})
+        sha = write(raw, {"task_sha256":fp,"id":tid,"training":{"seconds":10,"segment_tokens":500}})
+        write(receipt, {"job":"job","status":"completed","fingerprint":fp,"task":tid,"started":100,"finished":110,
+                        "board":0, "chip":i%2, "artifacts":{"result.json":{"sha256":sha}}})
+        accepted[fp] = dict(task_path=str(task), result_path=str(raw), receipt_path=str(receipt))
+    capacity = {"job":{"phase":"Running","workers":[{"state":"serving","at":now, "capacity":{"threads":16},
+                                                     "cards":{"0":{"chips":{"0":{},"1":{}}}}}]}}
+    resources = dict(observed_unix=now, deadline_unix=now+1e9, remaining_device_seconds=1e9,
+                     allocated_physical_boards=1, active_nodes=1, node_capacity=capacity)
+    estimate = cloud.cloud_forecast(selected, resources, accepted=accepted)
+    assert estimate["fits"], estimate["reasons"]
+    assert estimate["rates"]["same"]["slow_rate"] == 50
+    assert estimate["parallelism_by_backend"]["npu"] == [4, 4] and estimate["logical_chips"] == 2
+    assert estimate["physical_boards_charged"] == 1 and estimate["accepted_attempts"] == 4
+    assert estimate["wall_seconds_range"] == estimate["allocated_board_seconds_range"]
+    resources["remaining_device_seconds"] = 10
+    assert not cloud.cloud_forecast(selected, resources, accepted=accepted)["fits"]

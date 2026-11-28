@@ -14,6 +14,10 @@ def _bound(reference, *, document=True):
     if not isinstance(reference, dict) or not reference.get("path") or not reference.get("sha256"):
         raise ValueError("missing continuation reference")
     path = Path(reference["path"])
+    if not document:
+        from .checkpoint_archive3 import archive_record
+        if archive_record(path, reference["sha256"], reference.get("size_bytes")):
+            return path
     if sha256(path) != reference["sha256"]:
         raise ValueError("continuation reference changed")
     if not document:

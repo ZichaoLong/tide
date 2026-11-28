@@ -398,7 +398,9 @@ def migration_origin(task, result):
     old, previous = migration_inputs(task, receipt)
     cp = receipt["checkpoint"]
     resume, training = result["resume"], result["training"]
-    checked(cp, "source migration checkpoint")
+    from .checkpoint_archive3 import archive_record
+    if not archive_record(cp["path"], cp["sha256"], cp.get("size_bytes")):
+        checked(cp, "source migration checkpoint")
     if (mark["checkpoint"] != cp or mark["original_result"] != receipt["result"]
             or mark["original_task"] != receipt["original_task"]
             or resume.get("path") != cp["path"] or resume.get("sha256") != cp["sha256"]

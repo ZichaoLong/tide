@@ -42,7 +42,11 @@ def _checkpoint(result, *, phase, seed, allowed_missing):
         raise ValueError("selected chain checkpoint record is incomplete")
     path = Path(record["path"]).resolve()
     expected = allowed_missing.get(str(path))
-    if path.is_file():
+    from .checkpoint_archive3 import archive_record
+    archived = archive_record(path, record["sha256"], record.get("size_bytes"))
+    if archived:
+        size = archived["size"]
+    elif path.is_file():
         if sha256(path) != record["sha256"]:
             raise ValueError("selected chain checkpoint is corrupt")
         size = path.stat().st_size
