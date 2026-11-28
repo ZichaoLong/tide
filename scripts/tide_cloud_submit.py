@@ -272,6 +272,8 @@ def read_on_node(node, request, work, obs, shared, *, mount_check=os.path.ismoun
     relay.require(request["action"] == "verify", "unsupported private input operation")
     h, size = request["sha256"], request["size"]
     blobs.validate(h, size)
+    if request.get("background"):
+        os.nice(15)
     return {"sha256": h, "size": blobs.read_signed(request["url"], h, size)}
 
 
@@ -367,11 +369,13 @@ def prime_inputs(node, objects):
     return remote_call(node, [], files={**request, "grants": grants})
 
 
-def verify_object(node, store, key, sha256, size):
+def verify_object(node, store, key, sha256, size, *, background=False):
     """Perform a regional streaming re-read without installing a file or using the runq task path."""
     blobs.validate(sha256, size)
-    result = remote_call(node, [], files={"action":"verify", "sha256":sha256, "size":size,
-                                          "url":blobs.signed_get(store, key)})
+    request = {"action":"verify", "sha256":sha256, "size":size, "url":blobs.signed_get(store, key)}
+    if background:
+        request["background"] = True
+    result = remote_call(node, [], files=request)
     relay.require(result == {"sha256":sha256, "size":size}, "regional verification acknowledgement differs")
     return result
 
