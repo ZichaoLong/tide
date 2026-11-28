@@ -118,3 +118,31 @@ def test_host_treats_ssh_failure_as_unknown(monkeypatch):
     monkeypatch.setattr(subprocess, "run", lost)
     c = {"job": "job", "task": "task", "attempt": "attempt", "fingerprint": "fp", "digest": "digest"}
     assert relay.recover({"name": "job", "id": "id"}, c, {})["status"] == "unavailable"
+
+
+def test_republish_exact_sealed_receipt_after_sfs_outputs_have_been_collected(frozen):
+    claim, obs, area, queue_path, run = frozen
+    area.mkdir(parents=True)
+    (area / "worker.lock").touch()
+    store(queue_path, {"key": claim["attempt"], "state": "completed"})
+    checkpoint = {"sha256": hashlib.sha256(b"already verified checkpoint").hexdigest()}
+    bodies = {
+        "checkpoint.pt": b"already verified checkpoint",
+        "result.json": json.dumps({"task_sha256": claim["fingerprint"], "checkpoint": checkpoint}).encode(),
+        "project-verdict.json": json.dumps({"task": claim["task"], "fingerprint": claim["fingerprint"],
+                                             "status": "completed", "checkpoint": checkpoint}).encode(),
+    }
+    artifacts = {}
+    for name, body in bodies.items():
+        key = f"products/attempts/{claim['attempt']}/{name}"
+        file = obs / key
+        file.parent.mkdir(parents=True, exist_ok=True)
+        file.write_bytes(body)
+        artifacts[name] = {"path": key, "size": len(body), "sha256": hashlib.sha256(body).hexdigest(),
+                           "content_md5": hashlib.md5(body, usedforsecurity=False).hexdigest()}
+    identity = {k: claim[k] for k in ("task", "job", "attempt", "fingerprint")}
+    store(area / "receipt.json", {**identity, "descriptor_sha256": claim["digest"], "runq": "frozen",
+                                  "status": "completed", "started": 10, "finished": 12, "artifacts": artifacts})
+    result = run()
+    assert result["status"] == "published"
+    assert (obs / result["receipt_key"]).read_bytes() == (area / "receipt.json").read_bytes()

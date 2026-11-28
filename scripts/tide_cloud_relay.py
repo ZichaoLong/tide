@@ -135,13 +135,14 @@ def native_paths(area, descriptor):
                 require(inn.is_relative_to(output), "native artifact outside the attempt")
                 p = member(output, inn.relative_to(output))
                 if name == "checkpoint.pt" or p.is_file():
-                    require(p.is_file(), "native artifact missing")
-                    files[name], checksums[name] = p, obj["sha256"]
+                    checksums[name] = obj["sha256"]
+                    if p.is_file():
+                        files[name] = p
     if verdict:
         require(bound(verdict, {"task": descriptor["task"], "fingerprint": descriptor["fingerprint"]})
                 and verdict["status"] in {"failed", "completed", "interrupted"}, "native verdict identity differs")
         if verdict["status"] in {"completed", "interrupted"}:
-            require("checkpoint.pt" in files and result and verdict.get("checkpoint", {}).get("sha256")
+            require("checkpoint.pt" in checksums and result and verdict.get("checkpoint", {}).get("sha256")
                     == result["checkpoint"]["sha256"], "native verdict lacks its checkpoint")
     return files, checksums, verdict if result else None
 
@@ -155,8 +156,6 @@ def relay_locked(area, obs, claim, queue, identity):
     if not source and not verdict:
         return {"status": "incomplete", "reason": "SFS attempt has no terminal receipt or native verdict/result"}
     status = verdict["status"] if verdict else source["status"]
-    if status in {"completed", "interrupted"}:
-        require(verdict is not None, "native verdict or result is unavailable")
     name = claim["attempt"]
     products = {}
     for key, path in files.items():
@@ -173,6 +172,18 @@ def relay_locked(area, obs, claim, queue, identity):
             require(key in {*NATIVE_FILES, "worker.log", "failure.pt", "checkpoint.pt"} and artifact["path"] == path
                     and existing_body(member(obs, path), artifact), "missing receipt artifact: " + key)
             products[key] = artifact
+    if status in {"completed", "interrupted"}:
+        require({"project-verdict.json", "result.json", "checkpoint.pt"} <= products.keys(),
+                "terminal claim lacks a native verdict, result or checkpoint")
+        # A sealed SFS receipt may outlive its local output directory. Verify the
+        # retained original artifact bodies and their native cross-references.
+        native_verdict = verdict or read(member(obs, products["project-verdict.json"]["path"]))
+        native_result = read(member(obs, products["result.json"]["path"]))
+        expected = products["checkpoint.pt"]["sha256"]
+        require(bound(native_verdict, {"task": claim["task"], "fingerprint": claim["fingerprint"], "status": status})
+                and native_result.get("task_sha256") == claim["fingerprint"]
+                and native_verdict.get("checkpoint", {}).get("sha256") == native_result.get("checkpoint", {}).get("sha256") == expected,
+                "retained terminal evidence is inconsistent")
     if source and source["status"] == status and source.get("artifacts") == products:
         data = (area / "receipt.json").read_bytes()
     else:
