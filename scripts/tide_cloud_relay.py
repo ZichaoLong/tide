@@ -222,11 +222,14 @@ def relay_locked(area, obs, claim, queue, identity):
     raise ValueError("conflicting reconciliation receipt")
 
 
-def reconcile(claim, work, obs, shared, mount_check=os.path.ismount):
-    """Inspect verified mounts and the queue's actual durable request before taking the worker lock."""
-    name, attempt = claim["job"], claim["attempt"]
+def check_identity(claim):
     require(all(isinstance(s, str) and re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,190}", s)
-                for s in (name, attempt, claim["task"])), "invalid attempt identity")
+                for s in (claim["job"], claim["attempt"], claim["task"])), "invalid attempt identity")
+    require(all(isinstance(claim[k], str) and re.fullmatch(r"[0-9a-f]{64}", claim[k])
+                for k in ("digest", "fingerprint")), "invalid descriptor or task digest")
+
+
+def allocation_paths(name, work, obs, shared, mount_check=os.path.ismount):
     cfg = read(member(work, "job.json"))
     release = read(member(work, "payload/production.json"))
     qcfg = read(member(work, "queue.json"))
@@ -237,19 +240,43 @@ def reconcile(claim, work, obs, shared, mount_check=os.path.ismount):
             and str(shared) == qcfg["writable_areas"][0] and mount_check(writable[0])
             and obs == obs.resolve() and obs.name == name and mount_check(obs), "unverified job OBS or writable SFS mount")
     require(shared.is_dir() and shared.stat().st_uid == os.getuid(), "unexpected shared directory")
-    native = member(shared, "tide-r3")
+    return member(shared, "tide-r3"), release
+
+
+def check_descriptor(payload, claim):
+    require(hashlib.sha256(payload).hexdigest() == claim["digest"], "OBS dispatch bytes changed")
+    descriptor = json.loads(payload)
+    require(isinstance(descriptor, dict) and bound(descriptor, {k: claim[k] for k in ("job", "task", "attempt", "fingerprint")}),
+            "incorrect dispatch envelope")
+    return descriptor
+
+
+def runtime_paths(job, job_id):
+    require(os.environ.get("MAFLOW_RUN") == job and os.environ.get("MAFLOW_WORKER") == "worker-0",
+            "SSH session belongs to another allocation")
+    for name in ("MA_JOB_ID", "MODELARTS_JOB_ID"):
+        value = os.environ.get(name, "")
+        if re.fullmatch(r"[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}", value):
+            require(value.lower() == job_id.lower(), "platform identity differs")
+    return tuple(Path(os.environ[k]) for k in ("MAFLOW_WORK", "MAFLOW_OBS", "MAFLOW_SHARED"))
+
+
+def reconcile(claim, work, obs, shared, mount_check=os.path.ismount):
+    """Inspect verified mounts and the queue's actual durable request before taking the worker lock."""
+    check_identity(claim)
+    name, attempt = claim["job"], claim["attempt"]
+    native, release = allocation_paths(name, work, obs, shared, mount_check)
     cluster = member(native, "runq/.runq-cluster")
     token = hashlib.sha256(attempt.encode()).hexdigest() + ".json"
     req = read(member(cluster, "requests/" + token))["spec"]
-    envelope = member(obs, "inputs/dispatch/" + attempt + ".json")
-    payload = envelope.read_bytes()
-    require(hashlib.sha256(payload).hexdigest() == claim["digest"], "OBS dispatch bytes changed")
-    d = json.loads(payload)
-    require(bound(d, {k: claim[k] for k in ("job", "task", "attempt", "fingerprint")}), "incorrect dispatch envelope")
     argv = req["options"]["argv"]
-    require(req["key"] == attempt and req.get("worker") == 0 and argv[-4:] == [
-        str(member(work, "payload/tide_cloud_node.py")), "worker", str(envelope), claim["digest"]
-    ], "queue request does not match the frozen descriptor")
+    old = member(obs, "inputs/dispatch/" + attempt + ".json")
+    cached = member(native, "envelopes/" + attempt + ".json")
+    require(req["key"] == attempt and req.get("worker") == 0 and len(argv) >= 4 and
+            argv[-4:-2] == [str(member(work, "payload/tide_cloud_node.py")), "worker"] and
+            argv[-2] in {str(old), str(cached)} and argv[-1] == claim["digest"],
+            "queue request does not match the frozen descriptor")
+    d = check_descriptor(Path(argv[-2]).read_bytes(), claim)
     queue = optional(member(cluster, "receipts/" + token))
     if not queue or queue.get("state") not in END:
         return {"status": "busy", "reason": "local runq has not sealed a terminal receipt"}
@@ -302,13 +329,7 @@ def recover(node, claim, queue_task):
 if __name__ == "__main__":
     try:
         claim = json.loads(sys.argv[1])
-        require(os.environ.get("MAFLOW_RUN") == claim["job"] and os.environ.get("MAFLOW_WORKER") == "worker-0",
-                "SSH session belongs to another allocation")
-        for name in ("MA_JOB_ID", "MODELARTS_JOB_ID"):
-            value = os.environ.get(name, "")
-            if re.fullmatch(r"[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}", value):
-                require(value.lower() == claim["job_id"].lower(), "platform identity differs")
-        result = reconcile(claim, Path(os.environ["MAFLOW_WORK"]), Path(os.environ["MAFLOW_OBS"]), Path(os.environ["MAFLOW_SHARED"]))
+        result = reconcile(claim, *runtime_paths(claim["job"], claim["job_id"]))
     except (ValueError, TypeError, KeyError) as exc:
         result = {"status": "incomplete", "reason": str(exc)}
     except (OSError, IndexError) as exc:

@@ -231,6 +231,63 @@ def run_one(obs, shared, envelope, checksum):
         return int(rec["status"] == "failed")
 
 
+def pending_dispatches(obs, enrolled):
+    pending = []
+    try:
+        requests = list((obs / "inputs/dispatch").iterdir())
+    except FileNotFoundError:
+        return pending
+    except OSError as exc:
+        print("dispatch listing unavailable", exc, file=sys.stderr, flush=True)
+        return pending
+    for request in requests:
+        if request.suffix != ".json" or request.name in enrolled:
+            continue
+        try:
+            body = request.read_bytes()
+            d = json.loads(body)
+            require(isinstance(d, dict) and ident(d["attempt"]) == request.stem and d["job"] == os.environ["MAFLOW_RUN"],
+                    "dispatch identity differs")
+            priority = d.get("priority")
+            pending.append((priority if type(priority) is int else 0, request, d, hashlib.sha256(body).hexdigest()))
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            print("dispatch not readable", request.name, exc, file=sys.stderr, flush=True)
+    return sorted(pending, key=lambda x: (-x[0], x[1].name))
+
+
+def enroll(request, d, checksum, call, obs, shared, release):
+    try:
+        require(d["backend"] in ("npu", "cpu") and type(d["priority"]) is int
+                and all(type(d[k]) is int and d[k] > 0 for k in ("threads", "ram_mib")), "invalid worker resources")
+        opts = ["--worker", 0, "--key", d["attempt"], "--cwd", ROOT, "--backend", d["backend"],
+                "--threads", d["threads"], "--ram-mib", d["ram_mib"], "--priority", d["priority"]]
+        if d.get("estimated_seconds") is not None:
+            require(type(d["estimated_seconds"]) is int and d["estimated_seconds"] > 0, "invalid runtime estimate")
+            opts.extend(["--estimated-seconds", d["estimated_seconds"]])
+        if d["backend"] == "npu":
+            require(type(d["hbm_mib"]) is int and d["hbm_mib"] > 0 and type(d["reserve_chip"]) is bool,
+                    "invalid NPU resources")
+            opts.extend(["--hbm-mib", d["hbm_mib"]])
+            if d["reserve_chip"]:
+                opts.append("--reserve-chip")
+    except (ValueError, KeyError, TypeError) as exc:
+        receipt = {"schema": "tide-cloud-result/v1", "task": d.get("task"), "attempt": request.stem,
+                   "fingerprint": d.get("fingerprint"), "descriptor_sha256": checksum, "job": d["job"],
+                   "runq": release["runq_commit"], "status": "failed", "error": repr(exc), "artifacts": {}}
+        local = shared / "rejections" / request.name
+        # Once sealed, retries after an OBS outage publish the same bytes.
+        if local.is_file():
+            require(read(local)["descriptor_sha256"] == checksum, "conflicting prior rejection")
+        else:
+            write(local, {**receipt, "finished": time.time()})
+        export(local, obs, "products/receipts/" + request.name)
+        return
+    result = call("submit", *opts, "--", sys.executable, "-B", "-u", str(ROOT / "tide_cloud_node.py"),
+                  "worker", str(request), checksum)
+    require(isinstance(result, dict) and result.get("key") == d["attempt"] and result.get("worker") == 0,
+            "runq has not acknowledged this attempt")
+
+
 def serve(obs, shared):
     exe = os.environ["MAFLOW_RUNQ"]
     release = read(ROOT / "production.json")
@@ -253,63 +310,43 @@ def serve(obs, shared):
     try:
         last_heartbeat = 0.
         while time.time() < deadline - 90 and agent.poll() is None:
-            if (obs / "control" / "drain-tide.json").exists():
-                break
-            if not (queue / ".runq-cluster" / "allocation.json").exists():
+            try:
+                if (obs / "control" / "drain-tide.json").exists():
+                    break
+                registered = (queue / ".runq-cluster" / "allocation.json").exists()
+            except OSError as exc:
+                print("control mount unavailable", exc, file=sys.stderr, flush=True)
+                registered = False
+            if not registered:
                 time.sleep(1)
                 continue
-            pending = []
-            for request in (obs / "inputs/dispatch").glob("*.json"):
-                if request.name not in enrolled:
-                    try:
-                        d = read(request)
-                    except (OSError, ValueError):
-                        continue
-                    pending.append((d["priority"], request, d))
-            for _, request, d in sorted(pending, key=lambda x: (-x[0], x[1].name)):
+            pending = pending_dispatches(obs, enrolled)
+            for _, request, d, checksum in pending:
                 try:
-                    attempt = ident(d["attempt"])
-                    require(request.stem == attempt and d["job"] == os.environ["MAFLOW_RUN"], "misrouted task")
-                    opts = ["--worker", 0, "--key", attempt, "--cwd", ROOT, "--backend", d["backend"],
-                            "--threads", d["threads"], "--ram-mib", d["ram_mib"], "--priority", d["priority"]]
-                    if d.get("estimated_seconds"):
-                        opts.extend(["--estimated-seconds", d["estimated_seconds"]])
-                    if d["backend"] == "npu":
-                        opts.extend(["--hbm-mib", d["hbm_mib"]])
-                        if d["reserve_chip"]:
-                            opts += ["--reserve-chip"]
-                    call("submit", *opts, "--", sys.executable, "-B", "-u", str(ROOT / "tide_cloud_node.py"),
-                         "worker", str(request), sha(request))
-                except (FileNotFoundError, subprocess.TimeoutExpired):
-                    continue
-                except (ValueError, KeyError, subprocess.CalledProcessError) as exc:
-                    receipt = {"schema": "tide-cloud-result/v1", "task": d.get("task"), "attempt": request.stem,
-                               "fingerprint": d.get("fingerprint"), "descriptor_sha256": sha(request),
-                               "job": os.environ["MAFLOW_RUN"], "runq": release["runq_commit"], "status": "failed",
-                               "error": repr(exc), "artifacts": {}, "finished": time.time()}
-                    local = shared / "rejections" / request.name
-                    write(local, receipt)
-                    deliver(local, obs, "products/receipts/" + request.name)
-                enrolled.add(request.name)
+                    enroll(request, d, checksum, call, obs, shared, release)
+                    enrolled.add(request.name)
+                except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError) as exc:
+                    print("retrying dispatch", request.name, exc, file=sys.stderr, flush=True)
             if time.time() - last_heartbeat >= 15 or pending:
                 try:
                     state = call("status")
-                except (OSError, ValueError, subprocess.SubprocessError):
-                    time.sleep(3)
-                    continue
-                counts = {}
-                for task in state["tasks"]:
-                    counts[task["state"]] = counts.get(task["state"], 0) + 1
-                try:
+                    counts = {}
+                    for task in state["tasks"]:
+                        counts[task["state"]] = counts.get(task["state"], 0) + 1
                     observation(obs / "products/tide-status.json", {"at": time.time(), "counts": counts,
                                 "workers": state["workers"], "tasks": state["tasks"], "deadline": deadline,
                                 "job": os.environ["MAFLOW_RUN"], "runq": os.environ["MAFLOW_RUNQ_COMMIT"]})
                     last_heartbeat = time.time()
-                except OSError:
-                    pass
+                except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError) as exc:
+                    print("queue heartbeat unavailable", exc, file=sys.stderr, flush=True)
             time.sleep(3)
-        if agent.poll() is None:
-            call("finish")
+        while agent.poll() is None and time.time() < deadline:
+            try:
+                call("finish")
+                break
+            except (OSError, ValueError, subprocess.SubprocessError) as exc:
+                print("retrying graceful drain", exc, file=sys.stderr, flush=True)
+                time.sleep(1)
         code = agent.wait(timeout=max(15, deadline - time.time()))
         receipt = shared / "queue-receipt.json"
         write(receipt, {"job": os.environ["MAFLOW_RUN"], "at": time.time(), "exit": code,

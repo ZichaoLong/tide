@@ -59,6 +59,28 @@ def test_absence_requires_verified_terminal_without_a_start_and_the_exact_reques
         run()
 
 
+def test_reconciliation_accepts_only_the_exact_cached_sfs_descriptor_or_original_obs_path(frozen):
+    c, obs, area, queue, run = frozen
+    name = c["attempt"] + ".json"
+    old = obs / "inputs/dispatch" / name
+    cached = area.parents[1] / "envelopes" / name
+    cached.parent.mkdir()
+    cached.write_bytes(old.read_bytes())
+    old.unlink()
+    request = queue.parent.parent / "requests" / queue.name
+    cfg = relay.read(request)
+    argv = cfg["spec"]["options"]["argv"]
+    argv[-2] = str(cached)
+    store(request, cfg)
+    assert run()["status"] == "never_started"
+    other = cached.parent / "other.json"
+    other.write_bytes(cached.read_bytes())
+    argv[-2] = str(other)
+    store(request, cfg)
+    with pytest.raises(ValueError, match="queue request"):
+        run()
+
+
 def test_reconciliation_preserves_failure_and_uses_only_finished_native_outputs(frozen):
     claim, obs, area, q, run = frozen
     area.mkdir(parents=True)
