@@ -152,3 +152,23 @@ def test_temporary_capacity_or_an_unsettled_first_update_keeps_the_allocations()
     claim["needs_relay"] = False
     data["accepted"]["m"] = {"runq_status":"failed"}
     assert idle_review_reason(forecast, data, nodes, 2) == "canary_needs_review"
+
+
+def test_live_heartbeat_reads_metadata_and_body_in_one_get():
+    if not shutil.which("maflow") and not (Path.home() / ".local/bin/maflow").is_file():
+        pytest.skip("maflow account client")
+    from contextlib import contextmanager
+    from io import BytesIO
+    from tide_cloud_controller import snapshot
+    body = b'{"at":30}'
+
+    class UpdatingStatus:
+        @contextmanager
+        def response(self, method, key):
+            assert (method, key) == ("GET", "heartbeat")
+            yield BytesIO(body)
+
+        def metadata(self, response):
+            return {"size":len(body), "sha256":hashlib.sha256(body).hexdigest()}
+
+    assert snapshot(UpdatingStatus(), "heartbeat") == {"at":30}

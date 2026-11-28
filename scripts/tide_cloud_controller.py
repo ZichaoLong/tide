@@ -7,6 +7,8 @@ from concurrent.futures import ThreadPoolExecutor
 from collections import Counter
 from datetime import datetime
 import fcntl
+import hashlib
+import http.client
 import json
 import math
 from pathlib import Path
@@ -22,6 +24,7 @@ from tide_cloud_dispatch import (CANARIES, descriptor, known_objects, object_key
 from tide_cloud_results import archive_outputs, canary, ingest
 from tide_portable import read, require, sha, write
 from ma_jobs import status_ref, stop_ref
+from ma_obs import ObsError
 import ma_oms
 
 ACTIVE = {"claimed", "awaiting_submission", "dispatched"}
@@ -40,9 +43,19 @@ def stamp(value):
 
 def snapshot(region, key):
     try:
-        return json.loads(region.get_bytes(key))
-    except (FileNotFoundError, json.JSONDecodeError):
-        return None
+        # A runq heartbeat can be replaced every 15 seconds. Read one atomic OBS
+        # version; an initial HEAD followed by a conditional GET can race every update.
+        with region.response("GET", key) as response:
+            headers = region.metadata(response)
+            body = response.read()
+        require(len(body) == headers["size"], "incomplete operation snapshot")
+        if headers["sha256"]:
+            require(hashlib.sha256(body).hexdigest() == headers["sha256"], "operation snapshot digest differs")
+        return json.loads(body)
+    except ObsError as exc:
+        if exc.status == 404:
+            return None
+        raise
 
 
 def observe_allocations(area, spec, region):
@@ -63,7 +76,7 @@ def observe_allocations(area, spec, region):
             queue = snapshot(region, m["prefix"] + "/products/tide-status.json")
             if queue:
                 require(queue["job"] == name and queue["runq"] == spec["runq_commit"], "queue release differs")
-        except (ValueError, OSError, RuntimeError, KeyError) as exc:
+        except (ValueError, OSError, RuntimeError, KeyError, http.client.HTTPException) as exc:
             platform = read(previous) if previous.is_file() else {"phase":"Unknown", "id":receipt["id"], "name":name}
             error = str(exc)
             queue = None
