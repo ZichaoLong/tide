@@ -42,15 +42,21 @@ def canary(area, state, region, prefix, claim):
 def ingest(area, cache, region, east, prefix, claim, state):
     a, fp = claim["attempt"], claim["fingerprint"]
     out = area / "attempts" / a
-    receipt = out / "receipt.json"
+    canonical = "products/receipts/" + a + ".json"
+    selected = claim.get("receipt_key", canonical)
+    require(selected in {canonical, "products/reconciled/" + a + ".json"}, "invalid receipt recovery scope")
+    receipt = out / ("receipt.json" if selected == canonical else "receipt-reconciled.json")
+    expected = claim.get("receipt_sha256")
     if not receipt.exists():
-        region.download(prefix + "/products/receipts/" + a + ".json", receipt)
+        region.download(prefix + "/" + selected, receipt, sha256=expected)
+    if expected:
+        require(sha(receipt) == expected, "recovered receipt does not match the node's publication")
     rec = read(receipt)
     frozen = read(area / "payload/production.json")
     require(rec["fingerprint"] == fp and rec["attempt"] == a and rec["task"] == claim["task"] and
             rec["job"] == claim["job"] and rec["descriptor_sha256"] == claim["digest"]
             and rec["runq"] == frozen["runq_commit"], "mismatched cloud receipt")
-    east.put_file(PREFIX + "/attempts/" + a + "/receipt.json", receipt)
+    east.put_file(PREFIX + "/attempts/" + a + "/" + receipt.name, receipt)
     results = {}
     for name, artifact in rec["artifacts"].items():
         key = prefix + "/" + artifact["path"]
@@ -91,7 +97,8 @@ def ingest(area, cache, region, east, prefix, claim, state):
         require(verdict["fingerprint"] == fp and verdict["task"] == claim["task"] and verdict["status"] == status,
                 "transport does not match native project verdict")
     if status == "failed" and not {"result.json", "project-verdict.json"}.issubset(results):
-        claim.update(status="failed", reason=rec.get("error") or "worker exited without a native result")
+        claim.update(status="failed", needs_relay=True,
+                     reason=rec.get("error") or "worker exited without a native result")
         return
     native = read(results["result.json"])
     require(native["execution_runtime"]["adapter_sha256"] == frozen["files"]["runtime_migration3.py"],

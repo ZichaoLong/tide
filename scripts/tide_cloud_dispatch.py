@@ -5,6 +5,7 @@ from __future__ import annotations
 import base64
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
+from functools import lru_cache
 import hashlib
 import json
 from pathlib import Path
@@ -55,13 +56,62 @@ def priority(row):
 
 
 def known_objects(area, verified):
-    single = area.parent / "storage/receipts/guiyang-object"
-    return {**verified, **{p.stem: read(p) for p in single.glob("*.json")},
+    import ma_oms
+    storage = area.parent / "storage"
+    single = storage / "receipts/guiyang-object"
+    service = {}
+    delivery = storage / "oms-service-delivery.json"
+    if delivery.exists():
+        for group in read(delivery)["operations"]:
+            if (group["status"] != 5 or group["n"] != group["total_num"] or group["bytes"] != group["complete_size"]
+                    or group["failed_num"] or group["skipped_num"]):
+                continue
+            operation = read(ma_oms.receipt_path(group["id"]))
+            require(operation["source"] == "east" and operation["destination"] == "guiyang"
+                    and str(operation["task_id"]) == str(group["task"]), "unrecognized incoming OMS route")
+            for obj in operation["objects"]:
+                h = obj["sha256"]
+                source = read(storage / "receipts/east" / (h + ".json"))
+                require(obj["source_key"] == obj["destination_key"] == object_key(h)
+                        and source["sha256"] == h and source["size"] == obj["size"]
+                        and source["etag"] == obj["source_etag"], "OMS transfer does not bind the verified East object")
+                service[h] = {"size":obj["size"], "source_verified_sha256":h, "oms":group["task"]}
+    return {**service, **verified, **{p.stem: read(p) for p in single.glob("*.json")},
+            **{p.stem: read(p) for p in (area / "other-inputs").glob("*.json")},
             **{p.stem: read(p) for p in (area / "regional-objects").glob("*.json")}}
 
 
 def object_key(digest):
     return PREFIX + "/objects/sha256/" + digest
+
+
+@lru_cache(maxsize=4)
+def hot_paths(file):
+    return read(file)["paths"]
+
+
+def original_size(area, old, h):
+    path = Path(old)
+    if path.is_file():
+        return path.stat().st_size
+    regional = area / "regional-objects" / (h + ".json")
+    if regional.exists():
+        location = read(regional)
+        require(location["sha256"] == location["verified_sha256"] == h and location["path"] == old,
+                "relocated parent has no matching readback")
+        return location["size"]
+    storage = area.parent / "storage"
+    candidate = hot_paths(storage / "hot.json").get(old, {})
+    if candidate.get("sha256") == h and candidate["key"] == object_key(h):
+        proof = read(storage / "receipts/east" / (h + ".json"))
+        require(proof["sha256"] == h and candidate["size"] == proof["size"], "archived hot parent differs")
+        return proof["size"]
+    from pilotlab.checkpoint_archive3 import archive_proofs, archive_record, checkpoint_reads
+    refs = archive_proofs(storage)
+    with checkpoint_reads(refs, authoritative=True):
+        archived = archive_record(old, h)
+    require(archived and archived["key"] == object_key(h), "missing authoritative original parent: " + old)
+    return archived["size"]
 
 
 def descriptor(area, row, job, attempt, spec):
@@ -78,15 +128,7 @@ def descriptor(area, row, job, attempt, spec):
     references = {}
     if t.get("resume_checkpoint"):
         old, h = t["resume_checkpoint"], t["resume_checkpoint_sha256"]
-        regional = area / "regional-objects" / (h + ".json")
-        if Path(old).is_file():
-            size = Path(old).stat().st_size
-        else:
-            location = read(regional)
-            require(location["sha256"] == location["verified_sha256"] == h and location["path"] == old,
-                    "relocated parent has no matching readback")
-            size = location["size"]
-        reference_file(references, old, h, size)
+        reference_file(references, old, h, original_size(area, old, h))
     gate = t.get("gate_file") or t.get("stage_b_gate")
     auxiliary = {}
     if gate:
@@ -114,7 +156,8 @@ def descriptor(area, row, job, attempt, spec):
          "estimated_seconds": row.get("estimated_seconds"), "start_tokens": start,
          "closing_tokens": t.get("eval_tokens", 0) * (2 if t.get("allow_confirmation") else 1),
          "closing_seconds": t.get("closing_reserve_seconds", 0)}
-    d["reserve_chip"] = d["backend"] == "npu" and (d["hbm_mib"] >= 48 * 1024 or (d["estimated_seconds"] or 0) >= 4 * 3600)
+    d["reserve_chip"] = d["backend"] == "npu" and (
+        row.get("reserve_chip", False) or d["hbm_mib"] >= 48 * 1024 or (d["estimated_seconds"] or 0) >= 4 * 3600)
     require(row.get("source", d["source"]) == d["source"], "task source mismatch")
     base = area / "payload/bases" / d["source"] / "base.json"
     if not base.is_file():
@@ -152,6 +195,12 @@ def stage_objects(area, region, job_prefix, objects, job, verified):
             return
         dest = job_prefix + "/inputs/objects/" + h
         proof = verified.get(h, {})
+        if proof.get("source_verified_sha256") == h and not proof.get("etag"):
+            # OMS completed this exact East input. Pin its regional copy now.
+            # The worker hashes every body before admitting it to the training process.
+            obj = region.head(object_key(h))
+            require(obj and obj["size"] == size and obj.get("sha256") in (None, h), "unexpected incoming object")
+            proof = {**proof, "etag":obj["etag"], "version":obj.get("version")}
         previous = region.head(dest)
         if previous and previous["size"] == size and previous.get("sha256") == h:
             meta = previous
@@ -172,7 +221,7 @@ def stage_objects(area, region, job_prefix, objects, job, verified):
         list(pool.map(copy, objects.items()))
 
 
-def publish_claim(area, region, east, job_prefix, state, row, d, plan):
+def publish_claim(area, region, east, job_prefix, state, row, d, plan, *, transport=None):
     attempt, fp = d["attempt"], d["fingerprint"]
     location = area / "attempts" / attempt
     location.mkdir(parents=True, exist_ok=True)
@@ -182,11 +231,12 @@ def publish_claim(area, region, east, job_prefix, state, row, d, plan):
     evaluation_key = task.get("evaluation_budget_key")
     extra = plan["evaluation"]["additional_reservation"] if evaluation_key else 0
     prep_charge = 0
-    if task["phase"] == "preflight" and not row.get("prior_results") and task["id"] not in state["budget"]["preparation_prior"]:
+    if (task["phase"] == "preflight" and not row.get("prior_results") and not row.get("preparation_already_reserved")
+            and task["id"] not in state["budget"]["preparation_prior"]):
         prep_charge = int(task.get("budget_tokens", task["target_tokens"] + 2*task.get("eval_tokens", 16384) + 32))
     claim = state["attempts"].get(attempt)
     if claim is None:
-        require(not any(x["fingerprint"] == fp and x["status"] in {"claimed", "dispatched", "accepted"}
+        require(not any(x["fingerprint"] == fp and x["status"] in {"claimed", "awaiting_submission", "dispatched", "accepted"}
                         for x in state["attempts"].values()), "already claimed or accepted fingerprint")
         if evaluation_key and state["budget"]["evaluation"].get(evaluation_key, 0) + extra > task["evaluation_token_limit"]:
             raise ValueError("evaluation_token_limit:" + evaluation_key)
@@ -195,18 +245,33 @@ def publish_claim(area, region, east, job_prefix, state, row, d, plan):
         claim = {"task": row["id"], "fingerprint": fp, "job": d["job"], "attempt": attempt,
                  "backend": row["backend"], "row": row, "digest": h, "status": "claimed",
                  "reserved_evaluation_tokens": extra, "reserved_preparation_tokens": prep_charge}
+        if transport:
+            claim["transport"] = transport
         # An immutable East receipt also fences another restored client choosing a different node.
-        east.put_bytes(PREFIX + "/claims/" + attempt + ".json", wire(claim))
+        key = PREFIX + "/claims/" + attempt + ".json"
+        try:
+            east.put_bytes(key, wire(claim))
+        except FileExistsError:
+            winner = json.loads(east.get_bytes(key))
+            require(winner["task"] == row["id"] and winner["fingerprint"] == fp and winner["status"] == "claimed"
+                    and winner["attempt"] == attempt and winner["reserved_evaluation_tokens"] == extra
+                    and winner["reserved_preparation_tokens"] == prep_charge, "incompatible canonical attempt")
+            claim = winner
         if evaluation_key:
             state["budget"]["evaluation"][evaluation_key] = state["budget"]["evaluation"].get(evaluation_key, 0) + extra
         state["budget"]["preparation"] += prep_charge
         state["attempts"][attempt] = claim
         write(area / "state.json", state)
+    if claim["job"] != d["job"] or claim.get("transport") != transport:
+        return claim
     require(claim["digest"] == h and claim["job"] == d["job"], "attempt dispatch bytes changed")
     (location / "runtime-plan.json").write_bytes(wire(plan))
+    east.put_bytes(PREFIX + "/attempts/" + attempt + "/runtime-plan.json", wire(plan))
+    east.put_bytes(PREFIX + "/attempts/" + attempt + "/task.json", base64.b64decode(d["task_bytes"], validate=True))
     east.put_bytes(PREFIX + "/dispatch/" + attempt + ".json", payload)
-    region.put_bytes(job_prefix + "/inputs/dispatch/" + attempt + ".json", payload)
-    claim["status"] = "dispatched"
+    folder = "authority" if transport else "dispatch"
+    region.put_bytes(job_prefix + "/inputs/" + folder + "/" + attempt + ".json", payload)
+    claim["status"] = "awaiting_submission" if transport else "dispatched"
     claim["submitted"] = time.time()
     write(area / "state.json", state)
     return claim

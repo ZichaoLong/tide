@@ -10,17 +10,21 @@ import fcntl
 import json
 import math
 from pathlib import Path
+import subprocess
 import sys
 import time
 import traceback
 
-from tide_cloud_allocation import BOARDS, PREFIX, PROJECT, REPO, Store, target_context, wire
+from tide_cloud_allocation import BOARDS, MAFLOW, PREFIX, PROJECT, REPO, Store, target_context, wire
+from tide_cloud_evidence import preparation_budget, snapshot_campaign
 from tide_cloud_dispatch import (CANARIES, descriptor, known_objects, object_key, objects_needed, priority,
                                  publish_claim, stage_objects, starting_budget)
 from tide_cloud_results import archive_outputs, canary, ingest
 from tide_portable import read, require, sha, write
 from ma_jobs import status_ref, stop_ref
 import ma_oms
+
+ACTIVE = {"claimed", "awaiting_submission", "dispatched"}
 
 
 def stamp(value):
@@ -42,46 +46,82 @@ def snapshot(region, key):
 
 
 def observe_allocations(area, spec, region):
-    nodes, now = {}, time.time()
-    for name in spec["jobs"]:
+    def observe(name):
         directory = area / "allocations" / name
         manifest = directory / "runtime-allocation.json"
         if not manifest.exists():
-            continue
+            return name, None
         m, receipt = read(manifest), read(directory / "submitted.json")
-        with target_context("guiyang"):
-            platform = status_ref(receipt["id"])
-        require(platform["name"] == name and platform["nodes"] == 1 and platform["flavor"] == "modelarts.pool.visual.16xlarge",
-                "an allocation no longer matches its request")
-        status = snapshot(region, m["prefix"] + "/products/tide-status.json")
-        if status:
-            require(status["job"] == name and status["runq"] == spec["runq_commit"], "unexpected active queue")
+        previous = directory / "last-platform.json"
+        error = None
+        try:
+            with target_context("guiyang"):
+                platform = status_ref(receipt["id"])
+            require(platform["name"] == name and platform["nodes"] == 1
+                    and platform["flavor"] == "modelarts.pool.visual.16xlarge", "allocation identity differs")
+            write(previous, platform)
+            queue = snapshot(region, m["prefix"] + "/products/tide-status.json")
+            if queue:
+                require(queue["job"] == name and queue["runq"] == spec["runq_commit"], "queue release differs")
+        except (ValueError, OSError, RuntimeError, KeyError) as exc:
+            platform = read(previous) if previous.is_file() else {"phase":"Unknown", "id":receipt["id"], "name":name}
+            error = str(exc)
+            queue = None
+        now = time.time()
         phase = platform["phase"].lower()
         started = stamp(platform.get("started"))
         terminal = phase in {"completed", "failed", "terminated", "stopped", "killed", "deleted", "succeeded", "rejected", "lost"}
-        # ModelArts duration is in milliseconds and can lag while the job is running.
         elapsed = max(0., (platform.get("duration") or 0) / 1000) if started else 0.
         if started and not terminal:
             elapsed = max(elapsed, now - started)
-        nodes[name] = {"name": name, "id": receipt["id"], "prefix": m["prefix"], "platform": platform,
-                       "platform_project": m["project"], "queue": status, "elapsed_seconds": elapsed,
-                       "terminal": terminal, "ready": bool(status and status["workers"] and now-status["at"]<150
-                                                          and phase == "running" and not terminal)}
-    return nodes
+        return name, {"name": name, "id": receipt["id"], "prefix": m["prefix"], "platform": platform,
+                      "platform_project": m["project"], "queue": queue, "elapsed_seconds": elapsed,
+                      "observation_error":error, "terminal": terminal,
+                      "ready":bool(phase == "running" and queue and -5 <= now - queue["at"] < 150
+                                   and any(w.get("state") == "serving" and -5 <= now-w.get("at",0) < 150
+                                           for w in queue["workers"]))}
+    with ThreadPoolExecutor(max_workers=len(spec["jobs"])) as pool:
+        return {name:row for name,row in pool.map(observe, spec["jobs"]) if row is not None}
 
 
 def stage_resource_report(area, spec, nodes):
     spent = sum(n["elapsed_seconds"] * BOARDS for n in nodes.values())
     active = sum(n["ready"] for n in nodes.values())
+    allocated = sum(bool(n["platform"].get("started")) and not n["terminal"] for n in nodes.values())
     data = {"schema": "tide-cloud-physical-budget/v1", "observed_unix": time.time(),
             "remaining_device_seconds": max(0, spec["remaining_device_seconds"] - spent),
             "cloud_device_seconds": spent, "physical_boards_per_node": BOARDS,
-            "deadline_unix": spec["deadline_unix"], "active_nodes": active, "allocated_physical_boards": active*BOARDS,
+            "deadline_unix": spec["deadline_unix"], "active_nodes": active, "allocated_physical_boards": allocated*BOARDS,
             "local_budget": str(REPO / ".local/pilot-r3/budget.json"),
             "node_capacity": {k:{"job": v["id"], "phase": v["platform"]["phase"], "workers": (v["queue"] or {}).get("workers", [])}
                               for k,v in nodes.items()}}
     write(area / "campaign/resources.json", data)
     return data
+
+
+def idle_review_reason(dag, state, nodes, expected_nodes):
+    """Release an idle allocation only for a settled gate, with all authorized capacity accounted for."""
+    if any(c.get("needs_relay") or c["status"] == "unconfirmed" for c in state["attempts"].values()):
+        return None
+    if len(state["canaries"]) < len(CANARIES):
+        for c in state["attempts"].values():
+            if (c["row"].get("legacy_id") in CANARIES and c["status"] == "failed"
+                    and c["fingerprint"] in state["accepted"]):
+                return "canary_needs_review"
+        return None
+    if state["blocked"]:
+        return "awaiting_scientific_review"
+    if len(nodes) != expected_nodes or any(n.get("observation_error") or not (n["ready"] or n["terminal"])
+                                          for n in nodes.values()):
+        return None
+    blockers = dag["blocked"]
+    if not blockers or dag["phase"] == "stage-a-or-b-evidence":
+        return None
+    transient = ("awaiting measured idle chip", "cloud allocation", "fresh runq chip maps",
+                 "no observed execution capacity")
+    if any(str(reason).startswith(transient) for reason in blockers):
+        return None
+    return "awaiting_scientific_review"
 
 
 def normalized(item):
@@ -102,14 +142,21 @@ def normalized(item):
 def restore_input(area, source, h, size, east, region):
     key = object_key(h)
     if not region.head(key):
-        source = Path(source)
-        require(source.stat().st_size == size and sha(source) == h, "late stage input does not match its native evidence")
-        east.put_file(key, source, sha256=h)
+        head = east.head(key)
+        if head:
+            require(head["size"] == size and head.get("sha256") in (None, h), "East parent metadata differs")
+            if not head.get("sha256"):
+                east.stream(key, expected=h, etag=head["etag"])
+        else:
+            source = Path(source)
+            require(source.stat().st_size == size and sha(source) == h, "late stage input does not match its native evidence")
+            east.put_file(key, source, sha256=h)
         task = ma_oms.submit("east", "guiyang", [key], operation_id="tide-r3-in-" + h[:44], project=PROJECT, hashes={key:h})
         ma_oms.wait(task, timeout=3600)
     head = region.stream(key, expected=h)
     require(head["size"] == size, "late stage input size mismatch")
-    write(area / "other-inputs" / (h + ".json"), {"key":key, "sha256":h, "size":size})
+    write(area / "other-inputs" / (h + ".json"), {"key":key, "sha256":h, "size":size,
+                                                   "etag":head["etag"], "version":head.get("version")})
 
 
 class Controller:
@@ -125,13 +172,23 @@ class Controller:
             self.state = remote or {"schema": "tide-cloud-authority/v1", "project": PROJECT, "attempts": {},
                                     "accepted": {}, "canaries": {}, "retries": {}, "blocked": {}, "budget": starting_budget()}
             write(state, self.state)
+        binding = sha(area / "payload/production.json")
+        require(self.state["project"] == PROJECT and self.state.setdefault("production_sha256", binding) == binding,
+                "restored authority state belongs to a different campaign")
         self.initial = read(area / "initial-tasks.json")
         self.hot = read(area.parent / "storage/hot.json")["objects"]
         self.background = ThreadPoolExecutor(max_workers=5)
         self.input_futures, self.archive_future = {}, None
         self.prestage_futures = {}
+        self.stage_pool = ThreadPoolExecutor(max_workers=4)
+        self.stage_futures = {}
         self.collect_pool = ThreadPoolExecutor(max_workers=6)
         self.collections = {}
+        self.relay_work = {}
+        self.science_future = None
+        self.transport_cache = {}
+        self.submission_pool = ThreadPoolExecutor(max_workers=4)
+        self.submissions = {}
         self.dag = {"phase": "stage-a-subjects", "finished":False, "blocked": [], "tasks": [], "selected_subjects":262}
         self.dag_version = None
         self.state.setdefault("drained", {})
@@ -146,6 +203,8 @@ class Controller:
                 updated, evidence = future.result()
             except Exception as exc:
                 self.log_error("collect:" + attempt, exc)
+                if isinstance(exc, (KeyError, FileNotFoundError, ValueError)):
+                    state["attempts"][attempt]["needs_relay"] = True
                 continue
             state["attempts"][attempt] = updated
             state["accepted"].update(evidence["accepted"])
@@ -153,38 +212,105 @@ class Controller:
             state.get("errors", {}).pop("collect:" + attempt, None)
             write(area / "state.json", state)
 
-        def collect(prefix, claim):
-            updated = dict(claim)
-            evidence = {"accepted": {}, "retries": {}}
-            ingest(area, self.cache, self.region, self.east, prefix, updated, evidence)
-            return updated, evidence
-
+        for attempt, future in list(self.relay_work.items()):
+            if future.done():
+                claim = state["attempts"][attempt]
+                self.reconcile(attempt, {"name":claim["job"]}, claim)
         for name, n in nodes.items():
-            if not any(c["job"] == name and c["status"] in {"dispatched", "claimed"} for c in state["attempts"].values()):
+            try:
+                self.node_receipts(n)
+                state.get("errors", {}).pop("receipts:" + name, None)
+            except (OSError, ValueError, KeyError, RuntimeError) as exc:
+                self.log_error("receipts:" + name, exc)
+
+    def collect(self, prefix, claim):
+        updated = dict(claim)
+        evidence = {"accepted": {}, "retries": {}}
+        ingest(self.area, self.cache, self.region, self.east, prefix, updated, evidence)
+        return updated, evidence
+
+    def node_receipts(self, node):
+        prefix = node["prefix"]
+        claims = {a:c for a,c in self.state["attempts"].items() if c["job"] == node["name"]}
+        for attempt, claim in claims.items():
+            old = claim["row"].get("legacy_id")
+            if old not in CANARIES or claim["status"] in {"claimed", "awaiting_submission"}:
                 continue
-            prefix = n["prefix"]
-            for claim in list(state["attempts"].values()):
-                if claim["job"] == name and claim["row"].get("legacy_id") in CANARIES and claim["status"] != "claimed":
-                    canary(area, state, self.region, prefix, claim)
-                    proof = state["canaries"].get(str(claim["row"]["legacy_id"]))
-                    if proof and not proof.get("uri"):
-                        key = PREFIX + "/first-updates/" + claim["attempt"] + ".json"
-                        self.east.put_file(key, area / "attempts" / claim["attempt"] / "first-update.json", sha256=proof["sha256"])
-                        proof["uri"] = self.east.uri(key)
-            published = set()
-            for obj in self.region.list(prefix + "/products/receipts/"):
-                a = Path(obj["key"]).stem
-                published.add(a)
-                c = state["attempts"].get(a)
-                if not c or c["status"] not in {"claimed", "dispatched"} or not obj["size"]:
-                    continue
-                if a not in self.collections and len(self.collections) < 12:
-                    self.collections[a] = self.collect_pool.submit(collect, prefix, c)
-            # No task wrapper can publish a receipt after the node has terminated.
-            if n["terminal"]:
-                for a,c in state["attempts"].items():
-                    if c["job"] == name and a not in published and c["status"] in {"claimed", "dispatched"}:
-                        c.update(status="unconfirmed", reason="platform terminal without verified native receipt")
+            proof = self.state["canaries"].get(str(old))
+            if proof and (proof.get("uri") or proof["attempt"] != attempt):
+                continue
+            try:
+                canary(self.area, self.state, self.region, prefix, claim)
+                proof = self.state["canaries"].get(str(old))
+                if proof:
+                    key = PREFIX + "/first-updates/" + attempt + ".json"
+                    self.east.put_file(key, self.area / "attempts" / attempt / "first-update.json", sha256=proof["sha256"])
+                    proof["uri"] = self.east.uri(key)
+                self.state.get("errors", {}).pop("canary:" + attempt, None)
+            except (OSError, ValueError, RuntimeError, KeyError) as exc:
+                self.log_error("canary:" + attempt, exc)
+        if not any(c["status"] in ACTIVE | {"unconfirmed"} or c.get("needs_relay") for c in claims.values()):
+            return
+        published = {Path(o["key"]).stem for o in self.region.list(prefix + "/products/receipts/") if o["size"]}
+        recovered = {Path(o["key"]).stem for o in self.region.list(prefix + "/products/reconciled/") if o["size"]}
+        by_key = {t["key"]:t for t in (node["queue"] or {}).get("tasks", [])}
+        for attempt,c in claims.items():
+            recovery = "products/reconciled/" + attempt + ".json"
+            if attempt in recovered and c.get("receipt_key") != recovery and c["status"] not in {"accepted","interrupted","not_started"}:
+                c.update(receipt_key=recovery, status="dispatched", needs_relay=False)
+            if attempt in self.collections:
+                continue
+            if attempt in published | recovered and not c.get("needs_relay"):
+                if c["status"] in ACTIVE | {"unconfirmed"} and len(self.collections) < 12:
+                    self.collections[attempt] = self.collect_pool.submit(self.collect, prefix, dict(c))
+                continue
+            q = by_key.get(attempt)
+            if node["ready"] and q and q["state"] in {"completed", "failed", "blocked", "cancelled", "unconfirmed"}:
+                self.reconcile(attempt, node, c, q)
+            elif node["terminal"] and c["status"] in ACTIVE:
+                c.update(status="unconfirmed", reason="platform terminal without verified native receipt")
+
+    def reconcile(self, attempt, node, claim, queue_task=None):
+        if claim["status"] in {"accepted", "interrupted", "not_started"}:
+            self.relay_work.pop(attempt, None)
+            return
+        now = time.time()
+        evidence = claim.setdefault("reconciliation", {"first_terminal":now, "tries":0})
+        future = self.relay_work.get(attempt)
+        if future is None:
+            if (queue_task is None or now-evidence["first_terminal"] < 90 or now < evidence.get("check_after", 0)
+                    or len(self.relay_work) >= 2):
+                return
+            from tide_cloud_relay import recover
+            self.relay_work[attempt] = self.background.submit(recover, node, dict(claim), queue_task)
+            return
+        if not future.done():
+            return
+        del self.relay_work[attempt]
+        try:
+            result = future.result()
+        except Exception as exc:
+            result = {"status":"unavailable", "reason":str(exc)}
+        evidence.update(tries=evidence["tries"] + 1, last=result, at=now)
+        evidence["check_after"] = now + min(600, 30 * evidence["tries"])
+        status = result["status"]
+        if status == "published":
+            claim.update(status="dispatched", needs_relay=False, receipt_key=result["receipt_key"],
+                         receipt_sha256=result.get("sha256"))
+        elif status == "never_started":
+            row = claim["row"]
+            prior = list(row.get("unstarted_on", []))
+            if node["name"] in prior:
+                claim.update(status="unconfirmed", needs_relay=False, reason="repeated pre-start failure on the same allocation")
+                self.state["blocked"][row["fingerprint"]] = claim["reason"]
+                return
+            claim.update(status="not_started", needs_relay=False)
+            self.state["retries"][row["fingerprint"]] = {
+                **row, "reserved_evaluation_tokens":row.get("reserved_evaluation_tokens", 0) + claim["reserved_evaluation_tokens"],
+                "preparation_already_reserved":True, "unstarted_on":[*prior, node["name"]]}
+        elif status == "incomplete" or (status == "unavailable" and evidence["tries"] >= 3):
+            claim.update(status="unconfirmed", reason="native attempt requires evidence reconciliation")
+            self.log_error("relay:" + attempt, RuntimeError(str(result)))
 
     def log_error(self, key, exc):
         message = f"{type(exc).__name__}: {exc}"
@@ -192,7 +318,7 @@ class Controller:
             print(key, message, flush=True)
         self.state["errors"][key] = message
 
-    def candidates(self):
+    def candidates(self, nodes):
         rows = {r["fingerprint"]:r for r in self.initial}
         try:
             from pilotlab.cloud_campaign3 import advance
@@ -200,17 +326,18 @@ class Controller:
             if exc.name != "pilotlab.cloud_campaign3":
                 raise
             advance = None
-        version = (len(self.state["accepted"]), int(time.time()//300))
+        version = (len(self.state["accepted"]), tuple((k,n["ready"],n["terminal"]) for k,n in nodes.items()),
+                   int(time.time()//300))
         if advance and self.dag_version != version:
             self.dag = advance(self.area / "campaign", self.area / "initial-tasks.json", self.state["accepted"])
             self.dag_version = version
         for t in self.dag["tasks"]:
             row = normalized(t)
             rows.setdefault(row["fingerprint"], row)
+        rows.update(self.state["retries"])
         if len(self.state["canaries"]) < len(CANARIES):
             rows = {k:r for k,r in rows.items() if r.get("legacy_id") in CANARIES}
-        rows.update(self.state["retries"])
-        skip = {c["fingerprint"] for c in self.state["attempts"].values() if c["status"] != "interrupted"}
+        skip = {c["fingerprint"] for c in self.state["attempts"].values() if c["status"] not in {"interrupted","not_started"}}
         skip.update(self.state["blocked"])
         return sorted([r for k,r in rows.items() if k not in skip], key=lambda r: (-priority(r),r["id"]))
 
@@ -234,7 +361,70 @@ class Controller:
             return False
         return True
 
+    def transport(self, node):
+        cached = self.transport_cache.get(node["id"])
+        if cached and time.monotonic() < cached[1]:
+            return cached[0]
+        # Only a positive machine-authenticated probe selects the private SFS route.
+        # A node reachable solely through its job mount can accept native OBS descriptors.
+        from tide_cloud_submit import ssh_ready
+        mode = "ssh" if ssh_ready(node) else "obs"
+        self.transport_cache[node["id"]] = mode, time.monotonic() + 300
+        return mode
+
+    def deliver(self, nodes):
+        from tide_cloud_submit import submit_batch, submit_native
+        for slot,future in list(self.submissions.items()):
+            if not future.done():
+                continue
+            del self.submissions[slot]
+            try:
+                reply = future.result()
+            except Exception as exc:
+                self.log_error("ingress:" + slot[0], exc)
+                continue
+            for attempt, result in reply.items():
+                c = self.state["attempts"][attempt]
+                if c["status"] != "awaiting_submission":
+                    continue
+                c["last_ingress"] = result
+                if result["status"] == "submitted":
+                    c.update(status="dispatched", submitted=time.time())
+                elif result["status"] == "rejected":
+                    c.update(status="failed", reason=result["reason"])
+                else:
+                    c["retry_ingress_after"] = time.time() + 20
+                    self.transport_cache.pop(nodes[slot[0]]["id"], None)
+            write(self.area / "state.json", self.state)
+        for name,node in nodes.items():
+            if not node["ready"]:
+                continue
+            visible = {task["key"] for task in node["queue"]["tasks"]}
+            per_mode = {"ssh":[], "obs":[]}
+            for attempt,c in self.state["attempts"].items():
+                if c["job"] != name or c["status"] != "awaiting_submission":
+                    continue
+                if attempt in visible:
+                    c.update(status="dispatched", submitted=time.time())
+                elif time.time() >= c.get("retry_ingress_after", 0):
+                    per_mode[c["transport"]].append(dict(c))
+            for mode,items in per_mode.items():
+                if items and (name,mode) not in self.submissions:
+                    batch = sorted(items, key=lambda c:-priority(c["row"]))[:24]
+                    func, args = (submit_batch, ()) if mode == "ssh" else (submit_native, (self.region,))
+                    self.submissions[name,mode] = self.submission_pool.submit(func, node, batch, *args)
+
     def send(self, row, node, available, existing=None):
+        error = "dispatch:" + node["name"] + ":" + row["fingerprint"]
+        try:
+            result = self.send_ready(row, node, available, existing)
+        except (KeyError, ValueError, OSError, RuntimeError) as exc:
+            self.log_error(error, exc)
+            return False
+        self.state.get("errors", {}).pop(error, None)
+        return result
+
+    def send_ready(self, row, node, available, existing):
         fp, name = row["fingerprint"], node["name"]
         count = sum(c["fingerprint"] == fp for c in self.state["attempts"].values())
         attempt = existing or f"r3-{fp}-{count+1}"
@@ -242,18 +432,36 @@ class Controller:
         objs = objects_needed(self.area, d)
         if not self.inputs(objs, available):
             return False
-        stage_objects(self.area, self.region, node["prefix"], objs, name, available)
+        if not all((self.area / "staged" / name / h).is_file() for h in objs):
+            key = name, fp
+            if key not in self.stage_futures and len(self.stage_futures) < 8:
+                self.stage_futures[key] = self.stage_pool.submit(
+                    stage_objects, self.area, self.region, node["prefix"], objs, name, available)
+            return False
+        mode = self.state["attempts"][attempt].get("transport") if existing else self.transport(node)
         try:
-            publish_claim(self.area, self.region, self.east, node["prefix"], self.state, row, d, plan)
+            result = publish_claim(self.area, self.region, self.east, node["prefix"], self.state, row, d, plan,
+                                   transport=mode)
         except ValueError as exc:
             if str(exc).startswith(("evaluation_token_limit", "preparation_token_limit")):
                 self.state["blocked"][fp] = str(exc)
                 return False
             raise
+        if result["status"] == "claimed":
+            return False
         self.state["retries"].pop(fp, None)
         return True
 
     def dispatch(self, nodes, rows):
+        for (name,fp), future in list(self.stage_futures.items()):
+            if future.done():
+                del self.stage_futures[name,fp]
+                try:
+                    future.result()
+                except Exception as exc:
+                    self.log_error("staging:" + name + ":" + fp, exc)
+                else:
+                    self.state.get("errors", {}).pop("staging:" + name + ":" + fp, None)
         available = known_objects(self.area, (read(self.area.parent / "storage/hot-guiyang.json")
                                               if (self.area.parent / "storage/hot-guiyang.json").exists() else {"objects":{}})["objects"])
         if len(self.state["canaries"]) < len(CANARIES):
@@ -277,21 +485,25 @@ class Controller:
         ready = {k:v for k,v in nodes.items() if v["ready"] and k not in self.state["drained"]}
         if not ready:
             return
+        next_observation = time.monotonic() + 40
         for a,c in list(self.state["attempts"].items()):
             if c["status"] == "claimed" and c["job"] in ready:
                 self.send(c["row"], ready[c["job"]], available, a)
         counts, loads = Counter(), Counter()
         for c in self.state["attempts"].values():
-            if c["status"] in {"claimed","dispatched"}:
+            if c["status"] in ACTIVE:
                 slot = c["job"], c["backend"]
                 counts[slot] += 1
                 loads[slot] += self.cost(c["row"])
         for row in rows:
+            if time.monotonic() >= next_observation:
+                break
             backend = row["backend"]
             usable = [k for k,n in ready.items() if counts[k,backend] < max(
                 2, 2 * n["queue"]["workers"][0]["capacity"]["threads"] // row["threads"])]
             if not usable:
                 continue
+            usable = [k for k in usable if k not in row.get("unstarted_on", ())] or usable
             if len(self.state["canaries"]) < len(CANARIES):
                 started = [c["job"] for c in self.state["attempts"].values() if c["row"].get("legacy_id") in CANARIES]
                 chosen = started[0] if started and started[0] in usable else min(usable, key=lambda k:nodes[k]["platform"].get("started") or 0)
@@ -300,6 +512,7 @@ class Controller:
             if self.send(row, ready[chosen], available):
                 counts[chosen,backend] += 1
                 loads[chosen,backend] += self.cost(row)
+                self.deliver(nodes)
 
     @staticmethod
     def cost(row):
@@ -310,6 +523,7 @@ class Controller:
         nodes = observe_allocations(self.area, self.spec, self.region)
         resources = stage_resource_report(self.area, self.spec, nodes)
         self.receipts(nodes)
+        self.deliver(nodes)
         if self.archive_future is None or self.archive_future.done():
             if self.archive_future is not None:
                 try:
@@ -317,24 +531,52 @@ class Controller:
                 except Exception as exc:
                     self.log_error("archive-outputs", exc)
             self.archive_future = self.background.submit(archive_outputs, self.area, self.east)
-        rows = self.candidates()
+        rows = self.candidates(nodes)
+        if self.science_future is None or self.science_future.done():
+            if self.science_future is not None:
+                try:
+                    self.science_future.result()
+                except Exception as exc:
+                    self.log_error("publish-science", exc)
+            self.science_future = self.background.submit(snapshot_campaign, self.area, self.east)
+        prep = preparation_budget(self.state, nodes, time.time())
+        if prep["remaining_seconds"] <= 0:
+            for row in rows:
+                if row["phase"] == "preflight" and row["backend"] == "npu":
+                    self.state["blocked"][row["fingerprint"]] = "preparation_device_hour_limit"
+            rows = [r for r in rows if r["fingerprint"] not in self.state["blocked"]]
+            # The platform continues to serve unrelated workers. Address exactly the
+            # preparation cluster key that owns the exhausted experiment budget.
+            for registration in prep["registrations"]:
+                key = registration["key"]
+                if self.state.setdefault("preparation_stops", {}).get(key):
+                    continue
+                code = ("import json,os,subprocess,sys; "
+                        "p=json.load(open(os.environ['MAFLOW_RUNQ_QUEUE_FILE'])); "
+                        "subprocess.run([os.environ['MAFLOW_RUNQ'],'cluster','cancel','--shared',p['shared'],"
+                        "sys.argv[1]],check=True)")
+                ref = "guiyang/" + nodes[registration["job"]]["id"]
+                result = subprocess.run([sys.executable, "-B", str(MAFLOW), "job", "exec", ref, "--",
+                                         "python3", "-c", code, key], capture_output=True, timeout=90)
+                if result.returncode == 0:
+                    self.state["preparation_stops"][key] = time.time()
         deadline = resources["deadline_unix"] - time.time()
         exhausted = deadline <= 360 or resources["remaining_device_seconds"] <= 0
         if not exhausted and not self.dag["finished"]:
             self.dispatch(nodes, rows)
         counts = Counter(c["status"] for c in self.state["attempts"].values())
-        terminal = not any(counts[k] for k in ("claimed", "dispatched"))
+        terminal = not any(counts[k] for k in ACTIVE)
         reason = "completed" if self.dag["finished"] else "budget" if exhausted else None
-        if terminal and not rows and (self.dag["blocked"] or self.state["blocked"]):
-            reason = "awaiting_scientific_review"
-        if terminal and len(self.state["canaries"]) < len(CANARIES) and any(
-                c["status"] in {"failed","unconfirmed"} and c["row"].get("legacy_id") in CANARIES for c in self.state["attempts"].values()):
-            reason = "canary_needs_review"
+        if not reason and terminal and not rows and not self.relay_work and not self.collections:
+            reason = idle_review_reason(self.dag, self.state, nodes, len(self.spec["jobs"]))
         for k,n in nodes.items():
             if n["terminal"] or k in self.state["drained"]:
                 continue
-            tail = self.dag["phase"] == "stage-b-confirmation" and not rows and not any(
-                c["job"] == k and c["status"] in {"claimed", "dispatched"} for c in self.state["attempts"].values())
+            tail = (self.dag["phase"] == "stage-b-confirmation" and n["ready"] and not rows
+                    and not self.dag["blocked"] and not self.relay_work and not self.collections
+                    and counts["dispatched"] > 0 and not any(
+                        c["job"] == k and (c["status"] in ACTIVE | {"unconfirmed"} or c.get("needs_relay"))
+                        for c in self.state["attempts"].values()))
             if reason or tail:
                 self.region.put_bytes(n["prefix"]+"/control/drain-tide.json", wire({"reason":reason or "confirmation_tail"}))
                 if n["platform"]["phase"].lower() in {"pending", "waiting", "queuing"}:
@@ -344,13 +586,15 @@ class Controller:
         snapshot = {"observed_unix":time.time(), "phase":self.dag["phase"], "finished": self.dag["finished"],
                     "selected_subjects":self.dag.get("selected_subjects"), "selected_controls":self.dag.get("selected_controls"),
                     "nodes": nodes, "physical_budget": resources, "counts":dict(counts), "canaries":self.state["canaries"],
-                    "pending_candidates":len(rows), "gate_blockers": self.dag["blocked"], "budget_blockers":self.state["blocked"],
-                    "errors":self.state.get("errors",{}), "drained":self.state["drained"]}
+                    "pending_candidates":len(rows), "initial_known_tasks":len(self.initial),
+                    "native_ready_tasks":len(self.dag["tasks"]), "original_signals":sum(bool(r["resume"]) for r in self.initial), "gate_blockers": self.dag["blocked"], "budget_blockers":self.state["blocked"],
+                    "preparation_budget":prep, "errors":self.state.get("errors",{}), "drained":self.state["drained"]}
         write(self.area / "state.json", self.state)
         write(self.area / "status.json", snapshot)
         for name in ("state", "status"):
             self.east.put_file(PREFIX + "/control/" + name + ".json", self.area / (name + ".json"), overwrite=True)
-        return bool(nodes and all(n["terminal"] for n in nodes.values()) and terminal and not self.collections and
+        return bool(len(nodes) == len(self.spec["jobs"]) and all(n["terminal"] for n in nodes.values()) and
+                    terminal and not self.collections and not self.relay_work and
                     all((self.area / "east-objects" / p.name).exists() for p in (self.area / "regional-objects").glob("*.json")))
 
 
