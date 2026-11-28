@@ -55,7 +55,9 @@ def priority(row):
 
 
 def known_objects(area, verified):
-    return {**verified, **{p.stem: read(p) for p in (area / "regional-objects").glob("*.json")}}
+    single = area.parent / "storage/receipts/guiyang-object"
+    return {**verified, **{p.stem: read(p) for p in single.glob("*.json")},
+            **{p.stem: read(p) for p in (area / "regional-objects").glob("*.json")}}
 
 
 def object_key(digest):
@@ -76,7 +78,15 @@ def descriptor(area, row, job, attempt, spec):
     references = {}
     if t.get("resume_checkpoint"):
         old, h = t["resume_checkpoint"], t["resume_checkpoint_sha256"]
-        reference_file(references, old, h, Path(old).stat().st_size)
+        regional = area / "regional-objects" / (h + ".json")
+        if Path(old).is_file():
+            size = Path(old).stat().st_size
+        else:
+            location = read(regional)
+            require(location["sha256"] == location["verified_sha256"] == h and location["path"] == old,
+                    "relocated parent has no matching readback")
+            size = location["size"]
+        reference_file(references, old, h, size)
     gate = t.get("gate_file") or t.get("stage_b_gate")
     auxiliary = {}
     if gate:
@@ -141,9 +151,22 @@ def stage_objects(area, region, job_prefix, objects, job, verified):
         if (cache / h).is_file():
             return
         dest = job_prefix + "/inputs/objects/" + h
-        old_etag = verified.get(h, {}).get("etag", "") or ""
-        md5 = old_etag if len(old_etag) == 32 and all(c in "0123456789abcdef" for c in old_etag) else None
-        meta = region.copy_verified(object_key(h), dest, h, size, content_md5=md5)
+        proof = verified.get(h, {})
+        previous = region.head(dest)
+        if previous and previous["size"] == size and previous.get("sha256") == h:
+            meta = previous
+        elif proof.get("etag") and proof["size"] == size:
+            # Both single-part and multipart ETags pin the source version
+            # whose complete bytes the incoming SHA-256 receipt already verified.
+            service = {"store":region.side, "etag":proof["etag"], "version":proof.get("version"),
+                       "operation":"tide-verified-sha256-" + h}
+            try:
+                meta = region.copy_verified(object_key(h), dest, None, size, service=service)
+            except FileExistsError:
+                meta = region.stream(dest, expected=h)
+                require(meta["size"] == size, "conflicting staged object size")
+        else:
+            meta = region.copy_verified(object_key(h), dest, h, size)
         write(cache / h, {"sha256": h, "size": size, "key": dest, "etag": meta["etag"]})
     with ThreadPoolExecutor(max_workers=12) as pool:
         list(pool.map(copy, objects.items()))

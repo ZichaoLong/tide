@@ -46,8 +46,10 @@ def ingest(area, cache, region, east, prefix, claim, state):
     if not receipt.exists():
         region.download(prefix + "/products/receipts/" + a + ".json", receipt)
     rec = read(receipt)
+    frozen = read(area / "payload/production.json")
     require(rec["fingerprint"] == fp and rec["attempt"] == a and rec["task"] == claim["task"] and
-            rec["job"] == claim["job"] and rec["descriptor_sha256"] == claim["digest"], "mismatched cloud receipt")
+            rec["job"] == claim["job"] and rec["descriptor_sha256"] == claim["digest"]
+            and rec["runq"] == frozen["runq_commit"], "mismatched cloud receipt")
     east.put_file(PREFIX + "/attempts/" + a + "/receipt.json", receipt)
     results = {}
     for name, artifact in rec["artifacts"].items():
@@ -60,10 +62,20 @@ def ingest(area, cache, region, east, prefix, claim, state):
             target = object_key(h)
             region.copy_verified(key, target, h, size, content_md5=artifact["content_md5"])
             path = cache / h
-            if not path.exists():
-                region.download(target, path, sha256=h)
-            require(path.stat().st_size == size and sha(path) == h, "local review checkpoint changed")
-            record = {"key": target, "sha256": h, "size": size, "path": str(path), "origin": a}
+            location = out / (name + ".location.json")
+            if not location.exists():
+                observed = region.stream(target, expected=h)
+                require(observed["size"] == size, "regional checkpoint body length differs")
+                record = {"schema":"tide-cloud-checkpoint/v1", "key": target, "sha256": h, "size": size,
+                          "path": str(path), "uri": region.uri(target), "etag":observed["etag"], "version":observed.get("version"),
+                          "verified_sha256":h, "verified_unix": time.time(),
+                          "producer":{"job":claim["job"], "attempt":a, "fingerprint":fp,
+                                      "receipt_sha256":sha(receipt)}}
+                write(location, record)
+            record = read(location)
+            require(record["sha256"] == h and record["producer"]["receipt_sha256"] == sha(receipt),
+                    "checkpoint readback belongs to different evidence")
+            east.put_file(PREFIX + "/attempts/" + a + "/" + location.name, location)
             write(area / "regional-objects" / (h + ".json"), record)
         else:
             path = out / name
@@ -82,6 +94,8 @@ def ingest(area, cache, region, east, prefix, claim, state):
         claim.update(status="failed", reason=rec.get("error") or "worker exited without a native result")
         return
     native = read(results["result.json"])
+    require(native["execution_runtime"]["adapter_sha256"] == frozen["files"]["runtime_migration3.py"],
+            "result was produced by a different runtime adapter")
     path = out / "runtime-plan.json"
     task = read(claim["row"]["path"])
     plan = read(path)
@@ -92,6 +106,9 @@ def ingest(area, cache, region, east, prefix, claim, state):
     evidence = {"result_path": results["result.json"], "verdict_path": results["project-verdict.json"],
                 "runtime_plan_path": str(path), "receipt_path": str(receipt), "checkpoint_path": results.get("checkpoint.pt"),
                 "task_path": claim["row"]["path"], "runq_status": status}
+    if "checkpoint.pt" in results:
+        location = out / "checkpoint.pt.location.json"
+        evidence["checkpoint_receipt"] = {"path": str(location), "sha256": sha(location)}
     if status == "interrupted":
         claim["status"] = "interrupted"
         old = claim["row"]
@@ -128,7 +145,17 @@ def archive_outputs(area, east):
         assigned.update(hashes)
         if any(h in records for h in hashes):
             groups.append((path.stem, hashes))
-    fresh = sorted(set(records) - assigned)
+    fresh = []
+    for h in sorted(set(records) - assigned):
+        key = object_key(h)
+        previous = east.head(key)
+        if previous:
+            verified = east.stream(key, expected=h, etag=previous["etag"])
+            require(verified["size"] == records[h]["size"], "existing authority object size differs")
+            write(archive / (h + ".json"), {"uri": east.uri(key), "sha256":h, "size":verified["size"],
+                                             "verified":time.time(), "source":"existing_east_readback"})
+        else:
+            fresh.append(h)
     for index in range(0, len(fresh), 16):
         hashes = fresh[index:index+16]
         name = "tide-r3-out-" + hashlib.sha256(wire(hashes)).hexdigest()[:36]

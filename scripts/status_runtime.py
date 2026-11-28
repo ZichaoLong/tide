@@ -1,17 +1,58 @@
 """Read the current experimental launch, its scheduler and its host observations."""
 from collections import Counter
 from contextlib import closing
+from datetime import datetime, timezone
 import json
 from pathlib import Path
 import shlex
 import sqlite3
 import subprocess
+import time
 
 from pilotlab.audit3 import cgroup_observation, json_observation, systemd_observation
 from pilotlab.report3 import build_report
 
 REPOSITORY = "tide-learning-lab"
 LAUNCH = Path(".local/pilot-r3/launch.json")
+CLOUD = Path(".local/modelarts-r3/control")
+
+
+def observe_cloud(root):
+    directory = root / CLOUD
+    marker = directory / "payload/production.json"
+    if not marker.is_file():
+        return None
+    spec, pointer = json_observation(marker)
+    snapshot, sample = json_observation(directory / "status.json")
+    unit = "tide-r3-guiyang-controller-20261128.service"
+    controller = systemd_observation(unit)
+    result = {"kind":"modelarts_snapshot", "sources":[str(marker), str(directory / "status.json")],
+              "next_check":"maflow job list --target guiyang --json", "controller":controller,
+              "pointer":pointer, "observation":sample, "records":[],
+              "summary":"贵阳作业已登记，等待控制器状态快照"}
+    if not spec:
+        result["summary"] = "贵阳冻结清单无法校验"
+        return result
+    for name in spec["jobs"]:
+        admission, _ = json_observation(directory / "allocations" / name / "submitted.json")
+        n = (snapshot or {}).get("nodes", {}).get(name, {})
+        platform, q = n.get("platform", {}), n.get("queue") or {}
+        active = Counter(t.get("backend") for t in q.get("tasks", []) if t.get("state") == "running")
+        result["records"].append({"job":name, "id":(admission or {}).get("id"), "phase":platform.get("phase"),
+                                  "secondary_phase":platform.get("secondary_phase"), "runq_counts":q.get("counts", {}),
+                                  "running_by_backend":dict(active), "queue_observed_unix":q.get("at")})
+    if snapshot:
+        ts = snapshot["observed_unix"]
+        result.update(snapshot_observed_at=datetime.fromtimestamp(ts, timezone.utc).isoformat(),
+                      snapshot_age_seconds=round(time.time()-ts), selected_subjects=snapshot.get("selected_subjects"),
+                      phase=snapshot["phase"], counts=snapshot["counts"], canaries=snapshot["canaries"],
+                      physical_budget=snapshot["physical_budget"], gate_blockers=snapshot["gate_blockers"],
+                      budget_blockers=snapshot["budget_blockers"], errors=snapshot["errors"])
+        phases = "、".join(n["secondary_phase"] or n["phase"] or "未知" for n in result["records"])
+        result["summary"] = (f'贵阳 {snapshot["phase"]} · 已选 {snapshot.get("selected_subjects")}/344'
+                             f' · 作业 {phases} · 首步恢复 {len(snapshot["canaries"])}/2'
+                             f' · 平台数据采于 {result["snapshot_observed_at"]}')
+    return result
 
 
 def observe_queue_additions(launch, result):
@@ -141,6 +182,9 @@ def observe_deferred_followup(root, launch, result):
 
 
 def observe(root):
+    cloud = observe_cloud(root)
+    if cloud is not None:
+        return cloud
     path = root / LAUNCH
     launch, pointer = json_observation(path)
     result = {

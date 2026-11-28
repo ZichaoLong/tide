@@ -129,12 +129,36 @@ class Controller:
         self.hot = read(area.parent / "storage/hot.json")["objects"]
         self.background = ThreadPoolExecutor(max_workers=5)
         self.input_futures, self.archive_future = {}, None
+        self.prestage_futures = {}
+        self.collect_pool = ThreadPoolExecutor(max_workers=6)
+        self.collections = {}
         self.dag = {"phase": "stage-a-subjects", "finished":False, "blocked": [], "tasks": [], "selected_subjects":262}
         self.dag_version = None
         self.state.setdefault("drained", {})
 
     def receipts(self, nodes):
         state, area = self.state, self.area
+        for attempt, future in list(self.collections.items()):
+            if not future.done():
+                continue
+            del self.collections[attempt]
+            try:
+                updated, evidence = future.result()
+            except Exception as exc:
+                self.log_error("collect:" + attempt, exc)
+                continue
+            state["attempts"][attempt] = updated
+            state["accepted"].update(evidence["accepted"])
+            state["retries"].update(evidence["retries"])
+            state.get("errors", {}).pop("collect:" + attempt, None)
+            write(area / "state.json", state)
+
+        def collect(prefix, claim):
+            updated = dict(claim)
+            evidence = {"accepted": {}, "retries": {}}
+            ingest(area, self.cache, self.region, self.east, prefix, updated, evidence)
+            return updated, evidence
+
         for name, n in nodes.items():
             if not any(c["job"] == name and c["status"] in {"dispatched", "claimed"} for c in state["attempts"].values()):
                 continue
@@ -154,12 +178,8 @@ class Controller:
                 c = state["attempts"].get(a)
                 if not c or c["status"] not in {"claimed", "dispatched"} or not obj["size"]:
                     continue
-                try:
-                    ingest(area, self.cache, self.region, self.east, prefix, c, state)
-                except Exception as exc:
-                    self.log_error("collect:" + a, exc)
-                    continue
-                write(area / "state.json", state)
+                if a not in self.collections and len(self.collections) < 12:
+                    self.collections[a] = self.collect_pool.submit(collect, prefix, c)
             # No task wrapper can publish a receipt after the node has terminated.
             if n["terminal"]:
                 for a,c in state["attempts"].items():
@@ -243,8 +263,17 @@ class Controller:
                     d, _ = descriptor(self.area, r, "prestage", "prestage", self.spec)
                     common.update({h:x for h,x in objects_needed(self.area,d).items() if h in available})
             for name,n in nodes.items():
-                if not n["terminal"]:
-                    stage_objects(self.area, self.region, n["prefix"], common, name, available)
+                active = self.prestage_futures.get(name)
+                if active is not None and active.done():
+                    try:
+                        active.result()
+                    except Exception as exc:
+                        self.log_error("prestage:" + name, exc)
+                    self.prestage_futures.pop(name)
+                missing = any(not (self.area / "staged" / name / h).is_file() for h in common)
+                if not n["terminal"] and missing and name not in self.prestage_futures:
+                    self.prestage_futures[name] = self.background.submit(
+                        stage_objects, self.area, self.region, n["prefix"], common, name, available)
         ready = {k:v for k,v in nodes.items() if v["ready"] and k not in self.state["drained"]}
         if not ready:
             return
@@ -321,7 +350,7 @@ class Controller:
         write(self.area / "status.json", snapshot)
         for name in ("state", "status"):
             self.east.put_file(PREFIX + "/control/" + name + ".json", self.area / (name + ".json"), overwrite=True)
-        return bool(nodes and all(n["terminal"] for n in nodes.values()) and terminal and
+        return bool(nodes and all(n["terminal"] for n in nodes.values()) and terminal and not self.collections and
                     all((self.area / "east-objects" / p.name).exists() for p in (self.area / "regional-objects").glob("*.json")))
 
 
