@@ -1,0 +1,114 @@
+{
+  "archives": [
+    {
+      "index_sha256": "677acbdefae9c3e5270ac46a000e9d3d84de7f75293b6d5cd224568e2980b4ef",
+      "index_uri": "obs://meta-intelligence/l00580095/tide-learning-lab/production/r3-20261128/recovery/selected-chain-index.json.gz",
+      "proof": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/modelarts-r3/storage/selected-chain-proof.json",
+        "sha256": "110e3fe03f39b5c1a4aaa863a27ed2d925c4737f063f0173108fd684b2078ea7"
+      }
+    },
+    {
+      "index_sha256": "113aff63fa4e6b0f95776fffcdc82ea92ccb6fe9c6052ad2920e9d6513d4b6a5",
+      "index_uri": "obs://meta-intelligence/l00580095/tide-learning-lab/production/r3-20261128/recovery/selected-collateral-index.json.gz",
+      "proof": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/modelarts-r3/storage/selected-collateral-proof.json",
+        "sha256": "25e5dc3232a33d622e9c67251974ebc781621c27317e209c5fb2decec7a6c330"
+      }
+    },
+    {
+      "index_sha256": "51398057fa1cdfdc96922c0e0fb4efd91b28e72953301f6bcc76f47e4897694c",
+      "index_uri": "obs://meta-intelligence/l00580095/tide-learning-lab/production/r3-20261128/recovery/selected-frontier-index.json.gz",
+      "proof": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/modelarts-r3/storage/selected-frontier-proof.json",
+        "sha256": "bf08c5ceb4799ac36c37c011a225ef233958645e3cfeff9792b28367d06b2d39"
+      }
+    }
+  ],
+  "checkpoint_retention": "Source task/result/receipts and referenced indices stay durable. All surviving selected learning payloads were proved against the SHA and size of their original path using pins from complete remote OBS reads. Historical consumed parents require the original retirement receipt. Initialization decisions are re-read from the recorded diagnostics.",
+  "checkpoint_states": {
+    "a1/original_verified_in_archive": 388,
+    "a1/retired_after_verified_continuation": 148,
+    "a2/original_verified_in_archive": 388,
+    "a2/retired_after_verified_continuation": 148,
+    "a3/original_verified_in_archive": 536,
+    "init/ordinary": 804
+  },
+  "dispositions": {
+    "carried": 4,
+    "deferred_subjects": 74,
+    "fresh_followup": 70,
+    "primary_subjects": 270
+  },
+  "evidence_items": 2412,
+  "gate_status": "blocked",
+  "implementation_commit": "0ead9bfb133d3d447257ad5b2f68b845a1316d4c",
+  "incomplete_stage_reasons": [
+    "selection_does_not_cover_model_manifest",
+    "incomplete_control_matching",
+    "insufficient_remaining_resources"
+  ],
+  "intermediate_paths": 738,
+  "missing_intermediates": [],
+  "observed_at": "2026-11-28T11:48:54.301864+00:00",
+  "partial_gate_scope": "The scoped audit intentionally supplied no matched controls and remaining_resources_ok=False. The resource blocker records this input. No production budget forecast was attempted here. The whole campaign gate requires the other subjects, matched controls and a live passing forecast.",
+  "per_model_errors": [],
+  "read_seconds": 8.14,
+  "schema": "pilot-r3-guiyang-archive-readback-v1",
+  "scientific_method": "Reconstructed the native finite frontier from both stopped schedulers, then ran pilotlab.gate3.audit_stage_a in an authoritative archived-checkpoint context. Each old selection and earlier source transition was checked through its original gate and continuation record, including three collateral hard-stop records.",
+  "selected_model_recipes_sha256": "aa05de759d2ac433a07d1fd85662d2d6c57ce921b86f0bba88b0abc1fabe353a",
+  "selected_without_verified_archive": 0,
+  "source_inputs": {
+    "deferred_plan": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/plan.json",
+      "sha256": "6870c733d9c80ced7d9d1c46eecde460ccadb66b5880228a7eee328f67e10ff3"
+    },
+    "groups": {
+      "deferred": {
+        "original_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/round",
+        "resources": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/round/model-resources.json",
+          "sha256": "beac8a170f541cc96e2d2f445c2ca564ae8814444af5db653113501d26fde0c2"
+        },
+        "scheduler": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/one-hour-drain-20261127T144850/scheduler-final-deferred.json",
+          "sha256": "02bb1a9103f4ee749474b76eba6acd27930ca52a4a5213df1b9fe7a934f37322"
+        },
+        "selected": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/round/selected.json",
+          "sha256": "2aab876ccbc7a1ce02b954ccce242573dd5d658c649907a671b7075dc2414b8b"
+        }
+      },
+      "primary": {
+        "original_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-runq/round",
+        "resources": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-runq/round/model-resources.json",
+          "sha256": "8321f91f0dcfb54648b721b08457b843241b0cb6518ae1017561e343e9f5fccd"
+        },
+        "scheduler": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/one-hour-drain-20261127T144850/scheduler-final-primary.json",
+          "sha256": "d90a9bfac9825de96ca2131369bf68e9813f192d850684a40ac85080a7bb2dd8"
+        },
+        "selected": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-runq/round/selected.json",
+          "sha256": "a9e8505dfe641c6ba19ad2f588b086a0cf5097c700fcfb58aa17bd049c335673"
+        }
+      }
+    },
+    "pause": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-stage-a-checkpoint-pause-20261127.json",
+      "sha256": "c6ac13ca8ad700a8f3fb3470bf115d90c2b5b36ca0b1e826547e66b6bbf8ea13"
+    },
+    "primary_plan": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/signal-and-review-20261126/controller/campaign-plan.json",
+      "sha256": "f4e857b9fabcc2f9232f4c8c1187946b03db5e1795be50f86b5df9cdf24d06ac"
+    },
+    "review": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/deferred-followup-20261127/review.json",
+      "sha256": "7a6b9cf2fbfe1e0efe61d80c979fcda65f021bb83a17318e8520eb1a818fced3"
+    }
+  },
+  "stage_a_report_complete": false,
+  "subjects_admitted": 268,
+  "subjects_selected": 268
+}
