@@ -65,6 +65,10 @@ python -m pilotlab.hbm_profile3 --round "$round" snapshot --output "$snapshot"
 
 14 份训练数据和清单（278,720,072 字节）留在原路径，可通过 `make_base` 重建两份冻结基座清单。任务、逐步指标、结果、选方和调度记录继续供原生审核使用。清理后在隔离目录复核了原 281 项可派任务所需的 229 份输入，并从当前登记的 18 个云端请求重建出完全相同的描述符和运行计划。[阶段 A 候选复现](evidence/pilot-r3-guiyang-candidate-recovery-20261128.json) · [清理后复核](evidence/pilot-r3-modelarts-post-first-retirement-20261128.json)
 
+2026-11-28 20:53，华东至贵阳的 14 项 OMS 传输全部完成。两地对同一批 210 份续训输入及数据（19,237,056,320 字节）逐件核对了完整 SHA-256。现有贵阳作业就近读取了其中 167 份，另 43 份复用了与当前 ETag 和版本匹配的完整读取回执。对应的两地索引、逐对象回执以及首步验证后释放本机副本的增量记录可一并查询。[双区终验及 OBS 索引](evidence/pilot-r3-modelarts-regional-completion-20261128.json)
+
+同一批需要续验时，可运行 `python scripts/verify_tide_regional_inputs.py --job tide-r3-20261128-1 --workers 2`。每条 SSH 连接按顺序核验一批对象，`--workers` 指定已有贵阳节点上的低优先级读流数。中断后重跑会对齐目标版本并复用已完成的回执。[区域输入校验工具](../scripts/verify_tide_regional_inputs.py)
+
 华东总索引支持按原路径定位检查点、任务结果、冻结数据、日志及早期私有归档。149,041 个索引项中有 148,745 个可恢复，另 296 个已在原实验中按授权退役，索引记录了它们的原 SHA 和结果来源。用配置好的 `maflow`、Python 3.9+ 和 `zstd` 可在干净客户机上核验、恢复任一存续文件。[华东索引及四类隔离恢复回执](evidence/pilot-r3-modelarts-storage-recovery-20261128.json) · [按原路径恢复](../scripts/restore_modelarts_archive.py)
 
 ```bash
@@ -98,6 +102,7 @@ python scripts/restore_checkpoint_archive.py \
 | 问题 | 源码和最近的回归入口 |
 |---|---|
 | 调度、进程与现场报告 | [调度器](../pilotlab/scheduler3.py) · [只读审计](../pilotlab/audit3.py) · [报告用例](../tests/test_pilot_report3.py) |
+| 贵阳两节点派发与结果回传 | [控制器](../scripts/tide_cloud_controller.py) · [结果验收与跨区归档](../scripts/tide_cloud_results.py) · [首次自动生成后继的凭据](evidence/pilot-r3-guiyang-first-successors-20261128.json) |
 | 选方、活动量与门禁 | [选方](../pilotlab/round3.py) · [门禁](../pilotlab/gate3.py) · [零步接续用例](../tests/test_pilot_activity_resume3.py) |
 | 跨源码恢复、首步与训练凭据 | [来源核验](../pilotlab/source_migration3.py) · [恢复适配](../pilotlab/resume_adapter3.py) · [接续审阅](../pilotlab/stage_a_continued3.py) |
 | 算子、梯度、支持集或模型状态 | 从故障样本和独立预期到本批基座的实现、回归、下游验收和新批采用。[r24 完整案例](requests/pilot-r3-r24-quad.md) · [基座数值问题索引](../../graph-execution-foundation/docs/numerical-failure-modes.md) |

@@ -1,0 +1,124 @@
+{
+  "east_incremental_receipt": {
+    "etag": "63a7ae8f5cf729f02c8f453610fb3ddb",
+    "key": "tide-learning-lab/production/r3-20261128/recovery/after-first-update/two-region-closure.json",
+    "sha256": "a736f5b7e43d3f69ebbd386e97a3107df33385f5704c54e07209ae39243455c8",
+    "size": 4165,
+    "uri": "obs://meta-intelligence/l00580095/tide-learning-lab/production/r3-20261128/recovery/after-first-update/two-region-closure.json",
+    "version": null
+  },
+  "east_recovery_index": {
+    "etag": "7a6703ebc163cfcdcd1463a48884b553",
+    "key": "tide-learning-lab/production/r3-20261128/recovery/index.json",
+    "sha256": "b65c287a1beb58574ae58e646658eccf002d447d8f3a64746abda8fd8330a808",
+    "size": 191740,
+    "version": null
+  },
+  "east_recovery_validation": {
+    "etag": "55b2c3cf5dca30dbeb4bacc739a51e73",
+    "key": "tide-learning-lab/production/r3-20261128/recovery/validation.json",
+    "sha256": "a17d8456c1e18ad5b4b9b493a68a71e15ef1f5cfb32818c5ab4bbf8a8c259254",
+    "size": 2723,
+    "version": null
+  },
+  "historical_counts": "The East master and regional completion carry the counts frozen when the archive index was published; incremental_local_retirement records actual later local eviction.",
+  "incremental_local_retirement": {
+    "etag": "f7c4353a5ac42a7749dffc4d8419d028",
+    "key": "tide-learning-lab/production/r3-20261128/recovery/after-first-update/local-retirement.json",
+    "sha256": "f77a78db870631c9cc1202c31b1d0756b97b5d2cbcd0ee0004f38dafdc0af5d4",
+    "size": 6275,
+    "uri": "obs://meta-intelligence/l00580095/tide-learning-lab/production/r3-20261128/recovery/after-first-update/local-retirement.json",
+    "version": null
+  },
+  "last_link_bytes": 547011530752,
+  "observed": "2026-11-28T12:53:41.739037+00:00",
+  "original_validators": {
+    "hot-complete.json": {
+      "completed": "2026-11-28T12:53:33.406720+00:00",
+      "object_count": 210,
+      "passed": true
+    },
+    "relay-complete.json": {
+      "groups": 14,
+      "objects": 210,
+      "verified": "2026-11-28T12:53:30.990563+00:00"
+    }
+  },
+  "passed": true,
+  "per_object_method_evidence": {
+    "etag": "06b6fde033abf2d40f8e277f7961c190",
+    "key": "tide-learning-lab/production/r3-20261128/recovery/after-first-update/regional-audit-details.json.gz",
+    "sha256": "74351bfe11d5a607eaf2fd1ed0dd1ebaa80679c257db21d54824570a06fdcffd",
+    "size": 19944,
+    "uri": "obs://meta-intelligence/l00580095/tide-learning-lab/production/r3-20261128/recovery/after-first-update/regional-audit-details.json.gz",
+    "version": null
+  },
+  "production_node": {
+    "job": "tide-r3-20261128-1",
+    "platform_id": "c4a30523-cc7d-42c6-9b60-0ef3f4143ccc",
+    "workers": 3
+  },
+  "quota_and_storage": {
+    "account_used_kib": 53362532,
+    "filesystem_available_bytes": 1210278772736,
+    "grace_epoch": 0,
+    "hard_kib": 734003200,
+    "observed": "2026-11-28T12:32:00.934234+00:00",
+    "project_allocated_bytes": 7337029632,
+    "soft_kib": 314572800,
+    "source": "/dev/mapper/ascend_data-data"
+  },
+  "regional_completion": {
+    "etag": "57fda023948409154191c16d723076b6",
+    "key": "tide-learning-lab/production/r3-20261128/recovery/completion.json",
+    "sha256": "173adaf5d222b1df496c9ad5ce4a6166727d299fc575ba0cbe979cd3fb5e6c15",
+    "size": 1949,
+    "version": null
+  },
+  "schema": "tide-r3-regional-verified-after-production-first-updates/v1",
+  "target_content_verification": {
+    "etag": "9393af9b806c2222deecc702e9c58302",
+    "key": "tide-learning-lab/production/r3-20261128/recovery/guiyang-verification.json",
+    "sha256": "ce00e6821e10b5c37634e8f314903d416230b47e754669abfbe261887d353415",
+    "size": 608,
+    "version": null
+  },
+  "target_object_ledger": {
+    "etag": "9fecea56a680170354fd2e30bbd555e9",
+    "key": "tide-learning-lab/production/r3-20261128/recovery/indices/8a10d8f49aeea8c9b64628efce3c3dcddbe403e10419edf295972b63418f97a2.json.gz",
+    "sha256": "8a10d8f49aeea8c9b64628efce3c3dcddbe403e10419edf295972b63418f97a2",
+    "size": 16833,
+    "version": null
+  },
+  "verification": {
+    "allocated_new_nodes": 0,
+    "failed_transfers": 0,
+    "independent_oms_transfers": 14,
+    "node_invocation_bytes": {
+      "node": 6726054028,
+      "reused": 12511002292
+    },
+    "node_invocation_counts": {
+      "node": 142,
+      "reused": 68
+    },
+    "priority": "Three voluntary nice +15 CPU streams on the existing node. The signed GET uses authenticated SSH stdin. Only digest and size are returned.",
+    "receipt_method_bytes": {
+      "individual destination SHA-256": 25952862,
+      "ma_oms per-object ledger after exact destination SHA readback": 401416095,
+      "maflow verified OMS destination": 3181834846,
+      "regional full SHA-256 over signed GET on pinned ModelArts SSH": 15627852517
+    },
+    "receipt_method_counts": {
+      "individual destination SHA-256": 2,
+      "ma_oms per-object ledger after exact destination SHA readback": 1,
+      "maflow verified OMS destination": 40,
+      "regional full SHA-256 over signed GET on pinned ModelArts SSH": 167
+    },
+    "skipped_transfers": 0,
+    "source": "East OBS fully read by SHA-256 before OMS admission",
+    "target": "Guiyang canonical objects/sha256 with destination byte hashes",
+    "total_bytes": 19237056320,
+    "total_unique_objects": 210
+  }
+}
