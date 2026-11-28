@@ -66,6 +66,7 @@ def allocation(tmp_path, monkeypatch):
 
     def entry(backend, attempt=None, **changes):
         desc = {"job": node["name"], "task": "model-" + backend, "attempt": attempt or ("r3-" + backend),
+                "source": "fixture", "base_manifest":{"identity":"fixture", "files":{}}, "references":{},
                 "fingerprint": "a" * 64, "backend": backend, "threads": 3, "ram_mib": 20003, "priority": 10201,
                 "hbm_mib": 59000 if backend == "npu" else 0, "reserve_chip": backend == "npu",
                 "estimated_seconds": 17001, **changes}
@@ -198,6 +199,36 @@ def test_ssh_submission_uses_the_verified_descriptor_when_fuse_cannot_see_new_di
         return SimpleNamespace(returncode=0, stdout=json.dumps({"key":c["attempt"], "worker":0}))
     assert a.batch(ready, run)[c["attempt"]]["status"] == "submitted"
     assert (a.native / "envelopes" / (c["attempt"] + ".json")).read_bytes() == region.objects[a.node["prefix"] + "/" + leaf]
+
+
+def test_native_refresh_primes_inputs_and_only_materializes_the_original_frozen_request(allocation, monkeypatch):
+    a = allocation
+    raw = b"frozen source"
+    h = hashlib.sha256(raw).hexdigest()
+    ref = {"sha256":h, "size":len(raw), "name":"source"}
+    c = dict(a.entry("cpu", references={"source":ref}), transport="obs")
+    envelope = (a.obs / "inputs/authority/r3-cpu.json").read_bytes()
+    c["delivery"] = {"route":submit.ticket(submit.identity(a.node,c,"obs"), a.node["id"]),
+                     "body":submit.base64.b64encode(envelope).decode()}
+    def refresh():
+        return submit.remote_batch(a.node,[c],a.work,a.obs,a.shared,refresh=True,
+                                   mount_check=lambda p:p in (a.mount,a.obs),runner=pytest.fail)["r3-cpu"]
+    target = a.obs / "inputs/dispatch/r3-cpu.json"
+    assert refresh()["missing"] == {h:len(raw)} and not target.exists()
+    c["grants"] = {h:"input grant"}
+    def fetch(url, digest, size, f):
+        assert url == "input grant" and digest == h and size == len(raw)
+        f.write(raw)
+    monkeypatch.setattr(submit.blobs, "read_signed", fetch)
+    assert refresh()["status"] == "submitted" and target.read_bytes() == envelope
+    assert not (a.native / "envelopes/r3-cpu.json").exists()
+    assert refresh()["status"] == "submitted"
+    target.write_bytes(b"mismatch")
+    assert refresh()["status"] == "retry" and target.read_bytes() == b"mismatch"
+    token = hashlib.sha256(c["attempt"].encode()).hexdigest() + ".json"
+    dump(a.queue / ".runq-cluster/requests" / token, {"spec":{"key":c["attempt"],"worker":0,"options":{"argv":[
+        "python","-B","-u",str(a.work / "payload/tide_cloud_node.py"),"worker",str(target),c["digest"]]}}})
+    assert refresh()["status"] == "submitted" and target.read_bytes() == b"mismatch"
 
 
 def test_native_fallback_is_idempotent_handles_uncertain_put_and_prior_legacy_envelope(allocation):
