@@ -1,0 +1,164 @@
+{
+  "archive_check": {
+    "full_east_sha256_coverage": 196,
+    "guiyang_body_receipt": "tide-learning-lab/production/r3-20261128/recovery/guiyang-verification.json",
+    "guiyang_canonical_object_heads": 196,
+    "hot_input_bytes_including_corpus": 19237056320,
+    "hot_input_objects_including_corpus": 210,
+    "method": "SHA-256 of East master and its content-addressed gzip shards; all path attributes matched.",
+    "oms_delivered_checkpoint_objects": 196,
+    "shards": 164,
+    "submitted_oms_tasks": 14,
+    "verified_original_path_records": 266
+  },
+  "canary_first_updates": {
+    "local_evidence": "docs/evidence/pilot-r3-guiyang-first-updates-20261128.json",
+    "platform_id": "c4a30523-cc7d-42c6-9b60-0ef3f4143ccc",
+    "production_job": "tide-r3-20261128-1",
+    "sha256": "dfa7b063ae811e29e6ccc9f99eb66164f294540dac37fdb7ab9cf80bf12763f6",
+    "verified_by_backend": {
+      "cpu": {
+        "first_update_sha256": "62d27fde242ecebcb254e49066c7691f81fc76704940d34e7d4cdbdd93867d04",
+        "from_steps": 1770,
+        "legacy_id": "2907",
+        "original_checkpoint_sha256": "b0e8cbd11f7d69f87edbe273ee5a695c0907c28f7310eeccf7e2198fbf718117",
+        "steps": 1771
+      },
+      "npu": {
+        "first_update_sha256": "2bf2ee996a592ee9c273ad1795a3a398923473cf77e6a67193fb4b6cb721a9aa",
+        "from_steps": 1312,
+        "legacy_id": "2237",
+        "original_checkpoint_sha256": "8f826873d69916a3547d9af9c2cc3230f56fda7b8b7cc8df7ecff27898fb97fc",
+        "steps": 1313
+      }
+    }
+  },
+  "data": {
+    "bytes": 278720072,
+    "local_files": 14,
+    "rebuilt_native_base_manifests": {
+      "add132a5053b177165a3a62574e369a7931375a7df61ac6025fdde02fd35f82e": "ec972f0feb74cb94b238707b07cd73226feff80b00afdabb37dfaaf34d86d6a5",
+      "fb82cd0676f05e2aed1ae54d38aa2c6d3b1f3a70ac3cc508f56f1108641efebb": "dfc6f0256d5d412d67803c99af1a6893393616e72c27ace9e9b184dec72577a4"
+    }
+  },
+  "east_receipt": {
+    "etag": "f7c4353a5ac42a7749dffc4d8419d028",
+    "key": "tide-learning-lab/production/r3-20261128/recovery/after-first-update/local-retirement.json",
+    "sha256": "f77a78db870631c9cc1202c31b1d0756b97b5d2cbcd0ee0004f38dafdc0af5d4",
+    "size": 6275,
+    "uri": "obs://meta-intelligence/l00580095/tide-learning-lab/production/r3-20261128/recovery/after-first-update/local-retirement.json",
+    "version": null
+  },
+  "holder_verification": "An advisory Linux write lease was obtained and held through SHA-256, rename and final unlink for every inode. Existing descriptors and mmap closures were exercised with separate test processes on this filesystem.",
+  "initial_usage": {
+    "account_used_kib": 71822552,
+    "filesystem_available_bytes": 1191581081600,
+    "grace_epoch": 0,
+    "hard_kib": 734003200,
+    "observed": "2026-11-28T12:24:41.798631+00:00",
+    "project_allocated_bytes": 26289360896,
+    "soft_kib": 314572800,
+    "source": "/dev/mapper/ascend_data-data"
+  },
+  "isolated_descriptors": {
+    "all_rebuilt_claims": 18,
+    "archive_inputs": 229,
+    "attempted_original_pt_opens": 0,
+    "inputs_sha256": "ff2bcaee57246901bc4a8022a50077bb11d86237cc96b6ae0bd8f31e46948ad6",
+    "newly_released": 20,
+    "original_frontier": 281,
+    "paused": 69,
+    "potential_parent_tasks": 255,
+    "published_successor_claims": 13,
+    "scope": "All sampled live descriptors and runtime plans reproduced their native digests. For the original frontier the scientific input set and counts match the prior isolated replay; its temporary absolute generated-task paths vary by run.",
+    "subjects_pending": 76,
+    "subjects_selected": 268
+  },
+  "isolated_restores": [
+    {
+      "mode": 384,
+      "mtime_ns": 1795762213910845467,
+      "original": ".local/pilot-r3/campaign-runq/round/tasks/low-activity-multiscale_timed-mixed-n16-d128-k1-d8614748b3-a2-2026112002-r5/attempt-0/checkpoints/step-000001312-36033437fc.pt",
+      "sample": "2237",
+      "sha256": "8f826873d69916a3547d9af9c2cc3230f56fda7b8b7cc8df7ecff27898fb97fc",
+      "size": 401416159,
+      "source_key": "tide-learning-lab/production/r3-20261128/objects/sha256/8f826873d69916a3547d9af9c2cc3230f56fda7b8b7cc8df7ecff27898fb97fc",
+      "verified": "2026-11-28T12:30:26.230852+00:00"
+    },
+    {
+      "mode": 384,
+      "mtime_ns": 1795762214934855192,
+      "original": ".local/pilot-r3/resource-handoffs/deferred-followup-20261127/round/tasks/exchange-d64-s-shannon-e8ace058ca-a2-2026112001-r1/attempt-0/checkpoints/step-000001770-290c1d1ae5.pt",
+      "sample": "2907",
+      "sha256": "b0e8cbd11f7d69f87edbe273ee5a695c0907c28f7310eeccf7e2198fbf718117",
+      "size": 12976463,
+      "source_key": "tide-learning-lab/production/r3-20261128/objects/sha256/b0e8cbd11f7d69f87edbe273ee5a695c0907c28f7310eeccf7e2198fbf718117",
+      "verified": "2026-11-28T12:30:11.567689+00:00"
+    },
+    {
+      "mode": 384,
+      "mtime_ns": 1795746264328767088,
+      "original": ".local/pilot-r3/resource-handoffs/dev14-2237-20261127/stage-a3-checkpoint.pt",
+      "sample": "2237_handoff_alias",
+      "sha256": "5875b79d3451f56f98495361889a63ac85fd201c87fd9707c8f3e09a9e65c1c1",
+      "size": 61389727,
+      "source_key": "tide-learning-lab/production/r3-20261128/objects/sha256/5875b79d3451f56f98495361889a63ac85fd201c87fd9707c8f3e09a9e65c1c1",
+      "verified": "2026-11-28T12:30:14.528107+00:00"
+    }
+  ],
+  "observed": "2026-11-28T12:32:01.574514+00:00",
+  "passed": true,
+  "per_path_recovery_sources": {
+    "etag": "208ef6fe64ae88f4613acce9d52d72bf",
+    "key": "tide-learning-lab/production/r3-20261128/recovery/after-first-update/membership.json.gz",
+    "sha256": "fcec69bcf09d5da4e02e7f300b5def27f2db084d7a27b88266f9b7b252fa3a88",
+    "size": 42874,
+    "uri": "obs://meta-intelligence/l00580095/tide-learning-lab/production/r3-20261128/recovery/after-first-update/membership.json.gz",
+    "version": null
+  },
+  "post_release_usage": {
+    "account_used_kib": 53362532,
+    "filesystem_available_bytes": 1210278772736,
+    "grace_epoch": 0,
+    "hard_kib": 734003200,
+    "observed": "2026-11-28T12:32:00.934234+00:00",
+    "project_allocated_bytes": 7337029632,
+    "soft_kib": 314572800,
+    "source": "/dev/mapper/ascend_data-data"
+  },
+  "released": {
+    "canonical_hot_originals": 265,
+    "extra_2237_handoff_alias": ".local/pilot-r3/resource-handoffs/dev14-2237-20261127/stage-a3-checkpoint.pt",
+    "last_link_allocated_bytes": 18958954496,
+    "local_checkpoint_groups": 196,
+    "local_original_paths": 266,
+    "open_or_mapped_exceptions": [],
+    "remaining_campaign_pt_paths": 0,
+    "total_last_link_allocated_bytes_in_migration": 547011530752
+  },
+  "schema": "tide-r3-local-hot-checkpoint-retirement/v1",
+  "unchanged_master": {
+    "index": {
+      "etag": "7a6703ebc163cfcdcd1463a48884b553",
+      "key": "tide-learning-lab/production/r3-20261128/recovery/index.json",
+      "sha256": "b65c287a1beb58574ae58e646658eccf002d447d8f3a64746abda8fd8330a808",
+      "size": 191740,
+      "version": null
+    },
+    "validation": {
+      "etag": "55b2c3cf5dca30dbeb4bacc739a51e73",
+      "key": "tide-learning-lab/production/r3-20261128/recovery/validation.json",
+      "sha256": "a17d8456c1e18ad5b4b9b493a68a71e15ef1f5cfb32818c5ab4bbf8a8c259254",
+      "size": 2723,
+      "version": null
+    }
+  },
+  "verification_details": {
+    "etag": "b3a823e8c78334635598984219041735",
+    "key": "tide-learning-lab/production/r3-20261128/recovery/after-first-update/verification-details.json.gz",
+    "sha256": "72db3a8dec4fd4c08678e080b8732b5ba8624f9cb9d31a5c4402e088cdb82f53",
+    "size": 32874,
+    "uri": "obs://meta-intelligence/l00580095/tide-learning-lab/production/r3-20261128/recovery/after-first-update/verification-details.json.gz",
+    "version": null
+  }
+}

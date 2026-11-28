@@ -61,7 +61,20 @@ python -m pilotlab.hbm_profile3 --round "$round" snapshot --output "$snapshot"
 
 ## 恢复已归档的检查点
 
-贵阳迁移后，本机保留 210 份按内容识别的续训输入和数据，逐步指标、任务、结果与调度凭据继续供原生审核读取。2026-11-28 20:03 的本仓实占 24.47 GiB，账户实占 68.45 GiB。逐类物理块、最后一个硬链接释放量、恢复样本及地区对象索引均已登记。[本机存储与恢复验收](evidence/pilot-r3-modelarts-local-storage-20261128.json) · [阶段 A 候选复现](evidence/pilot-r3-guiyang-candidate-recovery-20261128.json)
+贵阳生产作业 `tide-r3-20261128-1` 已从原检查点完成 NPU 任务 2237 的第 1,313 步和 CPU 任务 2907 的第 1,771 步。本机随后释放 196 份检查点的 266 个原路径，共 17.66 GiB。其中包括 2237 搬卡时另存的硬链接。本次迁移累计释放 509.44 GiB。2026-11-28 20:32，本仓实占 6.83 GiB，账户实占 50.89 GiB。[两项贵阳首步](evidence/pilot-r3-guiyang-first-updates-20261128.json) · [最后一批释放与隔离恢复](evidence/pilot-r3-modelarts-post-first-retirement-20261128.json) · [较早的本机清理](evidence/pilot-r3-modelarts-local-storage-20261128.json)
+
+14 份训练数据和清单（278,720,072 字节）留在原路径，可通过 `make_base` 重建两份冻结基座清单。任务、逐步指标、结果、选方和调度记录继续供原生审核使用。清理后在隔离目录复核了原 281 项可派任务所需的 229 份输入，并从当前登记的 18 个云端请求重建出完全相同的描述符和运行计划。[阶段 A 候选复现](evidence/pilot-r3-guiyang-candidate-recovery-20261128.json) · [清理后复核](evidence/pilot-r3-modelarts-post-first-retirement-20261128.json)
+
+华东总索引支持按原路径定位检查点、任务结果、冻结数据、日志及早期私有归档。149,041 个索引项中有 148,745 个可恢复，另 296 个已在原实验中按授权退役，索引记录了它们的原 SHA 和结果来源。用配置好的 `maflow`、Python 3.9+ 和 `zstd` 可在干净客户机上核验、恢复任一存续文件。[华东索引及四类隔离恢复回执](evidence/pilot-r3-modelarts-storage-recovery-20261128.json) · [按原路径恢复](../scripts/restore_modelarts_archive.py)
+
+```bash
+saved=.local/pilot-r3/risk-screen-r01/frozen/round/tasks/risk-trained-fc-s-npu/attempt-0/checkpoints/step-000008207-d1c2146be6.pt
+index_sha=b65c287a1beb58574ae58e646658eccf002d447d8f3a64746abda8fd8330a808
+python scripts/restore_modelarts_archive.py "$saved" --index-sha256 "$index_sha"
+python scripts/restore_modelarts_archive.py "$saved" --index-sha256 "$index_sha" --to "$PWD/$saved"
+```
+
+第一条命令查询来源、大小与摘要。第二条恢复文件、权限和修改时间。NPU、CPU 两个续训点以及 2237 的交接副本均已用同一入口从华东恢复至空目录，并核对了内容和文件属性。[隔离恢复回执](evidence/pilot-r3-modelarts-post-first-retirement-20261128.json) · [贵阳 R3 正式续跑](portable-execution.md#贵阳-r3-正式续跑)
 
 2026-11-23 归档的 R1、R2、R3 检查点共有 1,830 个原路径、1,818 份不同内容。华东 OBS 沿用原恢复清单及压缩对象结构。清单按原仓库相对路径记录解压后的字节数、SHA-256、权限和纳秒修改时间。原轮次的全文件审计按路径读取这些文件，可以先恢复所需的轮次或单个检查点。[原归档记录](evidence/pilot-r3-r30-storage-cleanup.json) · [恢复程序](../scripts/restore_checkpoint_archive.py)
 
