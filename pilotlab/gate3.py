@@ -40,7 +40,15 @@ def read_evidence(entry, *, checkpoint=False, retired_checkpoints=None):
         raise ValueError("selected task or result differs from its evidence receipt")
     evidence = {"task_path": entry["task_path"], "task_sha256": task_hash,
                 "result_path": entry["result_path"], "result_sha256": result_hash}
+    if ("execution_runtime" in result) != ("runtime_plan" in entry):
+        raise ValueError("runtime migration result and frozen runtime plan must be read together")
+    if "runtime_plan" in entry:
+        from .runtime_migration3 import reviewed_result
+        result = reviewed_result(task, result, entry)
+        evidence["runtime_plan"] = dict(entry["runtime_plan"])
     if "portable_attempts" in entry:
+        if "runtime_plan" in entry:
+            raise ValueError("runtime migration already includes the ordered attempt history")
         from .continuation3 import read_attempt_chain
         result = read_attempt_chain(task, result, entry)
         evidence.update({k:entry[k] for k in ("portable_attempts","initial_checkpoint") if k in entry})
@@ -495,6 +503,8 @@ def create_gate(path, *, manifest_path, report_path, task_paths, gate_kind="form
     if report.get("chain_receipts", {}) != chain_receipts:
         raise ValueError("stage A report does not bind the independently verified chain receipts")
     for entry in report["evidence"]:
+        if "runtime_plan" in entry or "execution_runtime" in load(entry["result_path"]):
+            read_evidence(entry)
         for field in ("task", "result", "checkpoint"):
             path_key, hash_key = f"{field}_path", f"{field}_sha256"
             if field == "checkpoint" and path_key not in entry:
