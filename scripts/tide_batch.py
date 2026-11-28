@@ -205,10 +205,22 @@ def cluster(root):
     area = Path(os.environ["MAFLOW_SHARED"]).resolve() / "tide" / attempt
     area.mkdir(mode=0o700, parents=True, exist_ok=True)
     queue = area / "queue"
-    budget = int(os.environ.get("TIDE_QUEUE_SECONDS", str(read(root / "release.json")["run_seconds"] - 25)))
+    release = read(root / "release.json")
+    duration = release["resume_run_seconds"] if a["number"] > 1 else release["run_seconds"]
+    budget = min(duration - 25, int(os.environ.get("TIDE_QUEUE_SECONDS", str(duration - 25))))
+    require(budget > 0, "project queue budget must fit the job")
     deadline = time.time() + budget
     obs = Path(os.environ["MAFLOW_OBS"]).resolve()
-    ctl = [sys.executable, "-B", str(root / "runq/launcher.py"), "--json"]
+    runtime = release["runq"]
+    require(
+        (os.environ["MAFLOW_RUNQ_COMMIT"], os.environ["MAFLOW_RUNQ_SHA256"])
+        == (runtime["commit"], runtime["sha256"]),
+        "cloud runq does not match the frozen project release",
+    )
+    executable = Path(os.environ["MAFLOW_RUNQ"])
+    require(executable.is_absolute() and os.access(executable, os.X_OK), "cloud runq is not executable")
+    ctl = [str(executable), "--json"]
+    write(Path(os.environ["MAFLOW_RUNQ_QUEUE_FILE"]), {"mode": "project", "shared": str(queue), "deadline": deadline})
     ent = area / f"node-{rank}.json"
     write(
         ent,
@@ -217,6 +229,7 @@ def cluster(root):
             "rank": rank,
             "root": str(root),
             "python": sys.executable,
+            "runq": runtime,
             "pid": os.getpid(),
             "ticks": int(Path("/proc/self/stat").read_text().rsplit(")", 1)[1].split()[19]),
             "at": time.time(),

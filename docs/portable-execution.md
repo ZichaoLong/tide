@@ -9,13 +9,15 @@
 ```bash
 .venv-pilot-r3/bin/python -B scripts/make_tide_batch.py \
   --output "$BATCH_DIR" --project "$PROJECT" --batch "$BATCH" \
-  --foundation ../graph-execution-foundation --runq ~/tools/runq \
+  --foundation ../graph-execution-foundation \
   --experiment-revision "$EXPERIMENT_COMMIT" --foundation-revision "$FOUNDATION_COMMIT" \
   --task "$TASK_JSON" --data "$R3_DATA" --site modelarts --backend npu \
   --nodes 1 --ram-mib 8192 --hbm-mib 8192 --worker-seconds 420 --run-seconds 900
 ```
 
 按每项实际配方填写申请量与时限。对同一冻结来源的多项任务可重复使用 `--task`。本机使用 `--site local`，`--python-command` 可指定目标解释器。混合运行时，把分别准备好的组放在同一个计划中，为组指定各自的地点、输入目录和唯一任务 ID。云组内 runq 使用已获配的实例与卡，本机组沿用账户 runq 已分配的设备。
+
+生成器调用账户的 `maflow admin runq freeze --directory PAYLOAD`，将当前 runq 发行包、Git commit 及 SHA-256 装入 `payload/.maflow/runq/`；指定候选版本时传生成器 `--runq-manifest /路径/release.json`。云端启动器优先解包该冻结版本，TIDE 通过 `MAFLOW_RUNQ` 执行并核对身份。只有项目驱动向自己的队列提交、排空并封存科学回执；`maflow job queue status` 可查看该队列。需要由客户机持续追加独立命令时，按账户工具的约定创建可追加队列会话。以前已封存的批次继续使用各自的快照。
 
 以下命令中的 `SITE` 取本批约定的 `modelarts`、`local` 或 `hybrid`。云组可在生成计划时用 `--target` 指定计算目标，`--spec` 指定资源规格，`--authority` 指定存放整批计划及结果索引的 OBS 别名。多目标计划中，每个云组分别固定目标与资源申请。`project run --dry-run` 显示依据当前回执预计新增的分配，去掉该选项后提交。新客户端用 `project list` 发现各地项目及批次，用 `项目/批次` 定位结果。同一引用在多处登记时以 `--authority` 指定权威存储。
 

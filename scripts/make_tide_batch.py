@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import sys
@@ -17,6 +18,29 @@ from tide_portable import pack, sha, write, require
 
 def git(repo, *args):
     return subprocess.check_output(["git", "-C", str(repo), *args], text=True).strip()
+
+
+def freeze_runq(payload, manifest=None):
+    """Select the account release (or explicit candidate) at development time."""
+    cmd = ["maflow", "admin", "runq", "freeze", "--directory", str(payload), "--json"]
+    if manifest is not None:
+        cmd.extend(["--manifest", str(manifest.expanduser().resolve(strict=True))])
+    selection = json.loads(subprocess.check_output(cmd, text=True))
+    path = payload / ".maflow/runq/release.json"
+    marker = json.loads(path.read_bytes())
+    commit, checksum = marker["commit"], marker["sha256"]
+    require(
+        re.fullmatch(r"[0-9a-f]{40}|[0-9a-f]{64}", commit) and re.fullmatch(r"[0-9a-f]{64}", checksum),
+        "invalid frozen runq identity",
+    )
+    archive = path.with_name(f"runq-{commit}.tar.gz")
+    size = archive.stat().st_size
+    require(
+        selection.get("commit") == commit and selection.get("sha256") == checksum
+        and selection.get("bytes") == size and sha(archive) == checksum,
+        "maflow runq release differs from the frozen archive",
+    )
+    return {"commit": commit, "sha256": checksum, "bytes": size}
 
 
 def extract(repo, revision, paths, target):
@@ -157,7 +181,6 @@ def generate(a):
     originals = output / "source-records"
     repo = Path(__file__).resolve().parents[1]
     base = a.foundation.expanduser().resolve()
-    runq = a.runq.expanduser().resolve()
     repos = []
     adapter_commit = git(repo, "rev-parse", "HEAD")
     for role, path, revision in (
@@ -199,8 +222,7 @@ def generate(a):
             item["interrupt_after_step"] = 1
         tasks.append(item)
     pack(payload / "frozen", paths, data, a.evidence)
-    runq_rev = git(runq, "rev-parse", "HEAD")
-    extract(runq, runq_rev, ["launcher.py", "runqlib", "runq"], payload / "runq")
+    runtime = freeze_runq(payload, a.runq_manifest)
     for name in ("tide_portable.py", "tide_batch.py"):
         (payload / name).write_bytes(
             subprocess.check_output(["git", "-C", str(repo), "show", adapter_commit + ":scripts/" + name])
@@ -209,9 +231,11 @@ def generate(a):
         payload / "release.json",
         {
             "repositories": repos,
-            "runq_commit": runq_rev,
+            "runq_commit": runtime["commit"],
+            "runq": runtime,
             "adapter_commit": adapter_commit,
             "run_seconds": a.run_seconds,
+            "resume_run_seconds": a.resume_run_seconds or a.run_seconds,
             "frozen_sha256": sha(payload / "frozen/freeze.json"),
             "adapter_sha256": {name: sha(payload / name) for name in ("tide_portable.py", "tide_batch.py")},
         },
@@ -281,7 +305,7 @@ if __name__ == "__main__":
     p.add_argument("--foundation", required=True, type=Path)
     p.add_argument("--experiment-revision", default="HEAD")
     p.add_argument("--foundation-revision", default="HEAD")
-    p.add_argument("--runq", required=True, type=Path)
+    p.add_argument("--runq-manifest", type=Path, help="use a specific maflow runq release.json instead of the installed release")
     p.add_argument("--batch", required=True)
     p.add_argument("--project", required=True)
     p.add_argument("--backend", choices=("npu", "cpu"), default="npu")

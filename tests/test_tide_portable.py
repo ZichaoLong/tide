@@ -1,6 +1,8 @@
 """Copied task/gate bytes, moved worker outputs and contradictory attempt evidence."""
 
 from pathlib import Path
+import hashlib
+import json
 import sys
 
 import pytest
@@ -11,6 +13,77 @@ from pilotlab.io import sha256
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 from tide_batch import aggregate, export
 from tide_portable import Frozen, module_binding, pack, read, write
+
+
+def test_account_release_freezes_default_or_candidate_and_rejects_changed_bytes(tmp_path, monkeypatch):
+    from make_tide_batch import freeze_runq
+
+    payload = tmp_path / "payload"
+    marker = payload / ".maflow/runq/release.json"
+    fixed = b"frozen-test-archive"
+    release = {"commit": "1" * 40, "sha256": hashlib.sha256(fixed).hexdigest(), "bytes": len(fixed)}
+    archive = marker.with_name("runq-" + release["commit"] + ".tar.gz")
+    write(marker, release)
+    archive.write_bytes(fixed)
+    calls = []
+
+    def account_freeze(command, *, text):
+        calls.append(command)
+        return json.dumps(release)
+
+    monkeypatch.setattr("make_tide_batch.subprocess.check_output", account_freeze)
+    assert freeze_runq(payload) == release
+    assert calls[-1] == ["maflow", "admin", "runq", "freeze", "--directory", str(payload), "--json"]
+    assert freeze_runq(payload, marker) == release and calls[-1][-2:] == ["--manifest", str(marker)]
+    archive.write_bytes(b"changed-test-archive")
+    with pytest.raises(ValueError, match="differs"):
+        freeze_runq(payload)
+
+
+def test_project_queue_uses_supplied_cli_and_registers_only_one_service(tmp_path, monkeypatch):
+    from tide_batch import cluster
+
+    runtime = {"commit": "c" * 40, "sha256": "d" * 64, "bytes": 100}
+    write(tmp_path / "release.json", {"run_seconds": 90, "resume_run_seconds": 60, "runq": runtime})
+    write(tmp_path / "maflow-attempt.json", {
+        "schema": "maflow-attempt/v1", "site": "modelarts", "attempt": "attempt-one",
+        "number": 1, "tasks": [{"id": "item"}],
+    })
+    cli = tmp_path / "offline-runq"
+    cli.write_text("#!/bin/sh\nexit 0\n")
+    cli.chmod(0o700)
+    queue_file = tmp_path / "queue.json"
+    for name, value in {
+        "MAFLOW_SHARED": tmp_path / "shared", "MAFLOW_OBS": tmp_path / "obs",
+        "MAFLOW_RUNQ": cli, "MAFLOW_RUNQ_QUEUE_FILE": queue_file,
+        "MAFLOW_RUNQ_COMMIT": runtime["commit"], "MAFLOW_RUNQ_SHA256": runtime["sha256"],
+        "VC_TASK_INDEX": "1", "VC_WORKER_NUM": "2",
+    }.items():
+        monkeypatch.setenv(name, str(value))
+    observed = []
+
+    class Service:
+        def __init__(self, command, **kwargs):
+            observed.append(command)
+            assert command[0] == str(cli) and "serve" in command
+            shared = Path(command[command.index("--shared") + 1])
+            registration = read(queue_file)
+            assert registration["shared"] == str(shared) and registration["mode"] == "project"
+            write(shared / ".runq-cluster/workers/1.json", {"state": "stopped", "instance": "q", "counts": {}})
+
+        def wait(self, *, timeout):
+            return 0
+
+        def poll(self):
+            return 0
+
+    monkeypatch.setattr("tide_batch.subprocess.Popen", Service)
+    assert cluster(tmp_path) == 0 and len(observed) == 1
+    assert read(tmp_path / "obs/products/tide-node-1.json")["runq"] == runtime
+    monkeypatch.setenv("MAFLOW_RUNQ_SHA256", "e" * 64)
+    with pytest.raises(ValueError, match="does not match"):
+        cluster(tmp_path)
+    assert len(observed) == 1
 
 
 def test_export_binds_sha256_and_single_part_obs_etag_to_the_same_bytes(tmp_path):
