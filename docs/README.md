@@ -60,6 +60,8 @@ python -m pilotlab.hbm_profile3 --round "$round" snapshot --output "$snapshot"
 
 ## 恢复已归档的检查点
 
+贵阳迁移后，本机保留 210 份按内容识别的续训输入和数据，逐步指标、任务、结果与调度凭据继续供原生审核读取。2026-11-28 20:03 的本仓实占 24.47 GiB，账户实占 68.45 GiB。逐类物理块、最后一个硬链接释放量、恢复样本及地区对象索引均已登记。[本机存储与恢复验收](evidence/pilot-r3-modelarts-local-storage-20261128.json) · [阶段 A 候选复现](evidence/pilot-r3-guiyang-candidate-recovery-20261128.json)
+
 2026-11-23 归档的 R1、R2、R3 检查点共有 1,830 个原路径、1,818 份不同内容。华东 OBS 沿用原恢复清单及压缩对象结构。清单按原仓库相对路径记录解压后的字节数、SHA-256、权限和纳秒修改时间。原轮次的全文件审计按路径读取这些文件，可以先恢复所需的轮次或单个检查点。[原归档记录](evidence/pilot-r3-r30-storage-cleanup.json) · [恢复程序](../scripts/restore_checkpoint_archive.py)
 
 配好本账户的 `maflow`、Python 3.9+ 和 `zstd` 后，可从任一客户机恢复下列检查点。用 `--root` 指定空目录可做隔离恢复。

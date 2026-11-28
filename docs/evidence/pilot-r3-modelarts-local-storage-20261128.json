@@ -1,0 +1,186 @@
+{
+  "account_quota": {
+    "filesystem": "/dev/mapper/ascend_data-data",
+    "filesystem_available_bytes": 1191763329024,
+    "grace_epoch": 0,
+    "hard_kib": 734003200,
+    "observed": "2026-11-28T12:03:26.735974+00:00",
+    "soft_kib": 314572800,
+    "used_kib": 71779312
+  },
+  "archive_location": "east:/tide-learning-lab/production/r3-20261128",
+  "cold_archive_samples": {
+    "native_maflow": {
+      "files": 1,
+      "id": "7dc0a5102d4146e394931036788bc9e4",
+      "verified_bytes": 244000069
+    },
+    "offloaded_historical": {
+      "bytes": 404226231,
+      "idempotent": true,
+      "mode": 384,
+      "mtime_ns": 1795380007971294322,
+      "sha256": "bb1d7b0a10e62d47f6735539cb445621ca401a46c010ec4647c22fea21e5c1e1",
+      "source_path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r24/round/tasks/multiscale_timed-d256-k-mixed9-fa94f99487-a1-2026112001-r5/attempt-0/checkpoints/step-000000920-c8044c5cf2.pt",
+      "verified": "2026-11-28T11:25:46.906990+00:00"
+    },
+    "previous_private_store": {
+      "manifest_sha256": "33df9e2b4d050117636f3e612d7e83635de891af13694a4deef446f1e87a67fa",
+      "mode": 384,
+      "mtime_ns": 1795181025227997813,
+      "original": ".local/pilot-r3/campaign-r09/round/tasks/exchange-d128-k-base-4aac2dcb10-a2-2026112001-r2/attempt-0/checkpoints/step-000002300-40220a07fa.pt",
+      "result": [
+        "verified 1 files, restored 1",
+        "verified 1 files, restored 0",
+        "verified 1 files, restored 0"
+      ],
+      "sha256": "464a2ca33efb0d2eb270624549ab9c929dee3faf8ce05dd7b5053149edeb4551",
+      "size": 37339261
+    },
+    "remaining": {
+      "bytes": 53370033,
+      "idempotent": true,
+      "mode": 384,
+      "mtime_ns": 1795141144583777813,
+      "original": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r04/round/tasks/exchange-d64-k-base-8e5f1d5288-a1-2026112002-r3/attempt-0/checkpoints/step-000000064-bedcf69806.pt",
+      "sha256": "46dfe0ff8d1a8f2632af918fca44be5d35e0521f66d2fbb1a0d0c1c77b79a36a",
+      "verified": "2026-11-28T12:01:15.193466+00:00"
+    },
+    "selected": {
+      "bytes": 140778293,
+      "idempotent": true,
+      "mode": 384,
+      "mtime_ns": 1795414155130351882,
+      "original": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r26-final/round/tasks/low-activity-lattice-base-n16-d128-k4-d211c291b9-a1-2026112001-r2/attempt-0/checkpoints/step-000001024-cde14a640a.pt",
+      "sha256": "5ad11d4cb53e0834128445fa6f32e4b03e0e01233a3d35a7748c618a7f052545",
+      "verified": "2026-11-28T11:50:25.228262+00:00"
+    }
+  },
+  "first_below_soft": {
+    "filesystem": "/dev/mapper/ascend_data-data",
+    "filesystem_available_bytes": 985222926336,
+    "grace_epoch": 0,
+    "hard_kib": 734003200,
+    "observed": "2026-11-28T11:50:22.450987+00:00",
+    "soft_kib": 314572800,
+    "used_kib": 273616744
+  },
+  "frozen_source_archive": {
+    "evidence_groups": 66,
+    "evidence_paths": 138784,
+    "logical_bytes": 6289843870,
+    "sqlite_indexes_rebuilt_when_opening": [
+      ".local/pilot-r3/campaign-runq/round/hbm-profile.sqlite3-shm",
+      ".local/pilot-r3/resource-handoffs/deferred-followup-20261127/round/hbm-profile.sqlite3-shm"
+    ]
+  },
+  "local_retirements": {
+    "native_archive_bytes": 39269097472,
+    "other_historical_addressable_bytes": 248769277952,
+    "remaining_certified_non_hot_bytes": 105727823872,
+    "selected_and_validated_lineage_bytes": 134203285504,
+    "total_bytes": 528052576256,
+    "unpublished_partial_saves_bytes": 83091456
+  },
+  "native_source_acceptance": [
+    "docs/evidence/pilot-r3-guiyang-archive-readback-20261128.json",
+    "docs/evidence/pilot-r3-guiyang-candidate-recovery-20261128.json"
+  ],
+  "observed": "2026-11-28T12:03:26.736132+00:00",
+  "original_hardlink_topology": {
+    "archive_key": "tide-learning-lab/production/r3-20261128/recovery/hardlink-memberships.json.gz",
+    "sha256": "ce9e75de09614345e21b8e6c597743de4caf1572af793a749f0debb7b66762a6",
+    "size": 7329
+  },
+  "physical_accounting": "Each device/inode is counted once using st_blocks*512. Freed bytes count release of the last stored hard link. Directory totals can change while the cloud control ledgers run.",
+  "project_allocated_bytes_terminal_du": 26270285824,
+  "regional_content_indices": {
+    "remaining-checkpoints-proof.json": {
+      "archive_key": "tide-learning-lab/production/r3-20261128/recovery/remaining-checkpoints-index.json.gz",
+      "sha256": "13f4f9040ac35f986c6d33e5c9527c9d705147c37ad1f2d03d955a69b5619015",
+      "size": 920977
+    },
+    "selected-chain-proof.json": {
+      "archive_key": "tide-learning-lab/production/r3-20261128/recovery/selected-chain-index.json.gz",
+      "sha256": "677acbdefae9c3e5270ac46a000e9d3d84de7f75293b6d5cd224568e2980b4ef",
+      "size": 321453
+    },
+    "selected-collateral-proof.json": {
+      "archive_key": "tide-learning-lab/production/r3-20261128/recovery/selected-collateral-index.json.gz",
+      "sha256": "113aff63fa4e6b0f95776fffcdc82ea92ccb6fe9c6052ad2920e9d6513d4b6a5",
+      "size": 1194
+    },
+    "selected-frontier-proof.json": {
+      "archive_key": "tide-learning-lab/production/r3-20261128/recovery/selected-frontier-index.json.gz",
+      "sha256": "51398057fa1cdfdc96922c0e0fb4efd91b28e72953301f6bcc76f47e4897694c",
+      "size": 7183
+    }
+  },
+  "residual_allocated_blocks_at_review": {
+    "active_cloud_control_and_recovery": {
+      "allocated_bytes": 97509376,
+      "inode_count": 13328
+    },
+    "experiment_directories": {
+      "allocated_bytes": 170889216,
+      "inode_count": 41166
+    },
+    "frozen_sources": {
+      "allocated_bytes": 131395584,
+      "inode_count": 7194
+    },
+    "measurements_and_step_journals": {
+      "allocated_bytes": 4411318272,
+      "inode_count": 30676
+    },
+    "other_local_history": {
+      "allocated_bytes": 18726912,
+      "inode_count": 1740
+    },
+    "other_small_trial_files": {
+      "allocated_bytes": 3526656,
+      "inode_count": 229
+    },
+    "project_code_docs_and_environment": {
+      "allocated_bytes": 486707200,
+      "inode_count": 6263
+    },
+    "protected_checkpoints": {
+      "allocated_bytes": 18958954496,
+      "inode_count": 196
+    },
+    "protected_corpus_and_manifests": {
+      "allocated_bytes": 278761472,
+      "inode_count": 14
+    },
+    "runtime_logs": {
+      "allocated_bytes": 88563712,
+      "inode_count": 13668
+    },
+    "sqlite_profiles_and_sidecars": {
+      "allocated_bytes": 4018176,
+      "inode_count": 13
+    },
+    "tasks_results_and_diagnostic_records": {
+      "allocated_bytes": 1620074496,
+      "inode_count": 86003
+    }
+  },
+  "retained_live_inputs": {
+    "additional_link_names": [
+      {
+        "additional_disk_bytes": 0,
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/resource-handoffs/dev14-2237-20261127/stage-a3-checkpoint.pt",
+        "sha256": "5875b79d3451f56f98495361889a63ac85fd201c87fd9707c8f3e09a9e65c1c1"
+      }
+    ],
+    "checkpoint_disk_bytes": 18958954496,
+    "checkpoint_inodes": 196,
+    "distinct_hbm_and_cpu_input_hashes": 210,
+    "file_content_rehashed": true,
+    "original_aliases": 279,
+    "physical_bytes": 19237056320,
+    "physical_copies": 210
+  },
+  "schema": "tide-r3-modelarts-local-storage-review/v1"
+}
