@@ -1,0 +1,181 @@
+{
+  "catalogue_counts": {
+    "additional_certified_inodes": 1829,
+    "additional_certified_last_link_bytes": 105727823872,
+    "addressable_freed_bytes": 248769277952,
+    "addressable_inodes": 2402,
+    "addressable_original_paths": 2474,
+    "certified_selected_released_bytes": 134203285504,
+    "certified_selected_released_paths": 1323,
+    "guiyang_oms_transferred_bytes": 19237056320,
+    "guiyang_oms_transferred_objects": 210,
+    "legacy_compressed_bytes": 156973800358,
+    "legacy_local_symlinks_released": 801,
+    "legacy_original_paths": 1830,
+    "legacy_unique_checkpoints": 1818,
+    "native_archives": 89,
+    "native_freed_bytes": 39269097472,
+    "preexisting_unavailable_historical_a1a2": 296,
+    "r3_frozen_checkpoint_inodes": 5892,
+    "r3_frozen_checkpoint_names": 6100,
+    "recoverable_index_rows": 148745,
+    "remaining_checkpoint_inodes": 196,
+    "remaining_original_hot_hashes": 210,
+    "total_index_rows": 149041,
+    "total_local_freed_bytes": 528052576256,
+    "warm_objects": 1260
+  },
+  "clean_client_recoveries": [
+    {
+      "kind": "tar",
+      "mode": 384,
+      "mtime_ns": 1795089791857341432,
+      "sha256": "5bcc8190457bb4191fdaed4d3d46de7fa8a324ee4d2b3e8d889c6461e8d60c4e",
+      "size": 371,
+      "source": ".local/pilot-r1/round/tasks/npu-exchange-x-independent/fresh-process/result.json"
+    },
+    {
+      "kind": "archive",
+      "mode": 384,
+      "mtime_ns": 1795094718568601430,
+      "sha256": "190749bdaeb5f20c155206cbf3a44192263f42ddcd2b4518dba0413748780d61",
+      "size": 122894509,
+      "source": ".local/pilot-r2/round/tasks/npu-load-x16-l128-a/checkpoint.pt"
+    },
+    {
+      "kind": "object",
+      "mode": 384,
+      "mtime_ns": 1795165391873752802,
+      "sha256": "3b7c872af1f3879f276230a48243ed1a6473765e8345e0da12d130b92a66a76a",
+      "size": 9118829,
+      "source": ".local/pilot-r3/risk-screen-r01/frozen/round/tasks/risk-trained-fc-s-npu/attempt-0/checkpoints/step-000008207-d1c2146be6.pt"
+    },
+    {
+      "kind": "legacy-zstd",
+      "mode": 384,
+      "mtime_ns": 1795181092392648970,
+      "sha256": "dcdc0361ffc09cbd06e1d646b7e8c6b2b99aa4392e7f38ab9efca72354604cd6",
+      "size": 36581313,
+      "source": ".local/pilot-r3/campaign-r09/round/tasks/lattice-d128-k-receive128-ee1edca248-a3-2026112002-r2/attempt-0/checkpoints/step-000006541-4ac74e8063.pt"
+    }
+  ],
+  "cross_region_completion_key": "tide-learning-lab/production/r3-20261128/recovery/completion.json",
+  "directory": "east:/tide-learning-lab/production/r3-20261128/recovery/",
+  "east_complete": "2026-11-28T12:10:59.938746+00:00",
+  "former_private_nfs": {
+    "aliases_released_at": "2026-11-28T12:09:33.862437+00:00",
+    "compressed_checkpoint_bytes": 156973800358,
+    "gib_unit": 1073741824,
+    "local_stale_symlink_count": 801,
+    "local_stale_symlinks_absent": true,
+    "original_checkpoint_paths": 1830,
+    "original_dir": "/mi/sfs_turbo/zlong/tide-learning-lab-archive/storage-20261123-r30",
+    "original_manifest_sha256": "33df9e2b4d050117636f3e612d7e83635de891af13694a4deef446f1e87a67fa",
+    "private_quarantine_absent": true,
+    "regional_index": {
+      "key": "tide-learning-lab/production/r3-20261128/legacy/storage-20261123-r30/east-archive-index.json",
+      "sha256": "3bde1711fe743fd183336b593e8e5757a50654bad98f9feda5bba0323e1dd3ae"
+    },
+    "restoration": [
+      {
+        "path": ".local/pilot-r3/campaign-r09/round/tasks/exchange-d128-k-base-4aac2dcb10-a2-2026112001-r2/attempt-0/checkpoints/step-000002300-40220a07fa.pt",
+        "sha256": "464a2ca33efb0d2eb270624549ab9c929dee3faf8ce05dd7b5053149edeb4551",
+        "size": 37339261
+      },
+      {
+        "path": ".local/pilot-r3/campaign-r10/round/tasks/exchange-d128-x_reverse-pool-26a8635043-init-2026112001/attempt-0/checkpoints/step-000000004-bf2ac007f4.pt",
+        "sha256": "f620d840cb173257dd8f6990e59bdcdfd42a7554ee4cc787f34c9536b9040be4",
+        "size": 101989991
+      }
+    ],
+    "source_dir_absent": true,
+    "source_released_at": "2026-11-28T12:09:19.134130+00:00",
+    "unique_checkpoint_payloads": 1818,
+    "uploaded_physical_files_including_manifests_and_tools": 1832
+  },
+  "guiyang_content_readback_snapshot": {
+    "oms_service_complete": true,
+    "oms_started": "2026-11-28T11:15:01.075000+00:00",
+    "rates": {
+      "10_min": {
+        "accepted_bytes": 661856754,
+        "mib_per_second": 1.0519929790496827,
+        "remaining_hours": 4.270165029546559,
+        "window_seconds": 600.0
+      },
+      "15_min": {
+        "accepted_bytes": 758725332,
+        "mib_per_second": 0.8039742914835611,
+        "remaining_hours": 5.587471736412249,
+        "window_seconds": 900.0
+      },
+      "30_min": {
+        "accepted_bytes": 1622482759,
+        "mib_per_second": 0.8596222978168063,
+        "remaining_hours": 5.22576443383951,
+        "window_seconds": 1800.0
+      },
+      "since_start": {
+        "accepted_bytes": 2279630927,
+        "mib_per_second": 0.6444993739130332,
+        "remaining_hours": 6.970035677757886,
+        "window_seconds": 3373.200276
+      }
+    },
+    "remaining_bytes": 16957425393,
+    "remaining_objects": 179,
+    "sampled": "2026-11-28T12:11:14.275276+00:00",
+    "schema": "tide-partial-regional-content-progress/v1",
+    "sha_verified_bytes": 2279630927,
+    "sha_verified_objects": 31,
+    "total_bytes": 19237056320,
+    "total_objects": 210
+  },
+  "guiyang_final_receipt_key": "tide-learning-lab/production/r3-20261128/recovery/guiyang-verification.json",
+  "guiyang_service_delivery": {
+    "all_transferred": true,
+    "evidence_level": "OMS service completion counters; destination byte readback registered separately",
+    "observed": "2026-11-28T11:43:03.572172+00:00",
+    "operation_count": 14,
+    "total_bytes": 19237056320,
+    "total_objects": 210
+  },
+  "index": {
+    "etag": "7a6703ebc163cfcdcd1463a48884b553",
+    "key": "tide-learning-lab/production/r3-20261128/recovery/index.json",
+    "sha256": "b65c287a1beb58574ae58e646658eccf002d447d8f3a64746abda8fd8330a808",
+    "size": 191740,
+    "version": null
+  },
+  "local_client_path": "scripts/restore_modelarts_archive.py",
+  "local_quota_evidence": "docs/evidence/pilot-r3-modelarts-local-storage-20261128.json",
+  "operations_and_receipts": {
+    "current_local_measurement": ".local/modelarts-r3/storage/guiyang-observed.json",
+    "parallel_readback_unit": "tide-r3-guiyang-receipts-20261128.service",
+    "publication_unit": "tide-r3-two-region-closure-20261128.service",
+    "readback_unit": "tide-r3-hot-inputs-20261128.service",
+    "refresh_measurement": "python -B .local/modelarts-r3/storage/measure-regional-readback.py"
+  },
+  "protected_local_inputs": {
+    "checkpoint_inodes": 196,
+    "dataset_and_manifest_hashes": 14,
+    "next_release_condition": "Retain local checkpoint and data copies until production receipt(s) prove the first real resumed update across runtimes, including the bound checkpoint and data. Review any continuing local use before retiring these inputs.",
+    "total_hashes": 210
+  },
+  "recovery_client": {
+    "etag": "6f30a1ca0ab86476f64592050943460d",
+    "key": "tide-learning-lab/production/r3-20261128/recovery/restore.py",
+    "sha256": "f8f01b3a5e09e797cdeb197e94e5469264907a1e06bcfff135ce8becb434401f",
+    "size": 8450,
+    "version": null
+  },
+  "schema": "tide-r3-verified-project-recovery/v1",
+  "shards": 256,
+  "validation": {
+    "etag": "55b2c3cf5dca30dbeb4bacc739a51e73",
+    "key": "tide-learning-lab/production/r3-20261128/recovery/validation.json",
+    "sha256": "a17d8456c1e18ad5b4b9b493a68a71e15ef1f5cfb32818c5ab4bbf8a8c259254",
+    "size": 2723,
+    "version": null
+  }
+}
