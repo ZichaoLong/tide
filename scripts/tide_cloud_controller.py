@@ -593,9 +593,16 @@ class Controller:
         write(self.area / "status.json", snapshot)
         for name in ("state", "status"):
             self.east.put_file(PREFIX + "/control/" + name + ".json", self.area / (name + ".json"), overwrite=True)
-        return bool(len(nodes) == len(self.spec["jobs"]) and all(n["terminal"] for n in nodes.values()) and
-                    terminal and not self.collections and not self.relay_work and
-                    all((self.area / "east-objects" / p.name).exists() for p in (self.area / "regional-objects").glob("*.json")))
+        settled = (len(nodes) == len(self.spec["jobs"]) and all(n["terminal"] for n in nodes.values()) and
+                   terminal and not self.collections and not self.relay_work and
+                   all((self.area / "east-objects" / p.name).exists() for p in (self.area / "regional-objects").glob("*.json")))
+        if settled:
+            self.science_future.result()
+            if self.dag["finished"]:
+                final = self.area / "campaign/campaign/report.json"
+                require(read(self.area / "science-snapshot.json")["files"].get("report.json") == sha(final),
+                        "the final scientific report has not yet been archived")
+        return settled
 
 
 if __name__ == "__main__":

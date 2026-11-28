@@ -20,7 +20,8 @@ def snapshot_campaign(area, east):
     if not source.is_dir():
         return
     # Native task JSON and per-attempt runtime plans are already individually bound by each dispatch.
-    paths = sorted([*source.glob("*.json"), *(source / "decisions").glob("*.json")])
+    paths = sorted(p for directory in (source, source / "decisions", source / "matches", source / "stage-b-capacity")
+                   for p in directory.glob("*.json"))
     bodies = {p.relative_to(source).as_posix():p.read_bytes() for p in paths}
     hashes = {k:hashlib.sha256(v).hexdigest() for k,v in bodies.items()}
     revision = hashlib.sha256(wire(hashes)).hexdigest()

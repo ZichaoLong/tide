@@ -2,6 +2,34 @@
 
 项目负责冻结原始任务、源码、数据、科学门禁和检查点。账户工具 `maflow` 记录执行地点、作业、尝试编号、区域制品和资源回收情况。两者使用同一个任务 ID 及原始 `task.json` 字节的 SHA-256。
 
+## 贵阳 R3 正式续跑
+
+这次迁移使用两个单节点 ModelArts 作业。每个作业申请 8 张物理板、16 颗逻辑芯片，各运行自己的 runq。维护分支中的 TIDE 控制器保管全批任务、尝试和科研结论。登记身份为 `tide-learning-lab-c1dd49b83311`。11 月 28 日提交时 maflow 在平台清单中写入了路径别名 `tide-learning-lab-eb9313f37e43`，两份原始清单与统一项目 ID 的对应关系已登记。两份作业的输入包按 SHA-256 冻结。[作业 ID、输入摘要与预算](evidence/pilot-r3-guiyang-production-20261128.json)
+
+在本机从项目状态入口查看上次平台采样时间、Stage A 选方数、CPU/NPU 首次恢复和每个节点的队列计数。可按作业 ID 向贵阳重新采样。进入排队状态的作业在平台分配整节点后才开始计卡时。
+
+```bash
+python scripts/status.py
+maflow job show guiyang/c4a30523-cc7d-42c6-9b60-0ef3f4143ccc --json
+maflow job show guiyang/f0f47300-b53c-441e-95b4-91e245f0b5d0 --json
+maflow job queue status guiyang/tide-r3-20261128-1 --json
+maflow job queue status guiyang/tide-r3-20261128-2 --json
+```
+
+恢复先用 2237 的 NPU 第 1,312 步和 2907 的 CPU 第 1,770 步。每项都要验证旧末态、执行下一步有限更新、保存后用新的模型和优化器对象重载。两份回执到齐，控制器就会持续向已经获配的节点分派后继工作。它保留原任务的种子、后端、配方、累计曝光和逐主体评估预约。每张物理板每小时计一张卡时，逻辑芯片、CPU 工时和同卡并发数另列。长时或大 HBM 任务可在 runq 保护一个芯片开工窗口，其余任务根据真实余量和预计结束时间补位。[运行时迁移](../pilotlab/runtime_migration3.py) · [派发与预约](../scripts/tide_cloud_dispatch.py)
+
+客户端的用户服务为 `tide-r3-guiyang-controller-20261128.service`。控制器按任务 SHA 和尝试号在华东预约一次。验证到节点的 SSH、挂载及 runq 身份后，它把一批原始任务送入该节点的私有 SFS 队列；只有 OBS 可达时，它使用作业内置的 OBS 派发入口。每次尝试记录所用入口，断线后用同一任务键重试。若队列已结束、项目结果迟到，控制器可从该节点的原始产物补回回执。维护者可在同一分支提交控制器修订后运行 `bash scripts/tide_cloud_service.sh`，在途 worker 由所在的贵阳作业继续管理。[服务入口](../scripts/tide_cloud_service.sh) · [队列派发](../scripts/tide_cloud_submit.py) · [回执恢复](../scripts/tide_cloud_relay.py)
+
+华东权威前缀为 `east:/tide-learning-lab/production/r3-20261128/`。`control/rollout.json` 绑定两份平台作业，`control/status.json` 给出最近观察，`control/state.json` 记录已预约与已收的尝试。`dispatch/` 保存原任务字节和有序的断点历史，`attempts/` 保存原始结果、运行时计划和逐项产物凭证。热输入经 OMS 进入贵阳，每个节点按摘要取用。新检查点在贵阳读取正文复核，随后由 OMS 回传华东。`science/current.json` 标识最近一次原生选方、评估报告和门禁快照。新客户端可以先取以下轻量文件。
+
+```bash
+maflow fs cp east:/tide-learning-lab/production/r3-20261128/control/rollout.json ./rollout.json --verify sha256
+maflow fs cp east:/tide-learning-lab/production/r3-20261128/control/status.json ./tide-status.json --verify sha256
+maflow fs cp east:/tide-learning-lab/production/r3-20261128/science/current.json ./tide-science.json --verify sha256
+```
+
+Stage A 包含原 270 个主体、74 个早期主体及匹配对照。旧源沿用的 4 个配方保留原证据身份。控制器从冻结的 A1/A2/A3 轨迹逐步生成下一批。A 门禁还要核对来源、恢复链、初始化、匹配质量、活动量、评估预算和可用卡时。满足后进入 B 正式训练，再按原规则选 6 个主体及对应对照做多种子复跑，最后对列入清单的正式终态做独立确认评估。B 的 NPU 预约引用同来源、同形状的实测峰值，缺测的形状在有容量的芯片上先做有限的准备测量。准备任务沿用原有的 48 物理卡时和 64 Mi token 上限，其已用量跨迁移累计。[阶段推进](../pilotlab/cloud_campaign3.py) · [独立门禁](../pilotlab/gate3.py)
+
 ## 准备已有任务
 
 在维护分支使用已安装 NumPy 的项目解释器运行以下命令。把两个修订替换为任务采用的实现。冻结的数据目录包括 R3 视图及其原始 article corpus。阶段 B 还会复制任务引用的 gate、manifest、report 和确认授权。另有要保留的外部证据时重复传入 `--evidence 文件`。

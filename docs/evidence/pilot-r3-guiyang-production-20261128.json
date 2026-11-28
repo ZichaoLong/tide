@@ -1,0 +1,94 @@
+{
+  "authority": "obs://meta-intelligence/l00580095/tide-learning-lab/production/r3-20261128",
+  "budget": {
+    "boards_per_job": 8,
+    "deadline_unix": 1797698913.9318287,
+    "remaining_device_seconds": 21055585.278324153,
+    "run_seconds": 1314000
+  },
+  "cloud_test_retirement": {
+    "batches": [
+      "tide-transfer-20261128",
+      "tide-project-20261128",
+      "tide-runq-runtime-20261128",
+      "qualification-20261127"
+    ],
+    "receipts": {
+      "project-identity-after.json": "cd447b7e0529b53ff12725800b82429c948855ad513b80a7da8fb31842956f05",
+      "qualification-20261127-retired.json": "ee2767e8f1e23541cbbc6bb4f97d942c498bcd12568ccf7ee3a3c1ebe90b87df",
+      "retirement-summary.json": "c9bb6fd13254b58eef6c9ffd2bd34fbfa2a6ecf27bb2b98c084a6208ec5254b2",
+      "sfs-conclusion.json": "095ddf3406068da3b41a96b99e2971d09cd9868fa07263616dcd9fba92832999"
+    },
+    "verified_deleted_bytes": 28695799,
+    "verified_deleted_objects": 101
+  },
+  "frozen": {
+    "canary_legacy_ids": {
+      "cpu": 2907,
+      "npu": 2237
+    },
+    "initial_tasks": 261,
+    "initial_tasks_sha256": "ff4962d24e23792df57a4993ecdf5dc49c35f81de5ec2b6375640c4be9b3e945",
+    "production_sha256": "d1f3c8fc0e2ec9dac307e84de3fb33f79d08a77a09a099823f14d02fd86fc8a7",
+    "queued": 192,
+    "resumes": 69,
+    "runtime_adapter_sha256": "a3f3548cbac4dd23b5056b9b77b4282baad0813e3a5d9f9ab3dec30c844e8a65",
+    "worker_bundle_sha256": "26214965c2af5a86e3b5db515a59739efe9da82004519a3cc3ce52236d09c7a6"
+  },
+  "image": "swr.cn-southwest-2.myhuaweicloud.com/lingxi_blue/zlong-ascend-dev:torch2.10-cann9.1-r1",
+  "image_digest": "sha256:99442d9e494fd9b7c7dd0c666c2598bcd076cf3084429a5f0967d4b6b1472c7f",
+  "jobs": [
+    {
+      "canonical_project": "tide-learning-lab-c1dd49b83311",
+      "flavor": "modelarts.pool.visual.16xlarge",
+      "manifest_sha256": "a9fcdeb5919edf4514c158f840a989eb48a8ad78fec194ded122ec7780a315a9",
+      "name": "tide-r3-20261128-1",
+      "platform_id": "c4a30523-cc7d-42c6-9b60-0ef3f4143ccc",
+      "prefix": "modelarts-workflow/jobs/tide-r3-20261128-1",
+      "raw_submission_sha256": "02c823dc2c9ec7ce43e55bd83449b702869e92d7e0ce92bee3aa23ff578b85d7",
+      "submitted_manifest_project": "tide-learning-lab-eb9313f37e43"
+    },
+    {
+      "canonical_project": "tide-learning-lab-c1dd49b83311",
+      "flavor": "modelarts.pool.visual.16xlarge",
+      "manifest_sha256": "6d423bb876b575a41f5bdf3bb6ef49c472d109986aee3b7ed68d8a2a76167104",
+      "name": "tide-r3-20261128-2",
+      "platform_id": "f0f47300-b53c-441e-95b4-91e245f0b5d0",
+      "prefix": "modelarts-workflow/jobs/tide-r3-20261128-2",
+      "raw_submission_sha256": "202a9a6f14b3f430d3caf44e6a3b6bc09b90c63e397bf833b0be53f5074d6263",
+      "submitted_manifest_project": "tide-learning-lab-eb9313f37e43"
+    }
+  ],
+  "local_controller_unit": "tide-r3-guiyang-controller-20261128.service",
+  "maflow_after_identity_repair": "2c1050eacc0cd84701c1f2705e27aade2143605d",
+  "maflow_at_submission": "24336e643c0c51441866c4ae68a32f4348eab013",
+  "native_replay": {
+    "newly_ready_tasks": 20,
+    "previously_selected": 262,
+    "selected_after_replay": 268,
+    "total_subjects": 344
+  },
+  "pool": "pool-403d26e2-eab5-4518-83c3-3e3d45d8fb5a",
+  "project": "tide-learning-lab-c1dd49b83311",
+  "recorded_at": "2026-11-28T11:41:49.003212+00:00",
+  "recovery_entrypoint": "obs://meta-intelligence/l00580095/tide-learning-lab/production/r3-20261128/recovery/index.json",
+  "runq_bundle_sha256": "b98d1c696b0cdf620509edb731504eb62a6ead47d93f7edf95c422988bbae374",
+  "runq_commit": "7f644c6ee65632df57f0a4532e3d3e5e5c9be8ee",
+  "runq_version": "1.3.0",
+  "schema": "tide-cloud-rollout/v1",
+  "source_runtime_plan": {
+    "guiyang": {
+      "numpy": "1.26.4",
+      "python": "3.12.3",
+      "torch": "2.10.0",
+      "torch-npu": "2.10.0.post4"
+    },
+    "old": {
+      "numpy": "2.5.2",
+      "python": "3.12.13",
+      "torch": "2.12.0+cpu",
+      "torch-npu": "2.12.0.post3"
+    }
+  },
+  "status": "obs://meta-intelligence/l00580095/tide-learning-lab/production/r3-20261128/control/status.json"
+}
